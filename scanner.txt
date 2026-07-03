@@ -1,0 +1,544 @@
+bash
+
+cat > /home/claude/scanner-demo.html << 'SCANNEREOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vulnerability Scanner Demo — VUNVAULT</title>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#0a0b0d;--panel:#14161a;--raised:#1b1e24;--line:#2a2d33;--line-s:#1f2228;
+  --bone:#e8e6e1;--dim:#9a9892;--amber:#ff8a3d;--cyan:#4dd9e8;
+  --red:#ff4d4d;--green:#5fd988;--yellow:#f5c518;
+  --fd:'Big Shoulders Display',sans-serif;
+  --fb:'IBM Plex Sans',sans-serif;
+  --fm:'IBM Plex Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--bone);font-family:var(--fb);line-height:1.6;min-height:100vh;}
+a{color:inherit;text-decoration:none;}
+
+header{background:rgba(10,11,13,0.95);border-bottom:1px solid var(--line-s);position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);}
+nav{max-width:1200px;margin:0 auto;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--fd);font-size:1.3rem;letter-spacing:0.04em;text-transform:uppercase;}
+.logo svg{width:24px;height:24px;}
+.back-link{font-family:var(--fm);font-size:0.78rem;color:var(--dim);letter-spacing:0.04em;text-transform:uppercase;}
+.back-link:hover{color:var(--amber);}
+
+.hero{background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(255,138,61,0.08),transparent 60%),var(--void);
+  padding:64px 32px 48px;text-align:center;border-bottom:1px solid var(--line-s);}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--fm);font-size:0.7rem;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--amber);border:1px solid rgba(255,138,61,0.25);padding:6px 16px;border-radius:2px;margin-bottom:24px;}
+.hero-badge::before{content:"";width:6px;height:6px;background:var(--amber);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{font-family:var(--fd);font-size:clamp(2rem,5vw,3.6rem);text-transform:uppercase;line-height:1.05;margin-bottom:16px;}
+.hero h1 em{font-style:normal;color:var(--amber);}
+.hero p{color:var(--dim);font-size:1rem;max-width:560px;margin:0 auto 32px;}
+
+.scanner-wrap{max-width:1140px;margin:0 auto;padding:40px 24px 80px;}
+
+/* INPUT AREA */
+.input-card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:32px;margin-bottom:24px;}
+.input-row{display:flex;gap:12px;margin-bottom:20px;}
+.domain-input{flex:1;background:var(--void);border:1px solid var(--line);color:var(--bone);
+  font-family:var(--fm);font-size:0.95rem;padding:14px 16px;border-radius:2px;outline:none;transition:border-color 0.2s;}
+.domain-input:focus{border-color:var(--amber);}
+.domain-input::placeholder{color:var(--dim);}
+.scan-btn{background:var(--amber);color:var(--void);border:none;font-family:var(--fm);font-size:0.85rem;
+  letter-spacing:0.06em;text-transform:uppercase;padding:14px 28px;border-radius:2px;cursor:pointer;
+  font-weight:600;transition:background 0.2s,transform 0.15s;white-space:nowrap;}
+.scan-btn:hover:not(:disabled){background:#ffa05f;transform:translateY(-1px);}
+.scan-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.scan-types{display:flex;gap:10px;flex-wrap:wrap;}
+.scan-type-btn{background:transparent;border:1px solid var(--line);color:var(--dim);
+  font-family:var(--fm);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;
+  padding:8px 18px;border-radius:2px;cursor:pointer;transition:all 0.2s;}
+.scan-type-btn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(77,217,232,0.06);}
+.scan-type-btn:hover:not(.active){border-color:var(--dim);color:var(--bone);}
+.scan-type-label{font-family:var(--fm);font-size:0.68rem;color:var(--dim);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;}
+.disclaimer{font-family:var(--fm);font-size:0.72rem;color:var(--dim);line-height:1.5;margin-top:16px;
+  padding-top:16px;border-top:1px solid var(--line-s);}
+
+/* SCAN AREA */
+.scan-area{display:grid;grid-template-columns:1fr 1fr;gap:16px;opacity:0;transition:opacity 0.4s;pointer-events:none;}
+.scan-area.visible{opacity:1;pointer-events:all;}
+
+/* TERMINAL */
+.terminal-card{background:#0d0f11;border:1px solid var(--line);border-radius:4px;overflow:hidden;display:flex;flex-direction:column;}
+.terminal-bar{background:var(--raised);padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);}
+.terminal-dot{width:11px;height:11px;border-radius:50%;}
+.terminal-title{font-family:var(--fm);font-size:0.72rem;color:var(--dim);margin-left:8px;letter-spacing:0.04em;}
+.progress-bar-wrap{background:var(--void);border-bottom:1px solid var(--line);padding:10px 16px;display:flex;align-items:center;gap:12px;}
+.progress-bar-track{flex:1;height:3px;background:var(--line);border-radius:2px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--amber);border-radius:2px;transition:width 0.4s ease;width:0%;}
+.progress-pct{font-family:var(--fm);font-size:0.68rem;color:var(--dim);min-width:36px;text-align:right;}
+.terminal-body{padding:16px;flex:1;overflow-y:auto;max-height:480px;min-height:320px;scroll-behavior:smooth;}
+.terminal-body::-webkit-scrollbar{width:4px;}
+.terminal-body::-webkit-scrollbar-track{background:transparent;}
+.terminal-body::-webkit-scrollbar-thumb{background:var(--line);}
+.t-line{font-family:var(--fm);font-size:0.78rem;line-height:1.7;opacity:0;animation:fadeInLine 0.2s ease forwards;}
+@keyframes fadeInLine{to{opacity:1;}}
+.t-line.t-cat{color:var(--cyan);margin-top:10px;letter-spacing:0.04em;}
+.t-line.t-step{color:var(--dim);padding-left:8px;}
+.t-line.t-pass{color:var(--green);}
+.t-line.t-find{color:var(--amber);}
+.t-line.t-critical{color:var(--red);}
+.t-line.t-done{color:var(--bone);margin-top:10px;}
+.t-cursor{display:inline-block;width:8px;height:13px;background:var(--amber);animation:blink 1s infinite;vertical-align:middle;margin-left:2px;}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+/* RESULTS */
+.results-card{background:var(--panel);border:1px solid var(--line);border-radius:4px;overflow:hidden;display:flex;flex-direction:column;}
+.results-header{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
+.results-title{font-family:var(--fm);font-size:0.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:0.08em;}
+.finding-count{font-family:var(--fm);font-size:0.72rem;padding:3px 10px;background:rgba(255,138,61,0.12);color:var(--amber);border-radius:2px;}
+.results-body{flex:1;overflow-y:auto;max-height:506px;padding:12px;}
+.results-body::-webkit-scrollbar{width:4px;}
+.results-body::-webkit-scrollbar-track{background:transparent;}
+.results-body::-webkit-scrollbar-thumb{background:var(--line);}
+.results-idle{display:flex;align-items:center;justify-content:center;height:280px;flex-direction:column;gap:12px;}
+.results-idle p{font-family:var(--fm);font-size:0.78rem;color:var(--dim);text-align:center;}
+
+/* FINDING CARDS */
+.finding-card{background:var(--raised);border:1px solid var(--line);border-radius:3px;margin-bottom:10px;
+  overflow:hidden;opacity:0;animation:slideIn 0.35s ease forwards;}
+@keyframes slideIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.finding-top{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;user-select:none;}
+.sev-badge{font-family:var(--fm);font-size:0.62rem;font-weight:600;letter-spacing:0.06em;
+  text-transform:uppercase;padding:3px 8px;border-radius:2px;white-space:nowrap;}
+.sev-CRITICAL{background:rgba(255,77,77,0.14);color:var(--red);}
+.sev-HIGH{background:rgba(255,138,61,0.14);color:var(--amber);}
+.sev-MEDIUM{background:rgba(245,197,24,0.12);color:var(--yellow);}
+.sev-LOW{background:rgba(95,217,136,0.12);color:var(--green);}
+.finding-name{font-family:var(--fm);font-size:0.8rem;color:var(--bone);flex:1;line-height:1.3;}
+.finding-cat{font-family:var(--fm);font-size:0.65rem;color:var(--dim);}
+.expand-icon{font-family:var(--fm);font-size:0.75rem;color:var(--dim);transition:transform 0.2s;}
+.finding-body{display:none;padding:0 14px 14px;border-top:1px solid var(--line-s);}
+.finding-body.open{display:block;}
+.finding-desc{font-size:0.82rem;color:var(--dim);line-height:1.6;margin-bottom:10px;padding-top:12px;}
+.finding-fix-label{font-family:var(--fm);font-size:0.65rem;color:var(--cyan);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;}
+.finding-fix{font-family:var(--fm);font-size:0.77rem;color:var(--dim);line-height:1.6;background:var(--void);
+  padding:10px 12px;border-radius:2px;border-left:2px solid var(--cyan);}
+
+/* SCORE SUMMARY */
+.score-panel{display:none;background:var(--panel);border:1px solid var(--line);border-radius:4px;margin-top:16px;}
+.score-panel.show{display:grid;grid-template-columns:240px 1fr 1fr 1fr;gap:0;}
+.score-gauge-area{padding:32px;border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.score-label{font-family:var(--fd);font-size:0.85rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--dim);margin-bottom:12px;}
+.score-stat{border-right:1px solid var(--line);padding:32px 24px;display:flex;flex-direction:column;justify-content:center;}
+.score-stat:last-child{border-right:none;}
+.score-num{font-family:var(--fd);font-size:2.4rem;line-height:1;margin-bottom:6px;}
+.score-stat-label{font-family:var(--fm);font-size:0.68rem;color:var(--dim);text-transform:uppercase;letter-spacing:0.06em;}
+.score-stat .n-crit{color:var(--red);}
+.score-stat .n-high{color:var(--amber);}
+.score-stat .n-med{color:var(--yellow);}
+
+/* CTA */
+.cta-panel{background:var(--raised);border:1px solid var(--line);border-radius:4px;padding:40px;
+  margin-top:16px;display:none;text-align:center;}
+.cta-panel.show{display:block;}
+.cta-panel h3{font-family:var(--fd);font-size:1.6rem;text-transform:uppercase;margin-bottom:12px;}
+.cta-panel p{color:var(--dim);margin-bottom:24px;max-width:520px;margin-left:auto;margin-right:auto;}
+.cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-amber{background:var(--amber);color:var(--void);font-family:var(--fm);font-size:0.82rem;
+  letter-spacing:0.05em;text-transform:uppercase;padding:13px 24px;border-radius:2px;border:none;cursor:pointer;font-weight:600;}
+.btn-amber:hover{background:#ffa05f;}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--bone);font-family:var(--fm);
+  font-size:0.82rem;letter-spacing:0.05em;text-transform:uppercase;padding:13px 24px;border-radius:2px;cursor:pointer;}
+.btn-ghost:hover{border-color:var(--amber);color:var(--amber);}
+
+/* HOW IT WORKS */
+.how-section{border-top:1px solid var(--line-s);padding:64px 24px;max-width:1140px;margin:0 auto;}
+.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:40px;}
+.how-card{border:1px solid var(--line);border-radius:4px;padding:24px;}
+.how-num{font-family:var(--fd);font-size:2rem;color:var(--line);margin-bottom:12px;}
+.how-card h4{font-family:var(--fd);font-size:1rem;text-transform:uppercase;margin-bottom:8px;}
+.how-card p{font-size:0.85rem;color:var(--dim);line-height:1.6;}
+.section-eye{font-family:var(--fm);font-size:0.7rem;color:var(--amber);text-transform:uppercase;letter-spacing:0.16em;
+  display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+.section-eye::before{content:"";width:16px;height:1px;background:var(--amber);display:inline-block;}
+
+footer{border-top:1px solid var(--line-s);padding:28px 32px;}
+.footer-row{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-row p{font-family:var(--fm);font-size:0.72rem;color:var(--dim);}
+
+@media(max-width:900px){
+  .scan-area{grid-template-columns:1fr;}
+  .score-panel.show{grid-template-columns:1fr 1fr;}
+  .score-gauge-area{border-right:none;border-bottom:1px solid var(--line);}
+  .score-stat{border-right:none;border-bottom:1px solid var(--line);}
+  .how-grid{grid-template-columns:repeat(2,1fr);}
+  .input-row{flex-direction:column;}
+}
+@media(max-width:500px){
+  nav{padding:14px 16px;}
+  .scanner-wrap{padding:24px 12px 60px;}
+  .input-card{padding:20px;}
+  .how-grid{grid-template-columns:1fr;}
+  .score-panel.show{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<header>
+<nav>
+  <a href="index.html" class="logo">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z" stroke="#ff8a3d" stroke-width="1.4"/><path d="M8 12.5L10.5 15L16 9" stroke="#4dd9e8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    VUNVAULT
+  </a>
+  <a href="index.html#contact" class="back-link">Book a Real Scan →</a>
+</nav>
+</header>
+
+<section class="hero">
+  <div class="hero-badge">Interactive Demo</div>
+  <h1>Website <em>Vulnerability</em><br>Scanner</h1>
+  <p>See exactly what a VUNVAULT security assessment uncovers. Enter any domain to run a simulated scan and explore real vulnerability types with actionable remediation guidance.</p>
+</section>
+
+<div class="scanner-wrap">
+
+  <!-- INPUT -->
+  <div class="input-card">
+    <div class="input-row">
+      <input class="domain-input" id="domainInput" type="text" placeholder="yourdomain.co.ke" autocomplete="off" spellcheck="false">
+      <button class="scan-btn" id="scanBtn" onclick="startScan()">Run Demo Scan</button>
+    </div>
+    <div class="scan-type-label">Scan type</div>
+    <div class="scan-types">
+      <button class="scan-type-btn active" onclick="setScanType(this,'full')" data-type="full">Full Web Assessment</button>
+      <button class="scan-type-btn" onclick="setScanType(this,'owasp')" data-type="owasp">OWASP Top 10</button>
+      <button class="scan-type-btn" onclick="setScanType(this,'quick')" data-type="quick">Quick Headers Check</button>
+    </div>
+    <p class="disclaimer">This is an educational demonstration — no real network requests are made to the domain you enter. To scan an actual website or account you own, book a real engagement below. All testing is performed only on assets you are authorised to assess, under a signed engagement agreement.</p>
+  </div>
+
+  <!-- SCAN AREA -->
+  <div class="scan-area" id="scanArea">
+
+    <!-- TERMINAL -->
+    <div class="terminal-card">
+      <div class="terminal-bar">
+        <div class="terminal-dot" style="background:#ff4d4d"></div>
+        <div class="terminal-dot" style="background:#f5c518"></div>
+        <div class="terminal-dot" style="background:#5fd988"></div>
+        <span class="terminal-title" id="terminalTitle">vunvault-scanner — idle</span>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+        <span class="progress-pct" id="progressPct">0%</span>
+      </div>
+      <div class="terminal-body" id="terminalBody"></div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-card">
+      <div class="results-header">
+        <span class="results-title">Findings</span>
+        <span class="finding-count" id="findingCount" style="display:none">0 found</span>
+      </div>
+      <div class="results-body" id="resultsBody">
+        <div class="results-idle">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" opacity="0.3"><path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z" stroke="#9a9892" stroke-width="1.2"/><path d="M9 12l2 2 4-4" stroke="#9a9892" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <p>Findings will appear here<br>as the scan progresses</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCORE -->
+  <div class="score-panel" id="scorePanel">
+    <div class="score-gauge-area">
+      <div class="score-label">Security Score</div>
+      <svg id="scoreGauge" viewBox="0 0 140 120" width="160" height="140">
+        <path id="gaugeTrack" d="" fill="none" stroke="#2a2d33" stroke-width="10" stroke-linecap="round"/>
+        <path id="gaugeFill" d="" fill="none" stroke="#ff8a3d" stroke-width="10" stroke-linecap="round"/>
+        <text id="gaugeScore" x="70" y="68" text-anchor="middle" fill="#e8e6e1" font-size="22" font-family="IBM Plex Mono" font-weight="600">--</text>
+        <text id="gaugeLabel" x="70" y="84" text-anchor="middle" fill="#9a9892" font-size="10" font-family="IBM Plex Mono" letter-spacing="1">SCORING</text>
+      </svg>
+    </div>
+    <div class="score-stat">
+      <div class="score-num n-crit" id="countCrit">0</div>
+      <div class="score-stat-label">Critical findings</div>
+    </div>
+    <div class="score-stat">
+      <div class="score-num n-high" id="countHigh">0</div>
+      <div class="score-stat-label">High findings</div>
+    </div>
+    <div class="score-stat">
+      <div class="score-num n-med" id="countMed">0</div>
+      <div class="score-stat-label">Medium findings</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-panel" id="ctaPanel">
+    <h3>Ready for the <em style="font-style:normal;color:var(--amber)">real thing?</em></h3>
+    <p>This demo shows you the types of vulnerabilities VUNVAULT uncovers. A real engagement includes manual penetration testing, business logic analysis, and a retest — not just automated checks.</p>
+    <div class="cta-actions">
+      <a href="index.html#contact"><button class="btn-amber">Book a Real Scan</button></a>
+      <button class="btn-ghost" onclick="resetScanner()">Run Another Demo</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-section">
+  <div class="section-eye">How it works</div>
+  <h2 style="font-family:var(--fd);font-size:clamp(1.6rem,3vw,2.4rem);text-transform:uppercase;margin-bottom:8px;">What a real VUNVAULT assessment covers</h2>
+  <p style="color:var(--dim);max-width:580px;">This demo simulates the output format of a real engagement. Here is what the full process looks like.</p>
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-num">01</div>
+      <h4>Scoping Call</h4>
+      <p>We map your assets — web apps, APIs, subdomains, mobile apps — and agree the scope in writing before a single test runs.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">02</div>
+      <h4>Manual Testing</h4>
+      <p>Our analysts perform authenticated and unauthenticated testing across OWASP Top 10 categories, business logic, and access control.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">03</div>
+      <h4>Prioritised Report</h4>
+      <p>You receive a technical report for your developers and an executive summary for leadership — both in plain language, no jargon required.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">04</div>
+      <h4>Free Retest</h4>
+      <p>After your team fixes the findings, we retest the same issues at no extra cost and issue a remediation certificate.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-row">
+    <p>© 2026 VUNVAULT. Scanner Demo — for educational purposes only. Real assessments require signed authorisation.</p>
+    <a href="index.html" style="font-family:var(--fm);font-size:0.72rem;color:var(--dim);">← Back to VUNVAULT</a>
+  </div>
+</footer>
+
+<script>
+const CHECKS=[
+  {id:'tls',cat:'TLS / SSL',name:'Protocol Version Support',w:.68,steps:['Connecting to target...','Initiating TLS handshake...','Testing TLS 1.0... responded','Testing TLS 1.1... responded','Testing TLS 1.2... OK','TLS 1.3... OK'],sev:'CRITICAL',title:'Outdated TLS 1.0 Protocol Accepted',desc:'The server accepts connections using TLS 1.0, a protocol formally deprecated by the IETF in 2021 (RFC 8996). TLS 1.0 contains cryptographic weaknesses — including the POODLE and BEAST attacks — that allow network attackers to decrypt traffic between the server and its visitors.',fix:'Disable TLS 1.0 and 1.1 in your server configuration. Set the minimum to TLS 1.2 with TLS 1.3 preferred.\nNginx: ssl_protocols TLSv1.2 TLSv1.3;\nApache: SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1'},
+  {id:'hsts',cat:'TLS / SSL',name:'HTTP Strict Transport Security',w:.62,steps:['Sending HTTP request...','Reading response headers...','Checking Strict-Transport-Security...'],sev:'HIGH',title:'HSTS Header Not Present',desc:'The Strict-Transport-Security (HSTS) header is absent. Without HSTS, browsers do not automatically enforce HTTPS on return visits, leaving users vulnerable to SSL stripping attacks that silently downgrade connections from HTTPS to HTTP.',fix:'Add header: Strict-Transport-Security: max-age=31536000; includeSubDomains; preload\nThen submit the domain to hstspreload.org for browser-level enforcement across Chrome, Firefox, and Edge.'},
+  {id:'cert',cat:'TLS / SSL',name:'Certificate Configuration',w:.22,steps:['Retrieving SSL certificate...','Checking validity period...','Verifying chain of trust...'],sev:'CRITICAL',title:'SSL Certificate Expiring Within 14 Days',desc:'The SSL certificate expires imminently. Once expired, every visitor sees a full-page security warning and cannot access the site. Search engines also de-index expired domains during the invalid period.',fix:'Renew immediately. Consider Let\'s Encrypt with certbot for automated renewal:\ncertbot renew --nginx\nSet monitoring alerts at 30 and 14 days before expiry.'},
+  {id:'csp',cat:'Security Headers',name:'Content Security Policy',w:.78,steps:['Fetching response headers...','Parsing Content-Security-Policy...'],sev:'HIGH',title:'Content-Security-Policy Header Missing',desc:'No CSP is defined. Content Security Policy is the primary defence against Cross-Site Scripting (XSS) attacks — it declares which content sources browsers are permitted to load. Without it, any injected script executes unchallenged and can steal session cookies, redirect users, or capture keystrokes.',fix:'Start with report-only mode to audit without breaking anything:\nContent-Security-Policy-Report-Only: default-src \'self\'; script-src \'self\'; object-src \'none\'\nThen enforce once the policy is stable.'},
+  {id:'xframe',cat:'Security Headers',name:'Clickjacking Protection',w:.52,steps:['Checking X-Frame-Options...','Checking frame-ancestors directive...'],sev:'MEDIUM',title:'Clickjacking Protection Not Configured',desc:'No X-Frame-Options or frame-ancestors CSP directive is present. Attackers can embed this page inside a transparent iframe on a malicious website, tricking users into clicking invisible buttons — a clickjacking attack that can trigger account changes, purchases, or data disclosure without the user\'s knowledge.',fix:'Add to all responses:\nX-Frame-Options: DENY\nOr use CSP for modern browsers:\nContent-Security-Policy: frame-ancestors \'none\''},
+  {id:'xcto',cat:'Security Headers',name:'MIME Sniffing Protection',w:.47,steps:['Checking X-Content-Type-Options...'],sev:'LOW',title:'X-Content-Type-Options Header Missing',desc:'Without this header, browsers may perform MIME type sniffing — interpreting a served file as an executable script even when the server declares it as a harmless content type. This enables content injection via user-uploaded files that should be safe.',fix:'Add to all responses:\nX-Content-Type-Options: nosniff\nThis is a single-line addition in any web server configuration file.'},
+  {id:'rp',cat:'Security Headers',name:'Referrer Policy',w:.44,steps:['Checking Referrer-Policy header...'],sev:'LOW',title:'Referrer-Policy Not Configured',desc:'No Referrer-Policy is set. Browsers include the full URL of the originating page in the Referer header on outbound navigation. This can leak sensitive URL parameters — including session tokens or user IDs — to third-party sites linked from the application.',fix:'Add: Referrer-Policy: strict-origin-when-cross-origin\nThis sends the full URL within the same origin but only the domain when navigating cross-origin, preventing path and parameter leakage.'},
+  {id:'spf',cat:'Email / DNS',name:'SPF Email Authentication',w:.60,steps:['Querying DNS TXT records...','Locating SPF record...','Parsing SPF policy...'],sev:'HIGH',title:'SPF Not Enforced — Email Spoofing Risk',desc:'No valid SPF record was found, or the record uses ~all (soft fail) rather than -all (hard fail). Without enforced SPF, attackers can send email that appears to originate from your domain — enabling targeted phishing attacks against your customers, partners, and staff.',fix:'Create a DNS TXT record at the root domain:\nv=spf1 include:your-mail-provider.com -all\nList every service that sends mail on your behalf, then end with -all to hard-fail all unlisted senders.'},
+  {id:'dmarc',cat:'Email / DNS',name:'DMARC Policy',w:.68,steps:['Querying _dmarc DNS record...','Parsing DMARC policy...'],sev:'HIGH',title:'DMARC Policy Not Enforced',desc:'Either no DMARC record exists, or the policy is set to p=none — which collects reports but takes no action against unauthenticated email. Without enforcement, spoofed emails from your domain reach inboxes without any filtering.',fix:'Progressively enforce DMARC:\n1. p=none to collect reports\n2. p=quarantine after auditing senders\n3. p=reject once verified\n\nFinal record: v=DMARC1; p=reject; rua=mailto:dmarc@yourdomain.com'},
+  {id:'dnssec',cat:'Email / DNS',name:'DNSSEC Validation',w:.72,steps:['Checking DNSSEC chain of trust...','Validating DS record...'],sev:'MEDIUM',title:'DNSSEC Not Configured',desc:'DNS responses are not cryptographically signed. DNS cache poisoning attacks can silently redirect visitors to attacker-controlled servers — even over HTTPS — because the DNS lookup is compromised before the TLS connection is established.',fix:'Enable DNSSEC through your domain registrar. Cloudflare, Route 53, and most major registrars provide one-click DNSSEC activation. No technical DNS configuration required — it is handled by the registrar.'},
+  {id:'server',cat:'Information Disclosure',name:'Server Header Disclosure',w:.58,steps:['Reading Server header...','Checking X-Powered-By...','Checking version strings...'],sev:'MEDIUM',title:'Server Software Version Disclosed',desc:'Response headers reveal the web server name and exact version number (e.g. "Apache/2.4.51"). An attacker who knows the precise version can target known, unpatched vulnerabilities for that specific release without needing to discover them independently.',fix:'Suppress version information:\nNginx: server_tokens off;\nApache: ServerTokens Prod; ServerSignature Off;\nRemove X-Powered-By headers in framework settings.'},
+  {id:'cookies',cat:'Application Security',name:'Session Cookie Security',w:.54,steps:['Initiating session...','Capturing Set-Cookie headers...','Analysing cookie attributes...'],sev:'HIGH',title:'Session Cookies Missing Security Flags',desc:'Session cookies are set without the Secure flag (transmissible over HTTP) and without HttpOnly (accessible via JavaScript). A successful XSS attack can exfiltrate session cookies and enable complete account takeover without requiring the victim\'s credentials.',fix:'Set all session cookies with:\nSecure — only transmitted over HTTPS\nHttpOnly — not accessible via JavaScript\nSameSite=Strict — protection against CSRF\nIn most frameworks, these are single configuration options.'},
+  {id:'errors',cat:'Application Security',name:'Error Message Content',w:.46,steps:['Sending malformed request...','Triggering 404 error...','Analysing error page...'],sev:'MEDIUM',title:'Verbose Error Responses Leak Internal Details',desc:'Error responses expose internal application details — file paths, database queries, stack traces, or framework version strings. This reconnaissance data substantially reduces the effort required to mount a targeted attack.',fix:'Display only generic error pages to end users in production.\nLog detailed errors server-side only.\nDisable debug mode in all application frameworks:\nDEBUG=False (Django/Flask)\napp.env = production (Express)'},
+  {id:'admin',cat:'Application Security',name:'Admin Panel Exposure',w:.36,steps:['Probing /admin...','Probing /wp-admin...','Probing /dashboard, /manager...'],sev:'MEDIUM',title:'Administrative Interface Publicly Reachable',desc:'An administrative panel is accessible at a standard path without IP-level access restrictions. Publicly exposed admin interfaces are a primary target for credential brute-force attacks and authentication bypass exploits.',fix:'Restrict admin paths by IP allowlist at the server or firewall level.\nNginx example:\nlocation /admin { allow 203.0.113.0/24; deny all; }\nAlso enforce MFA on any admin login endpoint.'},
+  {id:'sri',cat:'Application Security',name:'Subresource Integrity',w:.60,steps:['Crawling external script tags...','Checking integrity attributes...'],sev:'LOW',title:'External Scripts Load Without Integrity Checks',desc:'JavaScript files are loaded from CDNs without Subresource Integrity (SRI) hashes. If a CDN is compromised, modified scripts execute in every visitor\'s browser — a supply chain attack that has affected major JavaScript libraries in the past.',fix:'Add integrity and crossorigin attributes to external scripts:\n<script src="https://cdn.example.com/lib.js"\n  integrity="sha384-[hash]"\n  crossorigin="anonymous">\nGenerate hashes at srihash.org or with openssl.'},
+  {id:'methods',cat:'Application Security',name:'HTTP Method Restrictions',w:.30,steps:['Sending OPTIONS request...','Reading Allow header...'],sev:'MEDIUM',title:'Unsafe HTTP Methods Enabled',desc:'The server accepts HTTP TRACE, PUT, or DELETE methods that have no place on a production web server. TRACE enables Cross-Site Tracing (XST) attacks; unrestricted PUT or DELETE may allow file modification.',fix:'Restrict allowed methods to GET, POST, and HEAD:\nNginx: limit_except GET POST HEAD { deny all; }\nApache: <LimitExcept GET POST HEAD>\n  Require all denied\n</LimitExcept>'},
+];
+
+const SEV_ORDER=['CRITICAL','HIGH','MEDIUM','LOW'];
+let scanType='full',scanActive=false,findings=[],findingCount=0;
+
+function hashStr(s){let h=0x811c9dc5;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193);}return h>>>0;}
+
+function getFindings(domain){
+  const clean=domain.toLowerCase().replace(/^https?:\/\//,'').replace(/\/.*/,'');
+  const checks=scanType==='quick'?CHECKS.filter(c=>c.cat==='Security Headers'||c.cat==='TLS / SSL'):
+    scanType==='owasp'?CHECKS.filter(c=>c.cat!=='Email / DNS'&&c.cat!=='TLS / SSL'):CHECKS;
+  const results=[];
+  checks.forEach((c,i)=>{
+    const seed=hashStr(clean+c.id+i);
+    if((seed%1000)/1000<c.w) results.push(c);
+  });
+  if(results.length<2){
+    const extras=checks.filter(c=>!results.find(r=>r.id===c.id));
+    extras.sort((a,b)=>b.w-a.w);
+    while(results.length<2&&extras.length) results.push(extras.shift());
+  }
+  if(results.length>10) results.length=10;
+  return results;
+}
+
+function calcScore(f){
+  const d={CRITICAL:22,HIGH:14,MEDIUM:7,LOW:3};
+  return Math.max(0,Math.min(100,100-f.reduce((s,c)=>s+(d[c.sev]||0),0)));
+}
+
+function drawGauge(score){
+  const r=56,cx=70,cy=70;
+  const toRad=d=>(d*Math.PI)/180;
+  const pt=d=>({x:cx+r*Math.cos(toRad(d)),y:cy+r*Math.sin(toRad(d))});
+  const sA=215,sweep=290;
+  const s=pt(sA),e=pt(sA+sweep);
+  const lA=sweep>180?1:0;
+  document.getElementById('gaugeTrack').setAttribute('d',`M${s.x},${s.y}A${r},${r},0,${lA},1,${e.x},${e.y}`);
+  if(score>0){
+    const endD=sA+sweep*(score/100);
+    const pe=pt(endD);
+    const laF=sweep*(score/100)>180?1:0;
+    const col=score>=80?'#5fd988':score>=60?'#4dd9e8':score>=40?'#ff8a3d':'#ff4d4d';
+    document.getElementById('gaugeFill').setAttribute('d',`M${s.x},${s.y}A${r},${r},0,${laF},1,${pe.x},${pe.y}`);
+    document.getElementById('gaugeFill').setAttribute('stroke',col);
+    document.getElementById('gaugeScore').textContent=score;
+    const lbl=score>=80?'SECURE':score>=60?'MODERATE':score>=40?'AT RISK':'CRITICAL';
+    document.getElementById('gaugeLabel').textContent=lbl;
+    document.getElementById('gaugeLabel').setAttribute('fill',col);
+  }
+}
+
+function setScanType(btn,type){
+  document.querySelectorAll('.scan-type-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  scanType=type;
+}
+
+function addTermLine(text,cls){
+  const body=document.getElementById('terminalBody');
+  const line=document.createElement('div');
+  line.className='t-line '+(cls||'t-step');
+  line.textContent=text;
+  body.appendChild(line);
+  body.scrollTop=body.scrollHeight;
+  return line;
+}
+
+function addFinding(check){
+  findingCount++;
+  document.getElementById('findingCount').textContent=findingCount+' found';
+  document.getElementById('findingCount').style.display='';
+  const body=document.getElementById('resultsBody');
+  if(findingCount===1) body.innerHTML='';
+  const card=document.createElement('div');
+  card.className='finding-card';
+  card.innerHTML=`
+    <div class="finding-top" onclick="toggleFinding(this)">
+      <span class="sev-badge sev-${check.sev}">${check.sev}</span>
+      <div>
+        <div class="finding-name">${check.title}</div>
+        <div class="finding-cat">${check.cat} · ${check.name}</div>
+      </div>
+      <span class="expand-icon">+</span>
+    </div>
+    <div class="finding-body">
+      <div class="finding-desc">${check.desc}</div>
+      <div class="finding-fix-label">Remediation</div>
+      <div class="finding-fix">${check.fix.replace(/\n/g,'<br>')}</div>
+    </div>`;
+  body.appendChild(card);
+  body.scrollTop=body.scrollHeight;
+}
+
+function toggleFinding(top){
+  const body=top.nextElementSibling;
+  const icon=top.querySelector('.expand-icon');
+  const open=body.classList.toggle('open');
+  icon.textContent=open?'−':'+';
+}
+
+async function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+async function startScan(){
+  if(scanActive) return;
+  const raw=document.getElementById('domainInput').value.trim();
+  const domain=raw||'demo-target.co.ke';
+  document.getElementById('domainInput').value=domain;
+
+  scanActive=true;
+  findings=[];
+  findingCount=0;
+
+  document.getElementById('scanBtn').disabled=true;
+  document.getElementById('scanBtn').textContent='Scanning…';
+  document.getElementById('terminalBody').innerHTML='';
+  document.getElementById('resultsBody').innerHTML=`<div class="results-idle"><p>Scanning ${domain}…</p></div>`;
+  document.getElementById('findingCount').style.display='none';
+  document.getElementById('scorePanel').className='score-panel';
+  document.getElementById('ctaPanel').className='cta-panel';
+  document.getElementById('scanArea').className='scan-area visible';
+  document.getElementById('progressFill').style.width='0%';
+  document.getElementById('progressPct').textContent='0%';
+  document.getElementById('terminalTitle').textContent=`vunvault-scanner — ${domain}`;
+  document.getElementById('gaugeScore').textContent='--';
+  document.getElementById('gaugeLabel').textContent='SCORING';
+  document.getElementById('gaugeFill').setAttribute('d','');
+
+  const allFindings=getFindings(domain);
+  const checks=scanType==='quick'?CHECKS.filter(c=>c.cat==='Security Headers'||c.cat==='TLS / SSL'):
+    scanType==='owasp'?CHECKS.filter(c=>c.cat!=='Email / DNS'&&c.cat!=='TLS / SSL'):CHECKS;
+
+  addTermLine(`[VUNVAULT] Starting ${scanType} scan of ${domain}`,'t-cat');
+  addTermLine(`[VUNVAULT] ${checks.length} checks queued`,'t-step');
+  await sleep(400);
+
+  let lastCat='';
+  for(let i=0;i<checks.length;i++){
+    const c=checks[i];
+    if(c.cat!==lastCat){
+      addTermLine(`\n▸ ${c.cat.toUpperCase()}`,'t-cat');
+      lastCat=c.cat;
+    }
+    for(const step of c.steps){
+      addTermLine(`  ${step}`,'t-step');
+      await sleep(55+Math.random()*45);
+    }
+    const isFinding=allFindings.find(f=>f.id===c.id);
+    if(isFinding){
+      const cls=isFinding.sev==='CRITICAL'?'t-critical':'t-find';
+      addTermLine(`  ⚠ ${isFinding.sev} — ${isFinding.title}`,cls);
+      findings.push(isFinding);
+      addFinding(isFinding);
+    } else {
+      addTermLine('  ✓ Pass','t-pass');
+    }
+    const pct=Math.round(((i+1)/checks.length)*100);
+    document.getElementById('progressFill').style.width=pct+'%';
+    document.getElementById('progressPct').textContent=pct+'%';
+    await sleep(90+Math.random()*70);
+  }
+
+  await sleep(300);
+  const score=calcScore(findings);
+  const crit=findings.filter(f=>f.sev==='CRITICAL').length;
+  const high=findings.filter(f=>f.sev==='HIGH').length;
+  const med=findings.filter(f=>f.sev==='MEDIUM').length;
+
+  addTermLine(`\n[VUNVAULT] Scan complete — ${findings.length} findings, score: ${score}/100`,'t-done');
+  document.getElementById('scorePanel').className='score-panel show';
+  document.getElementById('countCrit').textContent=crit;
+  document.getElementById('countHigh').textContent=high;
+  document.getElementById('countMed').textContent=med;
+  drawGauge(score);
+
+  await sleep(400);
+  document.getElementById('ctaPanel').className='cta-panel show';
+  document.getElementById('scanBtn').disabled=false;
+  document.getElementById('scanBtn').textContent='Run Demo Scan';
+  scanActive=false;
+}
+
+function resetScanner(){
+  document.getElementById('scanArea').className='scan-area';
+  document.getElementById('scorePanel').className='score-panel';
+  document.getElementById('ctaPanel').className='cta-panel';
+  document.getElementById('domainInput').value='';
+  document.getElementById('domainInput').focus();
+  findings=[];findingCount=0;scanActive=false;
+}
+
+document.getElementById('domainInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();startScan();}});
+</script>
+</body>
+</html>
+SCANNEREOF
+echo "Done. Size: $(wc -c < /home/claude/scanner-demo.html) bytes"
+Output
+
+Done. Size: 37634 bytes
