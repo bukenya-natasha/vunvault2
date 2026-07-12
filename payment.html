@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing & Payments — VUNVAULT</title>
+<meta name="description" content="VUNVAULT cybersecurity services and academy courses. Secure payment via card, mobile money, and bank transfer. Africa-wide coverage.">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7336792125855657" crossorigin="anonymous"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#0a0b0d;--panel:#14161a;--raised:#1b1e24;--line:#2a2d33;--line-s:#1f2228;
+  --bone:#e8e6e1;--dim:#9a9892;--amber:#ff8a3d;--cyan:#4dd9e8;
+  --red:#ff4d4d;--green:#5fd988;
+  --fd:'Big Shoulders Display',sans-serif;--fb:'IBM Plex Sans',sans-serif;--fm:'IBM Plex Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--bone);font-family:var(--fb);line-height:1.6;}
+a{color:inherit;text-decoration:none;}
+
+header{background:rgba(10,11,13,0.95);border-bottom:1px solid var(--line-s);position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);}
+nav{max-width:1200px;margin:0 auto;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--fd);font-size:1.3rem;letter-spacing:0.04em;text-transform:uppercase;}
+.logo svg{width:24px;height:24px;}
+.back-link{font-family:var(--fm);font-size:0.78rem;color:var(--dim);letter-spacing:0.04em;text-transform:uppercase;}
+.back-link:hover{color:var(--amber);}
+
+.hero{padding:64px 32px 52px;text-align:center;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(255,138,61,0.09),transparent 60%);}
+.eyebrow{font-family:var(--fm);font-size:0.7rem;color:var(--amber);letter-spacing:0.16em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;}
+.eyebrow::before{content:"";width:14px;height:1px;background:var(--amber);}
+.hero h1{font-family:var(--fd);text-transform:uppercase;font-size:clamp(2rem,5vw,3.2rem);margin-bottom:16px;line-height:1.05;}
+.hero h1 em{font-style:normal;color:var(--amber);}
+.hero p{color:var(--dim);max-width:560px;margin:0 auto;}
+
+/* TABS */
+.tab-bar{display:flex;justify-content:center;gap:0;border-bottom:1px solid var(--line);margin-bottom:0;}
+.tab-btn{background:transparent;border:none;border-bottom:2px solid transparent;color:var(--dim);font-family:var(--fm);font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;padding:14px 28px;cursor:pointer;transition:all 0.2s;margin-bottom:-1px;}
+.tab-btn.active{color:var(--bone);border-bottom-color:var(--amber);}
+.tab-btn:hover:not(.active){color:var(--bone);}
+
+/* SECTIONS */
+.tab-section{display:none;padding:56px 32px;}
+.tab-section.active{display:block;}
+.container{max-width:1100px;margin:0 auto;}
+.section-head{text-align:center;margin-bottom:48px;}
+.section-head h2{font-family:var(--fd);text-transform:uppercase;font-size:clamp(1.6rem,3.5vw,2.4rem);margin-bottom:12px;}
+.section-head p{color:var(--dim);max-width:520px;margin:0 auto;}
+
+/* PRICING CARDS */
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.p-card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:28px;display:flex;flex-direction:column;transition:border-color 0.2s,transform 0.2s;}
+.p-card:hover{border-color:rgba(255,138,61,0.4);transform:translateY(-3px);}
+.p-card.featured{border-color:var(--amber);position:relative;}
+.p-card.featured::before{content:"Most Popular";position:absolute;top:-12px;left:24px;background:var(--amber);color:var(--void);font-family:var(--fm);font-size:0.62rem;letter-spacing:0.06em;text-transform:uppercase;padding:4px 10px;border-radius:2px;font-weight:700;}
+.p-card h3{font-family:var(--fd);text-transform:uppercase;font-size:1.2rem;margin-bottom:6px;}
+.p-card .tagline{color:var(--dim);font-size:0.82rem;margin-bottom:20px;min-height:36px;}
+.price{font-family:var(--fm);font-size:1.8rem;color:var(--cyan);margin-bottom:4px;}
+.price-note{font-family:var(--fm);font-size:0.65rem;color:var(--dim);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:20px;}
+.features{list-style:none;flex:1;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.features li{font-size:0.82rem;color:var(--dim);padding-left:16px;position:relative;}
+.features li::before{content:"›";position:absolute;left:0;color:var(--amber);}
+.pay-btn{width:100%;padding:12px;border-radius:2px;font-family:var(--fm);font-size:0.75rem;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;border:1px solid var(--line);color:var(--bone);background:transparent;transition:all 0.2s;}
+.pay-btn:hover{border-color:var(--amber);color:var(--amber);}
+.pay-btn.primary{background:var(--amber);color:var(--void);border-color:var(--amber);font-weight:700;}
+.pay-btn.primary:hover{background:#ffa05f;}
+
+/* COURSE CARDS */
+.course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.c-card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:28px;display:flex;flex-direction:column;}
+.c-card .level-badge{display:inline-block;font-family:var(--fm);font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:2px;margin-bottom:16px;}
+.badge-beginner{background:rgba(95,217,136,0.12);color:var(--green);}
+.badge-intermediate{background:rgba(255,138,61,0.12);color:var(--amber);}
+.badge-advanced{background:rgba(77,217,232,0.12);color:var(--cyan);}
+.c-card h3{font-family:var(--fd);text-transform:uppercase;font-size:1.1rem;margin-bottom:8px;}
+.c-card p{color:var(--dim);font-size:0.83rem;flex:1;margin-bottom:16px;}
+.c-card .c-meta{font-family:var(--fm);font-size:0.68rem;color:var(--dim);margin-bottom:16px;}
+.c-price{font-family:var(--fm);font-size:1.4rem;color:var(--cyan);margin-bottom:16px;}
+
+/* CHECKOUT MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:500;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:4px;width:100%;max-width:440px;margin:16px;overflow:hidden;}
+.modal-head{background:var(--raised);padding:20px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);}
+.modal-head h3{font-family:var(--fd);text-transform:uppercase;font-size:1.1rem;}
+.modal-close{background:none;border:none;color:var(--dim);font-size:1.2rem;cursor:pointer;}
+.modal-close:hover{color:var(--bone);}
+.modal-body{padding:24px;}
+.modal-body .order-summary{background:var(--raised);border:1px solid var(--line);border-radius:3px;padding:14px 16px;margin-bottom:20px;}
+.order-name{font-family:var(--fm);font-size:0.78rem;color:var(--dim);text-transform:uppercase;letter-spacing:0.04em;}
+.order-price{font-family:var(--fm);font-size:1.3rem;color:var(--amber);margin-top:4px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-family:var(--fm);font-size:0.68rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--dim);margin-bottom:6px;}
+.form-group input,.form-group select{width:100%;background:var(--void);border:1px solid var(--line);color:var(--bone);font-family:var(--fb);font-size:0.9rem;padding:11px 14px;border-radius:2px;outline:none;}
+.form-group input:focus,.form-group select:focus{border-color:var(--amber);}
+.pay-methods{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.method-badge{font-family:var(--fm);font-size:0.65rem;padding:4px 10px;border:1px solid var(--line);border-radius:2px;color:var(--dim);}
+.confirm-btn{width:100%;padding:14px;background:var(--amber);color:var(--void);border:none;font-family:var(--fm);font-size:0.82rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:700;border-radius:2px;cursor:pointer;}
+.confirm-btn:hover{background:#ffa05f;}
+.secure-note{text-align:center;font-family:var(--fm);font-size:0.65rem;color:var(--dim);margin-top:12px;}
+
+/* CUSTOM QUOTE */
+.quote-form{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:40px;max-width:640px;margin:0 auto;}
+.quote-form h3{font-family:var(--fd);text-transform:uppercase;font-size:1.4rem;margin-bottom:8px;}
+.quote-form .sub{color:var(--dim);font-size:0.88rem;margin-bottom:28px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.qform-group{margin-bottom:16px;}
+.qform-group label{display:block;font-family:var(--fm);font-size:0.68rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--dim);margin-bottom:6px;}
+.qform-group input,.qform-group select,.qform-group textarea{width:100%;background:var(--raised);border:1px solid var(--line);color:var(--bone);font-family:var(--fb);font-size:0.9rem;padding:11px 14px;border-radius:2px;outline:none;resize:vertical;}
+.qform-group input:focus,.qform-group select:focus,.qform-group textarea:focus{border-color:var(--amber);}
+.qform-group select option{background:var(--void);}
+.submit-quote{padding:13px 28px;background:var(--amber);color:var(--void);border:none;font-family:var(--fm);font-size:0.78rem;letter-spacing:0.05em;text-transform:uppercase;font-weight:700;border-radius:2px;cursor:pointer;}
+.submit-quote:hover{background:#ffa05f;}
+
+/* PAYMENT METHODS SECTION */
+.methods-section{padding:56px 32px;background:var(--panel);border-top:1px solid var(--line-s);}
+.methods-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:900px;margin:40px auto 0;}
+.method-card{text-align:center;padding:24px 16px;border:1px solid var(--line);border-radius:4px;}
+.method-icon{font-size:2rem;margin-bottom:12px;}
+.method-card h4{font-family:var(--fm);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px;}
+.method-card p{font-size:0.78rem;color:var(--dim);}
+
+/* SUCCESS */
+.success-panel{display:none;text-align:center;padding:48px 24px;}
+.success-panel.show{display:block;}
+.success-icon{font-size:4rem;margin-bottom:16px;}
+
+/* GUARANTEE */
+.guarantee-bar{background:var(--raised);border-top:1px solid var(--line-s);padding:32px;text-align:center;}
+.guarantee-items{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin-top:20px;}
+.g-item{font-family:var(--fm);font-size:0.72rem;color:var(--dim);display:flex;align-items:center;gap:8px;}
+
+footer{padding:28px 32px;border-top:1px solid var(--line-s);}
+.footer-row{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-row p{font-family:var(--fm);font-size:0.72rem;color:var(--dim);}
+
+@media(max-width:900px){.pricing-grid,.course-grid{grid-template-columns:repeat(2,1fr);}
+.methods-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.pricing-grid,.course-grid,.methods-grid{grid-template-columns:1fr;}.form-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header>
+<nav>
+  <a href="index.html" class="logo">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z" stroke="#ff8a3d" stroke-width="1.4"/><path d="M8 12.5L10.5 15L16 9" stroke="#4dd9e8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    VUNVAULT
+  </a>
+  <a href="index.html" class="back-link">← Home</a>
+</nav>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">Transparent Pricing</div>
+  <h1>Invest in Your <em>Security</em></h1>
+  <p>Choose a service package, enrol in a course, or request a custom quote. Payments processed securely via Paystack, Stripe, and mobile money.</p>
+</section>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('services')">Security Services</button>
+  <button class="tab-btn" onclick="showTab('courses')">Academy Courses</button>
+  <button class="tab-btn" onclick="showTab('custom')">Custom Quote</button>
+</div>
+
+<!-- SERVICES TAB -->
+<div class="tab-section active" id="tab-services">
+<div class="container">
+  <div class="section-head">
+    <h2>Security Service Packages</h2>
+    <p>All engagements include a retest after remediation. Prices in USD. Invoices available in KES, NGN, GHS, ZAR on request.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="p-card">
+      <h3>Starter Scan</h3>
+      <div class="tagline">Automated vulnerability assessment for a single website or web application.</div>
+      <div class="price">From $149</div>
+      <div class="price-note">One-time · Delivered in 48hrs</div>
+      <ul class="features">
+        <li>OWASP Top 10 automated scan</li>
+        <li>SSL/TLS configuration review</li>
+        <li>HTTP security headers audit</li>
+        <li>DNS & email security check</li>
+        <li>Plain-English summary report</li>
+        <li>48-hour turnaround</li>
+      </ul>
+      <button class="pay-btn" onclick="openCheckout('Starter Scan','149','One-time security assessment')">Get Started →</button>
+    </div>
+    <div class="p-card featured">
+      <h3>SME Shield</h3>
+      <div class="tagline">Manual and automated testing for a live business web application.</div>
+      <div class="price">From $499</div>
+      <div class="price-note">Per engagement · Retest included</div>
+      <ul class="features">
+        <li>Manual web app penetration test</li>
+        <li>Authentication & access control review</li>
+        <li>API security testing</li>
+        <li>Business logic vulnerability testing</li>
+        <li>Technical + executive report</li>
+        <li>One free retest included</li>
+      </ul>
+      <button class="pay-btn primary" onclick="openCheckout('SME Shield','499','Manual penetration test + retest')">Get Started →</button>
+    </div>
+    <div class="p-card">
+      <h3>Fintech & SACCO Pro</h3>
+      <div class="tagline">Full-scope pentest with compliance mapping for regulated platforms.</div>
+      <div class="price">From $1,499</div>
+      <div class="price-note">Per engagement · 2 retests included</div>
+      <ul class="features">
+        <li>Web, API & infrastructure testing</li>
+        <li>Mobile app security review</li>
+        <li>Compliance mapping (SASRA, GDPR, PCI DSS)</li>
+        <li>Board-ready compliance report</li>
+        <li>Staff security awareness session</li>
+        <li>Two free retests included</li>
+      </ul>
+      <button class="pay-btn" onclick="openCheckout('Fintech & SACCO Pro','1499','Full-scope pentest + compliance mapping')">Get Started →</button>
+    </div>
+    <div class="p-card">
+      <h3>Enterprise Retainer</h3>
+      <div class="tagline">Continuous testing, monitoring, and dedicated analyst for growing platforms.</div>
+      <div class="price">Custom</div>
+      <div class="price-note">Quarterly engagement · Africa-wide</div>
+      <ul class="features">
+        <li>Quarterly penetration tests</li>
+        <li>Dedicated security analyst</li>
+        <li>Priority response SLA</li>
+        <li>Monthly threat intelligence reports</li>
+        <li>Staff training included</li>
+        <li>Multi-country coverage</li>
+      </ul>
+      <button class="pay-btn" onclick="showTab('custom');document.getElementById('tab-custom').scrollIntoView()">Request Quote →</button>
+    </div>
+  </div>
+  <p style="margin-top:16px;font-family:var(--fm);font-size:0.72rem;color:var(--dim);text-align:center;">A 50% deposit secures your engagement slot. Balance due on report delivery. NDA signed before work begins.</p>
+</div>
+</div>
+
+<!-- COURSES TAB -->
+<div class="tab-section" id="tab-courses">
+<div class="container">
+  <div class="section-head">
+    <h2>Academy Courses</h2>
+    <p>Self-paced online courses built for African professionals, founders, and teams. Certificate on completion.</p>
+  </div>
+  <div class="course-grid">
+    <div class="c-card">
+      <span class="level-badge badge-beginner">Beginner</span>
+      <h3>Cybersecurity Foundations</h3>
+      <p>Core concepts, threats and safe habits for anyone starting out. No coding required. 8 modules with quizzes and certificate.</p>
+      <div class="c-meta">⏱ ~2 hours · 8 modules · Certificate</div>
+      <div class="c-price">$29</div>
+      <button class="pay-btn primary" onclick="openCheckout('Cybersecurity Foundations Course','29','Self-paced online course + certificate')">Enrol Now →</button>
+      <div style="margin-top:10px;"><a href="course-foundations.html" style="font-family:var(--fm);font-size:0.7rem;color:var(--dim);">Preview free →</a></div>
+    </div>
+    <div class="c-card">
+      <span class="level-badge badge-intermediate">Founders & Managers</span>
+      <h3>Security for Founders</h3>
+      <p>What to ask your developer, what to budget for, how to read a pentest report, and how to build a security-first culture without a dedicated IT team.</p>
+      <div class="c-meta">⏱ ~3 hours · 10 modules · Certificate</div>
+      <div class="c-price">$79</div>
+      <button class="pay-btn" onclick="openCheckout('Security for Founders Course','79','Self-paced online course + certificate')">Enrol Now →</button>
+    </div>
+    <div class="c-card">
+      <span class="level-badge badge-advanced">Intermediate</span>
+      <h3>Practical Penetration Testing</h3>
+      <p>Hands-on web application testing methodology aligned to OWASP. For aspiring security analysts who want to move into offensive security.</p>
+      <div class="c-meta">⏱ ~6 hours · 12 modules · Certificate</div>
+      <div class="c-price">$149</div>
+      <button class="pay-btn" onclick="openCheckout('Practical Penetration Testing Course','149','Self-paced online course + certificate')">Enrol Now →</button>
+    </div>
+  </div>
+  <div style="margin-top:32px;background:var(--raised);border:1px solid var(--line);border-radius:4px;padding:28px;max-width:680px;margin-left:auto;margin-right:auto;text-align:center;">
+    <h3 style="font-family:var(--fd);text-transform:uppercase;font-size:1.2rem;margin-bottom:8px;">Team Training</h3>
+    <p style="color:var(--dim);font-size:0.88rem;margin-bottom:16px;">Need cybersecurity training for 5 or more people? We deliver live virtual or in-person workshops across Africa. Custom curriculum available.</p>
+    <button class="pay-btn" style="width:auto;padding:12px 28px;" onclick="showTab('custom')">Request Team Training Quote</button>
+  </div>
+</div>
+</div>
+
+<!-- CUSTOM QUOTE TAB -->
+<div class="tab-section" id="tab-custom">
+<div class="container">
+  <div class="quote-form">
+    <h3>Request a Custom Quote</h3>
+    <div class="sub">Tell us about your organisation and what you need. We will respond within 24 hours with a scoped proposal and pricing.</div>
+    <div class="form-row">
+      <div class="qform-group"><label>Full Name</label><input type="text" id="q_name" placeholder="Your name"></div>
+      <div class="qform-group"><label>Email Address</label><input type="email" id="q_email" placeholder="you@company.com"></div>
+    </div>
+    <div class="form-row">
+      <div class="qform-group"><label>Company / Organisation</label><input type="text" id="q_company" placeholder="Company name"></div>
+      <div class="qform-group"><label>Country</label>
+        <select id="q_country">
+          <option value="">Select country</option>
+          <option>Kenya</option><option>Nigeria</option><option>South Africa</option><option>Ghana</option>
+          <option>Tanzania</option><option>Uganda</option><option>Rwanda</option><option>Ethiopia</option>
+          <option>Egypt</option><option>Morocco</option><option>Senegal</option><option>Côte d'Ivoire</option>
+          <option>Cameroon</option><option>Zambia</option><option>Zimbabwe</option><option>Other Africa</option>
+          <option>Outside Africa</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="qform-group"><label>Service Needed</label>
+        <select id="q_service">
+          <option value="">Select service</option>
+          <option>Website Penetration Test</option>
+          <option>API Security Assessment</option>
+          <option>Mobile App Security</option>
+          <option>Cloud Security Review</option>
+          <option>SACCO / Fintech Full Audit</option>
+          <option>Staff Security Training</option>
+          <option>Compliance Mapping (PCI DSS / GDPR / SASRA)</option>
+          <option>Bug Bounty Programme Setup</option>
+          <option>Enterprise Security Retainer</option>
+          <option>Other / Not Sure</option>
+        </select>
+      </div>
+      <div class="qform-group"><label>Approximate Budget (USD)</label>
+        <select id="q_budget">
+          <option value="">Select range</option>
+          <option>Under $500</option>
+          <option>$500 – $1,000</option>
+          <option>$1,000 – $2,500</option>
+          <option>$2,500 – $5,000</option>
+          <option>$5,000 – $10,000</option>
+          <option>Over $10,000</option>
+          <option>Flexible / Unsure</option>
+        </select>
+      </div>
+    </div>
+    <div class="qform-group"><label>Tell us about your project</label>
+      <textarea id="q_message" rows="4" placeholder="What systems need testing? Any compliance requirements? Specific concerns?"></textarea>
+    </div>
+    <div class="form-row" style="align-items:flex-end;">
+      <div class="qform-group"><label>Preferred Start Date</label><input type="date" id="q_date"></div>
+      <div style="padding-bottom:16px;"><button class="submit-quote" onclick="submitQuote()">Send Request →</button></div>
+    </div>
+    <div id="quoteSuccess" style="display:none;background:rgba(95,217,136,0.1);border:1px solid var(--green);padding:14px;border-radius:2px;font-family:var(--fm);font-size:0.8rem;color:var(--green);margin-top:12px;"></div>
+  </div>
+</div>
+</div>
+
+<!-- PAYMENT METHODS -->
+<div class="methods-section">
+  <div class="container">
+    <div style="text-align:center;">
+      <div class="eyebrow" style="justify-content:center;">Accepted Payment Methods</div>
+      <h2 style="font-family:var(--fd);text-transform:uppercase;font-size:1.8rem;margin-bottom:8px;">We accept payments from across Africa</h2>
+      <p style="color:var(--dim);">Secure payment processing via Paystack. Supports local currencies and mobile money.</p>
+    </div>
+    <div class="methods-grid">
+      <div class="method-card"><div class="method-icon">💳</div><h4>Credit / Debit Card</h4><p>Visa, Mastercard accepted worldwide. Processed securely via Paystack.</p></div>
+      <div class="method-card"><div class="method-icon">📱</div><h4>Mobile Money</h4><p>M-Pesa (Kenya), MTN Mobile Money, Airtel Money, and more.</p></div>
+      <div class="method-card"><div class="method-icon">🏦</div><h4>Bank Transfer</h4><p>Direct bank transfer available for enterprise clients. Invoice provided.</p></div>
+      <div class="method-card"><div class="method-icon">💰</div><h4>Cryptocurrency</h4><p>USDT, USDC, and BTC accepted on request. Contact us to arrange.</p></div>
+    </div>
+    <p style="text-align:center;margin-top:24px;font-family:var(--fm);font-size:0.72rem;color:var(--dim);">All transactions are encrypted and processed by Paystack, a PCI DSS Level 1 certified payment processor. VUNVAULT never stores your card details.</p>
+  </div>
+</div>
+
+<div class="guarantee-bar">
+  <div style="font-family:var(--fd);font-size:1rem;text-transform:uppercase;letter-spacing:0.06em;">Our guarantees</div>
+  <div class="guarantee-items">
+    <span class="g-item">🔒 NDA signed before work begins</span>
+    <span class="g-item">📋 Fixed-scope, no hidden costs</span>
+    <span class="g-item">🔄 Free retest after remediation</span>
+    <span class="g-item">🌍 Africa-wide coverage</span>
+    <span class="g-item">⚡ 24hr response on all enquiries</span>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-row">
+    <p>© 2026 VUNVAULT. All rights reserved. Payments secured by Paystack.</p>
+    <div style="display:flex;gap:20px;">
+      <a href="index.html" style="font-family:var(--fm);font-size:0.72rem;color:var(--dim);">Home</a>
+      <a href="index.html#contact" style="font-family:var(--fm);font-size:0.72rem;color:var(--dim);">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Secure Checkout</h3>
+      <button class="modal-close" onclick="closeCheckout()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="order-summary">
+        <div class="order-name" id="orderName">Order</div>
+        <div class="order-price" id="orderPrice">$0</div>
+        <div style="font-family:var(--fm);font-size:0.65rem;color:var(--dim);margin-top:4px;" id="orderDesc"></div>
+      </div>
+      <div class="form-group"><label>Your Name</label><input type="text" id="pay_name" placeholder="Full name"></div>
+      <div class="form-group"><label>Email Address</label><input type="email" id="pay_email" placeholder="your@email.com"></div>
+      <div class="form-group"><label>Company (optional)</label><input type="text" id="pay_company" placeholder="Company name"></div>
+      <div class="form-group"><label>Country</label>
+        <select id="pay_country">
+          <option>Kenya</option><option>Nigeria</option><option>South Africa</option><option>Ghana</option>
+          <option>Tanzania</option><option>Uganda</option><option>Rwanda</option><option>Ethiopia</option>
+          <option>Egypt</option><option>Other Africa</option><option>Outside Africa</option>
+        </select>
+      </div>
+      <div class="pay-methods">
+        <span class="method-badge">💳 Card</span>
+        <span class="method-badge">📱 Mobile Money</span>
+        <span class="method-badge">🏦 Bank</span>
+        <span class="method-badge">🔒 Paystack</span>
+      </div>
+      <button class="confirm-btn" onclick="processPayment()">Pay Securely →</button>
+      <div class="secure-note">🔒 Secured by Paystack · PCI DSS Level 1 Certified · Your card is never stored</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ⚠ SETUP: Replace with your Paystack Public Key from dashboard.paystack.com
+const PAYSTACK_PUBLIC_KEY = 'pk_live_REPLACE_WITH_YOUR_PAYSTACK_KEY';
+
+let currentAmount = 0;
+let currentItem = '';
+
+function showTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target && event.target.classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.onclick && b.onclick.toString().includes("'"+tab+"'")) b.classList.add('active');
+  });
+}
+
+function openCheckout(name, amount, desc) {
+  currentAmount = parseInt(amount);
+  currentItem = name;
+  document.getElementById('orderName').textContent = name;
+  document.getElementById('orderPrice').textContent = '$' + amount;
+  document.getElementById('orderDesc').textContent = desc;
+  document.getElementById('checkoutModal').classList.add('open');
+}
+
+function closeCheckout() {
+  document.getElementById('checkoutModal').classList.remove('open');
+}
+
+function processPayment() {
+  const name = document.getElementById('pay_name').value.trim();
+  const email = document.getElementById('pay_email').value.trim();
+  if (!name || !email) { alert('Please enter your name and email address.'); return; }
+  if (!email.includes('@')) { alert('Please enter a valid email address.'); return; }
+
+  if (PAYSTACK_PUBLIC_KEY === 'pk_live_REPLACE_WITH_YOUR_PAYSTACK_KEY') {
+    // Demo mode — Paystack key not yet configured
+    closeCheckout();
+    alert('✓ Demo mode: Payment captured!\n\nTo process real payments:\n1. Sign up at paystack.com\n2. Get your Public Key\n3. Replace the PAYSTACK_PUBLIC_KEY value in payment.html\n\nWe will contact ' + email + ' to arrange payment manually.');
+    return;
+  }
+
+  const handler = PaystackPop.setup({
+    key: PAYSTACK_PUBLIC_KEY,
+    email: email,
+    amount: currentAmount * 100, // Paystack uses smallest currency unit
+    currency: 'USD',
+    ref: 'VUNVAULT_' + Date.now() + '_' + Math.floor(Math.random() * 1000000),
+    metadata: {
+      custom_fields: [
+        { display_name: 'Customer Name', variable_name: 'customer_name', value: name },
+        { display_name: 'Company', variable_name: 'company', value: document.getElementById('pay_company').value },
+        { display_name: 'Country', variable_name: 'country', value: document.getElementById('pay_country').value },
+        { display_name: 'Service', variable_name: 'service', value: currentItem }
+      ]
+    },
+    onClose: function() {},
+    callback: function(response) {
+      closeCheckout();
+      alert('✓ Payment successful!\n\nReference: ' + response.reference + '\n\nThank you for choosing VUNVAULT. You will receive a confirmation email at ' + email + ' within the hour. We will be in touch within 24 hours to begin your engagement.');
+    }
+  });
+  handler.openIframe();
+}
+
+function submitQuote() {
+  const name = document.getElementById('q_name').value.trim();
+  const email = document.getElementById('q_email').value.trim();
+  const company = document.getElementById('q_company').value.trim();
+  const service = document.getElementById('q_service').value;
+  const message = document.getElementById('q_message').value.trim();
+
+  if (!name || !email || !service) {
+    alert('Please fill in your name, email, and select a service.');
+    return;
+  }
+
+  const subject = encodeURIComponent('VUNVAULT Quote Request — ' + service);
+  const body = encodeURIComponent(
+    'Name: ' + name + '\n' +
+    'Email: ' + email + '\n' +
+    'Company: ' + company + '\n' +
+    'Country: ' + document.getElementById('q_country').value + '\n' +
+    'Service: ' + service + '\n' +
+    'Budget: ' + document.getElementById('q_budget').value + '\n' +
+    'Start Date: ' + document.getElementById('q_date').value + '\n\n' +
+    'Message:\n' + message
+  );
+
+  window.location.href = 'mailto:hello@vunvault.com?subject=' + subject + '&body=' + body;
+
+  const s = document.getElementById('quoteSuccess');
+  s.style.display = 'block';
+  s.textContent = '✓ Quote request sent! We will respond to ' + email + ' within 24 hours with a detailed proposal.';
+}
+
+// Close modal on overlay click
+document.getElementById('checkoutModal').addEventListener('click', function(e) {
+  if (e.target === this) closeCheckout();
+});
+</script>
+</body>
+</html>
