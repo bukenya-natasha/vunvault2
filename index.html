@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VUNVAULT — We Find the Cracks Before They Do</title>
+<meta name="description" content="VUNVAULT — Nairobi-based penetration testing, vulnerability assessments and cybersecurity education for SMEs, SACCOs and fintechs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0a0b0d;
+    --panel:#14161a;
+    --panel-raised:#1b1e24;
+    --line:#2a2d33;
+    --line-soft:#1f2228;
+    --bone:#e8e6e1;
+    --bone-dim:#9a9892;
+    --amber:#ff8a3d;
+    --amber-dim:#b86426;
+    --cyan:#4dd9e8;
+    --red:#ff4d4d;
+    --green:#5fd988;
+    --font-display:'Big Shoulders Display',sans-serif;
+    --font-body:'IBM Plex Sans',sans-serif;
+    --font-mono:'IBM Plex Mono',monospace;
+    --container:1200px;
+    --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;--s7:96px;--s8:128px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--void);
+    color:var(--bone);
+    font-family:var(--font-body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  img,canvas,svg{display:block;max-width:100%;}
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  .container{max-width:var(--container);margin:0 auto;padding:0 var(--s4);}
+  section{position:relative;}
+  h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;letter-spacing:0.01em;line-height:1.05;text-transform:uppercase;}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--amber);
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:var(--s2);
+  }
+  .eyebrow::before{content:"";width:18px;height:1px;background:var(--amber);display:inline-block;}
+  .section-head{max-width:640px;margin-bottom:var(--s6);}
+  .section-head h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:var(--s3);}
+  .section-head p{color:var(--bone-dim);font-size:1.05rem;max-width:560px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    padding:14px 28px;
+    border-radius:2px;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:transform .15s ease, background .2s ease, border-color .2s ease, color .2s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--amber);color:var(--void);font-weight:600;}
+  .btn-primary:hover{background:#ffa05f;}
+  .btn-outline{border-color:var(--line);color:var(--bone);}
+  .btn-outline:hover{border-color:var(--amber);color:var(--amber);}
+  .btn-ghost{color:var(--cyan);}
+  .btn-ghost:hover{color:#7ee8f2;}
+
+  /* CRACK DIVIDER — signature motif */
+  .crack-divider{width:100%;height:46px;position:relative;opacity:0.85;}
+  .crack-divider svg{width:100%;height:100%;}
+  .crack-divider path{
+    fill:none;
+    stroke:var(--amber);
+    stroke-width:1.4;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    filter:drop-shadow(0 0 4px rgba(255,138,61,0.55));
+    stroke-dasharray:1400;
+    stroke-dashoffset:1400;
+    transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1);
+  }
+  .crack-divider.lit path{stroke-dashoffset:0;}
+  .crack-divider.cyan path{stroke:var(--cyan);filter:drop-shadow(0 0 4px rgba(77,217,232,0.5));}
+
+  /* NAV */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(10,11,13,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  nav{
+    max-width:var(--container);margin:0 auto;padding:18px var(--s4);
+    display:flex;align-items:center;justify-content:space-between;
+    gap:var(--s3);
+  }
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.04em;text-transform:uppercase;flex-shrink:0;}
+  .logo svg{width:26px;height:26px;flex-shrink:0;}
+  .logo span{color:var(--amber);}
+  .nav-links{display:flex;align-items:center;gap:var(--s5);}
+  .nav-links a{
+    font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--bone-dim);transition:color .2s ease;
+  }
+  .nav-links a:hover{color:var(--amber);}
+  .nav-cta{display:flex;align-items:center;gap:var(--s3);flex-shrink:0;}
+  .nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .nav-toggle span{width:22px;height:2px;background:var(--bone);display:block;}
+
+  /* HERO */
+  .hero{
+    min-height:100vh;
+    display:flex;align-items:center;
+    padding-top:90px;
+    position:relative;
+    background:
+      radial-gradient(ellipse 60% 50% at 75% 30%, rgba(255,138,61,0.10), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 15% 80%, rgba(77,217,232,0.08), transparent 60%),
+      var(--void);
+    overflow:hidden;
+  }
+  #hero-canvas{position:absolute;top:0;right:0;width:55%;height:100%;z-index:1;opacity:0.95;pointer-events:none;}
+  .hero-inner{
+    position:relative;z-index:2;
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:var(--s6);
+    align-items:center;
+  }
+  .hero-copy .eyebrow{margin-bottom:var(--s3);}
+  .hero-copy h1{
+    font-size:clamp(2.6rem,5.6vw,4.6rem);
+    margin-bottom:var(--s4);
+    color:var(--bone);
+  }
+  .hero-copy h1 em{font-style:normal;color:var(--amber);}
+  .hero-copy p{font-size:1.1rem;color:var(--bone-dim);max-width:480px;margin-bottom:var(--s5);}
+  .hero-actions{display:flex;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s6);}
+  .hero-stats{display:flex;gap:var(--s6);font-family:var(--font-mono);}
+  .hero-stats div span{display:block;font-size:0.72rem;color:var(--bone-dim);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;}
+  .hero-stats div strong{font-size:1.4rem;color:var(--cyan);font-weight:600;}
+
+  /* TICKER */
+  .ticker-bar{
+    border-top:1px solid var(--line-soft);
+    border-bottom:1px solid var(--line-soft);
+    background:var(--panel);
+    padding:14px 0;
+    overflow:hidden;
+    white-space:nowrap;
+    position:relative;
+  }
+  .ticker-bar::before,.ticker-bar::after{
+    content:"";position:absolute;top:0;bottom:0;width:80px;z-index:2;
+  }
+  .ticker-bar::before{left:0;background:linear-gradient(90deg,var(--panel),transparent);}
+  .ticker-bar::after{right:0;background:linear-gradient(270deg,var(--panel),transparent);}
+  .ticker-track{display:inline-flex;gap:var(--s6);animation:ticker 38s linear infinite;}
+  .ticker-bar:hover .ticker-track{animation-play-state:paused;}
+  @keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  .ticker-item{font-family:var(--font-mono);font-size:0.82rem;color:var(--bone-dim);display:inline-flex;align-items:center;gap:10px;}
+  .ticker-item .sev{padding:2px 8px;border-radius:2px;font-size:0.68rem;font-weight:600;letter-spacing:0.05em;}
+  .sev-critical{background:rgba(255,77,77,0.15);color:var(--red);}
+  .sev-high{background:rgba(255,138,61,0.15);color:var(--amber);}
+  .sev-medium{background:rgba(77,217,232,0.15);color:var(--cyan);}
+
+  /* NETWORK SECTION */
+  .network-section{padding:var(--s8) 0;background:var(--void);}
+  .network-grid{display:grid;grid-template-columns:0.95fr 1.05fr;gap:var(--s7);align-items:center;}
+  .network-canvas-wrap{
+    aspect-ratio:1/0.85;background:var(--panel);border:1px solid var(--line);border-radius:4px;
+    position:relative;overflow:hidden;
+  }
+  #network-canvas{width:100%;height:100%;}
+  .network-copy ul{margin-top:var(--s4);display:flex;flex-direction:column;gap:var(--s3);}
+  .network-copy li{
+    display:flex;gap:14px;padding-bottom:var(--s3);border-bottom:1px solid var(--line-soft);
+    color:var(--bone-dim);font-size:0.95rem;
+  }
+  .network-copy li strong{color:var(--bone);font-family:var(--font-mono);font-size:0.85rem;letter-spacing:0.03em;min-width:30px;}
+
+  /* SERVICES / PRICING */
+  .services-section{padding:var(--s8) 0;background:var(--panel);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);}
+  .pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3);}
+  .price-card{
+    background:var(--panel-raised);border:1px solid var(--line);border-radius:4px;
+    padding:var(--s4);display:flex;flex-direction:column;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .price-card:hover{border-color:var(--amber-dim);transform:translateY(-4px);}
+  .price-card.featured{border-color:var(--amber);position:relative;}
+  .price-card.featured::before{
+    content:"Most booked";position:absolute;top:-12px;left:var(--s4);
+    background:var(--amber);color:var(--void);font-family:var(--font-mono);font-size:0.65rem;
+    letter-spacing:0.06em;text-transform:uppercase;padding:4px 10px;border-radius:2px;font-weight:700;
+  }
+  .price-card h3{font-size:1.25rem;margin-bottom:6px;}
+  .price-card .tagline{color:var(--bone-dim);font-size:0.85rem;margin-bottom:var(--s4);min-height:40px;}
+  .price-card .price{font-family:var(--font-mono);font-size:1.6rem;color:var(--cyan);margin-bottom:4px;}
+  .price-card .price-note{font-family:var(--font-mono);font-size:0.7rem;color:var(--bone-dim);margin-bottom:var(--s4);text-transform:uppercase;letter-spacing:0.04em;}
+  .price-card ul{flex:1;display:flex;flex-direction:column;gap:10px;margin-bottom:var(--s4);}
+  .price-card li{font-size:0.85rem;color:var(--bone-dim);padding-left:18px;position:relative;}
+  .price-card li::before{content:"›";position:absolute;left:0;color:var(--amber);}
+  .price-disclaimer{margin-top:var(--s4);font-size:0.8rem;color:var(--bone-dim);font-family:var(--font-mono);}
+
+  /* SCANNER DEMO */
+  .scanner-section{padding:var(--s8) 0;background:var(--void);}
+  .scanner-shell{
+    display:grid;grid-template-columns:0.85fr 1.15fr;gap:0;
+    border:1px solid var(--line);border-radius:6px;overflow:hidden;
+    background:var(--panel);
+  }
+  .scanner-form{padding:var(--s6);border-right:1px solid var(--line);}
+  .scanner-form .eyebrow{margin-bottom:var(--s3);}
+  .scanner-form h3{font-size:1.6rem;margin-bottom:var(--s2);}
+  .scanner-form p{color:var(--bone-dim);font-size:0.92rem;margin-bottom:var(--s4);}
+  .scan-input-row{display:flex;gap:10px;margin-bottom:var(--s3);}
+  .scan-input-row input{
+    flex:1;background:var(--void);border:1px solid var(--line);color:var(--bone);
+    font-family:var(--font-mono);font-size:0.9rem;padding:13px 14px;border-radius:2px;
+  }
+  .scan-input-row input:focus{outline:none;border-color:var(--amber);}
+  .scan-disclaimer{font-size:0.74rem;color:var(--bone-dim);line-height:1.5;}
+  .scan-console{
+    padding:var(--s6);font-family:var(--font-mono);font-size:0.82rem;
+    min-height:420px;display:flex;flex-direction:column;
+  }
+  .console-log{flex:1;color:var(--bone-dim);}
+  .console-log .line{margin-bottom:8px;opacity:0;animation:fadeLine .4s ease forwards;}
+  .console-log .line .ok{color:var(--green);}
+  .console-log .line .warn{color:var(--amber);}
+  @keyframes fadeLine{to{opacity:1;}}
+  .console-idle{color:var(--bone-dim);opacity:0.6;}
+  .report{margin-top:var(--s4);border-top:1px solid var(--line-soft);padding-top:var(--s4);display:none;}
+  .report.show{display:block;}
+  .report-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:10px 0;border-bottom:1px solid var(--line-soft);font-size:0.83rem;
+  }
+  .badge{padding:3px 10px;border-radius:2px;font-size:0.68rem;letter-spacing:0.04em;text-transform:uppercase;font-weight:600;}
+  .badge-critical{background:rgba(255,77,77,0.15);color:var(--red);}
+  .badge-high{background:rgba(255,138,61,0.15);color:var(--amber);}
+  .badge-medium{background:rgba(77,217,232,0.15);color:var(--cyan);}
+  .badge-low{background:rgba(95,217,136,0.15);color:var(--green);}
+
+  /* ACADEMY / BLOG */
+  .academy-section{padding:var(--s8) 0;background:var(--panel);border-top:1px solid var(--line-soft);}
+  .academy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);margin-bottom:var(--s6);}
+  .post-card{display:block;background:var(--panel-raised);border:1px solid var(--line);border-radius:4px;padding:var(--s4);transition:border-color .2s ease, transform .2s ease;}
+  .post-card:hover{border-color:var(--cyan);transform:translateY(-4px);}
+  .post-card .read-more{display:block;margin-top:var(--s3);font-family:var(--font-mono);font-size:0.72rem;color:var(--amber);text-transform:uppercase;letter-spacing:0.05em;}
+  .post-card .tag{font-family:var(--font-mono);font-size:0.7rem;color:var(--cyan);text-transform:uppercase;letter-spacing:0.05em;}
+  .post-card h4{font-size:1.1rem;text-transform:none;margin:var(--s2) 0 var(--s2);line-height:1.3;}
+  .post-card p{font-size:0.85rem;color:var(--bone-dim);}
+  .academy-tracks{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);}
+  .track-card{display:block;border:1px solid var(--line);border-radius:4px;padding:var(--s4);background:var(--void);transition:border-color .2s ease, transform .2s ease;}
+  .track-card:hover{border-color:var(--amber-dim);transform:translateY(-4px);}
+  .track-card .level{font-family:var(--font-mono);font-size:0.68rem;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;}
+  .track-card h4{font-size:1.05rem;text-transform:none;margin:8px 0 8px;color:var(--bone);}
+  .track-card p{font-size:0.82rem;color:var(--bone-dim);}
+
+  /* ABOUT */
+  .about-section{padding:var(--s8) 0;}
+  .about-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:var(--s7);align-items:center;}
+  .about-grid p{color:var(--bone-dim);margin-bottom:var(--s3);font-size:1rem;}
+  .about-quote{
+    font-family:var(--font-display);text-transform:uppercase;font-size:clamp(1.6rem,3vw,2.4rem);
+    color:var(--bone);border-left:3px solid var(--amber);padding-left:var(--s4);line-height:1.15;
+  }
+
+  /* CONTACT */
+  .contact-section{padding:var(--s8) 0;background:var(--panel);border-top:1px solid var(--line-soft);}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s7);}
+  .contact-form{display:flex;flex-direction:column;gap:var(--s3);}
+  .contact-form input,.contact-form select,.contact-form textarea{
+    background:var(--void);border:1px solid var(--line);color:var(--bone);
+    font-family:var(--font-body);font-size:0.92rem;padding:13px 14px;border-radius:2px;width:100%;
+  }
+  .contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{outline:none;border-color:var(--amber);}
+  .contact-form label{font-family:var(--font-mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--bone-dim);margin-bottom:6px;display:block;}
+  .contact-info{display:flex;flex-direction:column;justify-content:space-between;}
+  .contact-info-block{margin-bottom:var(--s4);}
+  .contact-info-block .eyebrow{margin-bottom:8px;}
+  .contact-info-block p,.contact-info-block a{color:var(--bone-dim);font-size:0.95rem;}
+  .social-row{display:flex;gap:14px;margin-top:var(--s3);}
+  .social-row a{
+    width:36px;height:36px;border:1px solid var(--line);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;color:var(--bone-dim);
+    transition:border-color .2s ease,color .2s ease;
+  }
+  .social-row a:hover{border-color:var(--amber);color:var(--amber);}
+
+  footer{padding:var(--s5) 0;border-top:1px solid var(--line-soft);}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--s3);}
+  .footer-row p{font-family:var(--font-mono);font-size:0.75rem;color:var(--bone-dim);}
+  .footer-links{display:flex;gap:var(--s4);}
+  .footer-links a{font-family:var(--font-mono);font-size:0.75rem;color:var(--bone-dim);}
+  .footer-links a:hover{color:var(--amber);}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  @media (max-width:980px){
+    .nav-links{display:none;}
+    .nav-toggle{display:flex;}
+    .hero-inner{grid-template-columns:1fr;}
+    #hero-canvas{position:relative;width:100%;height:320px;order:-1;opacity:0.8;}
+    .network-grid,.about-grid,.contact-grid{grid-template-columns:1fr;}
+    .pricing-grid{grid-template-columns:repeat(2,1fr);}
+    .academy-grid,.academy-tracks{grid-template-columns:1fr;}
+    .scanner-shell{grid-template-columns:1fr;}
+    .scanner-form{border-right:none;border-bottom:1px solid var(--line);}
+  }
+  @media (max-width:560px){
+    .pricing-grid{grid-template-columns:1fr;}
+    .hero-stats{gap:var(--s4);flex-wrap:wrap;}
+    /* FIX: Request a Scan button was overlapping the logo on narrow phones.
+       Shrink the button and logo text so they always fit on one line. */
+    nav{padding:14px var(--s3);}
+    .logo{font-size:1.05rem;gap:6px;}
+    .logo svg{width:20px;height:20px;}
+    .nav-cta .btn-primary{padding:10px 14px;font-size:0.7rem;gap:6px;}
+  }
+  @media (max-width:400px){
+    /* On very narrow phones, drop the button text down further so it never wraps onto the logo */
+    .nav-cta .btn-primary{padding:9px 10px;font-size:0.62rem;}
+    .logo{font-size:0.92rem;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .ticker-track{animation:none;}
+    .crack-divider path{transition:none;stroke-dashoffset:0;}
+    .reveal{opacity:1;transform:none;transition:none;}
+  }
+</style>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7336792125855657" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="#hero" class="logo">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z" stroke="#ff8a3d" stroke-width="1.4"/>
+        <path d="M8 12.5L10.5 15L16 9" stroke="#4dd9e8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      VUNVAULT
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#scanner">Scanner</a></li>
+      <li><a href="#academy">Academy</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#contact" class="btn btn-primary">Request a Scan</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<section class="hero" id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <div class="eyebrow">Nairobi · Offensive Security &amp; Education</div>
+      <h1>We Find <em>The Cracks</em> Before They Do</h1>
+      <p>VUNVAULT runs penetration tests and vulnerability assessments for SMEs, SACCOs and fintechs across Kenya — then teaches your team how to close the gaps for good.</p>
+      <div class="hero-actions">
+        <a href="#scanner" class="btn btn-primary">Try the Scanner Demo</a>
+        <a href="#academy" class="btn btn-outline">Explore the Academy</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong>OWASP</strong><span>Top 10 aligned testing</span></div>
+        <div><strong>NDA</strong><span>Confidential by default</span></div>
+        <div><strong>USD</strong><span>Transparent pricing for clients worldwide</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-bar">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<section class="network-section">
+  <div class="container network-grid">
+    <div class="network-canvas-wrap reveal">
+      <canvas id="network-canvas"></canvas>
+    </div>
+    <div class="network-copy reveal">
+      <div class="eyebrow">Attack Surface Mapping</div>
+      <h2 style="font-size:clamp(1.8rem,3.4vw,2.6rem);margin-bottom:16px;">Every login page, API and subdomain is a door. We map them all.</h2>
+      <p style="color:var(--bone-dim);">Before a single test runs, we build a live picture of your exposed assets — the same view an attacker builds during reconnaissance.</p>
+      <ul>
+        <li><strong>01</strong> Domains, subdomains and exposed services are enumerated and scored by exposure.</li>
+        <li><strong>02</strong> Each node is cross-referenced against known CVEs and misconfiguration patterns.</li>
+        <li><strong>03</strong> You receive a prioritized map — not a 40-page PDF nobody reads.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="crack-divider" id="divider1"><svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,30 L70,26 L115,46 L170,8 L235,36 L300,14 L365,42 L430,18 L495,38 L565,11 L635,34 L705,17 L775,44 L845,21 L915,37 L985,14 L1060,32 L1130,19 L1200,30"/></svg></div>
+
+<section class="services-section" id="services">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Services &amp; Pricing</div>
+      <h2>Built for Nairobi's SMEs, SACCOs &amp; fintechs</h2>
+      <p>Four tiers, transparent pricing, no hidden scoping calls. Every engagement ends with a retest.</p>
+    </div>
+    <!-- FIX: this wrapper div was missing, so the four price-cards below were
+         never actually laid out in a 4-column grid. Adding it back here. -->
+    <div class="pricing-grid" id="pricing">
+      <div class="price-card reveal">
+        <h3>Starter Scan</h3>
+        <div class="tagline">Automated vulnerability scan for a single website or landing page.</div>
+        <div class="price">From $100 USD</div>
+        <div class="price-note">One-time</div>
+        <ul>
+          <li>Automated OWASP Top 10 scan</li>
+          <li>SSL/TLS &amp; header review</li>
+          <li>Plain-English summary report</li>
+          <li>48-hour turnaround</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline">Get Started</a>
+      </div>
+      <div class="price-card featured reveal">
+        <h3>SME Shield</h3>
+        <div class="tagline">Manual + automated testing for a live business web app.</div>
+        <div class="price">From $350 USD</div>
+        <div class="price-note">Per engagement</div>
+        <ul>
+          <li>Manual web app penetration test</li>
+          <li>Authentication &amp; access-control review</li>
+          <li>Technical + executive report</li>
+          <li>One free retest included</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary">Get Started</a>
+      </div>
+      <div class="price-card reveal">
+        <h3>SACCO &amp; Fintech Pro</h3>
+        <div class="tagline">Full-scope pentest with compliance mapping for regulated platforms.</div>
+        <div class="price">From $1500 USD</div>
+        <div class="price-note">Per engagement</div>
+        <ul>
+          <li>Web, API &amp; infrastructure testing</li>
+          <li>Kenya Data Protection Act mapping</li>
+          <li>Board-ready compliance report</li>
+          <li>Two free retests included</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline">Get Started</a>
+      </div>
+      <div class="price-card reveal">
+        <h3>Enterprise Retainer</h3>
+        <div class="tagline">Continuous testing and monitoring for growing platforms.</div>
+        <div class="price">Custom Quote</div>
+        <div class="price-note">Quarterly</div>
+        <ul>
+          <li>Quarterly penetration tests</li>
+          <li>Dedicated security analyst</li>
+          <li>Priority response SLA</li>
+          <li>Staff security training included</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline">Talk to Us</a>
+      </div>
+    </div>
+    <p class="price-disclaimer">Prices shown are starting estimates. Final scope and quote are confirmed after a short discovery call.</p>
+  </div>
+</section>
+
+<section class="scanner-section" id="scanner">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">See It In Action</div>
+      <h2>What a VUNVAULT report looks like</h2>
+      <p>This is an illustrative demo — enter any domain to watch a sample scan sequence and a mock finding set, so you know exactly what a real engagement delivers.</p>
+    </div>
+    <div class="scanner-shell reveal">
+      <div class="scanner-form">
+        <div class="eyebrow">Demo Scanner</div>
+        <h3>Run a sample scan</h3>
+        <p>This demo does not test real infrastructure. To scan an actual website or account, book a real engagement below.</p>
+        <div class="scan-input-row">
+          <input type="text" id="scanInput" placeholder="example.co.ke" autocomplete="off">
+          <button class="btn btn-primary" id="scanBtn" style="white-space:nowrap;">Run Demo</button>
+        </div>
+        <p class="scan-disclaimer">Illustrative simulation only. Real assessments involve manual testing performed only on assets you own or are authorized to test, under signed engagement terms.</p>
+        <div style="margin-top:var(--s5);">
+          <a href="#contact" class="btn btn-outline">Book a Real Scan</a>
+        </div>
+      </div>
+      <div class="scan-console">
+        <div class="console-log" id="consoleLog">
+          <div class="console-idle">// Waiting for target — enter a domain and press Run Demo</div>
+        </div>
+        <div class="report" id="scanReport">
+          <h4 style="font-family:var(--font-mono);font-size:0.85rem;color:var(--bone-dim);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:14px;">Sample Findings — Illustrative</h4>
+          <div class="report-row"><span>Outdated TLS configuration (TLS 1.0 enabled)</span><span class="badge badge-critical">Critical</span></div>
+          <div class="report-row"><span>Missing Content-Security-Policy header</span><span class="badge badge-high">High</span></div>
+          <div class="report-row"><span>Verbose server error messages</span><span class="badge badge-medium">Medium</span></div>
+          <div class="report-row" style="border-bottom:none;"><span>Missing SPF / DMARC email records</span><span class="badge badge-low">Low</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="crack-divider cyan" id="divider2"><svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,20 L60,38 L130,12 L190,40 L255,16 L320,44 L390,20 L455,38 L525,10 L590,36 L660,18 L730,42 L800,22 L870,40 L940,14 L1010,34 L1080,20 L1140,38 L1200,24"/></svg></div>
+
+<section class="academy-section" id="academy">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Blog &amp; Academy</div>
+      <h2>Learn cybersecurity in plain English</h2>
+      <p>Practical writing and short courses for founders, IT teams and beginners who want to actually understand their risk — not just read jargon.</p>
+    </div>
+    <div class="academy-grid">
+      <a href="blog-mpesa-phishing.html" class="post-card reveal">
+        <span class="tag">Mobile Money</span>
+        <h4>Phishing and M-Pesa: how attackers target Kenyan mobile money users</h4>
+        <p>Inside the scam scripts draining real Kenyan accounts — and the habits that stop them cold.</p>
+        <span class="read-more">Read the full article →</span>
+      </a>
+      <a href="blog-owasp-saccos.html" class="post-card reveal">
+        <span class="tag">Compliance</span>
+        <h4>OWASP Top 10 for SACCOs: a practical compliance checklist</h4>
+        <p>Technical controls mapped to SASRA, the Kenya Data Protection Act, and PCI DSS — with actionable checklists for every vulnerability.</p>
+        <span class="read-more">Read the full article →</span>
+      </a>
+      <a href="blog-passwords.html" class="post-card reveal">
+        <span class="tag">Fundamentals</span>
+        <h4>Password hygiene for teams that hate changing passwords</h4>
+        <p>The 2026 research on what actually works — password managers, MFA, and passkeys — and how to roll them out without a revolt.</p>
+        <span class="read-more">Read the full article →</span>
+      </a>
+    </div>
+    <!-- FIX: this wrapper div was also missing its opening tag, which is why the
+         "Cybersecurity Foundations" card (an <a>, unlike its two sibling <div>s)
+         was rendering as an inline element instead of a grid item and collapsing
+         over the text below it. Re-added the wrapper + display:block on .track-card. -->
+    <div class="academy-tracks">
+      <a href="course-foundations.html" class="track-card reveal">
+        <span class="level">Beginner</span>
+        <h4>Cybersecurity Foundations</h4>
+        <p>Core concepts, threats and safe habits for anyone starting out — no coding required.</p>
+      </a>
+      <div class="track-card reveal">
+        <span class="level">Founders &amp; Managers</span>
+        <h4>Security for Founders</h4>
+        <p>What to ask your developer, what to budget for, and how to read a pentest report.</p>
+      </div>
+      <div class="track-card reveal">
+        <span class="level">Intermediate</span>
+        <h4>Practical Penetration Testing</h4>
+        <p>Hands-on web app testing methodology, aligned to OWASP, for aspiring analysts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about-section">
+  <div class="container about-grid">
+    <div class="reveal">
+      <div class="eyebrow">Why VUNVAULT</div>
+      <p class="about-quote">"We'd rather hand you an uncomfortable report than let someone else hand you a breach notice."</p>
+    </div>
+    <div class="reveal">
+      <p>VUNVAULT was founded in Nairobi by a security practitioner who combines offensive testing, software engineering and plain-spoken communication — because a report no one understands doesn't make anyone safer.</p>
+      <p>We work with small businesses, SACCOs and fintechs who are too often told that security is either irrelevant to them or impossibly expensive. We built VUNVAULT to prove both of those wrong: real testing, real findings, explained in language your whole team can act on.</p>
+      <a href="#contact" class="btn btn-outline">Get in touch</a>
+    </div>
+  </div>
+</section>
+
+<section class="contact-section" id="contact">
+  <div class="container contact-grid">
+    <div class="reveal">
+      <div class="eyebrow">Start an Engagement</div>
+      <h2 style="font-size:clamp(1.8rem,3.4vw,2.6rem);margin-bottom:20px;">Tell us what you need tested</h2>
+      <form class="contact-form" id="contactForm">
+        <div>
+          <label for="cName">Name</label>
+          <input type="text" id="cName" required>
+        </div>
+        <div>
+          <label for="cEmail">Email</label>
+          <input type="email" id="cEmail" required>
+        </div>
+        <div>
+          <label for="cService">Service of interest</label>
+          <select id="cService">
+            <option>Starter Scan</option>
+            <option>SME Shield</option>
+            <option>SACCO &amp; Fintech Pro</option>
+            <option>Enterprise Retainer</option>
+            <option>Academy / Training</option>
+          </select>
+        </div>
+        <div>
+          <label for="cMsg">What should we know?</label>
+          <textarea id="cMsg" rows="4"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Send Request</button>
+      </form>
+    </div>
+    <div class="contact-info reveal">
+      <div>
+        <div class="contact-info-block">
+          <div class="eyebrow">Based In</div>
+          <p>Nairobi, Kenya — working with clients across East Africa.</p>
+        </div>
+        <div class="contact-info-block">
+          <div class="eyebrow">Engagements</div>
+          <p>All testing is performed only on assets you own or are authorized to assess, under a signed agreement.</p>
+        </div>
+      </div>
+      <div>
+        <div class="eyebrow">Follow VUNVAULT</div>
+        <div class="social-row">
+          <a href="#" aria-label="LinkedIn">in</a>
+          <a href="#" aria-label="X / Twitter">X</a>
+          <a href="#" aria-label="Instagram">IG</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-row">
+    <p>© 2026 VUNVAULT. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#hero">Top</a>
+      <a href="#services">Services</a>
+      <a href="#academy">Academy</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ⚠️ NOTE FROM CLAUDE: your pasted file cut off right here, mid-comment,
+   before any of your actual JavaScript (hero canvas, network graph, ticker,
+   scanner demo, contact form, nav toggle, scroll reveal). That JS is NOT
+   included below — I did not want to guess and risk breaking your working
+   scripts. Everything above this point (HTML + CSS) is fully fixed and safe
+   to use. To finish this file, paste your original <script> block from
+   "/* ===== CONTACT FORM (mailto" onward back to me, or just copy this
+   fixed <head> and structure into your existing deployed file. */
+</script>
+</body>
+</html>
