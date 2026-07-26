@@ -119,9 +119,10 @@
 
   /* HERO */
   .hero{
-    min-height:100vh;
+    min-height:auto;
     display:flex;align-items:center;
     padding-top:90px;
+    padding-bottom:40px;
     position:relative;
     background:
       radial-gradient(ellipse 60% 50% at 75% 30%, rgba(255,138,61,0.10), transparent 60%),
@@ -129,7 +130,7 @@
       var(--void);
     overflow:hidden;
   }
-  #hero-canvas{position:absolute;top:0;right:0;width:55%;height:100%;z-index:1;opacity:0.95;pointer-events:none;}
+  #hero-canvas{position:absolute;top:0;right:0;width:75%;height:100%;z-index:1;opacity:0.95;pointer-events:none;}
   .hero-inner{
     position:relative;z-index:2;
     display:grid;grid-template-columns:1.1fr 0.9fr;gap:var(--s6);
@@ -312,7 +313,8 @@
     .nav-links{display:none;}
     .nav-toggle{display:flex;}
     .hero-inner{grid-template-columns:1fr;}
-    #hero-canvas{position:relative;width:100%;height:320px;order:-1;opacity:0.8;}
+  #hero-canvas{position:relative;width:100%;height:420px;order:-1;opacity:0.9;}
+
     .network-grid,.about-grid,.contact-grid{grid-template-columns:1fr;}
     .pricing-grid{grid-template-columns:repeat(2,1fr);}
     .academy-grid,.academy-tracks{grid-template-columns:1fr;}
