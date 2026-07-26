@@ -289,13 +289,13 @@
   .contact-info{display:flex;flex-direction:column;justify-content:space-between;}
   .contact-info-block{margin-bottom:var(--s4);}
   .contact-info-block .eyebrow{margin-bottom:8px;}
-  .contact-info-block p,.contact-info-block a{color:var(--bone-dim);font-size:0.95rem;}
-  .social-row{display:flex;gap:14px;margin-top:var(--s3);}
+  .social-row{display:flex;gap:14px;margin-top:var(--s3);flex-wrap:wrap;}
   .social-row a{
-    width:36px;height:36px;border:1px solid var(--line);border-radius:50%;
+    width:40px;height:40px;border:1px solid var(--line);border-radius:50%;
     display:flex;align-items:center;justify-content:center;color:var(--bone-dim);
+    font-size:0.68rem;font-family:var(--font-mono);font-weight:600;
     transition:border-color .2s ease,color .2s ease;
-  }
+}
   .social-row a:hover{border-color:var(--amber);color:var(--amber);}
 
   footer{padding:var(--s5) 0;border-top:1px solid var(--line-soft);}
@@ -610,11 +610,14 @@
       <div>
         <div class="eyebrow">Follow VUNVAULT</div>
         <div class="social-row">
-          <a href="#" aria-label="LinkedIn">in</a>
-          <a href="#" aria-label="X / Twitter">X</a>
-          <a href="#" aria-label="Instagram">IG</a>
+                 <div class="social-row">
+          <a href="mailto:hello@vunvault.com" aria-label="Email">@</a>
+          <a href="https://wa.me/254705998032" target="_blank" rel="noopener" aria-label="WhatsApp">WA</a>
+          <a href="https://x.com/bukenyaz55987?s=11" target="_blank" rel="noopener" aria-label="X / Twitter">X</a>
+          <a href="https://www.linkedin.com/in/natashabukenya?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_ios" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+          <a href="https://www.instagram.com/vunvault?igsh=b3h1MXVhbjIwbm92&amp;utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+          <a href="https://www.tiktok.com/@vunvault" target="_blank" rel="noopener" aria-label="TikTok">TT</a>
         </div>
-      </div>
     </div>
   </div>
 </section>
