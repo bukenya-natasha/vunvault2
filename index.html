@@ -261,7 +261,8 @@
   .post-card h4{font-size:1.1rem;text-transform:none;margin:var(--s2) 0 var(--s2);line-height:1.3;}
   .post-card p{font-size:0.85rem;color:var(--bone-dim);}
   .academy-tracks{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);}
-  .track-card{border:1px solid var(--line);border-radius:4px;padding:var(--s4);background:var(--void);}
+   .track-card{display:block;border:1px solid var(--line);border-radius:4px;padding:var(--s4);background:var(--void);text-decoration:none;color:inherit;transition:border-color .2s ease, transform .2s ease;}
+  .track-card:hover{border-color:var(--amber-dim);transform:translateY(-4px);}
   .track-card .level{font-family:var(--font-mono);font-size:0.68rem;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;}
   .track-card h4{font-size:1.05rem;text-transform:none;margin:8px 0 8px;}
   .track-card p{font-size:0.82rem;color:var(--bone-dim);}
@@ -529,24 +530,24 @@
         <p>The 2026 research on what actually works — password managers, MFA, and passkeys — and how to roll them out without a revolt.</p>
         <span class="read-more">Read the full article →</span>
       </a>
-    </div>
-  <div class="academy-grid">
-  <a class="card" href="course-foundations.html">
+   <div class="academy-tracks">
+  <a class="track-card reveal" href="course-foundations.html">
     <span class="level">Beginner</span>
     <h4>Cybersecurity Foundations</h4>
     <p>Core concepts, threats and safe habits for anyone starting out — no coding required.</p>
   </a>
-  <a class="card" href="#">
+  <a class="track-card reveal" href="#">
     <span class="level">Beginner</span>
     <h4>Phishing &amp; Social Engineering Defense</h4>
     <p>Spot fraudulent M-Pesa, email and SIM-swap scams before they cost you — built for SACCOs, fintechs and everyday teams.</p>
   </a>
-  <a class="card" href="#">
+  <a class="track-card reveal" href="#">
     <span class="level">Intermediate</span>
     <h4>Practical Penetration Testing</h4>
     <p>Hands-on web app testing methodology, aligned to OWASP, for aspiring analysts.</p>
   </a>
 </div>
+
 
     </div>
   </div>
