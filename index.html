@@ -407,6 +407,37 @@
     .vv-chat-toggle{right:16px;bottom:16px;}
   }
 </style>
+<style>
+/* ===== VUNVAULT SECURITY ADVISORY + PRESS (added) ===== */
+.advisory-section{background:var(--panel);}
+.advisory-box{margin-top:var(--s4);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:6px;background:var(--panel-raised);overflow:hidden;}
+.advisory-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s2);padding:14px 20px;background:rgba(255,77,77,0.07);border-bottom:1px solid var(--line-soft);}
+.adv-id{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--bone-dim);}
+.adv-chips{display:flex;gap:8px;flex-wrap:wrap;}
+.adv-chip{font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.06em;text-transform:uppercase;padding:4px 10px;border-radius:2px;font-weight:600;}
+.adv-chip.critical{background:rgba(255,77,77,0.15);color:var(--red);}
+.adv-chip.info{background:rgba(77,217,232,0.15);color:var(--cyan);}
+.adv-chip.warn{background:rgba(255,138,61,0.15);color:var(--amber);}
+.advisory-body{padding:var(--s4) 20px 20px;}
+.advisory-body h3{font-size:1.1rem;text-transform:none;letter-spacing:0;margin-bottom:var(--s2);}
+.advisory-body p{font-size:0.95rem;color:var(--bone-dim);margin-bottom:var(--s2);}
+.adv-section-title{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--amber);margin:var(--s3) 0 10px;}
+.advisory-body ol.adv-list{margin:0;padding:0;list-style:none;counter-reset:adv;display:flex;flex-direction:column;gap:10px;}
+.advisory-body ol.adv-list li{color:var(--bone-dim);font-size:0.95rem;padding-left:34px;position:relative;counter-increment:adv;}
+.advisory-body ol.adv-list li::before{content:counter(adv);position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:50%;background:var(--amber);color:var(--void);font-family:var(--font-mono);font-size:0.7rem;font-weight:600;display:flex;align-items:center;justify-content:center;}
+.press-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4);}
+.press-panel{background:var(--panel-raised);border:1px solid var(--line);border-radius:6px;padding:var(--s4);}
+.press-quote{border-left:3px solid var(--amber);padding-left:var(--s3);margin-bottom:var(--s3);}
+.press-quote p{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(1.05rem,2vw,1.35rem);line-height:1.3;color:var(--bone);margin-bottom:8px;}
+.press-quote cite{font-family:var(--font-mono);font-size:0.72rem;color:var(--bone-dim);font-style:normal;}
+.press-contact{display:flex;flex-direction:column;gap:8px;font-family:var(--font-mono);font-size:0.82rem;color:var(--bone-dim);}
+.press-contact a{color:var(--amber);}
+.press-contact a:hover{color:#ffa05f;}
+.press-topics{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+.press-topics li{color:var(--bone-dim);font-size:0.92rem;padding-left:18px;position:relative;}
+.press-topics li::before{content:"\203A";position:absolute;left:0;color:var(--amber);}
+@media (max-width:900px){.press-grid{grid-template-columns:1fr;}}
+</style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7336792125855657" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -641,35 +672,50 @@
         <a href="news-interpol-report-africa-cybercrime.html" class="btn btn-ghost">Read more →</a>
       </div>
     </div>
-        <h3>Vodacom Lesotho launches M-Pesa investment solution</h3>
-        <p>subscribers can now buy government treasury bills and saving bonds directly from their digital wallets.</p>
-        <div class="article-meta"><span>27 Jul 2026</span><span>VUNVAULT Team</span></div>
-        <a href="news-vodacom-lesotho-mpesa.html" class="btn btn-ghost">Read more →</a>
+  </div>
+</section>
+
+
+<section class="advisory-section" id="advisories" style="padding:var(--s7) 0;border-top:1px solid var(--line-soft);">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Security Advisory</div>
+      <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);">Active threat advisory: internet-exposed control systems</h2>
+      <p>We publish short, practical advisories when real-world attacks teach us something every organization should know. This one is based on the coordinated cyberattacks on U.S. water systems in July 2026.</p>
+    </div>
+    <div class="advisory-box reveal">
+      <div class="advisory-head">
+        <span class="adv-id">VUNVAULT-ADV-2026-0803-01</span>
+        <div class="adv-chips">
+          <span class="adv-chip critical">Severity: Critical</span>
+          <span class="adv-chip warn">Active Campaign</span>
+          <span class="adv-chip info">ICS / OT Sector</span>
+        </div>
       </div>
-      <div class="article-card reveal">
-        <div class="article-tag">Artificial Intelligence</div>
-        <h3>Cencori, Spitch build speech AI models for African languages</h3>
-        <p>A strategic alliance seeks to deploy highly localized speech recognition and natural language processing models.</p>
-        <div class="article-meta"><span>24 Jul 2026</span><span>VUNVAULT Team</span></div>
-        <a href="news-speech-ai-african-languages.html" class="btn btn-ghost">Read more →</a>
-      </div>
-      <div class="article-card reveal">
-        <div class="article-tag">Fintech</div>
-        <h3>Guinea launches NimbaPay instant payment system</h3>
-        <p>The Central Bank has introduced a unified mobile payment interoperability network to allow immediate transactions.</p>
-        <div class="article-meta"><span>24 Jul 2026</span><span>VUNVAULT Team</span></div>
-        <a href="news-guinea-nimbapay.html" class="btn btn-ghost">Read more →</a>
-      </div>
-      <div class="article-card reveal">
-        <div class="article-tag">Fintech &amp; Saccos</div>
-        <h3>Kenya Fast Tracks Digital Reforms to Secure Sacco Sector</h3>
-        <p>SASRA is enforcing mandatory digital compliance frameworks and cybersecurity monitoring to protect member savings.</p>
-        <div class="article-meta"><span>29 Jul 2026</span><span>VUNVAULT Team</span></div>
-        <a href="news-kenya-sacco-reforms.html" class="btn btn-ghost">Read more →</a>
+      <div class="advisory-body">
+        <h3>Why this matters, in plain English</h3>
+        <p>A programmable logic controller (PLC) is a small industrial computer that tells pumps, valves, chemical dosers and sensors what to do. When a utility leaves one connected to the internet, often with its factory default password, an attacker anywhere in the world can find it with automated scanners in minutes and take control of it. The attackers behind the July 2026 water-system hacks were not sophisticated. They simply found what too many operators never look for.</p>
+        <div class="adv-section-title">Seven mitigations we recommend to every operator of critical infrastructure</div>
+        <ol class="adv-list">
+          <li>Audit every PLC, HMI, SCADA interface and remote-access point. If it does not need to be online, take it offline now.</li>
+          <li>Change default credentials immediately and enforce multi-factor authentication on all engineering workstations and HMIs.</li>
+          <li>Require VPN-only remote access from allow-listed IP addresses. Never expose control systems directly to the internet.</li>
+          <li>Segment operational (OT) networks from business (IT) networks and block unexpected outbound traffic from control systems.</li>
+          <li>Monitor for the signs of this campaign: password or IP-address changes on controllers, devices dropping offline, logins outside normal hours.</li>
+          <li>Back up controller logic and configuration files, and rehearse manual operation, so a locked-out plant can keep running.</li>
+          <li>Test your own defenses with an authorized attack-surface assessment before an attacker does it for you.</li>
+        </ol>
+        <div class="adv-section-title">Think you have been hit?</div>
+        <p>Do not reboot or reconfigure evidence. Disconnect the affected device from the network, preserve logs, notify your national incident-response team (in Kenya, the National KE-CIRT) and contact a qualified incident-response partner.</p>
+        <div style="margin-top:var(--s3);display:flex;gap:var(--s2);flex-wrap:wrap;">
+          <a href="news-water-systems-cyberattacks.html" class="btn btn-primary">Read the full analysis</a>
+          <a href="#contact" class="btn btn-outline">Request an exposure check</a>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
 
 <section class="about-section">
   <div class="container about-grid">
@@ -740,6 +786,44 @@
     </div>
   </div>
 </section>
+
+
+<section class="press-section" id="press" style="padding:var(--s7) 0;border-top:1px solid var(--line-soft);">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">Press &amp; Media</div>
+      <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);">For journalists and partners</h2>
+      <p>VUNVAULT is an Africa-rooted cybersecurity firm headquartered in Nairobi, Kenya, providing penetration testing, vulnerability assessments and security education to organizations of every size, across Africa and worldwide.</p>
+    </div>
+    <div class="press-grid reveal">
+      <div class="press-panel">
+        <div class="press-quote">
+          <p>&ldquo;The Minnesota attacks were not sophisticated, and that is exactly what makes them dangerous. Attackers simply found control systems left connected to the internet, often with default passwords. Every utility should treat this campaign as a rehearsal for something worse.&rdquo;</p>
+          <cite>VUNVAULT Security Team, in response to the July 2026 water-system attacks</cite>
+        </div>
+        <div class="adv-section-title">What we can talk to you about</div>
+        <ul class="press-topics">
+          <li>PLC and industrial control system (ICS/OT) security explained simply</li>
+          <li>What the U.S. water attacks mean for African utilities and regulators</li>
+          <li>How to run a free exposure check on your own organization</li>
+          <li>Cybersecurity training for teams, boards and beginners</li>
+        </ul>
+      </div>
+      <div class="press-panel">
+        <div class="adv-section-title">Media contact</div>
+        <div class="press-contact">
+          <span>Email: <a href="/cdn-cgi/l/email-protection#92e1e7e2e2fde0e6d2e4e7fce4f3e7fee6bcf1fdff"><span class="__cf_email__" data-cfemail="12616762627d60665264677c6473677e663c717d7f">[email&#160;protected]</span></a></span>
+          <span>WhatsApp: <a href="https://wa.me/254705998032" target="_blank" rel="noopener">+254 705 998 032</a></span>
+          <span>X (Twitter): <a href="https://x.com/vunvault" target="_blank" rel="noopener">@vunvault</a></span>
+          <span>Instagram: <a href="https://www.instagram.com/vunvault" target="_blank" rel="noopener">@vunvault</a></span>
+        </div>
+        <div class="adv-section-title" style="margin-top:var(--s3);">Press kit</div>
+        <p style="font-size:0.92rem;color:var(--bone-dim);line-height:1.7;">Need a short version? Use our one-line description: <em style="color:var(--bone);font-style:normal;">&ldquo;We find the cracks before they do&rdquo;</em> is our tagline. VUNVAULT is available for interviews, expert comment and joint research on cybersecurity in Africa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <footer>
   <div class="container footer-top">
@@ -820,7 +904,7 @@
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 /* ===== AI CHAT WIDGET =====
    This posts each message to /api/chat on your own domain. That endpoint is
@@ -1138,5 +1222,5 @@ scanInput.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.pre
   step();
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a23964c1faab6450',t:'MTc4NTQ2NzI1NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a254fc620f9d73f4',t:'MTc4NTc1NjU4MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a23964c1faab6450',t:'MTc4NTQ2NzI1NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a254fc620f9d73f4',t:'MTc4NTc1NjU4MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2554ed9b9a0c89d',t:'MTc4NTc1OTk1OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
