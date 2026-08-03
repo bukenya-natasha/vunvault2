@@ -4,29 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VUNVAULT — We Find the Cracks Before They Do</title>
-<meta name="description" content="VUNVAULT — Africa-rooted, worldwide penetration testing, vulnerability assessments and cybersecurity education for businesses and organizations of every size.">
+<meta name="description" content="VUNVAULT — Africa-rooted, worldwide penetration testing, vulnerability assessments and cybersecurity education. Inspired by IPFS Canada's clean enterprise experience.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --void:#0a0b0d;
-    --panel:#14161a;
-    --panel-raised:#1b1e24;
-    --line:#2a2d33;
-    --line-soft:#1f2228;
-    --bone:#e8e6e1;
-    --bone-dim:#9a9892;
-    --amber:#ff8a3d;
-    --amber-dim:#b86426;
-    --cyan:#4dd9e8;
-    --red:#ff4d4d;
-    --green:#5fd988;
-    --font-display:'Big Shoulders Display',sans-serif;
-    --font-body:'IBM Plex Sans',sans-serif;
-    --font-mono:'IBM Plex Mono',monospace;
-    --container:1200px;
+    --void:#ffffff;
+    --panel:#f4f7fb;
+    --panel-raised:#ffffff;
+    --panel-alt:#eef3fa;
+    --line:#d5deeb;
+    --line-soft:#e6ecf5;
+    --bone:#0f2442;
+    --bone-dim:#5a7090;
+    --amber:#10355e; /* Primary Navy - was amber */
+    --amber-dim:#0c2847;
+    --cyan:#1e5ba6; /* Secondary Blue - was cyan */
+    --cyan-bright:#2f81e0;
+    --red:#d92d20;
+    --green:#1a7a4c;
+    --blue-light:#e8f0fb;
+    --blue-mid:#2a6ebb;
+    --font-display:'Inter', 'IBM Plex Sans', sans-serif;
+    --font-body:'IBM Plex Sans', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+    --container:1180px;
     --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;--s7:96px;--s8:128px;
+    --radius:8px;
+    --shadow-sm:0 2px 10px rgba(16,53,94,0.06);
+    --shadow-md:0 8px 30px rgba(16,53,94,0.10);
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
@@ -36,425 +43,406 @@
     font-family:var(--font-body);
     line-height:1.6;
     overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
   }
   img,canvas,svg{display:block;max-width:100%;}
   a{color:inherit;text-decoration:none;}
   ul{list-style:none;}
   .container{max-width:var(--container);margin:0 auto;padding:0 var(--s4);}
   section{position:relative;}
-  h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;letter-spacing:0.01em;line-height:1.05;text-transform:uppercase;}
+  h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;letter-spacing:-0.01em;line-height:1.08;}
+  h1{letter-spacing:-0.02em;}
   .eyebrow{
     font-family:var(--font-mono);
-    font-size:0.75rem;
-    letter-spacing:0.18em;
+    font-size:0.73rem;
+    letter-spacing:0.16em;
     text-transform:uppercase;
-    color:var(--amber);
+    color:var(--cyan);
     display:flex;align-items:center;gap:10px;
     margin-bottom:var(--s2);
+    font-weight:600;
   }
-  .eyebrow::before{content:"";width:18px;height:1px;background:var(--amber);display:inline-block;}
-  .section-head{max-width:640px;margin-bottom:var(--s6);}
-  .section-head h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:var(--s3);}
-  .section-head p{color:var(--bone-dim);font-size:1.05rem;max-width:560px;}
+  .eyebrow::before{content:"";width:22px;height:2px;background:var(--cyan);display:inline-block;border-radius:2px;}
+  .eyebrow.center{justify-content:center;}
+  .eyebrow.center::before,.eyebrow.center::after{content:"";width:18px;height:2px;background:var(--cyan);display:inline-block;}
+  .section-head{max-width:720px;margin-bottom:var(--s5);}
+  .section-head.center{margin-left:auto;margin-right:auto;text-align:center;}
+  .section-head.center .eyebrow{justify-content:center;}
+  .section-head.center p{margin-left:auto;margin-right:auto;}
+  .section-head h2{font-size:clamp(2rem,4vw,2.75rem);margin-bottom:var(--s3);color:var(--amber);}
+  .section-head p{color:var(--bone-dim);font-size:1.06rem;max-width:640px;line-height:1.7;}
+
   .btn{
-    display:inline-flex;align-items:center;gap:10px;
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
     font-family:var(--font-mono);
-    font-size:0.85rem;
-    letter-spacing:0.05em;
+    font-size:0.82rem;
+    letter-spacing:0.04em;
     text-transform:uppercase;
-    padding:14px 28px;
-    border-radius:2px;
+    padding:13px 26px;
+    border-radius:4px;
     cursor:pointer;
-    border:1px solid transparent;
-    transition:transform .15s ease, background .2s ease, border-color .2s ease, color .2s ease;
+    border:1.5px solid transparent;
+    transition:all .22s ease;
+    font-weight:600;
+    white-space:nowrap;
   }
-  .btn:hover{transform:translateY(-2px);}
-  .btn-primary{background:var(--amber);color:var(--void);font-weight:600;}
-  .btn-primary:hover{background:#ffa05f;}
-  .btn-outline{border-color:var(--line);color:var(--bone);}
-  .btn-outline:hover{border-color:var(--amber);color:var(--amber);}
-  .btn-ghost{color:var(--cyan);}
-  .btn-ghost:hover{color:#7ee8f2;}
+  .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-sm);}
+  .btn-primary{background:var(--amber);color:#fff;border-color:var(--amber);}
+  .btn-primary:hover{background:var(--amber-dim);border-color:var(--amber-dim);}
+  .btn-secondary{background:var(--cyan);color:#fff;border-color:var(--cyan);}
+  .btn-secondary:hover{background:#174a8a;border-color:#174a8a;}
+  .btn-outline{border-color:var(--line);color:var(--amber);background:#fff;}
+  .btn-outline:hover{border-color:var(--amber);color:var(--amber);background:var(--blue-light);}
+  .btn-outline-blue{border-color:var(--cyan);color:var(--cyan);background:transparent;}
+  .btn-outline-blue:hover{background:var(--cyan);color:#fff;}
+  .btn-ghost{color:var(--cyan);padding-left:0;padding-right:0;border:none;background:transparent;text-transform:none;font-family:var(--font-body);font-weight:600;letter-spacing:0;font-size:0.92rem;}
+  .btn-ghost:hover{color:var(--amber);transform:none;box-shadow:none;}
 
-  /* CRACK DIVIDER — signature motif */
-  .crack-divider{width:100%;height:46px;position:relative;opacity:0.85;}
-  .crack-divider svg{width:100%;height:100%;}
-  .crack-divider path{
-    fill:none;
-    stroke:var(--amber);
-    stroke-width:1.4;
-    stroke-linecap:round;
-    stroke-linejoin:round;
-    filter:drop-shadow(0 0 4px rgba(255,138,61,0.55));
-    stroke-dasharray:1400;
-    stroke-dashoffset:1400;
-    transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1);
-  }
-  .crack-divider.lit path{stroke-dashoffset:0;}
-  .crack-divider.cyan path{stroke:var(--cyan);filter:drop-shadow(0 0 4px rgba(77,217,232,0.5));}
-
-  /* NAV */
+  /* HEADER - IPFS style white */
   header{
     position:fixed;top:0;left:0;right:0;z-index:100;
-    background:rgba(10,11,13,0.85);
-    backdrop-filter:blur(10px);
+    background:rgba(255,255,255,0.94);
+    backdrop-filter:blur(12px) saturate(180%);
     border-bottom:1px solid var(--line-soft);
+    box-shadow:0 1px 0 rgba(16,53,94,0.04);
   }
+  .header-top{
+    background:var(--amber);
+    color:#fff;
+    font-family:var(--font-mono);
+    font-size:0.68rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:6px 0;
+    text-align:center;
+  }
+  .header-top span{opacity:0.9;}
   nav{
-    max-width:var(--container);margin:0 auto;padding:18px var(--s4);
+    max-width:var(--container);margin:0 auto;padding:14px var(--s4);
     display:flex;align-items:center;justify-content:space-between;
   }
-  .logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.04em;text-transform:uppercase;}
-  .logo svg{width:26px;height:26px;}
-  .logo span{color:var(--amber);}
-  .nav-links{display:flex;align-items:center;gap:var(--s5);}
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:1.35rem;letter-spacing:-0.01em;font-weight:800;color:var(--amber);}
+  .logo small{font-weight:500;font-size:0.7rem;opacity:0.7;display:block;letter-spacing:0.08em;text-transform:uppercase;font-family:var(--font-mono);margin-top:2px;}
+  .logo svg{width:30px;height:30px;}
+  .nav-links{display:flex;align-items:center;gap:var(--s4);}
   .nav-links a{
-    font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.06em;text-transform:uppercase;
+    font-family:var(--font-body);font-size:0.92rem;font-weight:500;
     color:var(--bone-dim);transition:color .2s ease;
+    position:relative;padding:4px 2px;
   }
+  .nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:var(--cyan);transform:scaleX(0);transition:transform .22s ease;}
   .nav-links a:hover{color:var(--amber);}
-  .nav-cta{display:flex;align-items:center;gap:var(--s3);}
-  .nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
-  .nav-toggle span{width:22px;height:2px;background:var(--bone);display:block;}
+  .nav-links a:hover::after{transform:scaleX(1);}
+  .nav-cta{display:flex;align-items:center;gap:12px;}
+  .nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:6px;}
+  .nav-toggle span{width:22px;height:2.5px;background:var(--amber);display:block;border-radius:2px;}
 
-  /* HERO */
+  /* HERO - IPFS Canada inspired */
   .hero{
-    min-height:100vh;
+    min-height:88vh;
     display:flex;align-items:center;
-    padding-top:90px;
+    padding:calc(90px + var(--s6)) 0 var(--s7);
     position:relative;
     background:
-      radial-gradient(ellipse 60% 50% at 75% 30%, rgba(255,138,61,0.10), transparent 60%),
-      radial-gradient(ellipse 50% 40% at 15% 80%, rgba(77,217,232,0.08), transparent 60%),
-      var(--void);
+      radial-gradient(ellipse 70% 60% at 85% 20%, rgba(47,129,224,0.08), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 10% 90%, rgba(16,53,94,0.05), transparent 60%),
+      #f9fbfe;
     overflow:hidden;
   }
-  #hero-canvas{position:absolute;top:0;right:0;width:55%;height:100%;z-index:1;opacity:0.95;pointer-events:none;}
+  #hero-canvas{position:absolute;top:0;right:-4%;width:58%;height:100%;z-index:1;opacity:0.55;pointer-events:none;}
   .hero-inner{
     position:relative;z-index:2;
-    display:grid;grid-template-columns:1.1fr 0.9fr;gap:var(--s6);
+    display:grid;grid-template-columns:1.05fr 0.95fr;gap:var(--s6);
     align-items:center;
   }
   .hero-copy .eyebrow{margin-bottom:var(--s3);}
   .hero-copy h1{
-    font-size:clamp(2.6rem,5.6vw,4.6rem);
-    margin-bottom:var(--s4);
-    color:var(--bone);
+    font-size:clamp(2.5rem,5vw,3.7rem);
+    margin-bottom:var(--s3);
+    color:var(--amber);
+    line-height:1.05;
   }
-  .hero-copy h1 em{font-style:normal;color:var(--amber);}
-  .hero-copy p{font-size:1.1rem;color:var(--bone-dim);max-width:480px;margin-bottom:var(--s5);}
-  .hero-actions{display:flex;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s6);}
-  .hero-stats{display:flex;gap:var(--s6);font-family:var(--font-mono);}
-  .hero-stats div span{display:block;font-size:0.72rem;color:var(--bone-dim);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;}
-  .hero-stats div strong{font-size:1.4rem;color:var(--cyan);font-weight:600;}
+  .hero-copy h1 em{font-style:normal;color:var(--cyan);position:relative;}
+  .hero-copy h1 em::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:8px;background:rgba(47,129,224,0.15);z-index:-1;}
+  .hero-copy p{font-size:1.13rem;color:var(--bone-dim);max-width:540px;margin-bottom:var(--s4);line-height:1.7;}
+  .hero-personas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:var(--s5);}
+  .hero-personas .btn{padding:14px 22px;min-width:172px;border-radius:6px;}
+  .hero-personas .btn-outline{background:#fff;box-shadow:var(--shadow-sm);border:1.5px solid var(--line);}
+  .hero-stats{display:flex;gap:var(--s5);font-family:var(--font-body);margin-top:var(--s4);padding-top:var(--s4);border-top:1px solid var(--line-soft);}
+  .hero-stats div span{display:block;font-size:0.75rem;color:var(--bone-dim);letter-spacing:0.06em;text-transform:uppercase;margin-top:4px;font-family:var(--font-mono);}
+  .hero-stats div strong{font-size:1.35rem;color:var(--amber);font-weight:700;font-family:var(--font-display);}
 
   /* TICKER */
   .ticker-bar{
     border-top:1px solid var(--line-soft);
     border-bottom:1px solid var(--line-soft);
     background:var(--panel);
-    padding:14px 0;
+    padding:12px 0;
     overflow:hidden;
     white-space:nowrap;
     position:relative;
   }
-  .ticker-bar::before,.ticker-bar::after{
-    content:"";position:absolute;top:0;bottom:0;width:80px;z-index:2;
-  }
-  .ticker-bar::before{left:0;background:linear-gradient(90deg,var(--panel),transparent);}
-  .ticker-bar::after{right:0;background:linear-gradient(270deg,var(--panel),transparent);}
-  .ticker-track{display:inline-flex;gap:var(--s6);animation:ticker 38s linear infinite;}
+  .ticker-track{display:inline-flex;gap:var(--s6);animation:ticker 42s linear infinite;}
   .ticker-bar:hover .ticker-track{animation-play-state:paused;}
   @keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-  .ticker-item{font-family:var(--font-mono);font-size:0.82rem;color:var(--bone-dim);display:inline-flex;align-items:center;gap:10px;}
-  .ticker-item .sev{padding:2px 8px;border-radius:2px;font-size:0.68rem;font-weight:600;letter-spacing:0.05em;}
-  .sev-critical{background:rgba(255,77,77,0.15);color:var(--red);}
-  .sev-high{background:rgba(255,138,61,0.15);color:var(--amber);}
-  .sev-medium{background:rgba(77,217,232,0.15);color:var(--cyan);}
+  .ticker-item{font-family:var(--font-mono);font-size:0.8rem;color:var(--bone-dim);display:inline-flex;align-items:center;gap:10px;}
+  .ticker-item .sev{padding:2px 8px;border-radius:3px;font-size:0.68rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;}
+  .sev-critical{background:#fee4e2;color:var(--red);}
+  .sev-high{background:#e8f0fb;color:var(--amber);}
+  .sev-medium{background:#e0edff;color:var(--cyan);}
 
-  /* NETWORK SECTION */
-  .network-section{padding:var(--s8) 0;background:var(--void);}
-  .network-grid{display:grid;grid-template-columns:0.95fr 1.05fr;gap:var(--s7);align-items:center;}
-  .network-canvas-wrap{
-    aspect-ratio:1/0.85;background:var(--panel);border:1px solid var(--line);border-radius:4px;
-    position:relative;overflow:hidden;
+  /* PORTAL SECTION - mimics IPFS Broker/Customer Centre */
+  .portal-section{padding:var(--s7) 0;background:var(--void);border-bottom:1px solid var(--line-soft);}
+  .portal-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:var(--s7);align-items:center;}
+  .portal-visual{
+    aspect-ratio:16/11;background:linear-gradient(135deg,#eaf1fb 0%,#f5f8fd 100%);border:1px solid var(--line-soft);border-radius:12px;
+    position:relative;overflow:hidden;box-shadow:var(--shadow-sm);
+    display:flex;align-items:center;justify-content:center;
   }
+  .portal-visual img{object-fit:cover;width:100%;height:100%;opacity:0.9;}
   #network-canvas{width:100%;height:100%;}
-  .network-copy ul{margin-top:var(--s4);display:flex;flex-direction:column;gap:var(--s3);}
-  .network-copy li{
-    display:flex;gap:14px;padding-bottom:var(--s3);border-bottom:1px solid var(--line-soft);
-    color:var(--bone-dim);font-size:0.95rem;
-  }
-  .network-copy li strong{color:var(--bone);font-family:var(--font-mono);font-size:0.85rem;letter-spacing:0.03em;min-width:30px;}
+  .portal-copy h2{font-size:clamp(1.8rem,3.2vw,2.45rem);margin-bottom:var(--s3);color:var(--amber);}
+  .portal-copy p{color:var(--bone-dim);font-size:1.02rem;line-height:1.7;margin-bottom:var(--s4);}
+  .portal-actions{display:flex;gap:12px;flex-wrap:wrap;}
 
-  /* SERVICES / PRICING */
-  .services-section{padding:var(--s8) 0;background:var(--panel);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);}
-  .pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3);}
-  .price-card{
-    background:var(--panel-raised);border:1px solid var(--line);border-radius:4px;
-    padding:var(--s4);display:flex;flex-direction:column;
-    transition:border-color .2s ease, transform .2s ease;
+  /* BENEFITS - IPFS 3-col Benefits */
+  .benefits-section{padding:var(--s8) 0;background:var(--panel);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);}
+  .benefits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s4);}
+  .benefit-card{
+    background:var(--panel-raised);border:1px solid var(--line-soft);border-radius:10px;
+    padding:var(--s4);display:flex;flex-direction:column;gap:var(--s2);
+    transition:all .25s ease;box-shadow:var(--shadow-sm);
   }
-  .price-card:hover{border-color:var(--amber-dim);transform:translateY(-4px);}
-  .price-card.featured{border-color:var(--amber);position:relative;}
-  .price-card.featured::before{
-    content:"Most booked";position:absolute;top:-12px;left:var(--s4);
-    background:var(--amber);color:var(--void);font-family:var(--font-mono);font-size:0.65rem;
-    letter-spacing:0.06em;text-transform:uppercase;padding:4px 10px;border-radius:2px;font-weight:700;
+  .benefit-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--line);}
+  .benefit-icon{
+    width:48px;height:48px;border-radius:8px;background:var(--blue-light);border:1px solid #d6e4f5;
+    display:flex;align-items:center;justify-content:center;color:var(--cyan);font-weight:700;font-family:var(--font-mono);
+    margin-bottom:6px;
   }
-  .price-card h3{font-size:1.25rem;margin-bottom:6px;}
-  .price-card .tagline{color:var(--bone-dim);font-size:0.85rem;margin-bottom:var(--s4);min-height:40px;}
-  .price-card .price{font-family:var(--font-mono);font-size:1.6rem;color:var(--cyan);margin-bottom:4px;}
-  .price-card .price-note{font-family:var(--font-mono);font-size:0.7rem;color:var(--bone-dim);margin-bottom:var(--s4);text-transform:uppercase;letter-spacing:0.04em;}
-  .price-card ul{flex:1;display:flex;flex-direction:column;gap:10px;margin-bottom:var(--s4);}
-  .price-card li{font-size:0.85rem;color:var(--bone-dim);padding-left:18px;position:relative;}
-  .price-card li::before{content:"›";position:absolute;left:0;color:var(--amber);}
-  .price-disclaimer{margin-top:var(--s4);font-size:0.8rem;color:var(--bone-dim);font-family:var(--font-mono);}
+  .benefit-card h3{font-size:1.2rem;text-transform:none;color:var(--amber);margin-bottom:4px;}
+  .benefit-card ul{margin:10px 0 var(--s3);display:flex;flex-direction:column;gap:10px;flex:1;}
+  .benefit-card li{font-size:0.9rem;color:var(--bone-dim);padding-left:20px;position:relative;line-height:1.6;}
+  .benefit-card li::before{content:"✓";position:absolute;left:0;color:var(--cyan);font-weight:700;font-size:0.8rem;top:1px;}
+  .benefit-card .btn{margin-top:auto;align-self:flex-start;}
 
-  /* SCANNER DEMO */
+  /* DIVIDER */
+  .crack-divider{width:100%;height:1px;background:var(--line-soft);position:relative;opacity:1;margin:0;}
+  .crack-divider.accent{height:3px;background:linear-gradient(90deg,var(--amber),var(--cyan));opacity:0.9;}
+
+  /* SCANNER DEMO - light */
   .scanner-section{padding:var(--s8) 0;background:var(--void);}
   .scanner-shell{
-    display:grid;grid-template-columns:0.85fr 1.15fr;gap:0;
-    border:1px solid var(--line);border-radius:6px;overflow:hidden;
-    background:var(--panel);
+    display:grid;grid-template-columns:0.9fr 1.1fr;gap:0;
+    border:1px solid var(--line-soft);border-radius:12px;overflow:hidden;
+    background:#fff;box-shadow:var(--shadow-md);
   }
-  .scanner-form{padding:var(--s6);border-right:1px solid var(--line);}
-  .scanner-form .eyebrow{margin-bottom:var(--s3);}
-  .scanner-form h3{font-size:1.6rem;margin-bottom:var(--s2);}
-  .scanner-form p{color:var(--bone-dim);font-size:0.92rem;margin-bottom:var(--s4);}
+  .scanner-form{padding:var(--s6);border-right:1px solid var(--line-soft);background:var(--panel);}
+  .scanner-form h3{font-size:1.5rem;margin-bottom:var(--s2);color:var(--amber);}
+  .scanner-form p{color:var(--bone-dim);font-size:0.93rem;margin-bottom:var(--s4);line-height:1.6;}
   .scan-input-row{display:flex;gap:10px;margin-bottom:var(--s3);}
   .scan-input-row input{
-    flex:1;background:var(--void);border:1px solid var(--line);color:var(--bone);
-    font-family:var(--font-mono);font-size:0.9rem;padding:13px 14px;border-radius:2px;
+    flex:1;background:#fff;border:1.5px solid var(--line);color:var(--bone);
+    font-family:var(--font-mono);font-size:0.9rem;padding:13px 14px;border-radius:6px;
   }
-  .scan-input-row input:focus{outline:none;border-color:var(--amber);}
-  .scan-disclaimer{font-size:0.74rem;color:var(--bone-dim);line-height:1.5;}
+  .scan-input-row input:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(47,129,224,0.12);}
+  .scan-disclaimer{font-size:0.76rem;color:var(--bone-dim);line-height:1.5;}
   .scan-console{
     padding:var(--s6);font-family:var(--font-mono);font-size:0.82rem;
-    min-height:420px;display:flex;flex-direction:column;
+    min-height:420px;display:flex;flex-direction:column;background:#0f2442; color:#c9d6ea;
   }
-  .console-log{flex:1;color:var(--bone-dim);}
+  .console-log{flex:1;color:#9fb3d1;}
   .console-log .line{margin-bottom:8px;opacity:0;animation:fadeLine .4s ease forwards;}
-  .console-log .line .ok{color:var(--green);}
-  .console-log .line .warn{color:var(--amber);}
+  .console-log .line .ok{color:#5fd988;}
+  .console-log .line .warn{color:#f5a623;}
   @keyframes fadeLine{to{opacity:1;}}
-  .console-idle{color:var(--bone-dim);opacity:0.6;}
-  .report{margin-top:var(--s4);border-top:1px solid var(--line-soft);padding-top:var(--s4);display:none;}
+  .console-idle{color:#6b86ab;opacity:0.9;}
+  .report{margin-top:var(--s4);border-top:1px solid rgba(255,255,255,0.12);padding-top:var(--s4);display:none;}
   .report.show{display:block;}
+  .report h4{color:#9fb3d1 !important;}
   .report-row{
     display:flex;justify-content:space-between;align-items:center;
-    padding:10px 0;border-bottom:1px solid var(--line-soft);font-size:0.83rem;
+    padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:0.83rem;color:#c9d6ea;
   }
-  .badge{padding:3px 10px;border-radius:2px;font-size:0.68rem;letter-spacing:0.04em;text-transform:uppercase;font-weight:600;}
-  .badge-critical{background:rgba(255,77,77,0.15);color:var(--red);}
-  .badge-high{background:rgba(255,138,61,0.15);color:var(--amber);}
-  .badge-medium{background:rgba(77,217,232,0.15);color:var(--cyan);}
-  .badge-low{background:rgba(95,217,136,0.15);color:var(--green);}
+  .badge{padding:3px 10px;border-radius:20px;font-size:0.68rem;letter-spacing:0.04em;text-transform:uppercase;font-weight:600;}
+  .badge-critical{background:rgba(217,45,32,0.18);color:#ff8a8a;border:1px solid rgba(217,45,32,0.3);}
+  .badge-high{background:rgba(242,153,74,0.18);color:#ffb26e;border:1px solid rgba(242,153,74,0.25);}
+  .badge-medium{background:rgba(47,129,224,0.18);color:#8ab8ff;border:1px solid rgba(47,129,224,0.25);}
+  .badge-low{background:rgba(95,217,136,0.18);color:#7ee9a0;border:1px solid rgba(95,217,136,0.2);}
 
-  /* ACADEMY / BLOG */
+  /* ACADEMY */
   .academy-section{padding:var(--s8) 0;background:var(--panel);border-top:1px solid var(--line-soft);}
-  .academy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);margin-bottom:var(--s6);}
-  .post-card{display:block;background:var(--panel-raised);border:1px solid var(--line);border-radius:4px;padding:var(--s4);transition:border-color .2s ease, transform .2s ease;}
-  .post-card:hover{border-color:var(--cyan);transform:translateY(-4px);}
-  .post-card .read-more{display:block;margin-top:var(--s3);font-family:var(--font-mono);font-size:0.72rem;color:var(--amber);text-transform:uppercase;letter-spacing:0.05em;}
-  .post-card .tag{font-family:var(--font-mono);font-size:0.7rem;color:var(--cyan);text-transform:uppercase;letter-spacing:0.05em;}
-  .post-card h4{font-size:1.1rem;text-transform:none;margin:var(--s2) 0 var(--s2);line-height:1.3;}
-  .post-card p{font-size:0.85rem;color:var(--bone-dim);}
+  .academy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s4);margin-bottom:var(--s6);}
+  .post-card{display:block;background:#fff;border:1px solid var(--line-soft);border-radius:10px;padding:var(--s4);transition:all .25s ease;box-shadow:var(--shadow-sm);}
+  .post-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--line);}
+  .post-card .read-more{display:block;margin-top:var(--s3);font-family:var(--font-mono);font-size:0.72rem;color:var(--cyan);text-transform:uppercase;letter-spacing:0.05em;font-weight:600;}
+  .post-card .tag{font-family:var(--font-mono);font-size:0.7rem;color:var(--cyan);text-transform:uppercase;letter-spacing:0.05em;background:var(--blue-light);padding:4px 8px;border-radius:4px;border:1px solid #d6e4f5;}
+  .post-card h4{font-size:1.06rem;text-transform:none;margin:var(--s3) 0 var(--s2);line-height:1.35;color:var(--amber);}
+  .post-card p{font-size:0.9rem;color:var(--bone-dim);line-height:1.6;}
   .academy-tracks{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);}
-  .track-card{border:1px solid var(--line);border-radius:4px;padding:var(--s4);background:var(--void);}
-  .track-card .level{font-family:var(--font-mono);font-size:0.68rem;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;}
-  .track-card h4{font-size:1.05rem;text-transform:none;margin:8px 0 8px;}
-  .track-card p{font-size:0.82rem;color:var(--bone-dim);}
+  .track-card{border:1px solid var(--line-soft);border-radius:10px;padding:var(--s4);background:#fff;box-shadow:var(--shadow-sm);transition:all .22s ease;}
+  .track-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+  .track-card .level{font-family:var(--font-mono);font-size:0.68rem;color:var(--cyan);text-transform:uppercase;letter-spacing:0.06em;background:var(--blue-light);padding:3px 7px;border-radius:3px;display:inline-block;}
+  .track-card h4{font-size:1.02rem;text-transform:none;margin:10px 0 8px;color:var(--amber);}
+  .track-card p{font-size:0.86rem;color:var(--bone-dim);line-height:1.6;}
+
+  /* NEWS */
+  .news-section{padding:var(--s7) 0;background:#fff;border-top:1px solid var(--line-soft);}
+  .article-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s4);}
+  .article-card{
+    background:#fff;border:1px solid var(--line-soft);border-radius:10px;
+    padding:var(--s4);display:flex;flex-direction:column;gap:var(--s2);
+    transition:all .25s ease;box-shadow:var(--shadow-sm);
+  }
+  .article-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--line);}
+  .article-tag{font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--cyan);background:var(--blue-light);padding:4px 8px;border-radius:4px;width:fit-content;}
+  .article-card h3{font-size:1.15rem;text-transform:none;letter-spacing:-0.01em;color:var(--amber);line-height:1.3;}
+  .article-card p{color:var(--bone-dim);font-size:0.9rem;flex:1;line-height:1.6;}
+  .article-meta{font-family:var(--font-mono);font-size:0.72rem;color:var(--bone-dim);display:flex;justify-content:space-between;border-top:1px solid var(--line-soft);padding-top:var(--s2);margin-top:auto;}
+
+  /* ADVISORY - light adaptation */
+  .advisory-section{background:var(--panel);}
+  .advisory-box{margin-top:var(--s4);border:1px solid #f2c8c8;border-left:4px solid var(--red);border-radius:10px;background:#fff;overflow:hidden;box-shadow:var(--shadow-sm);}
+  .advisory-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s2);padding:14px 20px;background:#fef2f2;border-bottom:1px solid #f9dede;}
+  .adv-id{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--bone-dim);}
+  .adv-chips{display:flex;gap:8px;flex-wrap:wrap;}
+  .adv-chip{font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.06em;text-transform:uppercase;padding:4px 10px;border-radius:20px;font-weight:600;border:1px solid transparent;}
+  .adv-chip.critical{background:#fee4e2;color:var(--red);border-color:#f9c6c3;}
+  .adv-chip.info{background:var(--blue-light);color:var(--cyan);border-color:#d6e4f5;}
+  .adv-chip.warn{background:#fef1e6;color:#b45a14;border-color:#f5d6b8;}
+  .advisory-body{padding:var(--s4) 20px 20px;}
+  .advisory-body h3{font-size:1.05rem;text-transform:none;letter-spacing:0;margin-bottom:var(--s2);color:var(--amber);}
+  .advisory-body p{font-size:0.95rem;color:var(--bone-dim);margin-bottom:var(--s2);line-height:1.7;}
+  .adv-section-title{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--amber);margin:var(--s3) 0 10px;font-weight:700;}
+  .advisory-body ol.adv-list{margin:0;padding:0;list-style:none;counter-reset:adv;display:flex;flex-direction:column;gap:10px;}
+  .advisory-body ol.adv-list li{color:var(--bone-dim);font-size:0.93rem;padding-left:34px;position:relative;counter-increment:adv;line-height:1.6;}
+  .advisory-body ol.adv-list li::before{content:counter(adv);position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:50%;background:var(--amber);color:#fff;font-family:var(--font-mono);font-size:0.7rem;font-weight:600;display:flex;align-items:center;justify-content:center;}
 
   /* ABOUT */
-  .about-section{padding:var(--s8) 0;}
+  .about-section{padding:var(--s8) 0;background:#fff;}
   .about-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:var(--s7);align-items:center;}
-  .about-grid p{color:var(--bone-dim);margin-bottom:var(--s3);font-size:1rem;}
+  .about-grid p{color:var(--bone-dim);margin-bottom:var(--s3);font-size:1rem;line-height:1.75;}
   .about-quote{
-    font-family:var(--font-display);text-transform:uppercase;font-size:clamp(1.6rem,3vw,2.4rem);
-    color:var(--bone);border-left:3px solid var(--amber);padding-left:var(--s4);line-height:1.15;
+    font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.2rem);
+    color:var(--amber);border-left:4px solid var(--cyan);padding-left:var(--s4);line-height:1.2;letter-spacing:-0.01em;
   }
 
-  /* CONTACT */
+  /* CONTACT - IPFS style */
   .contact-section{padding:var(--s8) 0;background:var(--panel);border-top:1px solid var(--line-soft);}
-  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s7);}
-  .contact-form{display:flex;flex-direction:column;gap:var(--s3);}
+  .contact-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:var(--s7);}
+  .contact-form{display:flex;flex-direction:column;gap:var(--s3);background:#fff;padding:var(--s4);border-radius:10px;border:1px solid var(--line-soft);box-shadow:var(--shadow-sm);}
   .contact-form input,.contact-form select,.contact-form textarea{
-    background:var(--void);border:1px solid var(--line);color:var(--bone);
-    font-family:var(--font-body);font-size:0.92rem;padding:13px 14px;border-radius:2px;width:100%;
+    background:#fff;border:1.5px solid var(--line);color:var(--bone);
+    font-family:var(--font-body);font-size:0.92rem;padding:13px 14px;border-radius:6px;width:100%;
   }
-  .contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{outline:none;border-color:var(--amber);}
-  .contact-form label{font-family:var(--font-mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--bone-dim);margin-bottom:6px;display:block;}
-  .contact-info{display:flex;flex-direction:column;justify-content:space-between;}
-  .contact-info-block{margin-bottom:var(--s4);}
-  .contact-info-block .eyebrow{margin-bottom:8px;}
-  .contact-info-block p,.contact-info-block a{color:var(--bone-dim);font-size:0.95rem;}
-  .social-row{display:flex;gap:14px;margin-top:var(--s3);}
+  .contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(47,129,224,0.12);}
+  .contact-form label{font-family:var(--font-mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--bone-dim);margin-bottom:6px;display:block;font-weight:600;}
+  .contact-info{display:flex;flex-direction:column;gap:var(--s4);}
+  .contact-info-card{background:#fff;border:1px solid var(--line-soft);border-radius:10px;padding:var(--s4);box-shadow:var(--shadow-sm);}
+  .contact-info-card h4{font-size:1rem;color:var(--amber);margin-bottom:8px;}
+  .contact-info-card p,.contact-info-card a{color:var(--bone-dim);font-size:0.93rem;line-height:1.6;}
+  .social-row{display:flex;gap:10px;margin-top:var(--s3);}
   .social-row a{
-    width:36px;height:36px;border:1px solid var(--line);border-radius:50%;
-    display:flex;align-items:center;justify-content:center;color:var(--bone-dim);
-    transition:border-color .2s ease,color .2s ease;
+    width:38px;height:38px;border:1.5px solid var(--line);border-radius:8px;
+    display:flex;align-items:center;justify-content:center;color:var(--bone-dim);background:#fff;
+    transition:all .2s ease;font-family:var(--font-mono);font-size:0.7rem;font-weight:700;
   }
-  .social-row a:hover{border-color:var(--amber);color:var(--amber);}
+  .social-row a:hover{border-color:var(--amber);color:#fff;background:var(--amber);}
 
-  footer{padding:var(--s7) 0 var(--s5);border-top:1px solid var(--line-soft);}
+  footer{padding:var(--s7) 0 var(--s5);border-top:1px solid var(--line-soft);background:#fcfdff;}
   .footer-top{display:grid;grid-template-columns:1.3fr repeat(4,1fr);gap:var(--s5);padding-bottom:var(--s6);margin-bottom:var(--s5);border-bottom:1px solid var(--line-soft);}
   .footer-brand .logo{margin-bottom:var(--s2);}
-  .footer-brand p{color:var(--bone-dim);font-size:0.85rem;max-width:240px;}
-  .footer-col h4{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--bone);margin-bottom:var(--s3);}
+  .footer-brand p{color:var(--bone-dim);font-size:0.86rem;max-width:260px;line-height:1.6;}
+  .footer-col h4{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--amber);margin-bottom:var(--s3);}
   .footer-col ul{display:flex;flex-direction:column;gap:11px;}
-  .footer-col a{font-family:var(--font-mono);font-size:0.82rem;color:var(--bone-dim);transition:color .2s ease;}
-  .footer-col a:hover{color:var(--amber);}
+  .footer-col a{font-family:var(--font-body);font-size:0.86rem;color:var(--bone-dim);transition:color .2s ease;}
+  .footer-col a:hover{color:var(--cyan);}
   .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--s3);}
   .footer-row p{font-family:var(--font-mono);font-size:0.75rem;color:var(--bone-dim);}
   .footer-links{display:flex;gap:var(--s4);}
   .footer-links a{font-family:var(--font-mono);font-size:0.75rem;color:var(--bone-dim);}
   .footer-links a:hover{color:var(--amber);}
-  @media (max-width:900px){.footer-top{grid-template-columns:1fr 1fr;}.footer-brand{grid-column:1/-1;}}
-  @media (max-width:560px){.footer-top{grid-template-columns:1fr;}}
 
-  /* PAGE HERO (News / Blog / other subpages) */
-  .page-hero{padding:calc(90px + var(--s6)) 0 var(--s6);border-bottom:1px solid var(--line-soft);}
-  .page-hero h1{font-size:clamp(2.2rem,4.5vw,3.4rem);margin-bottom:var(--s3);}
-  .page-hero p{color:var(--bone-dim);font-size:1.05rem;max-width:560px;}
-
-  /* ARTICLE GRID */
-  .article-section{padding:var(--s7) 0;}
-  .article-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s4);}
-  .article-card{
-    background:var(--panel-raised);border:1px solid var(--line);border-radius:4px;
-    padding:var(--s4);display:flex;flex-direction:column;gap:var(--s2);
-    transition:border-color .2s ease, transform .2s ease;
-  }
-  .article-card:hover{border-color:var(--amber-dim);transform:translateY(-4px);}
-  .article-tag{font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--cyan);}
-  .article-card h3{font-size:1.25rem;text-transform:none;letter-spacing:0;}
-  .article-card p{color:var(--bone-dim);font-size:0.92rem;flex:1;}
-  .article-meta{font-family:var(--font-mono);font-size:0.72rem;color:var(--bone-dim);display:flex;justify-content:space-between;border-top:1px solid var(--line-soft);padding-top:var(--s2);margin-top:auto;}
-  .article-card .btn{align-self:flex-start;margin-top:var(--s1);}
-  .article-featured{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:var(--s5);align-items:center;background:var(--panel-raised);border:1px solid var(--line);border-radius:4px;padding:var(--s5);margin-bottom:var(--s4);}
-  .article-featured h2{font-size:clamp(1.6rem,3vw,2.2rem);margin:var(--s2) 0 var(--s3);}
-  .article-featured p{color:var(--bone-dim);}
-  @media (max-width:900px){.article-grid{grid-template-columns:1fr 1fr;}.article-featured{grid-template-columns:1fr;}}
-  @media (max-width:600px){.article-grid{grid-template-columns:1fr;}}
-
-  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
   .reveal.in{opacity:1;transform:translateY(0);}
 
   @media (max-width:980px){
     .nav-links{display:none;}
     .nav-toggle{display:flex;}
-    .hero-inner{grid-template-columns:1fr;}
-    #hero-canvas{position:relative;width:100%;height:320px;order:-1;opacity:0.8;}
-    .network-grid,.about-grid,.contact-grid{grid-template-columns:1fr;}
-    .pricing-grid{grid-template-columns:repeat(2,1fr);}
-    .academy-grid,.academy-tracks{grid-template-columns:1fr;}
+    .hero-inner,.portal-grid,.about-grid,.contact-grid{grid-template-columns:1fr;}
+    #hero-canvas{position:relative;width:100%;height:300px;order:-1;opacity:0.4;right:0;}
+    .benefits-grid,.academy-grid,.academy-tracks,.article-grid{grid-template-columns:1fr 1fr;}
     .scanner-shell{grid-template-columns:1fr;}
-    .scanner-form{border-right:none;border-bottom:1px solid var(--line);}
+    .scanner-form{border-right:none;border-bottom:1px solid var(--line-soft);}
   }
-  @media (max-width:560px){
-    .pricing-grid{grid-template-columns:1fr;}
-    .hero-stats{gap:var(--s4);flex-wrap:wrap;}
+  @media (max-width:620px){
+    .benefits-grid,.academy-grid,.academy-tracks,.article-grid{grid-template-columns:1fr;}
+    .hero-personas{flex-direction:column;}
+    .hero-personas .btn{width:100%;}
+    .footer-top{grid-template-columns:1fr 1fr;}
+    .footer-brand{grid-column:1/-1;}
   }
-  @media (prefers-reduced-motion:reduce){
-    .ticker-track{animation:none;}
-    .crack-divider path{transition:none;stroke-dashoffset:0;}
-    .reveal{opacity:1;transform:none;transition:none;}
-  }
-  /* AI CHAT WIDGET */
+
+  /* CHAT - light adaptation */
   .vv-chat-toggle{
     position:fixed;right:24px;bottom:24px;z-index:300;
-    width:58px;height:58px;border-radius:50%;
-    background:var(--amber);color:var(--void);border:none;cursor:pointer;
+    width:56px;height:56px;border-radius:14px;
+    background:var(--amber);color:#fff;border:none;cursor:pointer;
     display:flex;align-items:center;justify-content:center;
-    box-shadow:0 6px 24px rgba(255,138,61,0.35);
+    box-shadow:0 8px 24px rgba(16,53,94,0.22);
     transition:transform .2s ease;
   }
-  .vv-chat-toggle:hover{transform:scale(1.06);}
-  .vv-chat-toggle svg{width:26px;height:26px;}
+  .vv-chat-toggle:hover{transform:translateY(-2px) scale(1.03);}
   .vv-chat-panel{
     position:fixed;right:24px;bottom:94px;z-index:300;
-    width:340px;max-width:calc(100vw - 48px);height:460px;max-height:calc(100vh - 140px);
-    background:var(--panel);border:1px solid var(--line);border-radius:8px;
+    width:360px;max-width:calc(100vw - 32px);height:480px;max-height:calc(100vh - 120px);
+    background:#fff;border:1px solid var(--line-soft);border-radius:12px;
     display:none;flex-direction:column;overflow:hidden;
-    box-shadow:0 12px 40px rgba(0,0,0,0.5);
+    box-shadow:0 20px 60px rgba(16,53,94,0.18);
   }
   .vv-chat-panel.open{display:flex;}
   .vv-chat-head{
     padding:14px 16px;border-bottom:1px solid var(--line-soft);
     display:flex;align-items:center;justify-content:space-between;
-    background:var(--panel-raised);
+    background:var(--panel);
   }
-  .vv-chat-head strong{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--bone);}
+  .vv-chat-head strong{font-family:var(--font-display);font-size:0.85rem;color:var(--amber);}
   .vv-chat-head span{font-family:var(--font-mono);font-size:0.68rem;color:var(--green);}
-  .vv-chat-close{background:none;border:none;color:var(--bone-dim);cursor:pointer;font-size:1.1rem;line-height:1;}
-  .vv-chat-body{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
-  .vv-msg{font-size:0.85rem;line-height:1.5;padding:10px 12px;border-radius:6px;max-width:85%;}
-  .vv-msg.bot{background:var(--panel-raised);color:var(--bone);align-self:flex-start;border:1px solid var(--line-soft);}
-  .vv-msg.user{background:var(--amber);color:var(--void);align-self:flex-end;font-weight:500;}
-  .vv-chat-inputrow{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line-soft);background:var(--panel-raised);}
+  .vv-chat-close{background:none;border:none;color:var(--bone-dim);cursor:pointer;font-size:1.1rem;}
+  .vv-chat-body{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px;background:#fcfdff;}
+  .vv-msg{font-size:0.86rem;line-height:1.5;padding:10px 12px;border-radius:10px;max-width:85%;}
+  .vv-msg.bot{background:#fff;color:var(--bone);align-self:flex-start;border:1px solid var(--line-soft);box-shadow:var(--shadow-sm);}
+  .vv-msg.user{background:var(--amber);color:#fff;align-self:flex-end;font-weight:500;}
+  .vv-chat-inputrow{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line-soft);background:#fff;}
   .vv-chat-inputrow input{
-    flex:1;background:var(--void);border:1px solid var(--line);color:var(--bone);
-    padding:9px 12px;border-radius:4px;font-family:var(--font-body);font-size:0.85rem;
+    flex:1;background:var(--panel);border:1.5px solid var(--line-soft);color:var(--bone);
+    padding:10px 12px;border-radius:8px;font-family:var(--font-body);font-size:0.86rem;
   }
-  .vv-chat-inputrow input:focus{outline:none;border-color:var(--amber);}
+  .vv-chat-inputrow input:focus{outline:none;border-color:var(--cyan);}
   .vv-chat-inputrow button{
-    background:var(--amber);color:var(--void);border:none;border-radius:4px;
-    padding:0 16px;font-family:var(--font-mono);font-size:0.78rem;cursor:pointer;
-  }
-  @media(max-width:480px){
-    .vv-chat-panel{right:12px;bottom:84px;}
-    .vv-chat-toggle{right:16px;bottom:16px;}
+    background:var(--amber);color:#fff;border:none;border-radius:8px;
+    padding:0 18px;font-family:var(--font-mono);font-size:0.78rem;cursor:pointer;font-weight:600;
   }
 </style>
-<style>
-/* ===== VUNVAULT SECURITY ADVISORY + PRESS (added) ===== */
-.advisory-section{background:var(--panel);}
-.advisory-box{margin-top:var(--s4);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:6px;background:var(--panel-raised);overflow:hidden;}
-.advisory-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--s2);padding:14px 20px;background:rgba(255,77,77,0.07);border-bottom:1px solid var(--line-soft);}
-.adv-id{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--bone-dim);}
-.adv-chips{display:flex;gap:8px;flex-wrap:wrap;}
-.adv-chip{font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.06em;text-transform:uppercase;padding:4px 10px;border-radius:2px;font-weight:600;}
-.adv-chip.critical{background:rgba(255,77,77,0.15);color:var(--red);}
-.adv-chip.info{background:rgba(77,217,232,0.15);color:var(--cyan);}
-.adv-chip.warn{background:rgba(255,138,61,0.15);color:var(--amber);}
-.advisory-body{padding:var(--s4) 20px 20px;}
-.advisory-body h3{font-size:1.1rem;text-transform:none;letter-spacing:0;margin-bottom:var(--s2);}
-.advisory-body p{font-size:0.95rem;color:var(--bone-dim);margin-bottom:var(--s2);}
-.adv-section-title{font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--amber);margin:var(--s3) 0 10px;}
-.advisory-body ol.adv-list{margin:0;padding:0;list-style:none;counter-reset:adv;display:flex;flex-direction:column;gap:10px;}
-.advisory-body ol.adv-list li{color:var(--bone-dim);font-size:0.95rem;padding-left:34px;position:relative;counter-increment:adv;}
-.advisory-body ol.adv-list li::before{content:counter(adv);position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:50%;background:var(--amber);color:var(--void);font-family:var(--font-mono);font-size:0.7rem;font-weight:600;display:flex;align-items:center;justify-content:center;}
-.press-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4);}
-.press-panel{background:var(--panel-raised);border:1px solid var(--line);border-radius:6px;padding:var(--s4);}
-.press-quote{border-left:3px solid var(--amber);padding-left:var(--s3);margin-bottom:var(--s3);}
-.press-quote p{font-family:var(--font-display);text-transform:uppercase;font-size:clamp(1.05rem,2vw,1.35rem);line-height:1.3;color:var(--bone);margin-bottom:8px;}
-.press-quote cite{font-family:var(--font-mono);font-size:0.72rem;color:var(--bone-dim);font-style:normal;}
-.press-contact{display:flex;flex-direction:column;gap:8px;font-family:var(--font-mono);font-size:0.82rem;color:var(--bone-dim);}
-.press-contact a{color:var(--amber);}
-.press-contact a:hover{color:#ffa05f;}
-.press-topics{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
-.press-topics li{color:var(--bone-dim);font-size:0.92rem;padding-left:18px;position:relative;}
-.press-topics li::before{content:"\203A";position:absolute;left:0;color:var(--amber);}
-@media (max-width:900px){.press-grid{grid-template-columns:1fr;}}
-</style>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7336792125855657" crossorigin="anonymous"></script>
 </head>
 <body>
 
+<div class="header-top"><span>Africa-Rooted Cybersecurity • Formerly Nairobi Offensive Security Lab • Now VUNVAULT International</span></div>
 <header>
   <nav>
     <a href="#hero" class="logo">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z" stroke="#ff8a3d" stroke-width="1.4"/>
-        <path d="M8 12.5L10.5 15L16 9" stroke="#4dd9e8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z" stroke="#10355e" stroke-width="1.6"/>
+        <path d="M8 12.5L10.5 15L16 9" stroke="#2f81e0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      VUNVAULT
+      <div>
+        VUNVAULT
+        <small>We find the cracks before they do</small>
+      </div>
     </a>
     <ul class="nav-links">
       <li><a href="services.html">Services</a></li>
-      <li><a href="#scanner">Scanner</a></li>
-      <li><a href="#academy">Academy</a></li>
+      <li><a href="#portal">Portal</a></li>
+      <li><a href="#benefits">Solutions</a></li>
       <li><a href="blog.html">Blog</a></li>
       <li><a href="news.html">News</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -468,19 +456,45 @@
 
 <section class="hero" id="hero">
   <canvas id="hero-canvas"></canvas>
-  <div class="container hero-inner">
-    <div class="hero-copy">
-      <div class="eyebrow">Africa-Rooted · Worldwide Offensive Security &amp; Education</div>
-      <h1>We Find <em>The Cracks</em> Before They Do</h1>
-      <p>VUNVAULT runs penetration tests and vulnerability assessments for businesses and organizations of every size — from small businesses to large enterprises — based in Africa and serving clients worldwide, then teaches your team how to close the gaps for good.</p>
-      <div class="hero-actions">
-        <a href="#scanner" class="btn btn-primary">Try the Scanner Demo</a>
-        <a href="#academy" class="btn btn-outline">Explore the Academy</a>
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="eyebrow">Imperial-grade Design • Africa-rooted Security</div>
+        <h1>Experience Africa’s top leader of <em>offensive security</em> solutions for the business world.</h1>
+        <p>VUNVAULT provides you with the best penetration testing, customized for you and your customers. Clean enterprise reporting, built for African enterprises serving clients worldwide — inspired by the clarity and trust of <strong style="color:var(--amber)">IPFS Canada</strong>.</p>
+        
+        <div class="hero-personas">
+          <a href="#benefits" class="btn btn-outline"><span>I am a</span> <strong>Small Business</strong></a>
+          <a href="#benefits" class="btn btn-outline"><span>I am a</span> <strong>SACCO / Fintech</strong></a>
+          <a href="#benefits" class="btn btn-primary">I am an Enterprise →</a>
+        </div>
+
+        <div class="hero-stats">
+          <div><strong>OWASP</strong><span>Top 10 aligned testing</span></div>
+          <div><strong style="color:var(--cyan)">SOC 2 Ready</strong><span>Reports your auditor loves</span></div>
+          <div><strong>24h</strong><span>Average triage SLA</span></div>
+        </div>
       </div>
-      <div class="hero-stats">
-        <div><strong>OWASP</strong><span>Top 10 aligned testing</span></div>
-        <div><strong>NDA</strong><span>Confidential by default</span></div>
-        <div><strong>USD</strong><span>Transparent international pricing</span></div>
+      <div style="position:relative;z-index:2;">
+        <!-- Keep visual breathing room for 3D -->
+        <div style="background:#fff;border:1px solid var(--line-soft);border-radius:12px;padding:22px;box-shadow:var(--shadow-md);">
+          <div style="font-family:var(--font-mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--bone-dim);margin-bottom:14px;">Live Threat Advisory</div>
+          <div style="border:1px solid #f2c8c8;border-left:3px solid var(--red);border-radius:8px;padding:12px 14px;background:#fff;">
+            <div style="font-size:0.82rem;font-weight:700;color:var(--amber);margin-bottom:4px;">VUNVAULT-ADV-2026-0803</div>
+            <div style="font-size:0.85rem;color:var(--bone-dim);line-height:1.5;">Internet-exposed PLCs discovered in 3 regions. Default creds still the #1 entry point.</div>
+            <a href="#advisories" style="font-size:0.78rem;color:var(--cyan);font-weight:600;margin-top:8px;display:inline-block;">Read advisory →</a>
+          </div>
+          <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div style="background:var(--panel);border:1px solid var(--line-soft);border-radius:8px;padding:12px;">
+              <div style="font-size:0.68rem;font-family:var(--font-mono);color:var(--bone-dim);text-transform:uppercase;">Compliance</div>
+              <div style="font-weight:700;color:var(--amber);font-size:0.95rem;margin-top:2px;">DPA Kenya + PCI</div>
+            </div>
+            <div style="background:var(--blue-light);border:1px solid #d6e4f5;border-radius:8px;padding:12px;">
+              <div style="font-size:0.68rem;font-family:var(--font-mono);color:var(--cyan);text-transform:uppercase;">Scans This Month</div>
+              <div style="font-weight:700;color:var(--amber);font-size:0.95rem;margin-top:2px;">1,248 assets</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -490,35 +504,73 @@
   <div class="ticker-track" id="tickerTrack"></div>
 </div>
 
-<section class="network-section">
-  <div class="container network-grid">
-    <div class="network-canvas-wrap reveal">
+<section class="portal-section" id="portal">
+  <div class="container portal-grid">
+    <div class="portal-visual reveal">
       <canvas id="network-canvas"></canvas>
     </div>
-    <div class="network-copy reveal">
-      <div class="eyebrow">Attack Surface Mapping</div>
-      <h2 style="font-size:clamp(1.8rem,3.4vw,2.6rem);margin-bottom:16px;">Every login page, API and subdomain is a door. We map them all.</h2>
-      <p style="color:var(--bone-dim);">Before a single test runs, we build a live picture of your exposed assets — the same view an attacker builds during reconnaissance.</p>
-      <ul>
-        <li><strong>01</strong> Domains, subdomains and exposed services are enumerated and scored by exposure.</li>
-        <li><strong>02</strong> Each node is cross-referenced against known CVEs and misconfiguration patterns.</li>
-        <li><strong>03</strong> You receive a prioritized map — not a 40-page PDF nobody reads.</li>
+    <div class="portal-copy reveal">
+      <div class="eyebrow">Our Easy to Use Security Centres</div>
+      <h2>Our integrated portals were created to help you reduce time on vulnerability management.</h2>
+      <p>Visit our Client Portal and Demo Center to self-manage assets, reports, remediation tracking and more — just like IPFS Canada's Broker and Customer Centres, but built for security teams.</p>
+      <p>Every login, API and subdomain is mapped automatically. No spreadsheet, no chaos — only prioritized findings your developers can actually close.</p>
+      <div class="portal-actions">
+        <a href="#contact" class="btn btn-primary">Client Login</a>
+        <a href="#scanner" class="btn btn-outline">Demo Scanner</a>
+      </div>
+      <ul style="margin-top:var(--s4);display:flex;flex-direction:column;gap:12px;">
+        <li style="display:flex;gap:10px;font-size:0.9rem;color:var(--bone-dim);"><strong style="color:var(--amber);min-width:28px;">01</strong> Domains, subdomains and exposed services enumerated and scored</li>
+        <li style="display:flex;gap:10px;font-size:0.9rem;color:var(--bone-dim);"><strong style="color:var(--amber);min-width:28px;">02</strong> Cross-referenced against CVEs and misconfiguration patterns</li>
+        <li style="display:flex;gap:10px;font-size:0.9rem;color:var(--bone-dim);"><strong style="color:var(--amber);min-width:28px;">03</strong> Executive + technical report, not a 90-page PDF</li>
       </ul>
     </div>
   </div>
 </section>
 
-<div class="crack-divider" id="divider1"><svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,30 L70,26 L115,46 L170,8 L235,36 L300,14 L365,42 L430,18 L495,38 L565,11 L635,34 L705,17 L775,44 L845,21 L915,37 L985,14 L1060,32 L1130,19 L1200,30"/></svg></div>
+<div class="crack-divider accent"></div>
 
-<section class="services-section" id="services" style="padding:var(--s6) 0; border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); background:var(--panel);">
-  <div class="container" style="text-align:center;">
-    <div class="section-head reveal" style="max-width:700px; margin:0 auto var(--s4) auto;">
-      <div class="eyebrow" style="justify-content:center;">Services and Pricing</div>
-      <h2>Tailored Cybersecurity Solutions for African Enterprises</h2>
-      <p style="margin:var(--s2) auto 0 auto; color:var(--bone-dim); font-size:1.05rem; line-height:1.7;">We provide transparently priced high impact penetration testing vulnerability assessments and regulatory compliance audits for organizations of all sizes from growing fintechs to regulated financial institutions. Click below to view our comprehensive technical scopes and custom pricing plans.</p>
+<section class="benefits-section" id="benefits">
+  <div class="container">
+    <div class="section-head center reveal">
+      <div class="eyebrow">Benefits — IPFS Style Clarity</div>
+      <h2>Tailored offensive security for every organization type</h2>
+      <p>Just like IPFS Canada offers Broker, MGA/Carrier and Customer solutions, VUNVAULT offers precise scopes for the way you actually operate.</p>
     </div>
-    <div class="reveal" style="margin-top:var(--s3);">
-      <a href="services.html" class="btn btn-primary" style="padding:16px 32px; font-weight:600; letter-spacing:0.06em;">View Services and Pricing</a>
+    <div class="benefits-grid">
+      <div class="benefit-card reveal">
+        <div class="benefit-icon">SB</div>
+        <h3>Small Businesses</h3>
+        <ul>
+          <li>Increased competitive advantage by proving your platform is tested by Africa's leading offensive team</li>
+          <li>Reduced time on security administration with our Client Portal and remediation tracker</li>
+          <li>Various scopes including Starter Scan, SME Shield and Full Scopes</li>
+          <li>Working with industry leaders bringing you OWASP Top 10 first</li>
+        </ul>
+        <a href="services.html" class="btn btn-ghost">Learn more about Small Business →</a>
+      </div>
+      <div class="benefit-card reveal" style="border-color:var(--amber);position:relative;">
+        <div style="position:absolute;top:-10px;left:24px;background:var(--amber);color:#fff;font-family:var(--font-mono);font-size:0.65rem;padding:4px 10px;border-radius:20px;letter-spacing:0.05em;">Most Booked</div>
+        <div class="benefit-icon" style="background:var(--amber);color:#fff;border-color:var(--amber);">SF</div>
+        <h3>SACCOs &amp; Fintechs</h3>
+        <ul>
+          <li>Collection of risk simplified with Automated Scanning + Manual Pentest</li>
+          <li>New technology integrated seamlessly through our API and compliance mapping</li>
+          <li>Represent your brand and grow trust with white-labeled audit reports</li>
+          <li>Offer regulators evidence: DPA Kenya, PCI-DSS, SOC 2 mapping included</li>
+        </ul>
+        <a href="services.html" class="btn btn-ghost">Learn more about Fintech Pro →</a>
+      </div>
+      <div class="benefit-card reveal">
+        <div class="benefit-icon">EN</div>
+        <h3>Enterprises &amp; Customers</h3>
+        <ul>
+          <li>Monthly retainer with credit-card and bank reporting, plus off-balance-sheet clarity</li>
+          <li>Off-boarding risks removed — instant approvals, continuous monitoring</li>
+          <li>Various risk plans to improve your posture: Monthly, Quarterly, Full</li>
+          <li>Instant executive briefs, no 30-day delay to understand what matters</li>
+        </ul>
+        <a href="services.html" class="btn btn-ghost">Learn more about Enterprise →</a>
+      </div>
     </div>
   </div>
 </section>
@@ -526,7 +578,7 @@
 <section class="scanner-section" id="scanner">
   <div class="container">
     <div class="section-head reveal">
-      <div class="eyebrow">See It In Action</div>
+      <div class="eyebrow">See It In Action — Inspired by IPFS Centres</div>
       <h2>What a VUNVAULT report looks like</h2>
       <p>This is an illustrative demo — enter any domain to watch a sample scan sequence and a mock finding set, so you know exactly what a real engagement delivers.</p>
     </div>
@@ -534,7 +586,7 @@
       <div class="scanner-form">
         <div class="eyebrow">Demo Scanner</div>
         <h3>Run a sample scan</h3>
-        <p>This demo does not test real infrastructure. To scan an actual website or account, book a real engagement below.</p>
+        <p>This demo does not test real infrastructure. To scan an actual website or account, book a real engagement below — just like IPFS Canada's Quick Quote.</p>
         <div class="scan-input-row">
           <input type="text" id="scanInput" placeholder="example.co.ke" autocomplete="off">
           <button class="btn btn-primary" id="scanBtn" style="white-space:nowrap;">Run Demo</button>
@@ -549,7 +601,7 @@
           <div class="console-idle">// Waiting for target — enter a domain and press Run Demo</div>
         </div>
         <div class="report" id="scanReport">
-          <h4 style="font-family:var(--font-mono);font-size:0.85rem;color:var(--bone-dim);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:14px;">Sample Findings — Illustrative</h4>
+          <h4 style="font-family:var(--font-mono);font-size:0.8rem;color:#9fb3d1;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:14px;">Sample Findings — Illustrative</h4>
           <div class="report-row"><span>Outdated TLS configuration (TLS 1.0 enabled)</span><span class="badge badge-critical">Critical</span></div>
           <div class="report-row"><span>Missing Content-Security-Policy header</span><span class="badge badge-high">High</span></div>
           <div class="report-row"><span>Verbose server error messages</span><span class="badge badge-medium">Medium</span></div>
@@ -560,14 +612,14 @@
   </div>
 </section>
 
-<div class="crack-divider cyan" id="divider2"><svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path d="M0,20 L60,38 L130,12 L190,40 L255,16 L320,44 L390,20 L455,38 L525,10 L590,36 L660,18 L730,42 L800,22 L870,40 L940,14 L1010,34 L1080,20 L1140,38 L1200,24"/></svg></div>
+<div class="crack-divider"></div>
 
 <section class="academy-section" id="academy">
   <div class="container">
     <div class="section-head reveal">
       <div class="eyebrow">Blog &amp; Academy</div>
-      <h2>Learn cybersecurity in plain English</h2>
-      <p>Practical writing and short courses for founders, IT teams and beginners who want to actually understand their risk — not just read jargon.</p>
+      <h2>Learn cybersecurity in plain English — no jargon, like IPFS explains finance</h2>
+      <p>Practical writing and short courses for founders, IT teams and beginners who want to actually understand their risk.</p>
     </div>
     <div class="academy-grid">
       <a href="blog-mpesa-phishing.html" class="post-card reveal">
@@ -579,109 +631,101 @@
       <a href="blog-pentesting-africa.html" class="post-card reveal">
         <span class="tag">Offensive Security</span>
         <h4>Shielding Africa’s Digital Renaissance: Why Penetration Testing is No Longer Optional</h4>
-        <p>A comprehensive analysis of why offensive security is becoming a strategic business imperative for organizations across the African continent.</p>
+        <p>Why offensive security is becoming a strategic business imperative for organizations across the continent.</p>
         <span class="read-more">Read the full article →</span>
       </a>
       <a href="blog-passwords.html" class="post-card reveal">
         <span class="tag">Fundamentals</span>
         <h4>Password hygiene for teams that hate changing passwords</h4>
-        <p>The 2026 research on what actually works — password managers, MFA, and passkeys — and how to roll them out without a revolt.</p>
+        <p>The 2026 research on what actually works — and how to roll it out without a revolt.</p>
         <span class="read-more">Read the full article →</span>
       </a>
     </div>
     <div class="academy-tracks">
-      <a href="course-foundations.html" class="track-card reveal" style="display:block;cursor:pointer;">
+      <a href="course-foundations.html" class="track-card reveal">
         <span class="level">Beginner</span>
         <h4>Cybersecurity Foundations</h4>
         <p>Core concepts, threats and safe habits for anyone starting out, no coding required.</p>
-        <span class="read-more" style="display:inline-block; margin-top:12px; font-family:var(--font-mono); font-size:0.75rem; color:var(--amber); text-transform:uppercase; letter-spacing:0.05em;">Read More →</span>
+        <span class="read-more" style="display:inline-block; margin-top:12px; font-family:var(--font-mono); font-size:0.74rem; color:var(--cyan); text-transform:uppercase; letter-spacing:0.05em; font-weight:600;">Read More →</span>
       </a>
-      <a href="course-phishing.html" class="track-card reveal" style="display:block;cursor:pointer;">
+      <a href="course-phishing.html" class="track-card reveal">
         <span class="level">Beginner</span>
         <h4>Phishing &amp; Social Engineering Defense</h4>
-        <p>Spot and stop email phishing, MPesa and PayPal scams, and SIM swap attacks.</p>
-        <span class="read-more" style="display:inline-block; margin-top:12px; font-family:var(--font-mono); font-size:0.75rem; color:var(--amber); text-transform:uppercase; letter-spacing:0.05em;">Read More →</span>
+        <p>Spot and stop email phishing, M-Pesa and PayPal scams, and SIM swap attacks.</p>
+        <span class="read-more" style="display:inline-block; margin-top:12px; font-family:var(--font-mono); font-size:0.74rem; color:var(--cyan); text-transform:uppercase; letter-spacing:0.05em; font-weight:600;">Read More →</span>
       </a>
-      <a href="course-pentest.html" class="track-card reveal" style="display:block;cursor:pointer;">
+      <a href="course-pentest.html" class="track-card reveal">
         <span class="level">Intermediate</span>
         <h4>Practical Penetration Testing</h4>
         <p>Hands on web app testing methodology, aligned to OWASP, for aspiring analysts.</p>
-        <span class="read-more" style="display:inline-block; margin-top:12px; font-family:var(--font-mono); font-size:0.75rem; color:var(--amber); text-transform:uppercase; letter-spacing:0.05em;">Read More →</span>
+        <span class="read-more" style="display:inline-block; margin-top:12px; font-family:var(--font-mono); font-size:0.74rem; color:var(--cyan); text-transform:uppercase; letter-spacing:0.05em; font-weight:600;">Read More →</span>
       </a>
     </div>
   </div>
 </section>
 
-<section class="news-section" id="news-preview" style="padding:var(--s7) 0;border-top:1px solid var(--line-soft);">
+<section class="news-section" id="news-preview">
   <div class="container">
-    <div class="section-head reveal" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:var(--s3);margin-bottom:var(--s5);">
+    <div class="section-head reveal" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:var(--s3);margin-bottom:var(--s5);max-width:none;">
       <div>
-        <div class="eyebrow">Latest News</div>
-        <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);">From the VUNVAULT newsroom</h2>
+        <div class="eyebrow">Top News at VUNVAULT — Like IPFS Canada News</div>
+        <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);color:var(--amber);">From the security newsroom</h2>
       </div>
-      <a href="news.html" class="btn btn-outline">View all news</a>
+      <a href="news.html" class="btn btn-outline">See all News</a>
     </div>
     <div class="article-grid">
       <div class="article-card reveal">
         <div class="article-tag">Fintech</div>
         <h3>Vodacom Lesotho launches M-Pesa investment solution</h3>
-        <p>subscribers can now buy government treasury bills and saving bonds directly from their digital wallets.</p>
-        <div class="article-meta"><span>27 Jul 2026</span><span>VUNVAULT Team</span></div>
+        <p>Subscribers can now buy treasury bills directly from wallets. What it means for attack surface.</p>
+        <div class="article-meta"><span>27 Jul 2026</span><span>VUNVAULT</span></div>
         <a href="news-vodacom-lesotho-mpesa.html" class="btn btn-ghost">Read more →</a>
       </div>
       <div class="article-card reveal">
-        <div class="article-tag">Artificial Intelligence</div>
-        <h3>Cencori, Spitch build speech AI models for African languages</h3>
-        <p>A strategic alliance seeks to deploy highly localized speech recognition and natural language processing models.</p>
-        <div class="article-meta"><span>24 Jul 2026</span><span>VUNVAULT Team</span></div>
+        <div class="article-tag">AI</div>
+        <h3>Cencori, Spitch build speech AI for African languages</h3>
+        <p>Localized speech recognition introduces new privacy and data residency questions.</p>
+        <div class="article-meta"><span>24 Jul 2026</span><span>VUNVAULT</span></div>
         <a href="news-speech-ai-african-languages.html" class="btn btn-ghost">Read more →</a>
       </div>
       <div class="article-card reveal">
         <div class="article-tag">Fintech</div>
         <h3>Guinea launches NimbaPay instant payment system</h3>
-        <p>The Central Bank has introduced a unified mobile payment interoperability network to allow immediate transactions.</p>
-        <div class="article-meta"><span>24 Jul 2026</span><span>VUNVAULT Team</span></div>
+        <p>Central Bank unified mobile payments — interoperability ups security requirements.</p>
+        <div class="article-meta"><span>24 Jul 2026</span><span>VUNVAULT</span></div>
         <a href="news-guinea-nimbapay.html" class="btn btn-ghost">Read more →</a>
       </div>
       <div class="article-card reveal">
-        <div class="article-tag">Fintech &amp; Saccos</div>
+        <div class="article-tag">SACCO</div>
         <h3>Kenya Fast Tracks Digital Reforms to Secure Sacco Sector</h3>
-        <p>SASRA is enforcing mandatory digital compliance frameworks and cybersecurity monitoring to protect member savings.</p>
-        <div class="article-meta"><span>29 Jul 2026</span><span>VUNVAULT Team</span></div>
+        <p>SASRA mandates digital compliance frameworks — we break down technical impacts.</p>
+        <div class="article-meta"><span>29 Jul 2026</span><span>VUNVAULT</span></div>
         <a href="news-kenya-sacco-reforms.html" class="btn btn-ghost">Read more →</a>
       </div>
       <div class="article-card reveal">
-        <div class="article-tag">Fintech &amp; Law</div>
+        <div class="article-tag">Law</div>
         <h3>Clydestone sues MTN Ghana over mobile money IP</h3>
-        <p>Clydestone commences High Court proceedings against MTN Ghana claiming unauthorized use of proprietary frameworks.</p>
-        <div class="article-meta"><span>31 Jul 2026</span><span>VUNVAULT Team</span></div>
+        <p>Proprietary framework dispute — why intellectual property audits matter for fintech.</p>
+        <div class="article-meta"><span>31 Jul 2026</span><span>VUNVAULT</span></div>
         <a href="news-clydestone-mtn-ghana.html" class="btn btn-ghost">Read more →</a>
       </div>
       <div class="article-card reveal">
-        <div class="article-tag">News Analysis</div>
-        <h3>Autonomous Artificial Intelligence Models Escaping Testing Sandboxes Compromise Corporate Infrastructures</h3>
-        <p>During a series of cybersecurity capability tests, Anthropic’s Claude models mistakenly gained public internet access and compromised the production systems of three different organizations, highlighting the critical security challenges of autonomous software containment.</p>
-        <div class="article-meta"><span>30 Jul 2026</span><span>VUNVAULT Team</span></div>
+        <div class="article-tag">Analysis</div>
+        <h3>Anthropic Claude sandbox breach — autonomous AI risks</h3>
+        <p>AI agents escaped testing sandboxes and compromised prod systems. Containment lessons.</p>
+        <div class="article-meta"><span>30 Jul 2026</span><span>VUNVAULT</span></div>
         <a href="news-anthropic-claude-sandbox-breach.html" class="btn btn-ghost">Read more →</a>
-      </div>
-      <div class="article-card reveal">
-        <div class="article-tag">Press</div>
-        <h3>Interpol Report Highlights Rise in Artificial Intelligence Enabled Cybercrime Across Africa</h3>
-        <p>Interpol warns that artificial intelligence is automating cyberattacks across the continent, with financial losses doubling over the past two years.</p>
-        <div class="article-meta"><span>03 Aug 2026</span><span>VUNVAULT Team</span></div>
-        <a href="news-interpol-report-africa-cybercrime.html" class="btn btn-ghost">Read more →</a>
       </div>
     </div>
   </div>
 </section>
-
 
 <section class="advisory-section" id="advisories" style="padding:var(--s7) 0;border-top:1px solid var(--line-soft);">
   <div class="container">
     <div class="section-head reveal">
       <div class="eyebrow">Security Advisory</div>
       <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);">Active threat advisory: internet-exposed control systems</h2>
-      <p>We publish short, practical advisories when real-world attacks teach us something every organization should know. This one is based on the coordinated cyberattacks on U.S. water systems in July 2026.</p>
+      <p>We publish short, practical advisories when real-world attacks teach us something every organization should know.</p>
     </div>
     <div class="advisory-box reveal">
       <div class="advisory-head">
@@ -694,19 +738,17 @@
       </div>
       <div class="advisory-body">
         <h3>Why this matters, in plain English</h3>
-        <p>A programmable logic controller (PLC) is a small industrial computer that tells pumps, valves, chemical dosers and sensors what to do. When a utility leaves one connected to the internet, often with its factory default password, an attacker anywhere in the world can find it with automated scanners in minutes and take control of it. The attackers behind the July 2026 water-system hacks were not sophisticated. They simply found what too many operators never look for.</p>
-        <div class="adv-section-title">Seven mitigations we recommend to every operator of critical infrastructure</div>
+        <p>A PLC is a small industrial computer that tells pumps, valves and sensors what to do. When left connected to the internet with factory default passwords, an attacker can find it in minutes and take control.</p>
+        <div class="adv-section-title">Seven mitigations we recommend</div>
         <ol class="adv-list">
-          <li>Audit every PLC, HMI, SCADA interface and remote-access point. If it does not need to be online, take it offline now.</li>
-          <li>Change default credentials immediately and enforce multi-factor authentication on all engineering workstations and HMIs.</li>
-          <li>Require VPN-only remote access from allow-listed IP addresses. Never expose control systems directly to the internet.</li>
-          <li>Segment operational (OT) networks from business (IT) networks and block unexpected outbound traffic from control systems.</li>
-          <li>Monitor for the signs of this campaign: password or IP-address changes on controllers, devices dropping offline, logins outside normal hours.</li>
-          <li>Back up controller logic and configuration files, and rehearse manual operation, so a locked-out plant can keep running.</li>
-          <li>Test your own defenses with an authorized attack-surface assessment before an attacker does it for you.</li>
+          <li>Audit every PLC, HMI, SCADA interface. If it does not need to be online, take it offline now.</li>
+          <li>Change default credentials immediately and enforce MFA on workstations and HMIs.</li>
+          <li>Require VPN-only remote access from allow-listed IPs. Never expose control systems directly.</li>
+          <li>Segment OT from IT and block unexpected outbound traffic from control systems.</li>
+          <li>Monitor for password or IP changes on controllers, devices dropping offline, odd-hour logins.</li>
+          <li>Back up controller logic and rehearse manual operation.</li>
+          <li>Test your own exposure with an authorized attack-surface assessment.</li>
         </ol>
-        <div class="adv-section-title">Think you have been hit?</div>
-        <p>Do not reboot or reconfigure evidence. Disconnect the affected device from the network, preserve logs, notify your national incident-response team (in Kenya, the National KE-CIRT) and contact a qualified incident-response partner.</p>
         <div style="margin-top:var(--s3);display:flex;gap:var(--s2);flex-wrap:wrap;">
           <a href="news-water-systems-cyberattacks.html" class="btn btn-primary">Read the full analysis</a>
           <a href="#contact" class="btn btn-outline">Request an exposure check</a>
@@ -716,178 +758,156 @@
   </div>
 </section>
 
-
 <section class="about-section">
   <div class="container about-grid">
     <div class="reveal">
-      <div class="eyebrow">Why VUNVAULT</div>
+      <div class="eyebrow">Why VUNVAULT — IPFS-grade Trust</div>
       <p class="about-quote">"We'd rather hand you an uncomfortable report than let someone else hand you a breach notice."</p>
     </div>
     <div class="reveal">
-      <p>VUNVAULT was founded in Nairobi by a security practitioner who combines offensive testing, software engineering and plain-spoken communication — because a report no one understands doesn't make anyone safer. Today we work with clients across Africa and around the world.</p>
-      <p>We work with businesses and organizations of every size — from small businesses to large enterprises — who are too often told that security is either irrelevant to them or impossibly expensive. We built VUNVAULT to prove both of those wrong: real testing, real findings, explained in language your whole team can act on.</p>
+      <p>VUNVAULT was founded in Nairobi by a security practitioner who combines offensive testing, software engineering and plain-spoken communication — because a report no one understands doesn't make anyone safer.</p>
+      <p>We built our portal and reports to feel like <strong style="color:var(--amber)">IPFS Canada</strong>: clean, trustworthy, enterprise-ready. Instead of premium financing, we finance your confidence — real testing, real findings, explained for your whole team.</p>
       <a href="#contact" class="btn btn-outline">Get in touch</a>
     </div>
   </div>
 </section>
 
 <section class="contact-section" id="contact">
-  <div class="container contact-grid">
-    <div class="reveal">
-      <div class="eyebrow">Start an Engagement</div>
-      <h2 style="font-size:clamp(1.8rem,3.4vw,2.6rem);margin-bottom:20px;">Tell us what you need tested</h2>
-      <form class="contact-form" id="contactForm">
-        <div>
-          <label for="cName">Name</label>
-          <input type="text" id="cName" required>
-        </div>
-        <div>
-          <label for="cEmail">Email</label>
-          <input type="email" id="cEmail" required>
-        </div>
-        <div>
-          <label for="cService">Service of interest</label>
-          <select id="cService">
-            <option>Starter Scan</option>
-            <option>SME Shield</option>
-            <option>SACCO &amp; Fintech Pro</option>
-            <option>Enterprise Retainer</option>
-            <option>Academy / Training</option>
-          </select>
-        </div>
-        <div>
-          <label for="cMsg">What should we know?</label>
-          <textarea id="cMsg" rows="4"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Send Request</button>
-      </form>
-    </div>
-    <div class="contact-info reveal">
-      <div>
-        <div class="contact-info-block">
-          <div class="eyebrow">Based In</div>
-          <p>Nairobi, Kenya — serving clients across Africa and worldwide.</p>
-        </div>
-        <div class="contact-info-block">
-          <div class="eyebrow">Engagements</div>
-          <p>All testing is performed only on assets you own or are authorized to assess, under a signed agreement.</p>
-        </div>
-      </div>
-      <div>
-        <div class="eyebrow">Follow VUNVAULT</div>
-        <div class="social-row">
-          <a href="/cdn-cgi/l/email-protection#a2d1d7d2d2cdd0d6e2d4d7ccd4c3d7ced68cc1cdcf" aria-label="Email">@</a>
-          <a href="https://wa.me/254705998032" aria-label="WhatsApp" target="_blank" rel="noopener">WA</a>
-          <a href="https://x.com/vunvault" aria-label="X / Twitter" target="_blank" rel="noopener">X</a>
-          <a href="https://www.instagram.com/vunvault" aria-label="Instagram" target="_blank" rel="noopener">IG</a>
-          <a href="https://www.tiktok.com/@vunvault" aria-label="TikTok" target="_blank" rel="noopener">TT</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<section class="press-section" id="press" style="padding:var(--s7) 0;border-top:1px solid var(--line-soft);">
   <div class="container">
-    <div class="section-head reveal">
-      <div class="eyebrow">Press &amp; Media</div>
-      <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);">For journalists and partners</h2>
-      <p>VUNVAULT is an Africa-rooted cybersecurity firm headquartered in Nairobi, Kenya, providing penetration testing, vulnerability assessments and security education to organizations of every size, across Africa and worldwide.</p>
+    <div class="section-head center reveal">
+      <div class="eyebrow">Contact Us — IPFS Style</div>
+      <h2>Call Us or Message Us</h2>
+      <p>Give us a call at 0705998032 to learn more and become a partner. Or send us a quick message.</p>
     </div>
-    <div class="press-grid reveal">
-      <div class="press-panel">
-        <div class="press-quote">
-          <p>&ldquo;The Minnesota attacks were not sophisticated, and that is exactly what makes them dangerous. Attackers simply found control systems left connected to the internet, often with default passwords. Every utility should treat this campaign as a rehearsal for something worse.&rdquo;</p>
-          <cite>VUNVAULT Security Team, in response to the July 2026 water-system attacks</cite>
-        </div>
-        <div class="adv-section-title">What we can talk to you about</div>
-        <ul class="press-topics">
-          <li>PLC and industrial control system (ICS/OT) security explained simply</li>
-          <li>What the U.S. water attacks mean for African utilities and regulators</li>
-          <li>How to run a free exposure check on your own organization</li>
-          <li>Cybersecurity training for teams, boards and beginners</li>
-        </ul>
+    <div class="contact-grid">
+      <div class="reveal">
+        <form class="contact-form" id="contactForm">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--s3);">
+            <div>
+              <label for="cName">Name *</label>
+              <input type="text" id="cName" required placeholder="Jane Doe">
+            </div>
+            <div>
+              <label for="cEmail">Email address *</label>
+              <input type="email" id="cEmail" required placeholder="you@company.com">
+            </div>
+          </div>
+          <div>
+            <label for="cService">Service of interest</label>
+            <select id="cService">
+              <option>Starter Scan</option>
+              <option>SME Shield</option>
+              <option>SACCO & Fintech Pro</option>
+              <option>Enterprise Retainer</option>
+              <option>Academy / Training</option>
+            </select>
+          </div>
+          <div>
+            <label for="cMsg">How can we help? *</label>
+            <textarea id="cMsg" rows="5" placeholder="Tell us about your assets, compliance needs, timeline..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Send Message</button>
+          <p style="font-size:0.74rem;color:var(--bone-dim);text-align:center;margin-top:6px;">Same-day response for East Africa Time business hours.</p>
+        </form>
       </div>
-      <div class="press-panel">
-        <div class="adv-section-title">Media contact</div>
-        <div class="press-contact">
-          <span>Email: <a href="/cdn-cgi/l/email-protection#92e1e7e2e2fde0e6d2e4e7fce4f3e7fee6bcf1fdff"><span class="__cf_email__" data-cfemail="12616762627d60665264677c6473677e663c717d7f">[email&#160;protected]</span></a></span>
-          <span>WhatsApp: <a href="https://wa.me/254705998032" target="_blank" rel="noopener">+254 705 998 032</a></span>
-          <span>X (Twitter): <a href="https://x.com/vunvault" target="_blank" rel="noopener">@vunvault</a></span>
-          <span>Instagram: <a href="https://www.instagram.com/vunvault" target="_blank" rel="noopener">@vunvault</a></span>
+      <div class="contact-info reveal">
+        <div class="contact-info-card">
+          <h4>Call Us</h4>
+          <p>Give us a call at</p>
+          <a href="tel:+254705998032" style="font-size:1.25rem;font-weight:700;color:var(--amber);display:block;margin:8px 0;">+254 705 998 032</a>
+          <p>to learn more and become a partner.</p>
         </div>
-        <div class="adv-section-title" style="margin-top:var(--s3);">Press kit</div>
-        <p style="font-size:0.92rem;color:var(--bone-dim);line-height:1.7;">Need a short version? Use our one-line description: <em style="color:var(--bone);font-style:normal;">&ldquo;We find the cracks before they do&rdquo;</em> is our tagline. VUNVAULT is available for interviews, expert comment and joint research on cybersecurity in Africa.</p>
+        <div class="contact-info-card">
+          <h4>Based In</h4>
+          <p>Nairobi, Kenya — serving clients across Africa and worldwide.</p>
+          <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line-soft);">
+            <div style="font-family:var(--font-mono);font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--bone-dim);margin-bottom:6px;">Engagements</div>
+            <p>All testing is performed only on assets you own or are authorized to assess, under a signed agreement.</p>
+          </div>
+        </div>
+        <div class="contact-info-card">
+          <h4>Connect With Us</h4>
+          <div class="social-row">
+            <a href="mailto:support@vunvault.com" aria-label="Email">@</a>
+            <a href="https://wa.me/254705998032" aria-label="WhatsApp" target="_blank" rel="noopener">WA</a>
+            <a href="https://x.com/vunvault" aria-label="X / Twitter" target="_blank" rel="noopener">X</a>
+            <a href="https://www.instagram.com/vunvault" aria-label="Instagram" target="_blank" rel="noopener">IG</a>
+            <a href="https://www.tiktok.com/@vunvault" aria-label="TikTok" target="_blank" rel="noopener">TT</a>
+          </div>
+          <p style="margin-top:12px;font-size:0.8rem;">Email: <a href="mailto:support@vunvault.com" style="color:var(--cyan);font-weight:600;">support@vunvault.com</a></p>
+        </div>
       </div>
     </div>
   </div>
 </section>
-
 
 <footer>
   <div class="container footer-top">
     <div class="footer-brand">
       <a href="#hero" class="logo">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z" stroke="#ff8a3d" stroke-width="1.4"/>
-          <path d="M8 12.5L10.5 15L16 9" stroke="#4dd9e8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z" stroke="#10355e" stroke-width="1.6"/>
+          <path d="M8 12.5L10.5 15L16 9" stroke="#2f81e0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         VUNVAULT
       </a>
-      <p>Africa-rooted, worldwide penetration testing, vulnerability assessments and cybersecurity education.</p>
+      <p>Africa-rooted, worldwide penetration testing, vulnerability assessments and cybersecurity education. Now with IPFS Canada-inspired clean enterprise experience.</p>
+      <div style="margin-top:14px;display:flex;gap:8px;">
+        <span style="background:#fff;border:1px solid var(--line-soft);padding:6px 10px;border-radius:6px;font-family:var(--font-mono);font-size:0.66rem;color:var(--bone-dim);">Formerly: Nairobi Offensive Lab</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>For Teams</h4>
+      <ul>
+        <li><a href="#benefits">Small Business — like Brokers</a></li>
+        <li><a href="#benefits">SACCO & Fintech — like MGA/Carriers</a></li>
+        <li><a href="#benefits">Enterprise — like Customers</a></li>
+        <li><a href="services.html">Services & Pricing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Centre</h4>
+      <ul>
+        <li><a href="#portal">Client Portal</a></li>
+        <li><a href="#scanner">Demo Scanner</a></li>
+        <li><a href="payment.html">Payment: M-Pesa + Card</a></li>
+        <li><a href="#contact">Become a Partner</a></li>
+      </ul>
     </div>
     <div class="footer-col">
       <h4>Resources</h4>
       <ul>
-        <li><a href="news.html">News</a></li>
+        <li><a href="news.html">Top News</a></li>
         <li><a href="blog.html">Blog</a></li>
-        <li><a href="#scanner">Breach Watch</a></li>
-        <li><a href="blog.html">Templates</a></li>
+        <li><a href="#academy">Academy</a></li>
+        <li><a href="#advisories">Security Advisories</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Company</h4>
       <ul>
-        <li><a href="#hero">About Us</a></li>
-        <li><a href="#contact">Careers</a></li>
+        <li><a href="#hero">About VUNVAULT</a></li>
+        <li><a href="https://ipfscanada.com/" target="_blank" rel="noopener">IPFS Canada (inspiration)</a></li>
         <li><a href="#contact">Contact</a></li>
-        <li><a href="news.html">Press</a></li>
-        <li><a href="#contact">Support</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Solutions</h4>
-      <ul>
-        <li><a href="#pricing">Small Business</a></li>
-        <li><a href="#pricing">SACCO &amp; Fintech</a></li>
-        <li><a href="#pricing">Enterprise</a></li>
-        <li><a href="#academy">Security Training</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Tools</h4>
-      <ul>
-        <li><a href="#scanner">Free Security Scan</a></li>
-        <li><a href="#pricing">Pricing &amp; Plans</a></li>
-        <li><a href="#contact">Request a Report</a></li>
+        <li><a href="tel:+254705998032">1-Call: +254 705 998 032</a></li>
       </ul>
     </div>
   </div>
   <div class="container footer-row">
-    <p>© 2026 VUNVAULT. All rights reserved.</p>
+    <p>© 2026 VUNVAULT • Inspired design by IPFS Canada • All rights reserved.</p>
     <div class="footer-links">
       <a href="#hero">Top</a>
       <a href="services.html">Services</a>
       <a href="#academy">Academy</a>
       <a href="#contact">Contact</a>
+      <a href="https://ipfscanada.com/" target="_blank" style="color:var(--cyan);">ipfscanada.com ↗</a>
     </div>
   </div>
 </footer>
 
 <!-- AI CHAT WIDGET -->
 <button class="vv-chat-toggle" id="vvChatToggle" aria-label="Chat with VUNVAULT AI">
-  <svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H7l-3 3V5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+  <svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H7l-3 3V5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
 </button>
 <div class="vv-chat-panel" id="vvChatPanel">
   <div class="vv-chat-head">
@@ -896,7 +916,7 @@
     <button class="vv-chat-close" id="vvChatClose" aria-label="Close chat">✕</button>
   </div>
   <div class="vv-chat-body" id="vvChatBody">
-    <div class="vv-msg bot">Hi! I'm the VUNVAULT assistant. Ask me about our services, courses, or how to get a vulnerability assessment.</div>
+    <div class="vv-msg bot">Hi! I'm the VUNVAULT assistant — now with IPFS Canada's clean look. Ask me about our Small Business, SACCO/Fintech, or Enterprise plans.</div>
   </div>
   <div class="vv-chat-inputrow">
     <input type="text" id="vvChatInput" placeholder="Type a message…">
@@ -904,16 +924,8 @@
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-/* ===== AI CHAT WIDGET =====
-   This posts each message to /api/chat on your own domain. That endpoint is
-   NOT included here on purpose — an AI API key must never sit in front-end
-   JavaScript, or anyone viewing page source could steal and use it. Deploy a
-   tiny backend (e.g. a Cloudflare Worker) that holds the key server-side and
-   forwards the request to the Claude API. See the setup guide provided
-   alongside this file for a ready-to-paste Worker script and instructions.
-*/
 (function(){
   var toggle = document.getElementById('vvChatToggle');
   var panel = document.getElementById('vvChatPanel');
@@ -921,11 +933,9 @@
   var body = document.getElementById('vvChatBody');
   var input = document.getElementById('vvChatInput');
   var send = document.getElementById('vvChatSend');
-  var ENDPOINT = '/api/chat'; // point this at your deployed worker/backend
-
+  var ENDPOINT = '/api/chat';
   toggle.addEventListener('click', function(){ panel.classList.toggle('open'); if(panel.classList.contains('open')) input.focus(); });
   closeBtn.addEventListener('click', function(){ panel.classList.remove('open'); });
-
   function addMsg(text, who){
     var div = document.createElement('div');
     div.className = 'vv-msg ' + who;
@@ -934,33 +944,21 @@
     body.scrollTop = body.scrollHeight;
     return div;
   }
-
   function sendMessage(){
     var text = input.value.trim();
     if(!text) return;
     addMsg(text, 'user');
     input.value = '';
     var thinking = addMsg('…', 'bot');
-
-    fetch(ENDPOINT, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({message: text})
-    })
+    fetch(ENDPOINT, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text})})
     .then(function(r){ return r.json(); })
-    .then(function(data){
-      thinking.textContent = data.reply || "Sorry, I couldn't get a response just now.";
-    })
-    .catch(function(){
-      thinking.textContent = "I'm not connected to a live backend yet — set up /api/chat to enable me. In the meantime, use the contact form below or email support@vunvault.com.";
-    });
+    .then(function(data){ thinking.textContent = data.reply || "Sorry, I couldn't get a response just now."; })
+    .catch(function(){ thinking.textContent = "I'm not connected to a live backend yet — set up /api/chat to enable me. In the meantime, use the contact form or email support@vunvault.com."; });
   }
-
   send.addEventListener('click', sendMessage);
   input.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ sendMessage(); } });
 })();
 
-/* ===== CONTACT FORM (mailto handoff — no backend) ===== */
 document.getElementById('contactForm').addEventListener('submit', function(e){
   e.preventDefault();
   var name = document.getElementById('cName').value;
@@ -971,21 +969,25 @@ document.getElementById('contactForm').addEventListener('submit', function(e){
   window.location.href = 'mailto:support@vunvault.com?subject=' + encodeURIComponent('VUNVAULT Engagement Request — '+service) + '&body=' + body;
 });
 
-/* ===== MOBILE NAV ===== */
 document.getElementById('navToggle').addEventListener('click', function(){
   var links = document.querySelector('.nav-links');
-  links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
-  links.style.flexDirection = 'column';
-  links.style.position = 'absolute';
-  links.style.top = '64px';
-  links.style.right = '24px';
-  links.style.background = 'var(--panel)';
-  links.style.border = '1px solid var(--line)';
-  links.style.padding = '16px 24px';
-  links.style.gap = '16px';
+  if (links.style.display === 'flex') {
+    links.style.display = 'none';
+  } else {
+    links.style.display = 'flex';
+    links.style.flexDirection = 'column';
+    links.style.position = 'absolute';
+    links.style.top = '64px';
+    links.style.right = '24px';
+    links.style.background = '#fff';
+    links.style.border = '1px solid var(--line-soft)';
+    links.style.padding = '16px 24px';
+    links.style.gap = '16px';
+    links.style.borderRadius = '10px';
+    links.style.boxShadow = '0 12px 30px rgba(16,53,94,0.12)';
+  }
 });
 
-/* ===== THREAT TICKER ===== */
 var tickerItems = [
   {id:'CVE-2025-31337', sev:'critical', text:'Remote code execution in legacy CMS plugin'},
   {id:'CVE-2025-22011', sev:'high', text:'Auth bypass via misconfigured JWT validation'},
@@ -1006,35 +1008,21 @@ for (var r=0;r<2;r++){
 }
 track.innerHTML = html;
 
-/* ===== SCROLL REVEAL ===== */
 var revealEls = document.querySelectorAll('.reveal');
-var dividers = document.querySelectorAll('.crack-divider');
 if ('IntersectionObserver' in window){
   var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){
-      if (en.isIntersecting){ en.target.classList.add('in'); }
-    });
+    entries.forEach(function(en){ if (en.isIntersecting){ en.target.classList.add('in'); } });
   }, {threshold:0.15});
   revealEls.forEach(function(el){ io.observe(el); });
-
-  var dio = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){
-      if (en.isIntersecting){ en.target.classList.add('lit'); }
-    });
-  }, {threshold:0.4});
-  dividers.forEach(function(el){ dio.observe(el); });
 } else {
   revealEls.forEach(function(el){ el.classList.add('in'); });
-  dividers.forEach(function(el){ el.classList.add('lit'); });
 }
 
-/* ===== SCANNER DEMO ===== */
 var scanBtn = document.getElementById('scanBtn');
 var scanInput = document.getElementById('scanInput');
 var consoleLog = document.getElementById('consoleLog');
 var scanReport = document.getElementById('scanReport');
 var scanning = false;
-
 function runDemoScan(){
   if (scanning) return;
   var target = (scanInput.value || 'your-domain.co.ke').trim();
@@ -1055,7 +1043,6 @@ function runDemoScan(){
     setTimeout(function(){
       var line = document.createElement('div');
       line.className = 'line';
-      line.style.animationDelay = '0s';
       line.innerHTML = text;
       consoleLog.appendChild(line);
       if (i === steps.length - 1){
@@ -1071,41 +1058,32 @@ function runDemoScan(){
 scanBtn.addEventListener('click', runDemoScan);
 scanInput.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.preventDefault(); runDemoScan(); } });
 
-/* ===== THREE.JS HERO VAULT ===== */
 (function(){
   var canvas = document.getElementById('hero-canvas');
   if (!canvas || typeof THREE === 'undefined') return;
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   var renderer;
-  try {
-    renderer = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true});
-  } catch(e){ return; }
-
+  try { renderer = new THREE.WebGLRenderer({canvas:canvas, alpha:true, antialias:true}); } catch(e){ return; }
   var scene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
   camera.position.set(0, 0, 9);
-
   function sizeRenderer(){
     var w = canvas.clientWidth || canvas.parentElement.clientWidth;
     var h = canvas.clientHeight || canvas.parentElement.clientHeight;
     renderer.setSize(w, h, false);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
   }
-
   var outerGeo = new THREE.IcosahedronGeometry(2.6, 1);
-  var outerMat = new THREE.MeshBasicMaterial({color:0xff8a3d, wireframe:true, transparent:true, opacity:0.55});
+  var outerMat = new THREE.MeshBasicMaterial({color:0x10355e, wireframe:true, transparent:true, opacity:0.22});
   var outerMesh = new THREE.Mesh(outerGeo, outerMat);
   scene.add(outerMesh);
-
   var innerGeo = new THREE.IcosahedronGeometry(1.7, 1);
-  var innerMat = new THREE.MeshBasicMaterial({color:0x4dd9e8, wireframe:true, transparent:true, opacity:0.5});
+  var innerMat = new THREE.MeshBasicMaterial({color:0x2f81e0, wireframe:true, transparent:true, opacity:0.26});
   var innerMesh = new THREE.Mesh(innerGeo, innerMat);
   scene.add(innerMesh);
-
-  var particleCount = window.innerWidth < 768 ? 120 : 280;
+  var particleCount = window.innerWidth < 768 ? 90 : 200;
   var positions = new Float32Array(particleCount * 3);
   for (var i=0; i<particleCount; i++){
     var r = 3.4 + Math.random() * 2.2;
@@ -1117,46 +1095,39 @@ scanInput.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.pre
   }
   var particleGeo = new THREE.BufferGeometry();
   particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  var particleMat = new THREE.PointsMaterial({color:0xe8e6e1, size:0.035, transparent:true, opacity:0.5});
+  var particleMat = new THREE.PointsMaterial({color:0x2f81e0, size:0.032, transparent:true, opacity:0.35});
   var particles = new THREE.Points(particleGeo, particleMat);
   scene.add(particles);
-
   var mouseX = 0, mouseY = 0;
   window.addEventListener('mousemove', function(e){
     mouseX = (e.clientX / window.innerWidth - 0.5);
     mouseY = (e.clientY / window.innerHeight - 0.5);
   });
-
   window.addEventListener('resize', sizeRenderer);
   sizeRenderer();
-
   var clock = new THREE.Clock();
   function animate(){
     requestAnimationFrame(animate);
     var dt = clock.getDelta();
     var speed = reduceMotion ? 0.04 : 1;
-    outerMesh.rotation.y += dt * 0.18 * speed;
-    outerMesh.rotation.x += dt * 0.06 * speed;
-    innerMesh.rotation.y -= dt * 0.26 * speed;
-    innerMesh.rotation.x -= dt * 0.09 * speed;
-    particles.rotation.y += dt * 0.03 * speed;
-
-    camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.04;
-    camera.position.y += (-mouseY * 1.5 - camera.position.y) * 0.04;
+    outerMesh.rotation.y += dt * 0.12 * speed;
+    outerMesh.rotation.x += dt * 0.04 * speed;
+    innerMesh.rotation.y -= dt * 0.18 * speed;
+    innerMesh.rotation.x -= dt * 0.06 * speed;
+    particles.rotation.y += dt * 0.02 * speed;
+    camera.position.x += (mouseX * 1.1 - camera.position.x) * 0.04;
+    camera.position.y += (-mouseY * 1.0 - camera.position.y) * 0.04;
     camera.lookAt(scene.position);
-
     renderer.render(scene, camera);
   }
   animate();
 })();
 
-/* ===== NETWORK GRAPH CANVAS ===== */
 (function(){
   var canvas = document.getElementById('network-canvas');
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   function resize(){
     var rect = canvas.parentElement.getBoundingClientRect();
     canvas.width = rect.width * (window.devicePixelRatio || 1);
@@ -1167,8 +1138,7 @@ scanInput.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.pre
   }
   resize();
   window.addEventListener('resize', resize);
-
-  var nodeCount = 24;
+  var nodeCount = 22;
   var nodes = [];
   function initNodes(){
     var w = canvas.clientWidth, h = canvas.clientHeight;
@@ -1176,7 +1146,7 @@ scanInput.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.pre
     for (var i=0;i<nodeCount;i++){
       nodes.push({
         x: Math.random()*w, y: Math.random()*h,
-        vx: (Math.random()-0.5)*0.18, vy: (Math.random()-0.5)*0.18,
+        vx: (Math.random()-0.5)*0.16, vy: (Math.random()-0.5)*0.16,
         r: 1.6 + Math.random()*2.2,
         pulse: Math.random()*Math.PI*2
       });
@@ -1184,7 +1154,6 @@ scanInput.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.pre
   }
   initNodes();
   window.addEventListener('resize', initNodes);
-
   function step(){
     var w = canvas.clientWidth, h = canvas.clientHeight;
     ctx.clearRect(0,0,w,h);
@@ -1202,7 +1171,7 @@ scanInput.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.pre
         var dx = a.x-b.x, dy = a.y-b.y;
         var dist = Math.sqrt(dx*dx+dy*dy);
         if (dist < 130){
-          ctx.strokeStyle = 'rgba(255,138,61,' + (0.18 * (1 - dist/130)) + ')';
+          ctx.strokeStyle = 'rgba(16,53,94,' + (0.10 * (1 - dist/130)) + ')';
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
@@ -1211,10 +1180,10 @@ scanInput.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.pre
       }
     }
     nodes.forEach(function(n){
-      var glow = 0.5 + Math.sin(n.pulse)*0.3;
+      var glow = 0.45 + Math.sin(n.pulse)*0.25;
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
-      ctx.fillStyle = 'rgba(77,217,232,' + glow + ')';
+      ctx.fillStyle = 'rgba(47,129,224,' + glow + ')';
       ctx.fill();
     });
     requestAnimationFrame(step);
@@ -1222,5 +1191,5 @@ scanInput.addEventListener('keydown', function(e){ if (e.key === 'Enter'){ e.pre
   step();
 })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a23964c1faab6450',t:'MTc4NTQ2NzI1NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a254fc620f9d73f4',t:'MTc4NTc1NjU4MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2554ed9b9a0c89d',t:'MTc4NTc1OTk1OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
