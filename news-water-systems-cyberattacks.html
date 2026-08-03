@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coordinated Cyberattacks Hit Water Systems Across Multiple U.S. States, VUNVAULT News</title>
+<meta name="description" content="Hackers hit water and wastewater utilities in at least seven U.S. states, forcing manual operations and boil-water notices. VUNVAULT breaks down the attacks, the suspected actors, and the lessons for African utilities.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#ffffff;
+    --panel:#f4f4f1;
+    --panel-raised:#fafaf8;
+    --line:#d9d9d4;
+    --line-soft:#e8e8e4;
+    --bone:#16181c;
+    --bone-dim:#5a5e66;
+    --amber:#ff8a3d;
+    --amber-dim:#c96a2b;
+    --cyan:#0f9db8;
+    --red:#d93434;
+    --green:#2f9e63;
+    --font-display:'Big Shoulders Display',sans-serif;
+    --font-body:'IBM Plex Sans',sans-serif;
+    --font-mono:'IBM Plex Mono',monospace;
+    --container:1100px;
+    --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;--s7:96px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--void);
+    color:var(--bone);
+    font-family:var(--font-body);
+    line-height:1.7;
+    overflow-x:hidden;
+  }
+  img{display:block;max-width:100%;}
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  .container{max-width:var(--container);margin:0 auto;padding:0 var(--s4);}
+  h1,h2,h3{font-family:var(--font-display);font-weight:700;letter-spacing:0.01em;line-height:1.1;text-transform:uppercase;}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--amber-dim);
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:var(--s2);
+  }
+  .eyebrow::before{content:"";width:18px;height:1px;background:var(--amber);display:inline-block;}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    padding:13px 26px;
+    border-radius:2px;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:transform .15s ease, background .2s ease, border-color .2s ease, color .2s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--amber);color:#16181c;font-weight:600;}
+  .btn-primary:hover{background:#ffa05f;}
+  .btn-outline{border-color:var(--line);color:var(--bone);}
+  .btn-outline:hover{border-color:var(--amber);color:var(--amber-dim);}
+
+  /* NAV */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(255,255,255,0.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  nav{
+    max-width:var(--container);margin:0 auto;padding:16px var(--s4);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--bone);}
+  .logo svg{width:26px;height:26px;}
+  .logo span{color:var(--amber);}
+  .nav-links{display:flex;align-items:center;gap:var(--s4);}
+  .nav-links a{
+    font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--bone-dim);transition:color .2s ease;
+  }
+  .nav-links a:hover,.nav-links a.active{color:var(--amber-dim);}
+  .nav-cta{display:flex;align-items:center;gap:var(--s3);}
+  .nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .nav-toggle span{width:22px;height:2px;background:var(--bone);display:block;}
+
+  /* PAGE HERO */
+  .page-hero{
+    padding:calc(90px + var(--s6)) 0 var(--s6);
+    border-bottom:1px solid var(--line-soft);
+    background:
+      radial-gradient(ellipse 55% 45% at 80% 25%, rgba(255,138,61,0.07), transparent 60%),
+      radial-gradient(ellipse 45% 40% at 10% 85%, rgba(15,157,184,0.06), transparent 60%),
+      #ffffff;
+  }
+  .page-hero .tag-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:var(--s3);}
+  .page-hero .tag{
+    font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;
+    padding:4px 10px;border-radius:2px;border:1px solid var(--line);
+    color:var(--cyan);
+  }
+  .page-hero .tag.critical{color:var(--red);border-color:rgba(217,52,52,0.4);}
+  .page-hero h1{font-size:clamp(2.1rem,4.6vw,3.3rem);margin-bottom:var(--s3);}
+  .page-hero h1 em{font-style:normal;color:var(--amber-dim);}
+  .page-hero .deck{color:var(--bone-dim);font-size:1.08rem;max-width:720px;margin-bottom:var(--s4);}
+  .meta-row{
+    display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;
+    font-family:var(--font-mono);font-size:0.78rem;color:var(--bone-dim);
+    border-top:1px solid var(--line-soft);padding-top:var(--s3);
+  }
+  .meta-row .byline{color:var(--bone);}
+  .meta-row .byline strong{color:var(--amber-dim);font-weight:600;}
+
+  /* ARTICLE BODY */
+  .article-section{padding:var(--s6) 0 var(--s7);}
+  .article-body{max-width:780px;margin:0 auto;}
+  .featured-figure{margin:0 0 var(--s6);}
+  .featured-figure img{
+    width:100%;border:1px solid var(--line);border-radius:6px;
+  }
+  .featured-figure figcaption{
+    font-family:var(--font-mono);font-size:0.72rem;color:var(--bone-dim);
+    padding:12px 4px 0;line-height:1.6;
+  }
+  .featured-figure figcaption .credit{color:var(--amber-dim);}
+  .article-body p{color:var(--bone-dim);font-size:1.02rem;margin-bottom:var(--s4);}
+  .article-body p strong{color:var(--bone);}
+  .article-body .lead{font-size:1.16rem;color:var(--bone);line-height:1.75;}
+  .article-body h2{
+    font-size:clamp(1.4rem,2.6vw,1.9rem);
+    margin:var(--s6) 0 var(--s3);
+    padding-bottom:12px;
+    border-bottom:1px solid var(--line-soft);
+    display:flex;align-items:center;gap:12px;
+  }
+  .article-body h2::before{
+    content:"";width:6px;height:1.1em;background:var(--amber);display:inline-block;flex-shrink:0;
+  }
+  .article-body h3{
+    font-size:1.15rem;text-transform:none;letter-spacing:0;
+    color:var(--bone);margin:var(--s4) 0 var(--s2);
+  }
+  .article-body ul{color:var(--bone-dim);margin:0 0 var(--s4);display:flex;flex-direction:column;gap:10px;}
+  .article-body ul li{padding-left:20px;position:relative;}
+  .article-body ul li::before{content:"›";position:absolute;left:0;color:var(--amber-dim);font-weight:600;}
+  .article-body ul li strong{color:var(--bone);}
+
+  blockquote.quote{
+    margin:var(--s6) 0;
+    padding:var(--s4) var(--s4) var(--s4) var(--s5);
+    border-left:3px solid var(--amber);
+    background:var(--panel);
+    border-radius:0 4px 4px 0;
+  }
+  blockquote.quote p{
+    font-family:var(--font-display);text-transform:uppercase;
+    font-size:clamp(1.2rem,2.2vw,1.6rem);line-height:1.25;
+    color:var(--bone);margin-bottom:10px;
+  }
+  blockquote.quote cite{
+    font-family:var(--font-mono);font-size:0.75rem;color:var(--bone-dim);font-style:normal;
+    letter-spacing:0.05em;
+  }
+
+  .vv-callout{
+    margin:var(--s6) 0;
+    border:1px solid var(--line);border-radius:6px;
+    background:linear-gradient(135deg, rgba(255,138,61,0.08), rgba(15,157,184,0.06)), #fbfbf9;
+    padding:var(--s4);
+  }
+  .vv-callout .eyebrow{margin-bottom:10px;}
+  .vv-callout h3{font-size:1.15rem;margin-bottom:var(--s2);text-transform:none;}
+  .vv-callout p{font-size:0.95rem;margin-bottom:10px;color:var(--bone-dim);}
+  .vv-callout p:last-child{margin-bottom:0;}
+
+  table.facts{
+    width:100%;border-collapse:collapse;margin:var(--s4) 0 var(--s2);
+    font-size:0.9rem;
+  }
+  table.facts th,table.facts td{
+    text-align:left;padding:12px 14px;border-bottom:1px solid var(--line-soft);
+    vertical-align:top;
+  }
+  table.facts th{
+    font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--cyan);background:var(--panel);white-space:nowrap;width:34%;
+  }
+  table.facts td{color:var(--bone-dim);}
+
+  .sources-note{
+    margin-top:var(--s6);padding:var(--s4);
+    border:1px dashed var(--line);border-radius:6px;
+    font-family:var(--font-mono);font-size:0.75rem;color:var(--bone-dim);line-height:1.8;
+  }
+  .sources-note strong{color:var(--bone);}
+
+  .back-link{display:inline-flex;align-items:center;gap:8px;margin-top:var(--s6);}
+
+  /* FOOTER */
+  footer{padding:var(--s6) 0 var(--s5);border-top:1px solid var(--line-soft);background:#ffffff;}
+  .footer-top{display:grid;grid-template-columns:1.3fr repeat(4,1fr);gap:var(--s5);padding-bottom:var(--s5);margin-bottom:var(--s4);border-bottom:1px solid var(--line-soft);}
+  .footer-brand .logo{margin-bottom:var(--s2);}
+  .footer-brand p{color:var(--bone-dim);font-size:0.85rem;max-width:240px;}
+  .footer-col h4{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--bone);margin-bottom:var(--s3);}
+  .footer-col ul{display:flex;flex-direction:column;gap:11px;}
+  .footer-col a{font-family:var(--font-mono);font-size:0.82rem;color:var(--bone-dim);transition:color .2s ease;}
+  .footer-col a:hover{color:var(--amber-dim);}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--s3);}
+  .footer-row p{font-family:var(--font-mono);font-size:0.75rem;color:var(--bone-dim);}
+  .footer-links{display:flex;gap:var(--s4);}
+  .footer-links a{font-family:var(--font-mono);font-size:0.75rem;color:var(--bone-dim);}
+  .footer-links a:hover{color:var(--amber-dim);}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  @media (max-width:900px){
+    .nav-links{display:none;}
+    .nav-toggle{display:flex;}
+    .footer-top{grid-template-columns:1fr 1fr;}.footer-brand{grid-column:1/-1;}
+  }
+  @media (max-width:560px){
+    .footer-top{grid-template-columns:1fr;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="logo">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z" stroke="#ff8a3d" stroke-width="1.4"/>
+        <path d="M8 12.5L10.5 15L16 9" stroke="#0f9db8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      VUNVAULT
+    </a>
+    <ul class="nav-links">
+      <li><a href="services.html">Services</a></li>
+      <li><a href="index.html#scanner">Scanner</a></li>
+      <li><a href="index.html#academy">Academy</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="news.html" class="active">News</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="index.html#contact" class="btn btn-primary">Request a Scan</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="tag-row reveal">
+      <span class="tag critical">Critical Infrastructure</span>
+      <span class="tag">Cybersecurity</span>
+      <span class="tag">Global Watch</span>
+    </div>
+    <h1 class="reveal">Coordinated Cyberattacks Hit Water Systems Across Multiple <em>U.S. States</em>, and It&rsquo;s a Warning for Utilities Everywhere</h1>
+    <p class="deck reveal">Hackers forced water plants in at least seven U.S. states offline, locked operators out of their own control systems and triggered boil-water notices. No water was contaminated, but the blueprint is now public, and African utilities are listening.</p>
+    <div class="meta-row reveal">
+      <span class="byline">By <strong>VUNVAULT</strong></span>
+      <span>|</span>
+      <span>August 3, 2026</span>
+      <span>|</span>
+      <span>6 min read</span>
+    </div>
+  </div>
+</section>
+
+<section class="article-section">
+  <div class="container">
+    <article class="article-body">
+
+      <figure class="featured-figure reveal">
+        <img src="images/cnn-water-tower-plymouth.jpg" alt="A water tower is seen in Plymouth, Minnesota, on July 30, 2026, one of the cities hit in the coordinated cyberattacks on U.S. water systems.">
+        <figcaption>
+          A water tower is seen in Plymouth, Minnesota, on July 30, 2026, one of the cities hit in the coordinated cyberattacks. <span class="credit">Photo: Ellen Schmidt / AP, via CNN</span>
+        </figcaption>
+      </figure>
+
+      <p class="lead">WASHINGTON: Hackers have launched a coordinated wave of cyberattacks against water and wastewater utilities across the United States, forcing some systems offline, triggering boil-water notices and exposing how fragile the digital controls behind the world&rsquo;s drinking water have become.</p>
+
+      <p>Federal officials confirmed that water utilities in at least <strong>seven U.S. states</strong> have reported cyber incidents since late July, in what analysts describe as one of the most serious cyberattacks on American water systems in years. The FBI, the Cybersecurity and Infrastructure Security Agency (CISA) and the Environmental Protection Agency (EPA) have spent the past week helping secure water facilities. No water contamination has been reported.</p>
+
+      <h2>What happened</h2>
+      <p>The first public signs of the attack emerged from Minnesota, where state authorities said more than <strong>30 community water systems</strong> were targeted in a &ldquo;coordinated cyberattack&rdquo; over the night of Sunday, July 26, through Monday, July 27. Four cities publicly confirmed attacks:</p>
+      <ul>
+        <li><strong>Braham</strong> (population ~1,700): unknown malware disabled the computerized operating controls at the water plant, leaving the city&rsquo;s water tower unable to be refilled for more than an hour. Public works crews restored the plant within roughly two hours.</li>
+        <li><strong>Plymouth</strong> (population ~80,000): IT staff disconnected cellular-connected equipment at two water towers and multiple wastewater lift stations to stop the attack and prevent retargeting. The city switched to manual operations.</li>
+        <li><strong>South St. Paul</strong>: also forced to operate its water system manually.</li>
+        <li><strong>Maple Plain</strong>: Mayor Julie Maas-Kusske declared a local state of emergency and deployed crews to restore service.</li>
+      </ul>
+      <p>Minnesota&rsquo;s chief information security officer, John Israel, later confirmed that about <strong>36 municipal water systems</strong> in the state were affected. The attacks then spread. The FBI said utilities in at least seven states reported incidents, including <strong>Wisconsin</strong>, where officials urged utilities to take &ldquo;immediate action,&rdquo; and <strong>Michigan</strong>, where hackers altered settings on wastewater equipment. In <strong>South Dakota</strong>, the city of Rapid City said one of its wastewater lift stations was targeted; it isolated the systems and said drinking water and public safety were unaffected.</p>
+
+      <h2>How the attacks worked</h2>
+      <p>Investigators say the attackers targeted <strong>internet-facing programmable logic controllers (PLCs)</strong>, the industrial computers that monitor water pressure, chemical dosing and other functions that keep drinking water safe. The intrusions were described as &ldquo;not complicated&rdquo;: hackers broke into PLCs left exposed online, often with default or no passwords.</p>
+      <ul>
+        <li>Changed passwords to <strong>lock operators out</strong> of their own systems</li>
+        <li>Altered device IP addresses, cutting monitoring and control capabilities</li>
+        <li>Disconnected devices from networks entirely</li>
+      </ul>
+      <p>The &ldquo;likely desired impact&rdquo; of the intrusions, according to a Minnesota Bureau of Criminal Apprehension memo obtained by CNN, was &ldquo;to cause loss of system pressure and subsequent potential contamination of water supply.&rdquo; The FBI said some victims reported operational effects including <strong>lost water pressure and flooding</strong> in certain locations. CISA warned that hackers &ldquo;are targeting water entities of all sizes.&rdquo;</p>
+
+      <h2>Who is responsible</h2>
+      <p>No formal attribution has been made, and officials caution the assessment is preliminary. The New York Times reported that investigators reviewing the attacks believe <strong>Iranian-linked hackers were probably responsible</strong>, a finding that comes amid the escalating 2026 war between the United States and Iran. Investigators stressed the report is preliminary and subject to change, and U.S. officials also warned of the risk of <strong>false flags</strong>.</p>
+      <p>President Donald Trump, at a cabinet meeting Friday, blamed Minnesota authorities for the hack and cast doubt on whether Iran was involved: &ldquo;They like to say, &lsquo;Oh, it&rsquo;s Iran.&rsquo; Iran should be so lucky. Iran&rsquo;s got bigger problems than worrying about Minnesota.&rdquo;</p>
+      <p>The timing fits a documented pattern. A joint advisory from CISA, the FBI and the NSA, issued in April 2026, documented Iranian-affiliated actors exploiting internet-exposed Rockwell Automation (Allen-Bradley) PLCs to cause disruptions across government services, water and wastewater, and energy sectors. The advisory was <strong>updated July 22, 2026</strong>, days before the Minnesota attacks, to add Schneider Electric and Siemens devices and document project-file exfiltration for the first time.</p>
+
+      <blockquote class="quote reveal">
+        <p>&ldquo;Water systems have enjoyed the benefits of remote access, but now those who wish us harm have it, too.&rdquo;</p>
+        <cite>Joshua Corman, co-founder, I Am The Cavalry</cite>
+      </blockquote>
+
+      <h2>The federal response</h2>
+      <ul>
+        <li><strong>CISA alert (July 30):</strong> warned of a &ldquo;significant increase&rdquo; in threat actors targeting PLCs in the Water and Wastewater Systems sector, and urged utilities to <strong>remove vulnerable equipment from the internet as soon as possible</strong>.</li>
+        <li><strong>FBI / EPA warning (July 30):</strong> confirmed incidents at utilities in about seven states and noted some activity had degraded water operations.</li>
+        <li><strong>CISA guidance:</strong> disconnect PLCs, access systems only through VPNs, replace default passwords, and allow access only from known engineering laptops. CISA specifically flagged <strong>undocumented cellular modems</strong> installed by operators or vendors as a risk.</li>
+        <li><strong>WaterISAC</strong>, the water sector&rsquo;s threat-sharing hub, urged utilities to shore up their systems, calling the scale and coordination of the Minnesota attacks &ldquo;unprecedented.&rdquo;</li>
+      </ul>
+
+      <h2>Why it matters beyond the U.S.</h2>
+      <p>The attack is a global wake-up call. Water and wastewater utilities in Africa, South Asia and the Middle East are particularly vulnerable, experts say, because many have leapt from manual systems to highly digital ones in a very short time, installing remote monitoring and automated controls <strong>without corresponding cybersecurity investment</strong>.</p>
+      <p>In Kenya, cyber threat intelligence firms have already documented ransomware groups, including Qilin, RansomHub and Lynx, showing growing interest in East African critical infrastructure, with energy and water utilities among the sectors targeted between 2025 and 2026. Kenya&rsquo;s National KE-CIRT, alongside sector regulators, has repeatedly urged operators of essential services to harden their systems.</p>
+      <p>The lesson from the U.S. incidents applies to utilities everywhere: <strong>if you cannot protect an internet-connected control system, take it offline</strong> until it can be secured.</p>
+
+      <div class="vv-callout reveal">
+        <div class="eyebrow">The VUNVAULT Take</div>
+        <h3>If you run a water utility, an energy plant, or any critical service in Africa, audit your exposure today</h3>
+        <p>This campaign is the clearest proof yet that industrial control systems are in attackers&rsquo; crosshairs, and that many operators are unknowingly exposing PLCs and SCADA interfaces to the open internet, sometimes with default credentials.</p>
+        <p>Start with three questions: Is any control equipment reachable from the internet? Are default passwords still in use? Who has remote access, and through what? VUNVAULT runs external attack-surface mapping and OT/IT assessments to answer exactly these questions before an attacker does.</p>
+      </div>
+
+      <h2>Key facts at a glance</h2>
+      <table class="facts">
+        <tr><th>First attacks</th><td>July 26 to July 27, 2026</td></tr>
+        <tr><th>Initial target</th><td>30+ community water systems in Minnesota (~36 confirmed)</td></tr>
+        <tr><th>Current scope</th><td>Utilities in at least 7 U.S. states</td></tr>
+        <tr><th>Method</th><td>Exploiting internet-exposed programmable logic controllers (PLCs)</td></tr>
+        <tr><th>Effects</th><td>Boil-water notices, manual operation, lost pressure, flooding in some areas</td></tr>
+        <tr><th>Contamination</th><td>None reported</td></tr>
+        <tr><th>Suspected actor</th><td>Iranian-linked hackers (preliminary, unconfirmed)</td></tr>
+        <tr><th>Response</th><td>CISA alert, FBI/EPA warning, WaterISAC advisory, ongoing federal investigation</td></tr>
+      </table>
+
+      <div class="sources-note">
+        <strong>Sources:</strong> CNN; Reuters; The New York Times; CISA; FBI; EPA; Minnesota IT Services; Newsweek; Tenable; CYFIRMA Kenya Cyber Threat Landscape Report (2025-2026); IWMI. Photo: Ellen Schmidt / AP via CNN.
+        <br><br>
+        <strong>Note:</strong> This is a developing story. Attribution and impact figures are based on preliminary reporting and may change as the federal investigation progresses. Article first published by VUNVAULT, August 3, 2026.
+      </div>
+
+      <a href="news.html" class="btn btn-outline back-link">Back to all news</a>
+    </article>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-top">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z" stroke="#ff8a3d" stroke-width="1.4"/>
+          <path d="M8 12.5L10.5 15L16 9" stroke="#0f9db8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        VUNVAULT
+      </a>
+      <p>Africa-rooted, worldwide penetration testing, vulnerability assessments and cybersecurity education.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="news.html">News</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="index.html#scanner">Breach Watch</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="index.html#hero">About Us</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="news.html">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Solutions</h4>
+      <ul>
+        <li><a href="services.html">Small Business</a></li>
+        <li><a href="services.html">SACCO &amp; Fintech</a></li>
+        <li><a href="services.html">Enterprise</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Tools</h4>
+      <ul>
+        <li><a href="index.html#scanner">Free Security Scan</a></li>
+        <li><a href="services.html">Pricing &amp; Plans</a></li>
+        <li><a href="index.html#contact">Request a Report</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-row">
+    <p>© 2026 VUNVAULT. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="news.html">News</a>
+      <a href="services.html">Services</a>
+      <a href="index.html#academy">Academy</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Mobile nav */
+document.getElementById('navToggle').addEventListener('click', function(){
+  var links = document.querySelector('.nav-links');
+  links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+  links.style.flexDirection = 'column';
+  links.style.position = 'absolute';
+  links.style.top = '64px';
+  links.style.right = '24px';
+  links.style.background = '#ffffff';
+  links.style.border = '1px solid var(--line)';
+  links.style.padding = '16px 24px';
+  links.style.gap = '16px';
+});
+
+/* Scroll reveal */
+var revealEls = document.querySelectorAll('.reveal');
+if ('IntersectionObserver' in window){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if (en.isIntersecting){ en.target.classList.add('in'); } });
+  }, {threshold:0.12});
+  revealEls.forEach(function(el){ io.observe(el); });
+} else {
+  revealEls.forEach(function(el){ el.classList.add('in'); });
+}
+</script>
+</body>
+</html>
