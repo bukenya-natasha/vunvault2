@@ -9,28 +9,45 @@
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --void:#ffffff;
-    --panel:#f8fafc;
-    --panel-raised:#f1f5f9;
-    --line:#cbd5e1;
-    --line-soft:#f1f5f9;
-    --bone:#0f172a;
-    --bone-dim:#334155;
-    --amber:#e25c00;
-    --amber-dim:#b86426;
-    --cyan:#0891b2;
-    --red:#dc2626;
-    --green:#16a34a;
-    --font-display:'Big Shoulders Display',sans-serif;
-    --font-body:'IBM Plex Sans',sans-serif;
-    --font-mono:'IBM Plex Mono',monospace;
-    --container:1200px;
+    /* VUNVAULT New Brand Palette */
+    --void: #fcfbf9;
+    --panel: #ffffff;
+    --panel-raised: #f7f6f3;
+    --line: #e2e8f0;
+    --line-soft: #f1f5f9;
+    --bone: #0f172a;
+    --bone-dim: #64748b;
+    --ink: #0f172a;
+    --sub: #64748b;
+    --accent: #0f172a;
+    --accent-blue: #0284c7;
+    --amber: #d97706;
+    --amber-dim: #b45309;
+    --cyan: #0284c7;
+    --red: #dc2626;
+    --green: #059669;
+
+    /* Course & Layout Tokens */
+    --black: #0f172a;
+    --dark: #0f172a;
+    --mid: #475569;
+    --light: #64748b;
+    --rule: #e2e8f0;
+    --rule-soft: #f1f5f9;
+    --paper: #fcfbf9;
+    --paper-warm: #f7f6f3;
+    --hi: #f1f5f9;
+
+    --font-display: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+    --container: 1200px;
     --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;--s7:96px;--s8:128px;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
   body{
-    background:var(--void);
+    background:#fcfbf9;color:#0f172a;
     color:var(--bone);
     font-family:var(--font-body);
     line-height:1.7;
@@ -66,7 +83,7 @@
   }
   .btn:hover{transform:translateY(-2px);}
   .btn-primary{background:var(--amber);color:#ffffff;font-weight:600;}
-  .btn-primary:hover{background:#ff7518;}
+  .btn-primary:hover{background:#0f172a;}
   .btn-outline{border-color:var(--line);color:var(--bone);background:transparent;}
   .btn-outline:hover{border-color:var(--amber);color:var(--amber);}
 
@@ -233,28 +250,25 @@
 </head>
 <body>
 
-<header>
-  <nav>
-    <a href="index.html" class="logo">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L21 6.5V12C21 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z" stroke="#e25c00" stroke-width="1.4"/>
-        <path d="M8 12.5L10.5 15L16 9" stroke="#0891b2" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      VUNVAULT
+<header style="position:sticky;top:0;z-index:200;background:rgba(252,251,249,0.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #e2e8f0;">
+  <div style="max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+    <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <div style="width:32px;height:32px;border-radius:10px;background:#0f172a;display:flex;align-items:center;justify-content:center;color:#fff;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z"/></svg>
+      </div>
+      <span style="font-weight:800;font-size:1.3rem;letter-spacing:0.06em;color:#0f172a;text-transform:uppercase;">VUNVAULT</span>
     </a>
-    <ul class="nav-links">
-      <li><a href="index.html#services">Services</a></li>
-      <li><a href="index.html#scanner">Scanner</a></li>
-      <li><a href="index.html#academy">Academy</a></li>
-      <li><a href="blog.html">Blog</a></li>
-      <li><a href="news.html">News</a></li>
-      <li><a href="index.html#contact">Contact</a></li>
-    </ul>
-    <div class="nav-cta">
-      <a href="index.html#contact" class="btn btn-primary">Request a Scan</a>
-      <button class="nav-toggle" id="navToggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+    <nav style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <a href="services.html" style="font-size:0.88rem;font-weight:600;color:#0f172a;text-decoration:none;padding:5px 12px;border-radius:9999px;background:rgba(15,23,42,0.06);">Services</a>
+      <a href="index.html#scanner" style="font-size:0.88rem;font-weight:600;color:#475569;text-decoration:none;padding:5px 12px;border-radius:9999px;">Scanner</a>
+      <a href="course-foundations.html" style="font-size:0.88rem;font-weight:600;color:#475569;text-decoration:none;padding:5px 12px;border-radius:9999px;">Academy</a>
+      <a href="news.html" style="font-size:0.88rem;font-weight:600;color:#475569;text-decoration:none;padding:5px 12px;border-radius:9999px;">News</a>
+      <a href="index.html#contact" style="font-size:0.88rem;font-weight:600;color:#475569;text-decoration:none;padding:5px 12px;border-radius:9999px;">Contact</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="index.html" style="background:#0f172a;color:#fff;font-size:0.85rem;font-weight:500;padding:8px 18px;border-radius:9999px;text-decoration:none;">Get Started</a>
     </div>
-  </nav>
+  </div>
 </header>
 
 <section class="blog-hero">
@@ -302,62 +316,60 @@
   </div>
 </section>
 
-<footer>
-  <div class="container footer-top">
-    <div class="footer-brand">
-      <a href="index.html#hero" class="logo">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z" stroke="#e25c00" stroke-width="1.4"/>
-          <path d="M8 12.5L10.5 15L16 9" stroke="#0891b2" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        VUNVAULT
+<footer style="background:#fcfbf9;border-top:1px solid #e2e8f0;padding:64px 32px 32px;color:#64748b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px;border-bottom:1px solid #e2e8f0;">
+    <div>
+      <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px;">
+        <div style="width:32px;height:32px;border-radius:10px;background:#0f172a;display:flex;align-items:center;justify-content:center;color:#fff;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z"/></svg>
+        </div>
+        <span style="font-weight:800;font-size:1.3rem;letter-spacing:0.06em;color:#0f172a;text-transform:uppercase;">VUNVAULT</span>
       </a>
-      <p>Africa rooted, worldwide penetration testing, vulnerability assessments and cybersecurity education.</p>
+      <p style="font-size:0.88rem;line-height:1.6;color:#64748b;max-width:320px;">Africa-rooted, worldwide penetration testing, vulnerability assessments and cybersecurity education.</p>
     </div>
-    <div class="footer-col">
-      <h4>Resources</h4>
-      <ul>
-        <li><a href="news.html">News</a></li>
-        <li><a href="index.html#academy">Blog</a></li>
-        <li><a href="index.html#scanner">Breach Watch</a></li>
-        <li><a href="index.html#academy">Templates</a></li>
+    <div>
+      <h4 style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#0f172a;margin-bottom:16px;">Resources</h4>
+      <ul style="list-style:none;padding:0;margin:0;font-size:0.88rem;display:flex;flex-direction:column;gap:10px;">
+        <li><a href="news.html" style="color:#64748b;text-decoration:none;">News</a></li>
+        <li><a href="blog.html" style="color:#64748b;text-decoration:none;">Blog</a></li>
+        <li><a href="index.html#scanner" style="color:#64748b;text-decoration:none;">Breach Watch</a></li>
+        <li><a href="blog.html" style="color:#64748b;text-decoration:none;">Templates</a></li>
       </ul>
     </div>
-    <div class="footer-col">
-      <h4>Company</h4>
-      <ul>
-        <li><a href="index.html#hero">About Us</a></li>
-        <li><a href="index.html#contact">Careers</a></li>
-        <li><a href="index.html#contact">Contact</a></li>
-        <li><a href="news.html">Press</a></li>
-        <li><a href="index.html#contact">Support</a></li>
+    <div>
+      <h4 style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#0f172a;margin-bottom:16px;">Company</h4>
+      <ul style="list-style:none;padding:0;margin:0;font-size:0.88rem;display:flex;flex-direction:column;gap:10px;">
+        <li><a href="index.html#about" style="color:#64748b;text-decoration:none;">About Us</a></li>
+        <li><a href="index.html#careers" style="color:#64748b;text-decoration:none;">Careers</a></li>
+        <li><a href="index.html#contact" style="color:#64748b;text-decoration:none;">Contact</a></li>
+        <li><a href="news.html" style="color:#64748b;text-decoration:none;">Press</a></li>
       </ul>
     </div>
-    <div class="footer-col">
-      <h4>Solutions</h4>
-      <ul>
-        <li><a href="index.html#services">Small Business</a></li>
-        <li><a href="index.html#services">SACCO &amp; Fintech</a></li>
-        <li><a href="index.html#services">Enterprise</a></li>
-        <li><a href="index.html#academy">Security Training</a></li>
+    <div>
+      <h4 style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#0f172a;margin-bottom:16px;">Solutions</h4>
+      <ul style="list-style:none;padding:0;margin:0;font-size:0.88rem;display:flex;flex-direction:column;gap:10px;">
+        <li><a href="services.html" style="color:#64748b;text-decoration:none;">Small Business</a></li>
+        <li><a href="services.html" style="color:#64748b;text-decoration:none;">SACCO & Fintech</a></li>
+        <li><a href="services.html" style="color:#64748b;text-decoration:none;">Enterprise</a></li>
+        <li><a href="course-foundations.html" style="color:#64748b;text-decoration:none;">Security Training</a></li>
       </ul>
     </div>
-    <div class="footer-col">
-      <h4>Tools</h4>
-      <ul>
-        <li><a href="index.html#scanner">Free Security Scan</a></li>
-        <li><a href="index.html#services">Pricing &amp; Plans</a></li>
-        <li><a href="index.html#contact">Request a Report</a></li>
+    <div>
+      <h4 style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#0f172a;margin-bottom:16px;">Tools</h4>
+      <ul style="list-style:none;padding:0;margin:0;font-size:0.88rem;display:flex;flex-direction:column;gap:10px;">
+        <li><a href="index.html#scanner" style="color:#64748b;text-decoration:none;">Free Security Scan</a></li>
+        <li><a href="services.html" style="color:#64748b;text-decoration:none;">Pricing & Plans</a></li>
+        <li><a href="index.html#contact" style="color:#64748b;text-decoration:none;">Request a Report</a></li>
       </ul>
     </div>
   </div>
-  <div class="container footer-row">
+  <div style="max-width:1200px;margin:24px auto 0;display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;color:#64748b;">
     <p>© 2026 VUNVAULT. All rights reserved.</p>
-    <div class="footer-links">
-      <a href="index.html#hero">Top</a>
-      <a href="index.html#services">Services</a>
-      <a href="index.html#academy">Academy</a>
-      <a href="index.html#contact">Contact</a>
+    <div style="display:flex;gap:20px;">
+      <a href="#" style="color:#64748b;text-decoration:none;">Top</a>
+      <a href="services.html" style="color:#64748b;text-decoration:none;">Services</a>
+      <a href="course-foundations.html" style="color:#64748b;text-decoration:none;">Academy</a>
+      <a href="index.html#contact" style="color:#64748b;text-decoration:none;">Contact</a>
     </div>
   </div>
 </footer>
@@ -377,5 +389,5 @@ document.getElementById('navToggle').addEventListener('click', function(){
   links.style.gap = '16px';
 });
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a23980ff8c5251a3',t:'MTc4NTQ2ODQxMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a23980ff8c5251a3',t:'MTc4NTQ2ODQxMA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a26c4f48be55ae0f',t:'MTc4NjAwMTE0OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
