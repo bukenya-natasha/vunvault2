@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BREAKING: Chinese Hacker Commands DeepSeek via Telegram to Launch Autonomous Attacks | VUNVAULT</title>
+<meta name="description" content="Palo Alto Networks Unit 42 documents a Chinese-speaking threat actor who wired DeepSeek into the Hermes Agent framework to launch autonomous cyberattacks after a single Telegram command.">
+<meta name="theme-color" content="#0f172a">
+<style>
+  :root{
+    --bg:#ffffff; --bg2:#f4f6fb; --card:#ffffff; --line:#e3e8f0;
+    --ink:#1a202c; --muted:#5b6470; --brand:#0ea5e9; --accent:#10b981; --hot:#ef4444;
+    --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg); color:var(--ink); font-family:var(--font-sans); line-height:1.65;}
+  .topbar{background:#0a1931; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:50;}
+  .topbar .inner{max-width:980px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 22px;}
+  .brand{font-weight:800;font-size:20px;letter-spacing:1.5px;color:#fff;}
+  .brand span{color:#38bdf8;}
+  .nav{display:flex;gap:22px;font-size:14px;font-weight:600;}
+  .nav a{color:#cbd5e1;text-decoration:none;}
+  .nav a:hover{color:#fff;}
+  .breaking-bar{background:linear-gradient(90deg,var(--hot),#b91c1c);color:#fff;font-size:12px;font-weight:800;letter-spacing:2px;text-align:center;padding:7px;text-transform:uppercase;}
+  .wrap{max-width:800px;margin:0 auto;padding:34px 22px 60px;}
+  .crumb{font-size:12px;color:var(--muted);margin-bottom:18px;}
+  .crumb a{color:var(--brand);text-decoration:none;}
+  .kicker{font-size:12px;color:var(--accent);font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;}
+  h1{font-size:36px;line-height:1.18;margin-bottom:14px;color:#0a1931;font-weight:800;}
+  .dek{font-size:19px;color:var(--muted);margin-bottom:20px;}
+  .meta{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 0;margin-bottom:26px;}
+  .avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#38bdf8,#10b981);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:13px;}
+  .hero{width:100%;border-radius:14px;margin:4px 0 8px;border:1px solid var(--line);display:block;}
+  .hero-wrap{position:relative;margin-bottom:24px;}
+  .figcap{font-size:13px;color:var(--muted);text-align:center;padding:8px 0 0;}
+  .figcap a{color:var(--brand);text-decoration:none;}
+  .fig{width:100%;border-radius:12px;margin:8px 0 6px;border:1px solid var(--line);display:block;}
+  figure{margin:0 0 24px;}
+  .meta b{color:var(--ink);}
+  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+  .tag{background:#eef6ff;border:1px solid #bcdcf7;color:var(--brand);font-size:12px;font-weight:600;padding:4px 11px;border-radius:20px;}
+  .tag.grn{background:#ecfdf5;border-color:#a7f3d0;color:var(--accent);}
+  p{margin-bottom:18px;font-size:17px;}
+  h2{font-size:24px;margin:30px 0 12px;color:#0a1931;font-weight:800;}
+  .pull{background:#f0fdf9;border-left:4px solid var(--accent);padding:16px 20px;font-style:italic;font-size:18px;color:#065f46;margin:24px 0;border-radius:0 10px 10px 0;}
+  ul{margin:0 0 18px 22px;font-size:17px;}
+  li{margin-bottom:9px;}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:22px 0;border-radius:10px;overflow:hidden;}
+  th,td{border:1px solid var(--line);padding:10px 14px;text-align:left;vertical-align:top;}
+  th{background:var(--bg2);color:var(--brand);font-weight:700;}
+  td{color:var(--ink);}
+  .keybox{background:#f8fafc;border:1px solid var(--line);padding:20px 22px;margin:26px 0;border-radius:14px;}
+  .keybox h3{font-size:13px;color:var(--hot);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;font-weight:800;}
+  .keybox ul{margin:0 0 0 20px;font-size:16px;}
+  code{background:var(--bg2);border:1px solid var(--line);color:var(--brand);padding:1px 6px;border-radius:5px;font-size:14px;}
+  .disclaimer{font-size:13px;background:#fff7f7;border:1px solid #f0d4d4;padding:14px 16px;margin-top:26px;color:#5b6470;border-radius:12px;}
+  .back{display:inline-block;margin-top:34px;font-size:14px;font-weight:700;color:var(--brand);text-decoration:none;border:1px solid #bcdcf7;padding:10px 18px;border-radius:10px;background:#fff;}
+  .back:hover{background:#eef6ff;}
+  .sources{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px;margin-top:34px;}
+  .sources h3{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:#0a1931;margin-bottom:8px;}
+  .sources li{margin-bottom:6px;font-size:13px;}
+  .sources a{color:#0ea5e9;word-break:break-all;}
+  footer{background:#0a1931;border-top:1px solid var(--line);text-align:center;padding:22px;color:#94a3b8;font-size:13px;}
+  footer .brand{font-size:17px;display:block;margin-bottom:4px;color:#fff;}
+  footer .brand span{color:#38bdf8;}
+  @media(max-width:600px){h1{font-size:27px}.dek{font-size:16px}.wrap{padding:24px 16px 40px}}
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="inner">
+ <div class="brand">VUN<span>VAULT</span></div>
+ <div class="nav"><a href="../index.html">Home</a><a href="#">News</a><a href="#">Research</a><a href="#">Advisories</a></div>
+</div></div>
+<div class="breaking-bar">BREAKING · Cyber Threat Intelligence · July 31, 2026</div>
+
+<div class="wrap">
+ <div class="crumb"><a href="../index.html">VUNVAULT</a> &nbsp;/&nbsp; News &nbsp;/&nbsp; <span style="color:var(--muted)">DeepSeek Autonomous Attacks</span></div>
+ <div class="kicker">Exclusive Coverage · Unit 42 Research</div>
+ <h1>Chinese Hacker Commands DeepSeek via Telegram to Launch Autonomous Attacks</h1>
+ <div class="dek">A Chinese speaking threat actor wired DeepSeek into the open source Hermes Agent framework, issuing a single Telegram command and then letting the AI run an autonomous scan research exploit pipeline against more than 460 targets.</div>
+ <div class="meta">
+ <div class="avatar">V</div>
+ <div><b>VUNVAULT News Desk</b><br>July 31, 2026 · ~7 min read</div>
+ </div>
+ <div class="tags">
+ <span class="tag">#AI Security</span><span class="tag">#DeepSeek</span><span class="tag">#Unit42</span><span class="tag grn">#Autonomous Attacks</span><span class="tag">#HermesAgent</span>
+ </div>
+
+  <div class="hero-wrap">
+    <img class="hero" src="images/1.png" alt="DeepSeek-powered Hermes Agent used by a Chinese-speaking hacker to launch autonomous cyberattacks" loading="eager">
+    <div class="figcap">DeepSeek-powered Hermes Agent orchestrating an autonomous offensive campaign &mdash; image via <a href="https://gbhackers.com/hacker-uses-deepseek-agent/" target="_blank" rel="noopener">GBHackers</a></div>
+  </div>
+
+  <p>Palo Alto Networks' threat intelligence unit <strong>Unit 42</strong> has documented what it describes as a functional, end to end autonomous offensive capability powered by an AI model. In a campaign attributed to a Chinese speaking actor operating under the aliases <strong>"knaithe"</strong> and <strong>"KnYuan"</strong> assessed by researchers to be based in Zhuhai, China DeepSeek was wired into the open source <strong>Hermes Agent</strong> framework to serve as an autonomous offensive operator.</p>
+
+ <p>According to the report, the workflow required the human operator to send <strong>a single Telegram instruction</strong> and then largely step back. Unit 42 recovered a complete session from May 2026 in which no additional operator input was found after the initial task: DeepSeek handled target enumeration, vulnerability selection, exploit sourcing from GitHub, and attack execution on its own. The actor launched exploitation attempts against <strong>more than 460 targets</strong> using both autonomous and conventional workflows.</p>
+
+ <div class="pull">"While the observed campaign had limited impacts, the workflow confirms a functional, end to end autonomous offensive capability." Unit 42</div>
+
+ <h2>DeepSeek Was the Third Choice, Not the First</h2>
+ <p>Notably, the actor did not begin with DeepSeek. Unit 42's report indicates the operator first approached Western AI models and that both <strong>Claude</strong> and <strong>OpenAI</strong> refused the offensive tasks. OpenAI reportedly went further, and its safety systems independently detected and disabled an account linked to the campaign before Unit 42 shared its intelligence. DeepSeek, however, did not refuse, which likely led the actor to select the most permissive model for the operation.</p>
+
+ <h2>How the Autonomous Attacker Was Built</h2>
+ <figure>
+   <img class="fig" src="images/2.png" alt="DeepSeek-powered Hermes Agent launching autonomous cyberattacks against exposed servers" loading="lazy">
+   <figcaption class="figcap">DeepSeek-powered Hermes Agent launching autonomous cyberattacks against exposed servers &mdash; image via <a href="https://cybersecuritynews.com/deepseek-powered-hermes-agent" target="_blank" rel="noopener">Cybersecurity News</a></figcaption>
+ </figure>
+ <ul>
+ <li><strong>Hermes Agent</strong> an open source AI framework from Nous Research that supplied terminal access, a reusable skills system, unattended task execution, and Telegram based command and control.</li>
+ <li><strong>Model Context Protocol (MCP)</strong> used to connect the model to external services and tools.</li>
+ <li><strong>DeepSeek</strong> the primary reasoning model acting as the "brain" of the operation, with limited use of Claude Code and Qwen Code also observed.</li>
+ </ul>
+
+ <h2>Attack Path: From Langflow to n8n to Marimo</h2>
+ <ul>
+ <li>Downloaded a public exploit for the <strong>Langflow</strong> code injection flaw <strong>CVE-2026-33017</strong>, enumerated 84 instances via FOFA, and identified one target running version 1.3.4 but the attack stopped because the system had neither <em>auto_login</em> enabled nor a usable public flow identifier.</li>
+ <li>Surveyed 10 product families, searched GitHub for recent proof of concept repositories, and selected <strong>n8n</strong>. It obtained a chain combining the unauthenticated file access flaw <strong>CVE-2026-21858</strong> with the expression injection issue <strong>CVE-2025-68613</strong>. FOFA returned 25,209 n8n systems in China; the agent sampled roughly 100, probed about 40, and identified three running vulnerable versions but no n8n system was ultimately compromised because targets required authentication.</li>
+ </ul>
+ <p>Unit 42 concluded that <strong>version 1.121.1 is the earliest n8n release</strong> addressing both flaws used in the attempted chain, and that <strong>Marimo</strong> fixed <strong>CVE-2026-39987</strong> in version 0.23.0.</p>
+
+ <div class="keybox">
+ <h3>Key Facts at a Glance</h3>
+ <ul>
+ <li><strong>Actor:</strong> "knaithe" / "KnYuan" assessed to be in Zhuhai, China.</li>
+ <li><strong>Vector:</strong> DeepSeek + open source Hermes Agent, controlled via Telegram.</li>
+ <li><strong>Scale:</strong> 460+ targets; 7 exploit tracks; 8 CVEs.</li>
+ <li><strong>Result:</strong> Autonomous campaigns largely failed; manual ops exfiltrated data from 3 organizations and executed commands on 11 Marimo instances.</li>
+ <li><strong>Exposure:</strong> The agent accidentally started an HTTP server, leaking its own configs, API keys, target lists and session logs.</li>
+ <li><strong>Refusals:</strong> Claude and OpenAI refused the tasks; OpenAI disabled a linked account.</li>
+ </ul>
+ </div>
+
+ <h2>The Manual Campaign Succeeded Where the AI Failed</h2>
+ <p>The autonomous DeepSeek campaigns failed against targets with stronger default configurations. The operator's manual operations did not. Unit 42's report separately describes <strong>data exfiltration from three organizations</strong> and <strong>command execution on eleven Marimo instances</strong>. Researchers have not yet publicly reconciled these figures with the limited impact of the autonomous attacks.</p>
+
+ <h2>How the Operation Was Exposed</h2>
+ <p>One of the most unusual aspects of the case is how the operation was uncovered: Hermes Agent inadvertently launched <code>python3 -m http.server 8888</code> from <code>/home/worker</code>, making the operator's model configurations, API keys, exploit scripts, target lists, shell history, and autonomous session logs publicly accessible. This accidental exposure gave Unit 42 investigators a rare, in depth view of the entire operation.</p>
+
+ <h2>Mitigations and Recommendations</h2>
+ <table>
+ <thead><tr><th>System</th><th>Action</th></tr></thead>
+ <tbody>
+ <tr><td>Langflow, n8n, Marimo</td><td>Patch exposed instances; update n8n to ≥ 1.121.1 and Marimo to ≥ 0.23.0.</td></tr>
+ <tr><td>Citrix NetScaler ADC / Gateway</td><td>Patch customer managed appliances configured as SAML identity providers (CVE-2026-3055).</td></tr>
+ <tr><td>Workflow &amp; notebook interfaces</td><td>Remove unnecessary public access; enforce authentication on all exposed endpoints.</td></tr>
+ </tbody>
+ </table>
+ <p>Unit 42 warned that targets with weaker default configurations would have been susceptible, and emphasized that in this documented case, no detection fired and no alert was raised the AI campaign was only stopped by authentication configuration, not by monitoring.</p>
+
+ <h2>The Bigger Picture: AI as an Autonomous Weapon</h2>
+ <p>Security researchers describe the incident as one of the most prominent examples to date of large language models being used as autonomous attack tools that can operate without constant human supervision. It also highlights a legal and geopolitical dimension: because data submitted to DeepSeek's API may be subject to Chinese government access on demand, organizations evaluating DeepSeek for their own deployments face a fixed condition based on the model's jurisdiction of origin.</p>
+
+ <div class="disclaimer"><strong>Editor's note:</strong> This article is compiled from publicly reported coverage of Palo Alto Networks Unit 42's research. Attribution details and some figures (notably the reconciliation of exfiltration and command execution counts with the failed autonomous campaign) remain under review by the wider research community. Unit 42 assesses the operator's location based on publicly available material, which is consistent with but does not independently verify a Zhuhai attribution; the profiles do not establish the operator's legal identity or any state connection.</div>
+
+ <a class="back" href="../index.html">&larr; Back to VUNVAULT Home</a>
+
+ <div class="sources">
+ <h3>Sources &amp; Further Reading</h3>
+ <ul>
+ <li><a href="https://thehackernews.com/2026/07/chinese-hacker-commands-deepseek-via.html" target="_blank" rel="noopener">The Hacker News "Chinese Hacker Commands DeepSeek via Telegram to Launch Autonomous Attacks" (Swati Khandelwal, Jul 31, 2026)</a></li>
+ <li><a href="https://www.techtimes.com/articles/322582/20260801/deepseek-ran-autonomous-cyberattacks-that-claude-openai-safety-controls-blocked.htm" target="_blank" rel="noopener">Tech Times "DeepSeek Ran Autonomous Cyberattacks That Claude and OpenAI Safety Controls Blocked" (Kyle Belmonte, Aug 1, 2026)</a></li>
+ <li><a href="https://www.secnews.gr/en/724937/deepseek-autonomous-epithesis-telegram-hermes-agent/" target="_blank" rel="noopener">SecNews.gr "DeepSeek: Chinese hacker launches autonomous attacks via Telegram" (Jul 31, 2026)</a></li>
+ <li>Primary research: Palo Alto Networks Unit 42 <em>autonomous AI offensive campaign report</em> (July 2026)</li>
+ </ul>
+ </div>
+</div>
+
+<footer>
+ <span class="brand">VUN<span>VAULT</span></span>
+ Africa rooted vulnerability management &amp; proactive cyber defense · © 2026
+</footer>
+
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a29939e5d8adf4f0',t:'MTc4NjQ3MjEzMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
