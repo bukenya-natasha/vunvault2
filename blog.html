@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — VUNVAULT</title>
+<meta name="description" content="In-depth cybersecurity articles and analyses from VUNVAULT — Africa-rooted, worldwide penetration testing, vulnerability assessment and cybersecurity education.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* VUNVAULT New Brand Palette */
+    --void: #fcfbf9;
+    --panel: #ffffff;
+    --panel-raised: #f7f6f3;
+    --line: #e2e8f0;
+    --line-soft: #f1f5f9;
+    --bone: #0f172a;
+    --bone-dim: #64748b;
+    --ink: #0f172a;
+    --sub: #64748b;
+    --accent: #0f172a;
+    --accent-blue: #0284c7;
+    --amber: #d97706;
+    --amber-dim: #b45309;
+    --cyan: #0284c7;
+    --red: #dc2626;
+    --green: #059669;
+
+    /* Course & Layout Tokens */
+    --black: #0f172a;
+    --dark: #0f172a;
+    --mid: #475569;
+    --light: #64748b;
+    --rule: #e2e8f0;
+    --rule-soft: #f1f5f9;
+    --paper: #fcfbf9;
+    --paper-warm: #f7f6f3;
+    --hi: #f1f5f9;
+
+    --font-display: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+    --container: 1200px;
+    --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;--s7:96px;--s8:128px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:#fcfbf9;color:#0f172a;
+    color:var(--bone);
+    font-family:var(--font-body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  img,canvas,svg{display:block;max-width:100%;}
+  a{color:inherit;text-decoration:none;}
+  ul{list-style:none;}
+  .container{max-width:var(--container);margin:0 auto;padding:0 var(--s4);}
+  section{position:relative;}
+  h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;letter-spacing:0.01em;line-height:1.05;text-transform:uppercase;}
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--amber);
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:var(--s2);
+  }
+  .eyebrow::before{content:"";width:18px;height:1px;background:var(--amber);display:inline-block;}
+  .section-head{max-width:640px;margin-bottom:var(--s6);}
+  .section-head h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:var(--s3);}
+  .section-head p{color:var(--bone-dim);font-size:1.05rem;max-width:560px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    padding:14px 28px;
+    border-radius:2px;
+    cursor:pointer;
+    border:1px solid transparent;
+    transition:transform .15s ease, background .2s ease, border-color .2s ease, color .2s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--amber);color:var(--void);font-weight:600;}
+  .btn-primary:hover{background:#ffa05f;}
+  .btn-outline{border-color:var(--line);color:var(--bone);}
+  .btn-outline:hover{border-color:var(--amber);color:var(--amber);}
+  .btn-ghost{color:var(--cyan);}
+  .btn-ghost:hover{color:#7ee8f2;}
+
+  /* CRACK DIVIDER — signature motif */
+  .crack-divider{width:100%;height:46px;position:relative;opacity:0.85;}
+  .crack-divider svg{width:100%;height:100%;}
+  .crack-divider path{
+    fill:none;
+    stroke:var(--amber);
+    stroke-width:1.4;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    filter:drop-shadow(0 0 4px rgba(255,138,61,0.55));
+    stroke-dasharray:1400;
+    stroke-dashoffset:1400;
+    transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1);
+  }
+  .crack-divider.lit path{stroke-dashoffset:0;}
+  .crack-divider.cyan path{stroke:var(--cyan);filter:drop-shadow(0 0 4px rgba(77,217,232,0.5));}
+
+  /* NAV */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(252, 251, 249, 0.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  nav{
+    max-width:var(--container);margin:0 auto;padding:18px var(--s4);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.04em;text-transform:uppercase;}
+  .logo svg{width:26px;height:26px;}
+  .logo span{color:var(--amber);}
+  .nav-links{display:flex;align-items:center;gap:var(--s5);}
+  .nav-links a{
+    font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--bone-dim);transition:color .2s ease;
+  }
+  .nav-links a:hover{color:var(--amber);}
+  .nav-cta{display:flex;align-items:center;gap:var(--s3);}
+  .nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .nav-toggle span{width:22px;height:2px;background:var(--bone);display:block;}
+
+  /* HERO */
+  .hero{
+    min-height:100vh;
+    display:flex;align-items:center;
+    padding-top:90px;
+    position:relative;
+    background:
+      radial-gradient(ellipse 60% 50% at 75% 30%, rgba(255,138,61,0.10), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 15% 80%, rgba(77,217,232,0.08), transparent 60%),
+      var(--void);
+    overflow:hidden;
+  }
+  #hero-canvas{position:absolute;top:0;right:0;width:55%;height:100%;z-index:1;opacity:0.95;pointer-events:none;}
+  .hero-inner{
+    position:relative;z-index:2;
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:var(--s6);
+    align-items:center;
+  }
+  .hero-copy .eyebrow{margin-bottom:var(--s3);}
+  .hero-copy h1{
+    font-size:clamp(2.6rem,5.6vw,4.6rem);
+    margin-bottom:var(--s4);
+    color:var(--bone);
+  }
+  .hero-copy h1 em{font-style:normal;color:var(--amber);}
+  .hero-copy p{font-size:1.1rem;color:var(--bone-dim);max-width:480px;margin-bottom:var(--s5);}
+  .hero-actions{display:flex;gap:var(--s3);flex-wrap:wrap;margin-bottom:var(--s6);}
+  .hero-stats{display:flex;gap:var(--s6);font-family:var(--font-mono);}
+  .hero-stats div span{display:block;font-size:0.72rem;color:var(--bone-dim);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;}
+  .hero-stats div strong{font-size:1.4rem;color:var(--cyan);font-weight:600;}
+
+  /* TICKER */
+  .ticker-bar{
+    border-top:1px solid var(--line-soft);
+    border-bottom:1px solid var(--line-soft);
+    background:var(--panel);
+    padding:14px 0;
+    overflow:hidden;
+    white-space:nowrap;
+    position:relative;
+  }
+  .ticker-bar::before,.ticker-bar::after{
+    content:"";position:absolute;top:0;bottom:0;width:80px;z-index:2;
+  }
+  .ticker-bar::before{left:0;background:linear-gradient(90deg,var(--panel),transparent);}
+  .ticker-bar::after{right:0;background:linear-gradient(270deg,var(--panel),transparent);}
+  .ticker-track{display:inline-flex;gap:var(--s6);animation:ticker 38s linear infinite;}
+  .ticker-bar:hover .ticker-track{animation-play-state:paused;}
+  @keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  .ticker-item{font-family:var(--font-mono);font-size:0.82rem;color:var(--bone-dim);display:inline-flex;align-items:center;gap:10px;}
+  .ticker-item .sev{padding:2px 8px;border-radius:2px;font-size:0.68rem;font-weight:600;letter-spacing:0.05em;}
+  .sev-critical{background:rgba(255,77,77,0.15);color:var(--red);}
+  .sev-high{background:rgba(255,138,61,0.15);color:var(--amber);}
+  .sev-medium{background:rgba(77,217,232,0.15);color:var(--cyan);}
+
+  /* NETWORK SECTION */
+  .network-section{padding:var(--s8) 0;background:var(--void);}
+  .network-grid{display:grid;grid-template-columns:0.95fr 1.05fr;gap:var(--s7);align-items:center;}
+  .network-canvas-wrap{
+    aspect-ratio:1/0.85;background:var(--panel);border:1px solid var(--line);border-radius:4px;
+    position:relative;overflow:hidden;
+  }
+  #network-canvas{width:100%;height:100%;}
+  .network-copy ul{margin-top:var(--s4);display:flex;flex-direction:column;gap:var(--s3);}
+  .network-copy li{
+    display:flex;gap:14px;padding-bottom:var(--s3);border-bottom:1px solid var(--line-soft);
+    color:var(--bone-dim);font-size:0.95rem;
+  }
+  .network-copy li strong{color:var(--bone);font-family:var(--font-mono);font-size:0.85rem;letter-spacing:0.03em;min-width:30px;}
+
+  /* SERVICES / PRICING */
+  .services-section{padding:var(--s8) 0;background:var(--panel);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);}
+  .pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3);}
+  .price-card{
+    background:var(--panel-raised);border:1px solid var(--line);border-radius:4px;
+    padding:var(--s4);display:flex;flex-direction:column;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .price-card:hover{border-color:var(--amber-dim);transform:translateY(-4px);}
+  .price-card.featured{border-color:var(--amber);position:relative;}
+  .price-card.featured::before{
+    content:"Most booked";position:absolute;top:-12px;left:var(--s4);
+    background:var(--amber);color:var(--void);font-family:var(--font-mono);font-size:0.65rem;
+    letter-spacing:0.06em;text-transform:uppercase;padding:4px 10px;border-radius:2px;font-weight:700;
+  }
+  .price-card h3{font-size:1.25rem;margin-bottom:6px;}
+  .price-card .tagline{color:var(--bone-dim);font-size:0.85rem;margin-bottom:var(--s4);min-height:40px;}
+  .price-card .price{font-family:var(--font-mono);font-size:1.6rem;color:var(--cyan);margin-bottom:4px;}
+  .price-card .price-note{font-family:var(--font-mono);font-size:0.7rem;color:var(--bone-dim);margin-bottom:var(--s4);text-transform:uppercase;letter-spacing:0.04em;}
+  .price-card ul{flex:1;display:flex;flex-direction:column;gap:10px;margin-bottom:var(--s4);}
+  .price-card li{font-size:0.85rem;color:var(--bone-dim);padding-left:18px;position:relative;}
+  .price-card li::before{content:"›";position:absolute;left:0;color:var(--amber);}
+  .price-disclaimer{margin-top:var(--s4);font-size:0.8rem;color:var(--bone-dim);font-family:var(--font-mono);}
+
+  /* SCANNER DEMO */
+  .scanner-section{padding:var(--s8) 0;background:var(--void);}
+  .scanner-shell{
+    display:grid;grid-template-columns:0.85fr 1.15fr;gap:0;
+    border:1px solid var(--line);border-radius:6px;overflow:hidden;
+    background:var(--panel);
+  }
+  .scanner-form{padding:var(--s6);border-right:1px solid var(--line);}
+  .scanner-form .eyebrow{margin-bottom:var(--s3);}
+  .scanner-form h3{font-size:1.6rem;margin-bottom:var(--s2);}
+  .scanner-form p{color:var(--bone-dim);font-size:0.92rem;margin-bottom:var(--s4);}
+  .scan-input-row{display:flex;gap:10px;margin-bottom:var(--s3);}
+  .scan-input-row input{
+    flex:1;background:var(--void);border:1px solid var(--line);color:var(--bone);
+    font-family:var(--font-mono);font-size:0.9rem;padding:13px 14px;border-radius:2px;
+  }
+  .scan-input-row input:focus{outline:none;border-color:var(--amber);}
+  .scan-disclaimer{font-size:0.74rem;color:var(--bone-dim);line-height:1.5;}
+  .scan-console{
+    padding:var(--s6);font-family:var(--font-mono);font-size:0.82rem;
+    min-height:420px;display:flex;flex-direction:column;
+  }
+  .console-log{flex:1;color:var(--bone-dim);}
+  .console-log .line{margin-bottom:8px;opacity:0;animation:fadeLine .4s ease forwards;}
+  .console-log .line .ok{color:var(--green);}
+  .console-log .line .warn{color:var(--amber);}
+  @keyframes fadeLine{to{opacity:1;}}
+  .console-idle{color:var(--bone-dim);opacity:0.6;}
+  .report{margin-top:var(--s4);border-top:1px solid var(--line-soft);padding-top:var(--s4);display:none;}
+  .report.show{display:block;}
+  .report-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:10px 0;border-bottom:1px solid var(--line-soft);font-size:0.83rem;
+  }
+  .badge{padding:3px 10px;border-radius:2px;font-size:0.68rem;letter-spacing:0.04em;text-transform:uppercase;font-weight:600;}
+  .badge-critical{background:rgba(255,77,77,0.15);color:var(--red);}
+  .badge-high{background:rgba(255,138,61,0.15);color:var(--amber);}
+  .badge-medium{background:rgba(77,217,232,0.15);color:var(--cyan);}
+  .badge-low{background:rgba(95,217,136,0.15);color:var(--green);}
+
+  /* ACADEMY / BLOG */
+  .academy-section{padding:var(--s8) 0;background:var(--panel);border-top:1px solid var(--line-soft);}
+  .academy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);margin-bottom:var(--s6);}
+  .post-card{display:block;background:var(--panel-raised);border:1px solid var(--line);border-radius:4px;padding:var(--s4);transition:border-color .2s ease, transform .2s ease;}
+  .post-card:hover{border-color:var(--cyan);transform:translateY(-4px);}
+  .post-card .read-more{display:block;margin-top:var(--s3);font-family:var(--font-mono);font-size:0.72rem;color:var(--amber);text-transform:uppercase;letter-spacing:0.05em;}
+  .post-card .tag{font-family:var(--font-mono);font-size:0.7rem;color:var(--cyan);text-transform:uppercase;letter-spacing:0.05em;}
+  .post-card h4{font-size:1.1rem;text-transform:none;margin:var(--s2) 0 var(--s2);line-height:1.3;}
+  .post-card p{font-size:0.85rem;color:var(--bone-dim);}
+  .academy-tracks{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);}
+  .track-card{border:1px solid var(--line);border-radius:4px;padding:var(--s4);background:var(--void);}
+  .track-card .level{font-family:var(--font-mono);font-size:0.68rem;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;}
+  .track-card h4{font-size:1.05rem;text-transform:none;margin:8px 0 8px;}
+  .track-card p{font-size:0.82rem;color:var(--bone-dim);}
+
+  /* ABOUT */
+  .about-section{padding:var(--s8) 0;}
+  .about-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:var(--s7);align-items:center;}
+  .about-grid p{color:var(--bone-dim);margin-bottom:var(--s3);font-size:1rem;}
+  .about-quote{
+    font-family:var(--font-display);text-transform:uppercase;font-size:clamp(1.6rem,3vw,2.4rem);
+    color:var(--bone);border-left:3px solid var(--amber);padding-left:var(--s4);line-height:1.15;
+  }
+
+  /* CONTACT */
+  .contact-section{padding:var(--s8) 0;background:var(--panel);border-top:1px solid var(--line-soft);}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s7);}
+  .contact-form{display:flex;flex-direction:column;gap:var(--s3);}
+  .contact-form input,.contact-form select,.contact-form textarea{
+    background:var(--void);border:1px solid var(--line);color:var(--bone);
+    font-family:var(--font-body);font-size:0.92rem;padding:13px 14px;border-radius:2px;width:100%;
+  }
+  .contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{outline:none;border-color:var(--amber);}
+  .contact-form label{font-family:var(--font-mono);font-size:0.7rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--bone-dim);margin-bottom:6px;display:block;}
+  .contact-info{display:flex;flex-direction:column;justify-content:space-between;}
+  .contact-info-block{margin-bottom:var(--s4);}
+  .contact-info-block .eyebrow{margin-bottom:8px;}
+  .contact-info-block p,.contact-info-block a{color:var(--bone-dim);font-size:0.95rem;}
+  .social-row{display:flex;gap:14px;margin-top:var(--s3);}
+  .social-row a{
+    width:36px;height:36px;border:1px solid var(--line);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;color:var(--bone-dim);
+    transition:border-color .2s ease,color .2s ease;
+  }
+  .social-row a:hover{border-color:var(--amber);color:var(--amber);}
+
+  footer{padding:var(--s7) 0 var(--s5);border-top:1px solid var(--line-soft);}
+  .footer-top{display:grid;grid-template-columns:1.3fr repeat(4,1fr);gap:var(--s5);padding-bottom:var(--s6);margin-bottom:var(--s5);border-bottom:1px solid var(--line-soft);}
+  .footer-brand .logo{margin-bottom:var(--s2);}
+  .footer-brand p{color:var(--bone-dim);font-size:0.85rem;max-width:240px;}
+  .footer-col h4{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--bone);margin-bottom:var(--s3);}
+  .footer-col ul{display:flex;flex-direction:column;gap:11px;}
+  .footer-col a{font-family:var(--font-mono);font-size:0.82rem;color:var(--bone-dim);transition:color .2s ease;}
+  .footer-col a:hover{color:var(--amber);}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--s3);}
+  .footer-row p{font-family:var(--font-mono);font-size:0.75rem;color:var(--bone-dim);}
+  .footer-links{display:flex;gap:var(--s4);}
+  .footer-links a{font-family:var(--font-mono);font-size:0.75rem;color:var(--bone-dim);}
+  .footer-links a:hover{color:var(--amber);}
+  @media (max-width:900px){.footer-top{grid-template-columns:1fr 1fr;}.footer-brand{grid-column:1/-1;}}
+  @media (max-width:560px){.footer-top{grid-template-columns:1fr;}}
+
+  /* PAGE HERO (News / Blog / other subpages) */
+  .page-hero{padding:calc(90px + var(--s6)) 0 var(--s6);border-bottom:1px solid var(--line-soft);}
+  .page-hero h1{font-size:clamp(2.2rem,4.5vw,3.4rem);margin-bottom:var(--s3);}
+  .page-hero p{color:var(--bone-dim);font-size:1.05rem;max-width:560px;}
+
+  /* ARTICLE GRID */
+  .article-section{padding:var(--s7) 0;}
+  .article-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s4);}
+  .article-card{
+    background:var(--panel-raised);border:1px solid var(--line);border-radius:4px;
+    padding:var(--s4);display:flex;flex-direction:column;gap:var(--s2);
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .article-card:hover{border-color:var(--amber-dim);transform:translateY(-4px);}
+  .article-tag{font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--cyan);}
+  .article-card h3{font-size:1.25rem;text-transform:none;letter-spacing:0;}
+  .article-card p{color:var(--bone-dim);font-size:0.92rem;flex:1;}
+  .article-meta{font-family:var(--font-mono);font-size:0.72rem;color:var(--bone-dim);display:flex;justify-content:space-between;border-top:1px solid var(--line-soft);padding-top:var(--s2);margin-top:auto;}
+  .article-card .btn{align-self:flex-start;margin-top:var(--s1);}
+  .article-featured{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:var(--s5);align-items:center;background:var(--panel-raised);border:1px solid var(--line);border-radius:4px;padding:var(--s5);margin-bottom:var(--s4);}
+  .article-featured h2{font-size:clamp(1.6rem,3vw,2.2rem);margin:var(--s2) 0 var(--s3);}
+  .article-featured p{color:var(--bone-dim);}
+  @media (max-width:900px){.article-grid{grid-template-columns:1fr 1fr;}.article-featured{grid-template-columns:1fr;}}
+  @media (max-width:600px){.article-grid{grid-template-columns:1fr;}}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  @media (max-width:980px){
+    .nav-links{display:none;}
+    .nav-toggle{display:flex;}
+    .hero-inner{grid-template-columns:1fr;}
+    #hero-canvas{position:relative;width:100%;height:320px;order:-1;opacity:0.8;}
+    .network-grid,.about-grid,.contact-grid{grid-template-columns:1fr;}
+    .pricing-grid{grid-template-columns:repeat(2,1fr);}
+    .academy-grid,.academy-tracks{grid-template-columns:1fr;}
+    .scanner-shell{grid-template-columns:1fr;}
+    .scanner-form{border-right:none;border-bottom:1px solid var(--line);}
+  }
+  @media (max-width:560px){
+    .pricing-grid{grid-template-columns:1fr;}
+    .hero-stats{gap:var(--s4);flex-wrap:wrap;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .ticker-track{animation:none;}
+    .crack-divider path{transition:none;stroke-dashoffset:0;}
+    .reveal{opacity:1;transform:none;transition:none;}
+  }
+  /* AI CHAT WIDGET */
+  .vv-chat-toggle{
+    position:fixed;right:24px;bottom:24px;z-index:300;
+    width:58px;height:58px;border-radius:50%;
+    background:var(--amber);color:var(--void);border:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 24px rgba(255,138,61,0.35);
+    transition:transform .2s ease;
+  }
+  .vv-chat-toggle:hover{transform:scale(1.06);}
+  .vv-chat-toggle svg{width:26px;height:26px;}
+  .vv-chat-panel{
+    position:fixed;right:24px;bottom:94px;z-index:300;
+    width:340px;max-width:calc(100vw - 48px);height:460px;max-height:calc(100vh - 140px);
+    background:var(--panel);border:1px solid var(--line);border-radius:8px;
+    display:none;flex-direction:column;overflow:hidden;
+    box-shadow:0 12px 40px rgba(0,0,0,0.5);
+  }
+  .vv-chat-panel.open{display:flex;}
+  .vv-chat-head{
+    padding:14px 16px;border-bottom:1px solid var(--line-soft);
+    display:flex;align-items:center;justify-content:space-between;
+    background:var(--panel-raised);
+  }
+  .vv-chat-head strong{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.04em;text-transform:uppercase;color:var(--bone);}
+  .vv-chat-head span{font-family:var(--font-mono);font-size:0.68rem;color:var(--green);}
+  .vv-chat-close{background:none;border:none;color:var(--bone-dim);cursor:pointer;font-size:1.1rem;line-height:1;}
+  .vv-chat-body{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+  .vv-msg{font-size:0.85rem;line-height:1.5;padding:10px 12px;border-radius:6px;max-width:85%;}
+  .vv-msg.bot{background:var(--panel-raised);color:var(--bone);align-self:flex-start;border:1px solid var(--line-soft);}
+  .vv-msg.user{background:var(--amber);color:var(--void);align-self:flex-end;font-weight:500;}
+  .vv-chat-inputrow{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line-soft);background:var(--panel-raised);}
+  .vv-chat-inputrow input{
+    flex:1;background:var(--void);border:1px solid var(--line);color:var(--bone);
+    padding:9px 12px;border-radius:4px;font-family:var(--font-body);font-size:0.85rem;
+  }
+  .vv-chat-inputrow input:focus{outline:none;border-color:var(--amber);}
+  .vv-chat-inputrow button{
+    background:var(--amber);color:var(--void);border:none;border-radius:4px;
+    padding:0 16px;font-family:var(--font-mono);font-size:0.78rem;cursor:pointer;
+  }
+  @media(max-width:480px){
+    .vv-chat-panel{right:12px;bottom:84px;}
+    .vv-chat-toggle{right:16px;bottom:16px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="logo">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z" stroke="#0f172a" stroke-width="1.4"/>
+        <path d="M8 12.5L10.5 15L16 9" stroke="#0284c7" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      VUNVAULT
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="index.html#scanner">Scanner</a></li>
+      <li><a href="index.html#academy">Academy</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="news.html">News</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="index.html#contact" class="btn btn-primary">Request a Scan</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="eyebrow">Resources</div>
+    <h1>Blog</h1>
+    <p>In-depth analyses, strategic intelligence and practical guides on cybersecurity in Africa and beyond, from the VUNVAULT team.</p>
+  </div>
+</section>
+
+<section class="article-section">
+  <div class="container">
+    <div class="article-grid">
+      <div class="article-card reveal">
+        <div class="article-tag">Strategic Intelligence</div>
+        <img src="blog/images/awakening-hero.jpg" alt="" style="width:100%;height:180px;object-fit:cover;border-radius:4px;border:1px solid var(--line);">
+        <h3>Africa's Cyber Awakening: How the Continent Is Fighting Back</h3>
+        <p>Mobile money, deepfake voice notes, a skills gap the size of the Sahara, and a new generation of hackers who'd rather defend than destroy. This is the story of how Africa is turning the tide.</p>
+        <div class="article-meta"><span>11 Aug 2026</span><span>VUNVAULT Team</span></div>
+        <a href="blog/blog-cybersecurity-awakening.html" class="btn btn-ghost">Read the article →</a>
+      </div>
+      <div class="article-card reveal">
+        <div class="article-tag">Regulatory Compliance</div>
+        <img src="blog/images/compliance-1.jpg" alt="" style="width:100%;height:180px;object-fit:cover;border-radius:4px;border:1px solid var(--line);">
+        <h3>Navigating Cybersecurity Compliance in Africa: A Practical Guide</h3>
+        <p>Once a voluntary badge of honour for multinational banks, cybersecurity compliance is now a legal necessity across the continent. A practical roadmap for African businesses.</p>
+        <div class="article-meta"><span>29 Jul 2026</span><span>VUNVAULT Team</span></div>
+        <a href="blog/blog-cybersecurity-compliance.html" class="btn btn-ghost">Read the article →</a>
+      </div>
+      <div class="article-card reveal">
+        <div class="article-tag">Offensive Security Analysis</div>
+        <img src="blog/images/pentest-hero.jpg" alt="" style="width:100%;height:180px;object-fit:cover;border-radius:4px;border:1px solid var(--line);">
+        <h3>Shielding Africa's Digital Renaissance: Why Penetration Testing Is No Longer Optional</h3>
+        <p>Africa has bypassed legacy banking to pioneer digital finance. As the continent builds, proactive testing is no longer a luxury — it is the price of trust.</p>
+        <div class="article-meta"><span>11 Aug 2026</span><span>VUNVAULT Team</span></div>
+        <a href="blog/blog-pentesting-africa.html" class="btn btn-ghost">Read the article →</a>
+      </div>
+      <div class="article-card reveal">
+        <div class="article-tag">Fintech</div>
+        <img src="blog/images/vodacom-mpesa.jpg" alt="" style="width:100%;height:180px;object-fit:cover;border-radius:4px;border:1px solid var(--line);">
+        <h3>Vodacom Lesotho Launches Mobile Investment Solution for Wallet Holders</h3>
+        <p>Lesotho mobile money subscribers can now buy government treasury bills and savings bonds directly from their wallets — a major step forward for financial inclusion.</p>
+        <div class="article-meta"><span>11 Aug 2026</span><span>VUNVAULT Team</span></div>
+        <a href="blog/vodacom-lesotho-mpesa.html" class="btn btn-ghost">Read the article →</a>
+      </div>
+      <div class="article-card reveal">
+        <div class="article-tag">Threat Intelligence</div>
+        <img src="blog/images/deepseek-hero.jpg" alt="" style="width:100%;height:180px;object-fit:cover;border-radius:4px;border:1px solid var(--line);">
+        <h3>Chinese Hacker Commands DeepSeek via Telegram to Launch Autonomous Attacks</h3>
+        <p>Palo Alto Networks Unit 42 documents a Chinese speaking actor using DeepSeek through Hermes Agent to run autonomous attacks after a single Telegram command.</p>
+        <div class="article-meta"><span>31 Jul 2026</span><span>VUNVAULT Team</span></div>
+        <a href="blog/deepseek-autonomous-attacks.html" class="btn btn-ghost">Read the article →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-top">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z" stroke="#0f172a" stroke-width="1.4"/>
+          <path d="M8 12.5L10.5 15L16 9" stroke="#0284c7" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        VUNVAULT
+      </a>
+      <p>Africa-rooted, worldwide penetration testing, vulnerability assessments and cybersecurity education.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="news.html">News</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="index.html#scanner">Breach Watch</a></li>
+        <li><a href="blog.html">Templates</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="index.html">About Us</a></li>
+        <li><a href="index.html#contact">Careers</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="news.html">Press</a></li>
+        <li><a href="index.html#contact">Support</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Solutions</h4>
+      <ul>
+        <li><a href="index.html#pricing">Small Business</a></li>
+        <li><a href="index.html#pricing">SACCO &amp; Fintech</a></li>
+        <li><a href="index.html#pricing">Enterprise</a></li>
+        <li><a href="index.html#academy">Security Training</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Tools</h4>
+      <ul>
+        <li><a href="index.html#scanner">Free Security Scan</a></li>
+        <li><a href="index.html#pricing">Pricing &amp; Plans</a></li>
+        <li><a href="index.html#contact">Request a Report</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-row">
+    <p>© 2026 VUNVAULT. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="index.html">Top</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#academy">Academy</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    var els = document.querySelectorAll('.reveal');
+    if(els.length){ setTimeout(function(){ els.forEach(function(el){ el.classList.add('in'); }); }, 100); }
+  });
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a29993292a2e7885',t:'MTc4NjQ3NTc4Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
