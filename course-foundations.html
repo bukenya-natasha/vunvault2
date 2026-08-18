@@ -3,989 +3,464 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cybersecurity Foundations, VUNVAULT Academy</title>
-<meta name="description" content="Learn cybersecurity fundamentals from scratch. Core concepts, threats, and safe habits for anyone starting out, no coding required.">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7336792125855657" crossorigin="anonymous"></script>
+<title>Cybersecurity Foundations — VUNVAULT Academy</title>
+<meta name="description" content="Eight self-paced modules with spoken narration, Africa-focused examples, quizzes and a certificate.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-    /* VUNVAULT New Brand Palette */
-    --void: #fcfbf9;
-    --panel: #ffffff;
-    --panel-raised: #f7f6f3;
-    --line: #e2e8f0;
-    --line-soft: #f1f5f9;
-    --bone: #0f172a;
-    --bone-dim: #64748b;
-    --ink: #0f172a;
-    --sub: #64748b;
-    --accent: #0f172a;
-    --accent-blue: #0284c7;
-    --amber: #d97706;
-    --amber-dim: #b45309;
-    --cyan: #0284c7;
-    --red: #dc2626;
-    --green: #059669;
-
-    /* Course & Layout Tokens */
-    --black: #0f172a;
-    --dark: #0f172a;
-    --mid: #475569;
-    --light: #64748b;
-    --rule: #e2e8f0;
-    --rule-soft: #f1f5f9;
-    --paper: #fcfbf9;
-    --paper-warm: #f7f6f3;
-    --hi: #f1f5f9;
-
-    --font-display: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-mono: 'IBM Plex Mono', monospace;
-    --container: 1200px;
-    --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;--s7:96px;--s8:128px;
+  :root{
+    --void:#fcfbf9; --line:#e2e8f0; --soft:#f1f5f9;
+    --ink:#0f172a; --sub:#64748b; --cyan:#0891b2; --cyan-dark:#0e7490; --cyan-soft:#e0f2fe;
+    --green:#059669; --red:#dc2626; --ok:#ecfdf5; --bad:#fef2f2;
+    --display:'Space Grotesk',sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'IBM Plex Mono',monospace;
   }
-*{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{background:var(, paper);color:var(, dark);font-family:var(, fb);line-height:1.75;}
-a{color:var(, black);text-decoration:none;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--void);color:var(--ink);font-family:var(--body);line-height:1.65;}
+  img{display:block;max-width:100%;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:820px;margin:0 auto;padding:0 22px;}
+  h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.015em;line-height:1.15;}
+  header{position:sticky;top:0;z-index:40;background:rgba(252,251,249,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+  header .bar{max-width:1100px;margin:0 auto;padding:12px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+  .logo{font-family:var(--display);letter-spacing:.14em;font-weight:700;}
+  nav a{font-size:.86rem;font-weight:600;color:var(--sub);padding:6px 10px;border-radius:999px;}
+  nav a.active,nav a:hover{color:var(--ink);background:rgba(15,23,42,.07);}
+  .hero{padding:52px 0 28px;}
+  .kicker{display:inline-block;font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan-dark);background:var(--cyan-soft);border:1px solid #bae6fd;padding:6px 12px;border-radius:999px;margin-bottom:14px;}
+  .hero h1{font-size:clamp(2rem,4.4vw,3rem);margin-bottom:12px;}
+  .hero h1 em{font-style:normal;color:var(--cyan-dark);}
+  .hero .lede{color:var(--sub);font-size:1.05rem;max-width:620px;margin-bottom:18px;}
+  .pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+  .pills span{font-family:var(--mono);font-size:.72rem;border:1px solid var(--line);background:#fff;padding:6px 11px;border-radius:999px;color:var(--sub);}
+  .progress{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:18px 0 8px;}
+  .progress .top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.75rem;color:var(--sub);margin-bottom:8px;}
+  .bar-bg{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;}
+  .bar-fg{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--cyan-dark));transition:width .3s;}
+  .hero-pic{border-radius:16px;overflow:hidden;border:1px solid var(--line);margin:22px 0 8px;}
+  .hero-pic img{width:100%;height:280px;object-fit:cover;}
 
-header{background:#fcfbf9;border-bottom:1px solid #e2e8f0;border-bottom:1px solid #f1f5f9;position:sticky;top:0;z-index:200;}
-nav{max-width:1200px;margin:0 auto;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;}
-.logo{display:flex;align-items:center;gap:10px;font-family:var(, fd);font-size:1.3rem;letter-spacing:0.04em;text-transform:uppercase;color:#0f172a;}
-.logo svg{width:24px;height:24px;}
-.back-link{font-family:var(, fm);font-size:0.78rem;color:#64748b;letter-spacing:0.04em;text-transform:uppercase;}
-.back-link:hover{color:#64748b;}
-
-/* HERO */
-.course-hero{background:#0d0d0d;color:#fff;padding:56px 32px 48px;}
-.hero-inner{max-width:900px;margin:0 auto;}
-.course-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(, fm);font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:#64748b;border:1px solid #e2e8f0;padding:5px 14px;border-radius:2px;margin-bottom:20px;}
-.course-hero h1{font-family:var(, fd);text-transform:uppercase;font-size:clamp(2rem,5vw,3.2rem);line-height:1.05;margin-bottom:16px;}
-.course-hero h1 em{font-style:normal;color:#0f172a;}
-.course-hero p{color:#64748b;font-size:1rem;max-width:580px;margin-bottom:28px;}
-.hero-meta{display:flex;gap:24px;flex-wrap:wrap;font-family:var(, fm);font-size:0.75rem;color:#888;text-transform:uppercase;letter-spacing:0.04em;padding-top:24px;border-top:1px solid #e2e8f0;}
-.hero-meta span{display:flex;align-items:center;gap:6px;}
-.progress-summary{background:#ffffff;border:1px solid #e2e8f0;border-radius:4px;padding:16px 20px;margin-top:24px;display:flex;align-items:center;gap:16px;}
-.prog-track{flex:1;height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;}
-.prog-fill{height:100%;background:#0f172a;border-radius:3px;transition:width 0.5s ease;width:0%;}
-.prog-label{font-family:var(, fm);font-size:0.72rem;color:#64748b;white-space:nowrap;}
-
-/* LAYOUT */
-.course-layout{display:grid;grid-template-columns:280px 1fr;gap:0;max-width:1100px;margin:0 auto;min-height:80vh;}
-
-/* SIDEBAR */
-.sidebar{border-right:1px solid var(, rule-soft);padding:32px 24px;position:sticky;top:61px;height:calc(100vh - 61px);overflow-y:auto;}
-.sidebar::-webkit-scrollbar{width:3px;}
-.sidebar::-webkit-scrollbar-thumb{background:var(, rule);}
-.sidebar-title{font-family:var(, fm);font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(, light);margin-bottom:20px;}
-.mod-item{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;border-radius:3px;cursor:pointer;margin-bottom:4px;transition:background 0.15s;border:1px solid transparent;}
-.mod-item:hover{background:var(, hi);}
-.mod-item.active{background:var(, hi);border-color:var(, rule);}
-.mod-item.done .mod-icon{background:var(, green);border-color:var(, green);color:#fff;}
-.mod-icon{width:24px;height:24px;border:1px solid var(, rule);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(, fm);font-size:0.65rem;color:var(, light);flex-shrink:0;margin-top:1px;transition:all 0.2s;}
-.mod-text{flex:1;}
-.mod-name{font-size:0.85rem;font-weight:600;color:var(, dark);line-height:1.3;}
-.mod-duration{font-family:var(, fm);font-size:0.65rem;color:var(, light);margin-top:2px;}
-.sidebar-cta{margin-top:24px;padding:16px;background:var(, hi);border-radius:3px;border:1px solid var(, rule-soft);}
-.sidebar-cta p{font-size:0.8rem;color:var(, mid);margin-bottom:10px;}
-.btn-enroll{display:block;text-align:center;background:var(, black);color:#fff;font-family:var(, fm);font-size:0.72rem;letter-spacing:0.05em;text-transform:uppercase;padding:10px;border-radius:2px;border:none;cursor:pointer;width:100%;}
-.btn-enroll:hover{background:#333;}
-
-/* CONTENT */
-.content{padding:40px 48px;max-width:720px;}
-.module-section{display:none;}
-.module-section.active{display:block;}
-.section-eyebrow{font-family:var(, fm);font-size:0.68rem;color:var(, amber);text-transform:uppercase;letter-spacing:0.14em;display:flex;align-items:center;gap:8px;margin-bottom:12px;}
-.section-eyebrow::before{content:"";width:14px;height:1px;background:var(, amber);}
-.content h2{font-family:var(, fd);text-transform:uppercase;font-size:clamp(1.6rem,3vw,2.2rem);color:var(, black);margin-bottom:16px;line-height:1.1;}
-.content .lead{font-size:1.05rem;color:var(, mid);margin-bottom:32px;line-height:1.7;}
-.content p{color:var(, dark);margin-bottom:20px;font-size:0.97rem;}
-.content h3{font-family:var(, fm);font-size:0.88rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(, black);margin:32px 0 12px;padding-left:12px;border-left:3px solid var(, black);}
-.key-box{background:var(, paper-warm);border:2px solid var(, black);padding:20px 24px;margin:24px 0;border-radius:2px;}
-.key-box .key-label{font-family:var(, fm);font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(, black);margin-bottom:10px;}
-.key-box p{margin:0;font-size:0.9rem;}
-.warn-box{background:var(, black);color:#fff;padding:20px 24px;margin:24px 0;border-radius:2px;}
-.warn-box .warn-label{font-family:var(, fm);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:#aaa;margin-bottom:8px;}
-.warn-box p{margin:0;color:#e8e6e1;font-size:0.9rem;}
-.example-box{background:var(, hi);border-left:3px solid var(, black);padding:16px 20px;margin:20px 0;font-family:var(, fm);font-size:0.82rem;color:var(, mid);line-height:1.6;}
-.example-box .ex-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(, light);margin-bottom:6px;}
-.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0;}
-.stat-cell{border:1px solid var(, rule);padding:16px;text-align:center;}
-.stat-num{font-family:var(, fd);font-size:1.8rem;color:var(, black);}
-.stat-sub{font-family:var(, fm);font-size:0.65rem;color:var(, light);text-transform:uppercase;letter-spacing:0.04em;margin-top:4px;}
-.threat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0;}
-.threat-card{border:1px solid var(, rule);padding:16px;border-radius:2px;}
-.threat-card .t-icon{font-size:1.4rem;margin-bottom:8px;}
-.threat-card h4{font-family:var(, fm);font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px;}
-.threat-card p{font-size:0.82rem;color:var(, mid);margin:0;}
-.cia-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0;}
-.cia-card{padding:20px;text-align:center;border:2px solid var(, black);}
-.cia-card h4{font-family:var(, fd);font-size:1.1rem;text-transform:uppercase;margin-bottom:8px;}
-.cia-card p{font-size:0.82rem;color:var(, mid);}
-.strength-meter{margin:20px 0;}
-.pw-example{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border:1px solid var(, rule-soft);margin-bottom:6px;border-radius:2px;font-family:var(, fm);font-size:0.82rem;}
-.pw-example .pw-score{padding:3px 10px;border-radius:2px;font-size:0.65rem;font-weight:700;text-transform:uppercase;}
-.pw-weak{background:rgba(239,68,68,0.12);color:var(, red);}
-.pw-medium{background:rgba(245,158,11,0.12);color:#f59e0b;}
-.pw-strong{background:rgba(34,197,94,0.12);color:var(, green);}
-.steps-list{display:flex;flex-direction:column;gap:0;border:1px solid var(, rule);overflow:hidden;margin:20px 0;}
-.step-row{display:grid;grid-template-columns:48px 1fr;border-bottom:1px solid var(, rule-soft);}
-.step-row:last-child{border-bottom:none;}
-.step-n{background:var(, black);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(, fd);font-size:1.2rem;}
-.step-c{padding:14px 18px;font-size:0.9rem;}
-.step-c strong{display:block;margin-bottom:4px;}
-.step-c p{margin:0;color:var(, mid);font-size:0.85rem;}
-
-/* QUIZ */
-.quiz-section{margin-top:40px;padding-top:32px;border-top:2px solid var(, black);}
-.quiz-section h3{font-family:var(, fd);font-size:1.4rem;text-transform:uppercase;margin-bottom:8px;}
-.quiz-section p{color:var(, mid);font-size:0.88rem;margin-bottom:24px;}
-.quiz-q{margin-bottom:24px;}
-.quiz-q .q-text{font-weight:600;margin-bottom:12px;font-size:0.95rem;}
-.quiz-options{display:flex;flex-direction:column;gap:8px;}
-.quiz-opt{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(, rule);border-radius:2px;cursor:pointer;font-size:0.9rem;transition:all 0.15s;background:transparent;}
-.quiz-opt:hover{border-color:var(, black);}
-.quiz-opt.selected{border-color:var(, black);background:var(, hi);}
-.quiz-opt.correct{border-color:var(, green);background:rgba(34,197,94,0.08);color:#166534;}
-.quiz-opt.wrong{border-color:var(, red);background:rgba(239,68,68,0.08);color:#991b1b;}
-.quiz-opt input{pointer-events:none;}
-.quiz-submit{background:var(, black);color:#fff;border:none;font-family:var(, fm);font-size:0.78rem;letter-spacing:0.05em;text-transform:uppercase;padding:12px 24px;border-radius:2px;cursor:pointer;margin-top:8px;}
-.quiz-submit:hover{background:#333;}
-.quiz-result{display:none;padding:16px 20px;border-radius:2px;margin-top:16px;font-family:var(, fm);font-size:0.85rem;}
-.quiz-result.pass{background:rgba(34,197,94,0.1);border:1px solid var(, green);color:#166534;}
-.quiz-result.fail{background:rgba(239,68,68,0.08);border:1px solid var(, red);color:#991b1b;}
-
-/* MODULE NAV */
-.module-nav{display:flex;justify-content:space-between;align-items:center;margin-top:40px;padding-top:24px;border-top:1px solid var(, rule-soft);}
-.nav-btn{background:transparent;border:1px solid var(, rule);color:var(, dark);font-family:var(, fm);font-size:0.75rem;letter-spacing:0.05em;text-transform:uppercase;padding:10px 20px;border-radius:2px;cursor:pointer;transition:all 0.2s;}
-.nav-btn:hover{border-color:var(, black);}
-.nav-btn.primary{background:var(, black);color:#fff;border-color:var(, black);}
-.nav-btn.primary:hover{background:#333;}
-.mark-done{background:var(, green);color:#fff;border:none;font-family:var(, fm);font-size:0.75rem;letter-spacing:0.05em;text-transform:uppercase;padding:10px 20px;border-radius:2px;cursor:pointer;}
-.mark-done.done-state{background:var(, hi);color:var(, green);border:1px solid var(, green);}
-
-/* CERTIFICATE */
-.cert-section{display:none;text-align:center;padding:48px 32px;}
-.cert-section.show{display:block;}
-.cert-card{max-width:580px;margin:0 auto;border:3px solid var(, black);padding:48px;background:var(, paper);}
-.cert-card h2{font-family:var(, fd);text-transform:uppercase;font-size:1.8rem;margin-bottom:8px;}
-.cert-card .cert-name{font-family:var(, fd);font-size:2rem;color:var(, black);border-bottom:2px solid var(, black);padding-bottom:12px;margin:20px 0;}
-.cert-card p{color:var(, mid);font-size:0.88rem;}
-.cert-btn{background:var(, black);color:#fff;border:none;font-family:var(, fm);font-size:0.78rem;letter-spacing:0.05em;text-transform:uppercase;padding:12px 28px;border-radius:2px;cursor:pointer;margin-top:20px;}
-
-footer{padding:28px 32px;border-top:1px solid var(, rule-soft);}
-.footer-row{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
-.footer-row p{font-family:var(, fm);font-size:0.72rem;color:var(, light);}
-
-.download-link{display:inline-flex;align-items:center;gap:8px;font-family:var(, fm);font-size:0.75rem;color:#0284c7;letter-spacing:0.04em;text-transform:uppercase;margin-top:16px;}
-.download-link:hover{color:#7ee8f2;}
-@media(max-width:860px){
-  .course-layout{grid-template-columns:1fr;}
-  .sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(, rule-soft);}
-  .content{padding:28px 20px;}
-  .cia-grid,.threat-grid,.stat-row{grid-template-columns:1fr;}
-}
-
-/* Premium Video Player */
-.video-container {
-  margin: var(--s3) 0 var(--s4) 0;
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  overflow: hidden;
-  background: #000000;
-  position: relative;
-  aspect-ratio: 16/9;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-}
-.video-poster {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.video-overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.35);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-.video-overlay:hover {
-  background: rgba(0,0,0,0.5);
-}
-.play-btn-circle {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: var(--amber);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
-  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  margin-bottom: var(--s2);
-}
-.video-overlay:hover .play-btn-circle {
-  transform: scale(1.1);
-}
-.play-btn-triangle {
-  width: 0;
-  height: 0;
-  border-top: 14px solid transparent;
-  border-bottom: 14px solid transparent;
-  border-left: 24px solid #ffffff;
-  margin-left: 8px;
-}
-.video-title-overlay {
-  font-family: var(--fd);
-  font-size: 1.4rem;
-  color: #ffffff;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  text-shadow: 0 2px 8px rgba(252, 251, 249, 0.92);
-}
-.video-controls {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  background: linear-gradient(to top, rgba(252, 251, 249, 0.92) 0%, rgba(0,0,0,0) 100%);
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-family: var(--fm);
-  font-size: 0.72rem;
-  color: #ffffff;
-  pointer-events: none;
-}
-.video-play-icon {
-  width: 10px;
-  height: 10px;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-left: 8px solid #ffffff;
-}
-.video-bar {
-  flex: 1;
-  height: 4px;
-  background: rgba(255,255,255,0.3);
-  border-radius: 2px;
-  position: relative;
-}
-.video-bar-fill {
-  width: 25%;
-  height: 100%;
-  background: var(--amber);
-  border-radius: 2px;
-}
-.video-time {
-  white-space: nowrap;
-}
-
-/* Premium Sidebar CTA Buy Box */
-.sidebar-cta {
-  border: 2px solid var(--amber) !important;
-  background: var(--panel-raised) !important;
-  box-shadow: 0 4px 12px rgba(255,138,61,0.1);
-}
-.btn-enroll {
-  background: var(--amber) !important;
-  font-weight: 700 !important;
-  font-size: 0.8rem !important;
-  letter-spacing: 0.06em !important;
-  transition: background 0.2s, transform 0.2s;
-}
-.btn-enroll:hover {
-  background: #0f172a !important;
-  transform: translateY(-1px);
-}
-
+  .mod{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px 24px;margin:18px 0 28px;}
+  .mod.locked{opacity:.55;pointer-events:none;}
+  .mod h2{font-size:1.45rem;margin:6px 0 8px;}
+  .mod .num{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan-dark);}
+  .mod p{margin:0 0 12px;color:#1e293b;}
+  .mod h3{font-size:1.08rem;margin:20px 0 8px;}
+  .mod ul{margin:0 0 12px 1.15rem;}
+  .mod li{margin:0 0 6px;}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;}
+  .stat{background:var(--cyan-soft);border-radius:12px;padding:14px 12px;text-align:center;}
+  .stat b{display:block;font-family:var(--display);font-size:1.35rem;color:var(--cyan-dark);}
+  .stat span{font-size:.75rem;color:var(--sub);}
+  .callout{border-left:4px solid var(--cyan);background:var(--cyan-soft);padding:12px 14px;border-radius:0 10px 10px 0;margin:14px 0;color:#155e75;}
+  .warn{border-left-color:var(--red);background:var(--bad);color:#7f1d1d;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0;}
+  .tile{border:1px solid var(--line);border-radius:12px;padding:12px;}
+  .tile h4{font-size:.92rem;margin-bottom:4px;}
+  .tile p{font-size:.84rem;color:var(--sub);margin:0;}
+  audio{width:100%;margin:10px 0 16px;}
+  .quiz{background:var(--soft);border-radius:12px;padding:16px;margin-top:16px;}
+  .quiz h3{margin-top:0;}
+  .q{margin:0 0 14px;}
+  .q p{font-weight:600;margin-bottom:6px;}
+  .q label{display:block;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:5px 0;cursor:pointer;font-size:.92rem;}
+  .q label:has(input:checked){border-color:var(--cyan);background:var(--cyan-soft);}
+  .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+  button{font-family:var(--body);font-weight:700;border:0;border-radius:999px;padding:10px 18px;cursor:pointer;}
+  .btn{background:var(--ink);color:#fff;}
+  .btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink);}
+  .ok{background:var(--ok);border-color:#86efac !important;}
+  .bad{background:var(--bad);border-color:#fca5a5 !important;}
+  .result{font-family:var(--mono);font-size:.8rem;margin-top:8px;}
+  #cert{display:none;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:28px 0;background:#fff;}
+  #cert .inner{padding:28px;text-align:center;background:linear-gradient(180deg,rgba(224,242,254,.7),#fff);}
+  #cert input{border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:1rem;width:min(320px,90%);}
+  footer{border-top:1px solid var(--line);padding:28px 0;color:var(--sub);font-size:.82rem;margin-top:24px;}
+  @media(max-width:700px){.stats,.grid3{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-
-<header style="position:sticky;top:0;z-index:200;background:rgba(252,251,249,0.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #e2e8f0;">
-  <div style="max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
-    <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-      <div style="width:32px;height:32px;border-radius:10px;background:#0f172a;display:flex;align-items:center;justify-content:center;color:#fff;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z"/></svg>
-      </div>
-      <span style="font-weight:800;font-size:1.3rem;letter-spacing:0.06em;color:#0f172a;text-transform:uppercase;">VUNVAULT</span>
-    </a>
-    <nav style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-      <a href="services.html" style="font-size:0.88rem;font-weight:600;color:#0f172a;text-decoration:none;padding:5px 12px;border-radius:9999px;background:rgba(15,23,42,0.06);">Services</a>
-      <a href="index.html#scanner" style="font-size:0.88rem;font-weight:600;color:#475569;text-decoration:none;padding:5px 12px;border-radius:9999px;">Scanner</a>
-      <a href="course-foundations.html" style="font-size:0.88rem;font-weight:600;color:#475569;text-decoration:none;padding:5px 12px;border-radius:9999px;">Academy</a>
-      <a href="news.html" style="font-size:0.88rem;font-weight:600;color:#475569;text-decoration:none;padding:5px 12px;border-radius:9999px;">News</a>
-      <a href="index.html#contact" style="font-size:0.88rem;font-weight:600;color:#475569;text-decoration:none;padding:5px 12px;border-radius:9999px;">Contact</a>
+<header>
+  <div class="bar">
+    <a class="logo" href="academy.html">VUNVAULT</a>
+    <nav>
+      <a href="news.html">News</a>
+      <a href="academy.html" class="active">Academy</a>
+      <a href="press-and-media.html">Press</a>
     </nav>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <a href="index.html" style="background:#0f172a;color:#fff;font-size:0.85rem;font-weight:500;padding:8px 18px;border-radius:9999px;text-decoration:none;">Get Started</a>
-    </div>
   </div>
 </header>
 
-<section class="course-hero">
-  <div class="hero-inner">
-    <div class="course-badge">Beginner · No coding required · self paced</div>
+<div class="wrap">
+  <section class="hero">
+    <div class="kicker">Beginner · No coding · Self-paced</div>
     <h1>Cybersecurity <em>Foundations</em></h1>
-    <p>Core concepts, real threats, and practical safe habits for anyone starting out. Understand how attackers think, and how to stop them, without writing a single line of code.</p>
-    <div class="hero-meta">
-      <span> 8 Modules</span>
-      <span> ~2 Hours Total</span>
-      <span> Africa Focused Examples</span>
-      <span> Certificate on Completion</span>
+    <p class="lede">Core concepts, real threats and practical habits — with spoken narration. Understand how attackers think, and how to stop them, without writing a line of code.</p>
+    <div class="pills">
+      <span>8 modules</span><span>~2 hours</span><span>Africa-focused examples</span><span>Voice narration</span><span>Certificate</span>
     </div>
-    <div class="progress-summary">
-      <div class="prog-track"><div class="prog-fill" id="mainProgress"></div></div>
-      <span class="prog-label" id="progLabel">0 of 8 modules complete</span>
+    <div class="progress">
+      <div class="top"><span id="progLabel">0 of 8 modules complete</span><span id="progPct">0%</span></div>
+      <div class="bar-bg"><div class="bar-fg" id="progBar"></div></div>
     </div>
-    <a href="course-foundations.html" download class="download-link">⬇ Download this course as an HTML file</a>
-  </div>
-</section>
+    <div class="hero-pic"><img src="images/academy-hero.jpg" alt="Learners in a VUNVAULT Academy session"></div>
+  </section>
 
-<div class="course-layout">
-
-<!,  SIDEBAR , >
-<aside class="sidebar">
-  <div class="sidebar-title">Course Modules</div>
-  <div id="modList"></div>
-  <div class="sidebar-cta">
-    <p>Want a team training session or a customised cybersecurity workshop?</p>
-    <a href="payment.html"><button class="btn-enroll">Get Full Access, $29</button></a>
-  </div>
-</aside>
-
-<!,  CONTENT , >
-<main class="content" id="mainContent">
-
-<!,  MODULE 1 , >
-<div class="module-section active" id="mod-0">
-  <div class="section-eyebrow">Module Module One</div>
-  <h2>What Is Cybersecurity?</h2>
-  <p class="lead">Before you can protect yourself or your organisation, you need to understand what you're protecting against, and why it matters more in 2026 than ever before.</p>
-  <div class="video-container">
-    <img class="video-poster" src="images/cyber_defenders_africa.png" alt="Introduction to Cybersecurity Foundations">
-    <div class="video-overlay">
-      <div class="play-btn-circle">
-        <div class="play-btn-triangle"></div>
+  <!-- MODULE 1 -->
+  <section class="mod" id="m1">
+    <div class="num">Module one</div>
+    <h2>What is cybersecurity?</h2>
+    <p>Press play to hear this lesson, then read and take the check. You need 2 of 3 to unlock the next module.</p>
+    <audio controls src="audio/mod-01.mp3"></audio>
+    <img src="images/academy-module1.jpg" alt="" style="border-radius:12px;margin:0 0 16px;width:100%;max-height:240px;object-fit:cover;">
+    <p>Cybersecurity is the practice of protecting computers, networks, applications and data from digital attacks, unauthorised access, damage or theft. It covers the password on your phone, hospital records, and the rails that move money.</p>
+    <p>Think of home security — locks, lights, a safe — applied to the digital world. A burglar must be at your door. A cybercriminal can attack from anywhere, unseen.</p>
+    <h3>Why Africa is on the front line</h3>
+    <p>Mobile money, digital banking and cloud tools brought millions into the formal economy. The same platforms are targets.</p>
+    <div class="stats">
+      <div class="stat"><b>$4B+</b><span>Lost to cybercrime in Africa yearly</span></div>
+      <div class="stat"><b>32M+</b><span>Active mobile-money users in Kenya</span></div>
+      <div class="stat"><b>70%</b><span>Of African SMEs have no security plan</span></div>
+    </div>
+    <p>These numbers are meant to motivate, not frighten. People who know the basics are far less likely to become victims.</p>
+    <h3>What it actually protects</h3>
+    <p><strong>Your money</strong> — wallets, banks, investments. <strong>Your identity</strong> — national ID, passport, biometrics. <strong>Your business</strong> — customers, secrets, operations. <strong>Your reputation</strong> — trust that took years to build.</p>
+    <div class="callout"><strong>Takeaway.</strong> Cybersecurity is personal safety, business continuity and national security. If you use a phone, you are a target and a defender.</div>
+    <div class="quiz" data-need="2">
+      <h3>Quick check</h3>
+      <div class="q" data-a="1"><p>1. Primary goal of cybersecurity?</p>
+        <label><input type="radio" name="q1a"> Making computers faster</label>
+        <label><input type="radio" name="q1a"> Protecting systems, data and networks from digital threats</label>
+        <label><input type="radio" name="q1a"> Designing better software</label>
       </div>
-      <div class="video-title-overlay">Introduction to Cybersecurity Foundations</div>
-    </div>
-    <div class="video-controls">
-      <div class="video-play-icon"></div>
-      <div class="video-bar">
-        <div class="video-bar-fill"></div>
+      <div class="q" data-a="1"><p>2. A real consequence of a cyberattack on a business?</p>
+        <label><input type="radio" name="q1b"> Faster internet</label>
+        <label><input type="radio" name="q1b"> Loss of customer trust and financial loss</label>
+        <label><input type="radio" name="q1b"> More storage space</label>
       </div>
-      <div class="video-time">0:00 / 2:30</div>
+      <div class="q" data-a="1"><p>3. Cybersecurity only matters for large corporations.</p>
+        <label><input type="radio" name="q1c"> True</label>
+        <label><input type="radio" name="q1c"> False</label>
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" onclick="grade(this)">Check answers</button>
+        <button class="btn-ghost" type="button" onclick="complete(1)">Mark complete →</button>
+      </div>
+      <div class="result"></div>
     </div>
-  </div>
-    
+  </section>
 
-  <p>Cybersecurity is the practice of protecting computers, networks, applications, and data from digital attacks, unauthorised access, damage, or theft. It covers everything from the password on your phone to the systems that keep hospital records private to the infrastructure that keeps financial transactions flowing.</p>
-
-  <p>Think of it like physical security for your home, locks on the doors, lights outside, a safe for valuables, but applied to the digital world. The difference is that a physical burglar has to be physically present. A cybercriminal can attack you from anywhere on earth, at any time, without you ever seeing them.</p>
-
-  <h3>Why Africa Is on the Front Line</h3>
-  <p>Africa's rapid digital adoption has created enormous opportunity, and equally enormous risk. Mobile money, digital banking, e commerce, and cloud based business tools have brought millions into the formal economy. But the same platforms that enable that growth are also targets.</p>
-
-  <div class="stat-row">
-    <div class="stat-cell"><div class="stat-num">$4B+</div><div class="stat-sub">Lost to cybercrime in Africa annually</div></div>
-    <div class="stat-cell"><div class="stat-num">32M+</div><div class="stat-sub">Active mobile money users in Kenya alone</div></div>
-    <div class="stat-cell"><div class="stat-num">70%</div><div class="stat-sub">Of African SMEs have no cybersecurity plan</div></div>
-  </div>
-
-  <p>These numbers are not meant to frighten you, they are meant to motivate you. The organisations and individuals who understand cybersecurity basics are dramatically less likely to become victims. Knowledge is the most effective defence.</p>
-
-  <h3>What Cybersecurity Actually Protects</h3>
-  <p><strong>Your money.</strong> Bank accounts, mobile money wallets, investment accounts, all of these are targets. <strong>Your identity.</strong> National ID numbers, passport details, and biometric data can be used to commit fraud in your name. <strong>Your business.</strong> Customer data, trade secrets, financial records, and operational systems. <strong>Your reputation.</strong> A breach that exposes customer data can destroy trust that took years to build.</p>
-
-  <div class="key-box">
-    <div class="key-label">Key Takeaway</div>
-    <p>Cybersecurity is not just an IT issue, it is a personal safety issue, a business continuity issue, and a national security issue. Everyone who uses a phone, laptop, or internet connection is both a potential target and a potential line of defence.</p>
-  </div>
-
-  <div class="quiz-section">
-    <h3>Quick Check, Module One</h3>
-    <p>Answer these questions to confirm you've got the core ideas. You need 2 out of 3 to proceed.</p>
-    <div id="quiz-0"></div>
-    <button class="quiz-submit" onclick="submitQuiz(0)">Check Answers</button>
-    <div class="quiz-result" id="qresult-0"></div>
-  </div>
-  <div class="module-nav">
-    <span></span>
-    <div style="display:flex;gap:10px;">
-      <button class="mark-done" id="done-0" onclick="markDone(0)">Mark Complete </button>
-      <button class="nav-btn primary" onclick="goModule(1)">Next Module →</button>
+  <section class="mod locked" id="m2">
+    <div class="num">Module two</div>
+    <h2>The cyber threat landscape</h2>
+    <audio controls src="audio/mod-02.mp3"></audio>
+    <p>Phishing is the most common attack: someone pretends to be a bank, a company or a friend and tricks you into handing over a PIN or password.</p>
+    <div class="callout warn"><strong>Real example, Kenya.</strong> “Congratulations! Your M-Pesa won KSh 50,000. Click and enter your PIN before midnight.” Safaricom never asks for your PIN this way.</div>
+    <div class="grid3">
+      <div class="tile"><h4>Phishing</h4><p>Fake messages that steal credentials or money.</p></div>
+      <div class="tile"><h4>Malware</h4><p>Software that spies, steals or damages a device.</p></div>
+      <div class="tile"><h4>Ransomware</h4><p>Encrypts files and demands payment.</p></div>
+      <div class="tile"><h4>Social engineering</h4><p>Psychology, not code, to make you act.</p></div>
+      <div class="tile"><h4>SIM swapping</h4><p>Moving your number onto an attacker’s SIM.</p></div>
+      <div class="tile"><h4>Man-in-the-middle</h4><p>Quietly reading traffic between two parties.</p></div>
     </div>
-  </div>
+    <h3>When ransomware hit a hospital</h3>
+    <p>In 2020 Life Healthcare in South Africa had records and admissions encrypted. Care went back to paper. Recovery took weeks. Healthcare, finance and government here are now regular targets.</p>
+    <p>Social engineering uses <strong>urgency</strong>, <strong>authority</strong>, <strong>fear</strong> and <strong>fake favours</strong>. Spot the trigger and you break the attack.</p>
+    <div class="quiz" data-need="2">
+      <h3>Quick check</h3>
+      <div class="q" data-a="1"><p>1. Technique that psychologically manipulates victims?</p>
+        <label><input type="radio" name="q2a"> Encryption</label>
+        <label><input type="radio" name="q2a"> Social engineering</label>
+        <label><input type="radio" name="q2a"> Patching</label>
+      </div>
+      <div class="q" data-a="1"><p>2. Example of phishing?</p>
+        <label><input type="radio" name="q2b"> Your bank’s monthly statement</label>
+        <label><input type="radio" name="q2b"> An SMS claiming a prize and asking for your PIN</label>
+        <label><input type="radio" name="q2b"> A scheduled antivirus scan</label>
+      </div>
+      <div class="q" data-a="1"><p>3. Best protection against ransomware?</p>
+        <label><input type="radio" name="q2c"> Paying quickly</label>
+        <label><input type="radio" name="q2c"> Up-to-date backups stored off-device</label>
+        <label><input type="radio" name="q2c"> Installing more antivirus only</label>
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" onclick="grade(this)">Check answers</button>
+        <button class="btn-ghost" type="button" onclick="complete(2)">Mark complete →</button>
+      </div>
+      <div class="result"></div>
+    </div>
+  </section>
+
+  <section class="mod locked" id="m3">
+    <div class="num">Module three</div>
+    <h2>The CIA triad</h2>
+    <audio controls src="audio/mod-03.mp3"></audio>
+    <div class="grid3">
+      <div class="tile"><h4>Confidentiality</h4><p>Only authorised people can see the data — your balance is not public.</p></div>
+      <div class="tile"><h4>Integrity</h4><p>The number has not been silently changed in transit.</p></div>
+      <div class="tile"><h4>Availability</h4><p>Systems work when needed — hospital records at 3 a.m.</p></div>
+    </div>
+    <p>Send mobile money and all three apply: only you and the recipient should see it; the amount must not change; the service must be up when you need to pay school fees.</p>
+    <div class="callout">Ask of every control: does it protect confidentiality, integrity and availability? A “no” is a gap.</div>
+    <div class="quiz" data-need="2">
+      <h3>Quick check</h3>
+      <div class="q" data-a="2"><p>1. The “C” in CIA stands for?</p>
+        <label><input type="radio" name="q3a"> Computing</label>
+        <label><input type="radio" name="q3a"> Cybersecurity</label>
+        <label><input type="radio" name="q3a"> Confidentiality</label>
+      </div>
+      <div class="q" data-a="2"><p>2. Hospital systems offline in an emergency — which principle?</p>
+        <label><input type="radio" name="q3b"> Confidentiality</label>
+        <label><input type="radio" name="q3b"> Integrity</label>
+        <label><input type="radio" name="q3b"> Availability</label>
+      </div>
+      <div class="q" data-a="1"><p>3. A transfer silently changes from $100 to $1,000.</p>
+        <label><input type="radio" name="q3c"> Confidentiality</label>
+        <label><input type="radio" name="q3c"> Integrity</label>
+        <label><input type="radio" name="q3c"> Availability</label>
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" onclick="grade(this)">Check answers</button>
+        <button class="btn-ghost" type="button" onclick="complete(3)">Mark complete →</button>
+      </div>
+      <div class="result"></div>
+    </div>
+  </section>
+
+  <section class="mod locked" id="m4">
+    <div class="num">Module four</div>
+    <h2>Passwords and authentication</h2>
+    <audio controls src="audio/mod-04.mp3"></audio>
+    <p>Stolen credentials start a huge share of breaches. Of 19 billion leaked passwords studied in 2024–25, only 6% were unique. Reuse means one leak opens every other account.</p>
+    <p><strong>password123</strong> is weak. <strong>Nairobi2026!</strong> is medium. A long random string from a manager is strong.</p>
+    <p>Use a password manager — Bitwarden, Google Password Manager or Apple Keychain. Then add MFA. Microsoft’s research: MFA blocks over 99% of identity attacks even when the password is already stolen.</p>
+    <ol>
+      <li>Enable MFA on email first — it resets everything else.</li>
+      <li>Then banking and mobile money.</li>
+      <li>Prefer an authenticator app over SMS (SIM-swap can steal SMS codes).</li>
+      <li>Print backup codes and store them offline.</li>
+    </ol>
+    <div class="quiz" data-need="2">
+      <h3>Quick check</h3>
+      <div class="q" data-a="2"><p>1. Strongest password?</p>
+        <label><input type="radio" name="q4a"> password123</label>
+        <label><input type="radio" name="q4a"> Nairobi2026!</label>
+        <label><input type="radio" name="q4a"> Xk#9mP2@rLqN (random, 12+ characters)</label>
+      </div>
+      <div class="q" data-a="1"><p>2. Main advantage of a password manager?</p>
+        <label><input type="radio" name="q4b"> Shorter passwords</label>
+        <label><input type="radio" name="q4b"> Unique strong passwords for every account</label>
+        <label><input type="radio" name="q4b"> It replaces MFA</label>
+      </div>
+      <div class="q" data-a="0"><p>3. MFA still helps if the attacker has your password.</p>
+        <label><input type="radio" name="q4c"> True</label>
+        <label><input type="radio" name="q4c"> False</label>
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" onclick="grade(this)">Check answers</button>
+        <button class="btn-ghost" type="button" onclick="complete(4)">Mark complete →</button>
+      </div>
+      <div class="result"></div>
+    </div>
+  </section>
+
+  <section class="mod locked" id="m5">
+    <div class="num">Module five</div>
+    <h2>Safe browsing and online habits</h2>
+    <audio controls src="audio/mod-05.mp3"></audio>
+    <p><strong>https://</strong> and a padlock mean the connection is encrypted — not that the site is honest. Phishing sites use HTTPS too. Read the full domain: <em>safaricom.co.ke</em> is not <em>safar1com.co.ke</em>.</p>
+    <div class="callout warn">Red flags: urgency, PIN requests, misspelled domains, surprise WhatsApp links, “download this to verify.”</div>
+    <p>Do not open banking or M-Pesa on café or airport Wi-Fi without a VPN. Proton VPN is a reputable free start. Install apps only from official stores — never a “bonus M-Pesa app” from chat.</p>
+    <div class="quiz" data-need="2">
+      <h3>Quick check</h3>
+      <div class="q" data-a="1"><p>1. HTTPS guarantees a site is legitimate.</p>
+        <label><input type="radio" name="q5a"> True</label>
+        <label><input type="radio" name="q5a"> False — it only encrypts the connection</label>
+      </div>
+      <div class="q" data-a="1"><p>2. Safest use of airport Wi-Fi?</p>
+        <label><input type="radio" name="q5b"> Use it freely</label>
+        <label><input type="radio" name="q5b"> Use a VPN and avoid banking</label>
+        <label><input type="radio" name="q5b"> Turn the firewall off</label>
+      </div>
+      <div class="q" data-a="1"><p>3. A friend’s WhatsApp sends a “special M-Pesa bonus app”.</p>
+        <label><input type="radio" name="q5c"> Install it</label>
+        <label><input type="radio" name="q5c"> Ignore it; only use official stores; call your friend</label>
+        <label><input type="radio" name="q5c"> Forward it</label>
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" onclick="grade(this)">Check answers</button>
+        <button class="btn-ghost" type="button" onclick="complete(5)">Mark complete →</button>
+      </div>
+      <div class="result"></div>
+    </div>
+  </section>
+
+  <section class="mod locked" id="m6">
+    <div class="num">Module six</div>
+    <h2>Device and mobile security</h2>
+    <audio controls src="audio/mod-06.mp3"></audio>
+    <p>Your phone is wallet, ID and bank. Install updates — they patch holes attackers already use. Audit app permissions. Lock every device; encryption usually follows the lock screen.</p>
+    <h3>If the phone is stolen</h3>
+    <ol>
+      <li>Change email and mobile-money passwords from another device first.</li>
+      <li>Call the network and lock the SIM so it cannot be swapped.</li>
+      <li>Use Find My Device to locate, lock or erase.</li>
+      <li>Get a police abstract for insurance and dispute fraud.</li>
+    </ol>
+    <div class="quiz" data-need="2">
+      <h3>Quick check</h3>
+      <div class="q" data-a="1"><p>1. When should you install a software update?</p>
+        <label><input type="radio" name="q6a"> Wait six months</label>
+        <label><input type="radio" name="q6a"> As soon as you reasonably can</label>
+        <label><input type="radio" name="q6a"> Never</label>
+      </div>
+      <div class="q" data-a="1"><p>2. First priority if the phone is stolen?</p>
+        <label><input type="radio" name="q6b"> Buy a new phone</label>
+        <label><input type="radio" name="q6b"> Change email and mobile-money passwords immediately</label>
+        <label><input type="radio" name="q6b"> Wait 24 hours</label>
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" onclick="grade(this)">Check answers</button>
+        <button class="btn-ghost" type="button" onclick="complete(6)">Mark complete →</button>
+      </div>
+      <div class="result"></div>
+    </div>
+  </section>
+
+  <section class="mod locked" id="m7">
+    <div class="num">Module seven</div>
+    <h2>Data protection and privacy</h2>
+    <audio controls src="audio/mod-07.mp3"></audio>
+    <p>Name, ID, date of birth, phone and habits can be stitched into a fraud profile. Brokers buy this data. Criminals steal it.</p>
+    <p>In Kenya the <strong>Data Protection Act 2019</strong> requires consent, a stated purpose, security, and deletion when you no longer need the data. Fines can reach KSh 5 million; officers can face prison.</p>
+    <p><strong>3-2-1 backups:</strong> three copies, two kinds of storage, one copy off-site or in the cloud. That is how you recover from ransomware without paying.</p>
+    <p>Tighten social privacy. Work, home area and routines help attackers write convincing lures.</p>
+    <div class="quiz" data-need="2">
+      <h3>Quick check</h3>
+      <div class="q" data-a="1"><p>1. Under Kenya’s Data Protection Act, businesses must:</p>
+        <label><input type="radio" name="q7a"> Pay a monthly government fee</label>
+        <label><input type="radio" name="q7a"> Obtain consent, secure data, delete when done</label>
+        <label><input type="radio" name="q7a"> Store data only in the US</label>
+      </div>
+      <div class="q" data-a="1"><p>2. The 3-2-1 rule means:</p>
+        <label><input type="radio" name="q7b"> 3 passwords, 2 devices, 1 antivirus</label>
+        <label><input type="radio" name="q7b"> 3 copies, 2 storage types, 1 copy off-site</label>
+        <label><input type="radio" name="q7b"> Check backups three times a week</label>
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" onclick="grade(this)">Check answers</button>
+        <button class="btn-ghost" type="button" onclick="complete(7)">Mark complete →</button>
+      </div>
+      <div class="result"></div>
+    </div>
+  </section>
+
+  <section class="mod locked" id="m8">
+    <div class="num">Module eight</div>
+    <h2>When things go wrong</h2>
+    <audio controls src="audio/mod-08.mp3"></audio>
+    <p>Warning signs: logins from unknown places, messages you did not send, a phone that suddenly has no service (possible SIM swap), money you did not send, apps you did not install.</p>
+    <h3>The first hour</h3>
+    <ol>
+      <li>Do not panic. Work the list.</li>
+      <li>Disconnect the device (Wi-Fi and mobile data off).</li>
+      <li>Change passwords from a clean device — email, then mobile money, then banking.</li>
+      <li>Call the bank or M-Pesa immediately. Fast reports sometimes reverse a transfer.</li>
+      <li>Screenshot everything.</li>
+      <li>Report: Kenya DCI Cybercrime Unit · Nigeria EFCC · South Africa SAPS 10111 · Interpol.</li>
+    </ol>
+    <div class="quiz" data-need="2">
+      <h3>Final assessment</h3>
+      <div class="q" data-a="1"><p>1. Phone suddenly loses all network. This could be:</p>
+        <label><input type="radio" name="q8a"> Always just a software bug</label>
+        <label><input type="radio" name="q8a"> A SIM-swap in progress</label>
+        <label><input type="radio" name="q8a"> Too many apps</label>
+      </div>
+      <div class="q" data-a="1"><p>2. First action if mobile money looks compromised?</p>
+        <label><input type="radio" name="q8b"> Post on social media</label>
+        <label><input type="radio" name="q8b"> Call the provider and freeze the account</label>
+        <label><input type="radio" name="q8b"> Wait and see</label>
+      </div>
+      <div class="q" data-a="1"><p>3. Why document evidence?</p>
+        <label><input type="radio" name="q8c"> It is not important</label>
+        <label><input type="radio" name="q8c"> Investigations, insurance and disputes</label>
+        <label><input type="radio" name="q8c"> To post proof online</label>
+      </div>
+      <div class="actions">
+        <button class="btn" type="button" onclick="grade(this)">Submit final assessment</button>
+        <button class="btn-ghost" type="button" onclick="complete(8)">Mark complete &amp; get certificate</button>
+      </div>
+      <div class="result"></div>
+    </div>
+  </section>
+
+  <section id="cert">
+    <div class="inner">
+      <div class="kicker">Certificate of completion</div>
+      <h2>VUNVAULT Academy</h2>
+      <p>This certifies that</p>
+      <p><input id="certName" placeholder="Your name" aria-label="Your name"></p>
+      <p>has successfully completed</p>
+      <p><strong>Cybersecurity Foundations</strong></p>
+      <p style="color:var(--sub);font-size:.85rem;margin-top:10px;">Awarded <span id="certDate"></span> · vunvault.com</p>
+      <div class="actions" style="justify-content:center;"><button class="btn" type="button" onclick="window.print()">Print / save</button></div>
+    </div>
+  </section>
 </div>
+<footer><div class="wrap">© 2026 VUNVAULT Academy · Spoken narration is generated audio, not a filmed lecture.</div></footer>
 
-<!,  MODULE 2 , >
-<div class="module-section" id="mod-1">
-  <div class="section-eyebrow">Module Module Two</div>
-  <h2>The Cyber Threat Landscape</h2>
-  <p class="lead">Attackers have dozens of tools at their disposal. Understanding the most common ones, and how they work, is the first step to recognising and stopping them.</p>
-
-  <h3>Phishing, The Most Common Attack</h3>
-  <p>Phishing is when an attacker pretends to be someone you trust, a bank, a company, or a friend, to trick you into revealing passwords, PINs, or personal information. It is the starting point for most major cyber incidents worldwide.</p>
-
-  <div class="example-box">
-    <div class="ex-label">Real Example, Africa</div>
-    "Congratulations! Your MPesa account has been selected as the winner of KSh 50,000. To claim your prize before midnight, click the link below and enter your PIN to verify your identity.", This is a phishing attack. Safaricom never asks for your PIN this way.
-  </div>
-
-  <h3>Types of Threats You Will Encounter</h3>
-  <div class="threat-grid">
-    <div class="threat-card">
-      <div class="t-icon"></div>
-      <h4>Phishing</h4>
-      <p>Fake messages mimicking trusted organisations to steal credentials or money.</p>
-    </div>
-    <div class="threat-card">
-      <div class="t-icon"></div>
-      <h4>Malware</h4>
-      <p>Malicious software installed on your device to spy, steal, or cause damage.</p>
-    </div>
-    <div class="threat-card">
-      <div class="t-icon"></div>
-      <h4>Ransomware</h4>
-      <p>Malware that encrypts your files and demands payment to restore access.</p>
-    </div>
-    <div class="threat-card">
-      <div class="t-icon"></div>
-      <h4>Social Engineering</h4>
-      <p>Psychological manipulation to make people reveal information or take actions.</p>
-    </div>
-    <div class="threat-card">
-      <div class="t-icon"></div>
-      <h4>SIM Swapping</h4>
-      <p>Convincing your network provider to move your number to an attacker's SIM.</p>
-    </div>
-    <div class="threat-card">
-      <div class="t-icon"></div>
-      <h4>Man-in-the-Middle</h4>
-      <p>Intercepting communications between two parties without their knowledge.</p>
-    </div>
-  </div>
-
-  <h3>How Ransomware Destroyed a Hospital</h3>
-  <p>In 2020, Life Healthcare Group, one of South Africa's largest private hospital networks, was hit by a ransomware attack. Patient records, admission systems, and business processing systems were encrypted. Operations had to revert to pen and paper. The attack disrupted care across multiple facilities and took weeks to recover from.</p>
-
-  <div class="warn-box">
-    <div class="warn-label"> Warning</div>
-    <p>Ransomware attackers increasingly target African healthcare, financial services, and government institutions. Any organisation that holds valuable data is a target, not just large corporations.</p>
-  </div>
-
-  <h3>The Social Engineering Playbook</h3>
-  <p>Social engineering does not require technical skill. It requires psychology. Attackers exploit <strong>urgency</strong> (act now before your account closes), <strong>authority</strong> (I am calling from your bank), <strong>fear</strong> (your account has been compromised), and <strong>reciprocity</strong> (someone sent you money by mistake). Recognising these triggers is the most powerful defence against them.</p>
-
-  <div class="quiz-section">
-    <h3>Quick Check, Module Two</h3>
-    <p>Test your understanding of cyber threats.</p>
-    <div id="quiz-1"></div>
-    <button class="quiz-submit" onclick="submitQuiz(1)">Check Answers</button>
-    <div class="quiz-result" id="qresult-1"></div>
-  </div>
-  <div class="module-nav">
-    <button class="nav-btn" onclick="goModule(0)">← Previous</button>
-    <div style="display:flex;gap:10px;">
-      <button class="mark-done" id="done-1" onclick="markDone(1)">Mark Complete </button>
-      <button class="nav-btn primary" onclick="goModule(2)">Next Module →</button>
-    </div>
-  </div>
-</div>
-
-<!,  MODULE 3 , >
-<div class="module-section" id="mod-2">
-  <div class="section-eyebrow">Module Module Three</div>
-  <h2>The CIA Triad, The Foundation of Security</h2>
-  <p class="lead">Every security decision in cybersecurity traces back to three core principles. Understanding them gives you a framework for evaluating any security situation.</p>
-
-  <div class="cia-grid">
-    <div class="cia-card">
-      <h4>Confidentiality</h4>
-      <p>Information is only accessible to those with permission. Your bank balance should only be visible to you and authorised bank staff, not to anyone who wants to look.</p>
-    </div>
-    <div class="cia-card">
-      <h4>Integrity</h4>
-      <p>Information is accurate and has not been tampered with. When you check your account balance, you need to trust that the number shown has not been altered by an attacker.</p>
-    </div>
-    <div class="cia-card">
-      <h4>Availability</h4>
-      <p>Systems and data are accessible when needed. A hospital's patient records must be available 24/7, an attack that makes them inaccessible during an emergency has the same impact as a physical attack.</p>
-    </div>
-  </div>
-
-  <h3>CIA in Everyday Life</h3>
-  <p>When you send money via mobile money, all three apply simultaneously. <strong>Confidentiality:</strong> only you and the recipient should know the transaction details. <strong>Integrity:</strong> the amount sent must be exactly what you entered, not altered in transit. <strong>Availability:</strong> the service must be accessible when you need to make an urgent payment.</p>
-
-  <p>When attackers breach these principles, the consequences are concrete. A confidentiality breach exposes your private data. An integrity breach changes your records without your knowledge. An availability attack (called a Denial of Service attack) prevents you from accessing your accounts or services entirely.</p>
-
-  <div class="key-box">
-    <div class="key-label">Apply the CIA Test</div>
-    <p>When evaluating any security decision, ask: Does this protect confidentiality? Does this ensure integrity? Does this support availability? If any answer is no, there is a gap to address.</p>
-  </div>
-
-  <div class="quiz-section">
-    <h3>Quick Check, Module Three</h3>
-    <div id="quiz-2"></div>
-    <button class="quiz-submit" onclick="submitQuiz(2)">Check Answers</button>
-    <div class="quiz-result" id="qresult-2"></div>
-  </div>
-  <div class="module-nav">
-    <button class="nav-btn" onclick="goModule(1)">← Previous</button>
-    <div style="display:flex;gap:10px;">
-      <button class="mark-done" id="done-2" onclick="markDone(2)">Mark Complete </button>
-      <button class="nav-btn primary" onclick="goModule(3)">Next Module →</button>
-    </div>
-  </div>
-</div>
-
-<!,  MODULE 4 , >
-<div class="module-section" id="mod-3">
-  <div class="section-eyebrow">Module Module Four</div>
-  <h2>Passwords and Authentication</h2>
-  <p class="lead">Stolen credentials are the entry point in 22% of all confirmed breaches. Your password is the first line of defence, and for most people, it is dangerously weak.</p>
-
-  <h3>Why Most Passwords Fail</h3>
-  <p>A study of 19 billion leaked passwords from 2024 and 2025 found that only 6% were unique, meaning 94% of people are reusing passwords across multiple accounts. When one account is breached, every account with the same password is immediately at risk.</p>
-
-  <div class="strength-meter">
-    <div class="pw-example"><span>password123</span><span class="pw-score pw-weak">Weak</span></div>
-    <div class="pw-example"><span>Nairobi2026!</span><span class="pw-score pw-medium">Medium</span></div>
-    <div class="pw-example"><span>Tr0ub4dor&3 (3 random words + numbers + symbols)</span><span class="pw-score pw-strong">Strong</span></div>
-    <div class="pw-example"><span>Xk#9mP2@rLqN (random, 12+ chars, manager-generated)</span><span class="pw-score pw-strong">Very Strong</span></div>
-  </div>
-
-  <h3>The Password Manager Solution</h3>
-  <p>A password manager is a secure digital vault that generates and remembers unique, strong passwords for every account. You remember one master password, the manager handles the rest. People who use password managers experience identity theft at roughly half the rate of those who don't.</p>
-
-  <p><strong>Free options to start:</strong> Bitwarden (fully free, open source, highly trusted), Google Password Manager (built into your Google account), Apple Keychain (built into Apple devices).</p>
-
-  <h3>multi factor Authentication (MFA)</h3>
-  <p>MFA adds a second verification step beyond your password, something you have (your phone) or something you are (your fingerprint). Microsoft's research shows that MFA blocks over 99% of identity-based attacks, even when the attacker already has your correct password.</p>
-
-  <div class="steps-list">
-    <div class="step-row"><div class="step-n">1</div><div class="step-c"><strong>Enable MFA on email first</strong><p>Your email is the master key, it can reset every other account. Protect it first.</p></div></div>
-    <div class="step-row"><div class="step-n">2</div><div class="step-c"><strong>Enable MFA on banking and mobile money</strong><p>Any account connected to money is a priority target.</p></div></div>
-    <div class="step-row"><div class="step-n">3</div><div class="step-c"><strong>Use an authenticator app, not SMS</strong><p>Authenticator apps (Google Authenticator, Microsoft Authenticator) are more secure than SMS codes, which can be intercepted via SIM swap.</p></div></div>
-    <div class="step-row"><div class="step-n">4</div><div class="step-c"><strong>Store backup codes safely</strong><p>When you enable MFA, you'll receive backup codes. Print them and store them somewhere physically safe.</p></div></div>
-  </div>
-
-  <div class="quiz-section">
-    <h3>Quick Check, Module Four</h3>
-    <div id="quiz-3"></div>
-    <button class="quiz-submit" onclick="submitQuiz(3)">Check Answers</button>
-    <div class="quiz-result" id="qresult-3"></div>
-  </div>
-  <div class="module-nav">
-    <button class="nav-btn" onclick="goModule(2)">← Previous</button>
-    <div style="display:flex;gap:10px;">
-      <button class="mark-done" id="done-3" onclick="markDone(3)">Mark Complete </button>
-      <button class="nav-btn primary" onclick="goModule(4)">Next Module →</button>
-    </div>
-  </div>
-</div>
-
-<!,  MODULE 5 , >
-<div class="module-section" id="mod-4">
-  <div class="section-eyebrow">Module Module Five</div>
-  <h2>Safe Browsing and Online Habits</h2>
-  <p class="lead">Your daily online behaviour, how you browse, what you click, where you connect, determines your risk more than any software you install.</p>
-
-  <h3>HTTPS, The Basics</h3>
-  <p>When a website address starts with <strong>https://</strong> and shows a padlock, communication between your device and that site is encrypted. An attacker on the same network cannot read the data in transit. When you see <strong>http://</strong> (no S), treat everything you type on that page as potentially visible to others.</p>
-  <p>However, HTTPS only means the connection is encrypted, it does not mean the website itself is safe or legitimate. Phishing sites use HTTPS too.</p>
-
-  <h3>Spotting Fake Websites</h3>
-  <p>Attackers create websites that look identical to the real thing. Always check the full domain name in your browser's address bar, not just the padlock. The difference between <strong>safaricom.co.ke</strong> and <strong>safar1com.co.ke</strong> or <strong>safaricom support.com</strong> is easy to miss when you're moving quickly.</p>
-
-  <div class="example-box">
-    <div class="ex-label">Red flags to watch for</div>
-    Urgent language pressuring immediate action · Requests for PINs or passwords · Slightly misspelled domain names · Unsolicited links in SMS or WhatsApp · Offers that are unusually generous · Requests to download a file to "verify" your account
-  </div>
-
-  <h3>Public Wi-Fi Risks</h3>
-  <p>Free Wi-Fi in cafes, hotels, airports, and shopping centres is convenient, and potentially dangerous. An attacker on the same network can potentially intercept unencrypted data. Never access banking, mobile money, or sensitive accounts on public Wi-Fi without a VPN.</p>
-  <p>A VPN (Virtual Private Network) encrypts all traffic from your device, even on public networks. Free options include Proton VPN (genuinely free, reputable). Paid options offer better speed and reliability.</p>
-
-  <h3>Safe Download Habits</h3>
-  <p>Only download software and apps from official sources, the Google Play Store, Apple App Store, or the software developer's official website. Never install an app sent via WhatsApp, SMS, or email, even from someone you know, their account may have been compromised.</p>
-
-  <div class="quiz-section">
-    <h3>Quick Check, Module Five</h3>
-    <div id="quiz-4"></div>
-    <button class="quiz-submit" onclick="submitQuiz(4)">Check Answers</button>
-    <div class="quiz-result" id="qresult-4"></div>
-  </div>
-  <div class="module-nav">
-    <button class="nav-btn" onclick="goModule(3)">← Previous</button>
-    <div style="display:flex;gap:10px;">
-      <button class="mark-done" id="done-4" onclick="markDone(4)">Mark Complete </button>
-      <button class="nav-btn primary" onclick="goModule(5)">Next Module →</button>
-    </div>
-  </div>
-</div>
-
-<!,  MODULE 6 , >
-<div class="module-section" id="mod-5">
-  <div class="section-eyebrow">Module Module Six</div>
-  <h2>Device and Mobile Security</h2>
-  <p class="lead">Your smartphone is your wallet, your ID, your bank, and your communication hub. It is also one of the most valuable targets for attackers.</p>
-
-  <h3>Keep Software Updated</h3>
-  <p>Software updates are not just about new features, they patch security vulnerabilities that attackers are actively exploiting. When your phone or laptop shows an update notification, do not delay it. Set devices to update automatically wherever possible.</p>
-
-  <h3>App Permissions</h3>
-  <p>When you install an app, it may request access to your contacts, camera, microphone, location, or storage. Not all of these requests are legitimate. A flashlight app that requests access to your contacts is a red flag. Review permissions before accepting, and periodically audit which apps have access to what on your device.</p>
-
-  <h3>Lock Screen and Encryption</h3>
-  <p>Enable a PIN, password, or biometric lock on every device. Enable full-device encryption (most modern smartphones do this by default when a lock screen is set). If your phone is stolen with no lock screen, every account on it is immediately accessible.</p>
-
-  <h3>What to Do If Your Phone Is Lost or Stolen</h3>
-  <div class="steps-list">
-    <div class="step-row"><div class="step-n">1</div><div class="step-c"><strong>Immediately change passwords</strong><p>Especially email and mobile money, from another device.</p></div></div>
-    <div class="step-row"><div class="step-n">2</div><div class="step-c"><strong>Contact your network provider</strong><p>Request your SIM be locked to prevent SIM swap attacks while you're vulnerable.</p></div></div>
-    <div class="step-row"><div class="step-n">3</div><div class="step-c"><strong>Use Find My Device</strong><p>Google (Android) and Apple (iOS) both offer remote location, lock, and erase features.</p></div></div>
-    <div class="step-row"><div class="step-n">4</div><div class="step-c"><strong>Report to police</strong><p>Get a police abstract, you'll need it for insurance and to dispute any fraudulent transactions.</p></div></div>
-  </div>
-
-  <div class="quiz-section">
-    <h3>Quick Check, Module Six</h3>
-    <div id="quiz-5"></div>
-    <button class="quiz-submit" onclick="submitQuiz(5)">Check Answers</button>
-    <div class="quiz-result" id="qresult-5"></div>
-  </div>
-  <div class="module-nav">
-    <button class="nav-btn" onclick="goModule(4)">← Previous</button>
-    <div style="display:flex;gap:10px;">
-      <button class="mark-done" id="done-5" onclick="markDone(5)">Mark Complete </button>
-      <button class="nav-btn primary" onclick="goModule(6)">Next Module →</button>
-    </div>
-  </div>
-</div>
-
-<!,  MODULE 7 , >
-<div class="module-section" id="mod-6">
-  <div class="section-eyebrow">Module Module Seven</div>
-  <h2>Data Protection and Privacy</h2>
-  <p class="lead">Your personal data is valuable, to you, to businesses, and to criminals. Understanding how it is collected, used, and protected helps you make better decisions about what you share and with whom.</p>
-
-  <h3>Why Your Data Has Value</h3>
-  <p>Your name, ID number, date of birth, phone number, location history, and browsing habits can be combined to build a profile that enables targeted attacks, financial fraud, or identity theft. Data brokers buy and sell this information legally. Criminals steal it illegally.</p>
-
-  <h3>The Kenya Data Protection Act 2019</h3>
-  <p>If you operate a business in Kenya or handle Kenyan residents' data, you are subject to the Kenya Data Protection Act. Key obligations include: obtaining consent before collecting personal data, telling people why you need their data, keeping it secure, and deleting it when it is no longer needed. Violations can result in fines of up to KSh 5 million or 3 years imprisonment for responsible officers.</p>
-
-  <h3>Backups, The 3-2-1 Rule</h3>
-  <p>The most overlooked form of data protection is a reliable backup. The 3-2-1 rule: keep <strong>3</strong> copies of important data, on <strong>2</strong> different types of storage, with <strong>1</strong> copy stored off-site or in the cloud. When ransomware encrypts your files, a clean backup means you can recover without paying the ransom.</p>
-
-  <h3>Social Media Privacy</h3>
-  <p>Review privacy settings on every platform. Default settings are usually the least private. Be deliberate about what personal information is publicly visible, your workplace, home area, daily routines, and family information can be used by attackers to craft convincing phishing messages or conduct physical surveillance.</p>
-
-  <div class="quiz-section">
-    <h3>Quick Check, Module Seven</h3>
-    <div id="quiz-6"></div>
-    <button class="quiz-submit" onclick="submitQuiz(6)">Check Answers</button>
-    <div class="quiz-result" id="qresult-6"></div>
-  </div>
-  <div class="module-nav">
-    <button class="nav-btn" onclick="goModule(5)">← Previous</button>
-    <div style="display:flex;gap:10px;">
-      <button class="mark-done" id="done-6" onclick="markDone(6)">Mark Complete </button>
-      <button class="nav-btn primary" onclick="goModule(7)">Next Module →</button>
-    </div>
-  </div>
-</div>
-
-<!,  MODULE 8 , >
-<div class="module-section" id="mod-7">
-  <div class="section-eyebrow">Module Module Eight</div>
-  <h2>When Things Go Wrong, Incident Response</h2>
-  <p class="lead">Even with the best precautions, incidents happen. Knowing what to do in the first hour after a security incident can make the difference between a minor setback and a catastrophic loss.</p>
-
-  <h3>Signs You May Have Been Compromised</h3>
-  <p>Your accounts show login activity from unknown locations. Contacts report receiving strange messages from you that you didn't send. Your phone suddenly loses service without explanation. Money you didn't send appears in your mobile money transaction history. Your device is slower than usual or shows apps you didn't install.</p>
-
-  <h3>The First Hour, What to Do</h3>
-  <div class="steps-list">
-    <div class="step-row"><div class="step-n">1</div><div class="step-c"><strong>Do not panic, act systematically</strong><p>Panicked decisions make things worse. Take a breath and work through the steps below.</p></div></div>
-    <div class="step-row"><div class="step-n">2</div><div class="step-c"><strong>Disconnect the affected device</strong><p>Take it offline (disable Wi-Fi and mobile data) to prevent further data exfiltration or spread.</p></div></div>
-    <div class="step-row"><div class="step-n">3</div><div class="step-c"><strong>Change all passwords from a clean device</strong><p>Start with email, then mobile money, then banking, then everything else.</p></div></div>
-    <div class="step-row"><div class="step-n">4</div><div class="step-c"><strong>Contact your bank and mobile money provider</strong><p>Report the incident immediately. Transactions may be reversible if reported quickly.</p></div></div>
-    <div class="step-row"><div class="step-n">5</div><div class="step-c"><strong>Document everything</strong><p>Screenshot suspicious messages, note dates and amounts, save transaction records.</p></div></div>
-    <div class="step-row"><div class="step-n">6</div><div class="step-c"><strong>Report to authorities</strong><p>DCI Cybercrime Unit in Kenya, INTERPOL Africa, or your national cybercrime reporting channel.</p></div></div>
-  </div>
-
-  <div class="key-box">
-    <div class="key-label">Africa Cybercrime Reporting</div>
-    <p>Kenya: DCI Cybercrime Unit, <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="35564c5750477551565c1b525a1b5e50">[email&#160;protected]</a> · Nigeria: EFCC, efcc.gov.ng · South Africa: SAPS Cybercrime, 10111 · Ghana: Cybercrime Unit, <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f192889394839283989c94b19699909f90819e9d989294df969e87df9699">[email&#160;protected]</a> · International: INTERPOL, interpol.int</p>
-  </div>
-
-  <div class="quiz-section">
-    <h3>Final Assessment, Module Eight</h3>
-    <p>Complete this final quiz to earn your certificate.</p>
-    <div id="quiz-7"></div>
-    <button class="quiz-submit" onclick="submitQuiz(7)">Submit Final Assessment</button>
-    <div class="quiz-result" id="qresult-7"></div>
-  </div>
-  <div class="module-nav">
-    <button class="nav-btn" onclick="goModule(6)">← Previous</button>
-    <div style="display:flex;gap:10px;">
-      <button class="mark-done" id="done-7" onclick="markDone(7)">Mark Complete </button>
-      <button class="nav-btn primary" onclick="checkCompletion()">Get Certificate </button>
-    </div>
-  </div>
-</div>
-
-<!,  CERTIFICATE , >
-<div class="cert-section" id="certSection">
-  <div class="cert-card">
-    <div style="font-family:var(, fm);font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(, light);margin-bottom:16px;">Certificate of Completion</div>
-    <h2>VUNVAULT Academy</h2>
-    <div style="font-family:var(, fm);font-size:0.75rem;color:var(, light);margin:8px 0 4px;">This certifies that</div>
-    <div class="cert-name" id="certName">Your Name</div>
-    <p>has successfully completed</p>
-    <p style="font-family:var(, fd);font-size:1.1rem;text-transform:uppercase;margin:8px 0;"><strong>Cybersecurity Foundations</strong></p>
-    <p style="font-size:0.82rem;color:var(, mid);margin-top:16px;">Awarded <span id="certDate"></span> · VUNVAULT Academy · vunvault.com</p>
-    <button class="cert-btn" onclick="window.print()">Print / Save Certificate</button>
-    <div style="margin-top:12px;"><a href="payment.html" style="font-family:var(, fm);font-size:0.75rem;color:var(, black);">Continue to Advanced Courses →</a></div>
-  </div>
-</div>
-
-</main>
-</div>
-
-<footer style="background:#fcfbf9;border-top:1px solid #e2e8f0;padding:64px 32px 32px;color:#64748b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px;border-bottom:1px solid #e2e8f0;">
-    <div>
-      <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px;">
-        <div style="width:32px;height:32px;border-radius:10px;background:#0f172a;display:flex;align-items:center;justify-content:center;color:#fff;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z"/></svg>
-        </div>
-        <span style="font-weight:800;font-size:1.3rem;letter-spacing:0.06em;color:#0f172a;text-transform:uppercase;">VUNVAULT</span>
-      </a>
-      <p style="font-size:0.88rem;line-height:1.6;color:#64748b;max-width:320px;">Africa-rooted, worldwide penetration testing, vulnerability assessments and cybersecurity education.</p>
-    </div>
-    <div>
-      <h4 style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#0f172a;margin-bottom:16px;">Resources</h4>
-      <ul style="list-style:none;padding:0;margin:0;font-size:0.88rem;display:flex;flex-direction:column;gap:10px;">
-        <li><a href="news.html" style="color:#64748b;text-decoration:none;">News</a></li>
-        <li><a href="blog.html" style="color:#64748b;text-decoration:none;">Blog</a></li>
-        <li><a href="index.html#scanner" style="color:#64748b;text-decoration:none;">Breach Watch</a></li>
-        <li><a href="blog.html" style="color:#64748b;text-decoration:none;">Templates</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4 style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#0f172a;margin-bottom:16px;">Company</h4>
-      <ul style="list-style:none;padding:0;margin:0;font-size:0.88rem;display:flex;flex-direction:column;gap:10px;">
-        <li><a href="index.html#about" style="color:#64748b;text-decoration:none;">About Us</a></li>
-        <li><a href="index.html#careers" style="color:#64748b;text-decoration:none;">Careers</a></li>
-        <li><a href="index.html#contact" style="color:#64748b;text-decoration:none;">Contact</a></li>
-        <li><a href="news.html" style="color:#64748b;text-decoration:none;">Press</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4 style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#0f172a;margin-bottom:16px;">Solutions</h4>
-      <ul style="list-style:none;padding:0;margin:0;font-size:0.88rem;display:flex;flex-direction:column;gap:10px;">
-        <li><a href="services.html" style="color:#64748b;text-decoration:none;">Small Business</a></li>
-        <li><a href="services.html" style="color:#64748b;text-decoration:none;">SACCO & Fintech</a></li>
-        <li><a href="services.html" style="color:#64748b;text-decoration:none;">Enterprise</a></li>
-        <li><a href="course-foundations.html" style="color:#64748b;text-decoration:none;">Security Training</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4 style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#0f172a;margin-bottom:16px;">Tools</h4>
-      <ul style="list-style:none;padding:0;margin:0;font-size:0.88rem;display:flex;flex-direction:column;gap:10px;">
-        <li><a href="index.html#scanner" style="color:#64748b;text-decoration:none;">Free Security Scan</a></li>
-        <li><a href="services.html" style="color:#64748b;text-decoration:none;">Pricing & Plans</a></li>
-        <li><a href="index.html#contact" style="color:#64748b;text-decoration:none;">Request a Report</a></li>
-      </ul>
-    </div>
-  </div>
-  <div style="max-width:1200px;margin:24px auto 0;display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;color:#64748b;">
-    <p>© 2026 VUNVAULT. All rights reserved.</p>
-    <div style="display:flex;gap:20px;">
-      <a href="#" style="color:#64748b;text-decoration:none;">Top</a>
-      <a href="services.html" style="color:#64748b;text-decoration:none;">Services</a>
-      <a href="course-foundations.html" style="color:#64748b;text-decoration:none;">Academy</a>
-      <a href="index.html#contact" style="color:#64748b;text-decoration:none;">Contact</a>
-    </div>
-  </div>
-</footer>
-
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-const MODULES=[
-  {name:'What Is Cybersecurity?',duration:'15 min'},
-  {name:'The Cyber Threat Landscape',duration:'20 min'},
-  {name:'The CIA Triad',duration:'15 min'},
-  {name:'Passwords and Authentication',duration:'20 min'},
-  {name:'Safe Browsing Habits',duration:'20 min'},
-  {name:'Device and Mobile Security',duration:'15 min'},
-  {name:'Data Protection and Privacy',duration:'15 min'},
-  {name:'Incident Response',duration:'20 min'},
-];
-
-const QUIZZES=[
-  {questions:[
-    {q:'What is the primary goal of cybersecurity?',opts:['Making computers faster','Protecting systems, data and networks from digital threats','Designing better software','Reducing internet costs'],correct:1},
-    {q:'Which of the following is a real consequence of a cyberattack on a business?',opts:['Faster internet speeds','Loss of customer trust and financial loss','More storage space','Better software updates'],correct:1},
-    {q:'Cybersecurity only matters for large corporations.',opts:['True','False'],correct:1},
-  ]},
-  {questions:[
-    {q:'What technique do attackers use to psychologically manipulate victims into revealing information?',opts:['Encryption','Social engineering','Firewalling','Patching'],correct:1},
-    {q:'Which of these is an example of a phishing attack?',opts:['A bank sending your monthly statement','An SMS claiming you won a prize and asking for your PIN','Your antivirus completing a scheduled scan','Your phone prompting for a software update'],correct:1},
-    {q:'Ransomware attacks encrypt your files and demand payment. What is the best protection?',opts:['Paying the ransom quickly','Having up-to-date backups stored off-device','Installing more antivirus software','Turning off your device when not in use'],correct:1},
-  ]},
-  {questions:[
-    {q:'What does the "C" in the CIA Triad stand for?',opts:['Computing','Cybersecurity','Confidentiality','Compliance'],correct:2},
-    {q:'A hospital\'s systems go offline during an emergency due to a cyberattack. Which CIA principle is violated?',opts:['Confidentiality','Integrity','Availability','All three equally'],correct:2},
-    {q:'An attacker changes the amount of a financial transaction from $100 to $1000 without detection. Which principle is violated?',opts:['Confidentiality','Integrity','Availability','None'],correct:1},
-  ]},
-  {questions:[
-    {q:'Which of these is the strongest password?',opts:['password123','Nairobi2026!','Xk#9mP2@rLqN (random, 12+ characters)','12345678'],correct:2},
-    {q:'What is the main advantage of a password manager?',opts:['It makes passwords shorter','It generates and stores unique strong passwords for every account','It replaces MFA entirely','It is free for all users'],correct:1},
-    {q:'MFA is valuable even when an attacker already has your correct password.',opts:['True, MFA adds a second verification step they cannot easily bypass','False, if they have your password, MFA cannot help'],correct:0},
-  ]},
-  {questions:[
-    {q:'A website showing "https://" in the address bar is guaranteed to be legitimate and safe.',opts:['True','False, HTTPS means the connection is encrypted, not that the site is trustworthy'],correct:1},
-    {q:'You are at an airport using free public Wi-Fi. What is the safest approach?',opts:['Use it freely, public Wi-Fi is always secure','Use a VPN and avoid accessing banking or sensitive accounts','Only use websites with .co.ke domains','Turn off your firewall to connect more easily'],correct:1},
-    {q:'A friend\'s WhatsApp sends you a link to download a "special MPesa bonus app". What should you do?',opts:['Download and install it immediately','Ignore it, only download apps from official app stores, and verify with your friend directly by calling','Forward it to other contacts','Save it for later'],correct:1},
-  ]},
-  {questions:[
-    {q:'Your phone shows a software update notification. When should you install it?',opts:['Wait 6 months to see if others have issues','As soon as possible, updates patch security vulnerabilities','Never, updates slow down your phone','Only when Wi-Fi is available, then wait indefinitely'],correct:1},
-    {q:'Your phone is stolen. What is your FIRST priority?',opts:['Buy a new phone','Change passwords for email and mobile money from another device immediately','Post about it on social media','Wait 24 hours before acting'],correct:1},
-  ]},
-  {questions:[
-    {q:'Under the Kenya Data Protection Act 2019, businesses that handle personal data must:',opts:['Pay a monthly fee to the government','Obtain consent, secure the data, and delete it when no longer needed','Share data with government agencies on request without consent','Store data on servers in the US only'],correct:1},
-    {q:'The 3-2-1 backup rule means:',opts:['3 passwords, 2 devices, 1 antivirus','3 copies of data, on 2 different storage types, with 1 copy off-site','3 users, 2 admins, 1 superuser','Check backups 3 times, on 2 occasions, 1 week apart'],correct:1},
-  ]},
-  {questions:[
-    {q:'Your phone suddenly loses all network service without explanation. This could be a sign of:',opts:['A software bug (always)','A SIM swap attack where attackers transferred your number','Low battery','Too many apps running'],correct:1},
-    {q:'What is the most important first action when you suspect your mobile money account is compromised?',opts:['Post about it on social media to warn others','Immediately call your mobile money provider to report it and potentially freeze the account','Wait to see if money disappears first','Change your phone wallpaper'],correct:1},
-    {q:'Why is documenting evidence during a cyber incident important?',opts:['It is not important, focus on recovery only','It helps investigations, insurance claims, and dispute resolution with financial institutions','To post proof on social media','Required by all employers'],correct:1},
-  ]},
-];
-
-let completed=JSON.parse(localStorage.getItem('vv_course_progress')||'[]');
-let currentMod=0;
-
-function buildSidebar(){
-  const list=document.getElementById('modList');
-  list.innerHTML='';
-  MODULES.forEach((m,i)=>{
-    const done=completed.includes(i);
-    const div=document.createElement('div');
-    div.className='mod-item'+(i===currentMod?' active':'')+(done?' done':'');
-    div.onclick=()=>goModule(i);
-    div.innerHTML=`<div class="mod-icon">${done?'':(i+1)}</div><div class="mod-text"><div class="mod-name">${m.name}</div><div class="mod-duration">${m.duration}</div></div>`;
-    list.appendChild(div);
-  });
-  const pct=Math.round((completed.length/8)*100);
-  document.getElementById('mainProgress').style.width=pct+'%';
-  document.getElementById('progLabel').textContent=`${completed.length} of 8 modules complete`;
-}
-
-function buildQuizzes(){
-  QUIZZES.forEach((quiz,qi)=>{
-    const container=document.getElementById('quiz-'+qi);
-    if(!container)return;
-    quiz.questions.forEach((q,qIdx)=>{
-      const div=document.createElement('div');
-      div.className='quiz-q';
-      div.innerHTML=`<div class="q-text">${qIdx+1}. ${q.q}</div><div class="quiz-options">${q.opts.map((o,oi)=>`<label class="quiz-opt" onclick="selectOpt(this,${qi},${qIdx})"><input type="radio" name="q${qi}_${qIdx}" value="${oi}"> ${o}</label>`).join('')}</div>`;
-      container.appendChild(div);
-    });
-  });
-}
-
-function selectOpt(el,qi,qIdx){
-  document.querySelectorAll(`[name="q${qi}_${qIdx}"]`).forEach(r=>r.closest('.quiz-opt').classList.remove('selected'));
-  el.classList.add('selected');
-}
-
-function submitQuiz(qi){
-  const quiz=QUIZZES[qi];
-  let correct=0;
-  quiz.questions.forEach((q,qIdx)=>{
-    const selected=document.querySelector(`[name="q${qi}_${qIdx}"]:checked`);
-    const opts=document.querySelectorAll(`[name="q${qi}_${qIdx}"]`);
-    opts.forEach(r=>{
-      const lbl=r.closest('.quiz-opt');
-      lbl.classList.remove('correct','wrong','selected');
-    });
-    if(selected){
-      const val=parseInt(selected.value);
-      selected.closest('.quiz-opt').classList.add(val===q.correct?'correct':'wrong');
-      if(val===q.correct){correct++;
-        opts[q.correct].closest('.quiz-opt').classList.add('correct');
-      } else {
-        opts[q.correct].closest('.quiz-opt').classList.add('correct');
-      }
-    } else {
-      opts[q.correct].closest('.quiz-opt').classList.add('correct');
-    }
-  });
-  const total=quiz.questions.length;
-  const pass=correct>=Math.ceil(total*0.6);
-  const res=document.getElementById('qresult-'+qi);
-  res.style.display='block';
-  res.className='quiz-result '+(pass?'pass':'fail');
-  res.textContent=pass?` ${correct}/${total} correct, great work! You can proceed.`:`${correct}/${total} correct, review the material above and try again.`;
-}
-
-function markDone(i){
-  if(!completed.includes(i)){
-    completed.push(i);
-    localStorage.setItem('vv_course_progress',JSON.stringify(completed));
+<script>
+const KEY='vv-foundations-v1';
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{done:[]}}catch(e){return{done:[]}}}
+function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
+function unlock(){
+  const s=load();
+  for(let i=1;i<=8;i++){
+    const el=document.getElementById('m'+i);
+    if(!el) continue;
+    if(i===1 || s.done.includes(i-1)) el.classList.remove('locked');
+    if(s.done.includes(i)) el.style.outline='2px solid #a7f3d0';
   }
-  const btn=document.getElementById('done-'+i);
-  btn.textContent=' Completed';
-  btn.classList.add('done-state');
-  buildSidebar();
-}
-
-function goModule(i){
-  document.querySelectorAll('.module-section').forEach(s=>s.classList.remove('active'));
-  document.getElementById('mod-'+i).classList.add('active');
-  document.getElementById('certSection').className='cert-section';
-  currentMod=i;
-  buildSidebar();
-  document.querySelector('.content').scrollIntoView({behavior:'smooth'});
-}
-
-function checkCompletion(){
-  markDone(7);
-  if(completed.length>=6){
-    const name=prompt('Enter your name for the certificate:','');
-    if(name){
-      document.querySelectorAll('.module-section').forEach(s=>s.classList.remove('active'));
-      document.getElementById('certSection').className='cert-section show';
-      document.getElementById('certName').textContent=name;
-      document.getElementById('certDate').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-    }
-  } else {
-    alert('Complete at least 6 modules before claiming your certificate.');
+  const n=s.done.length;
+  document.getElementById('progLabel').textContent=n+' of 8 modules complete';
+  document.getElementById('progPct').textContent=Math.round(n/8*100)+'%';
+  document.getElementById('progBar').style.width=(n/8*100)+'%';
+  if(n===8){
+    document.getElementById('cert').style.display='block';
+    document.getElementById('certDate').textContent=new Date().toLocaleDateString();
   }
 }
-
-// Restore done state on buttons
-function restoreDoneStates(){
-  completed.forEach(i=>{
-    const btn=document.getElementById('done-'+i);
-    if(btn){btn.textContent=' Completed';btn.classList.add('done-state');}
+function grade(btn){
+  const quiz=btn.closest('.quiz');
+  let ok=0,total=0;
+  quiz.querySelectorAll('.q').forEach(q=>{
+    total++;
+    const labels=[...q.querySelectorAll('label')];
+    const ans=+q.dataset.a;
+    labels.forEach((l,i)=>l.classList.remove('ok','bad'));
+    const picked=labels.findIndex(l=>l.querySelector('input').checked);
+    if(picked===ans){ok++; labels[ans].classList.add('ok');}
+    else{if(picked>=0) labels[picked].classList.add('bad'); labels[ans].classList.add('ok');}
   });
+  const need=+quiz.dataset.need||2;
+  quiz.querySelector('.result').textContent=ok+' / '+total+' correct'+(ok>=need?' — you can mark this complete.':' — review and try again.');
+  quiz.dataset.passed=ok>=need?'1':'0';
 }
-
-buildSidebar();
-buildQuizzes();
-restoreDoneStates();
+function complete(n){
+  const quiz=document.querySelector('#m'+n+' .quiz');
+  if(quiz && quiz.dataset.passed!=='1'){
+    quiz.querySelector('.result').textContent='Pass the check first ('+quiz.dataset.need+' correct).';
+    return;
+  }
+  const s=load();
+  if(!s.done.includes(n)) s.done.push(n);
+  save(s); unlock();
+  const next=document.getElementById('m'+(n+1));
+  if(next) next.scrollIntoView({behavior:'smooth',block:'start'});
+  else document.getElementById('cert').scrollIntoView({behavior:'smooth'});
+}
+unlock();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a239c8d58f586450',t:'MTc4NTQ3MTM1Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a26c1dbd1afe6450',t:'MTc4NTk5OTExOA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
