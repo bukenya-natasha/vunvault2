@@ -3,464 +3,130 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cybersecurity Foundations — VUNVAULT Academy</title>
-<meta name="description" content="Eight self-paced modules with spoken narration, Africa-focused examples, quizzes and a certificate.">
+<title>VUNVAULT Academy — Professional cybersecurity learning</title>
+<meta name="description" content="A free, self-paced cybersecurity academy for learners worldwide. Foundations, digital hygiene, self-OSINT and incident first-hour — with quizzes, spoken narration and certificates. Built from Africa’s front line.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --void:#fcfbf9; --line:#e2e8f0; --soft:#f1f5f9;
-    --ink:#0f172a; --sub:#64748b; --cyan:#0891b2; --cyan-dark:#0e7490; --cyan-soft:#e0f2fe;
-    --green:#059669; --red:#dc2626; --ok:#ecfdf5; --bad:#fef2f2;
-    --display:'Space Grotesk',sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'IBM Plex Mono',monospace;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--void);color:var(--ink);font-family:var(--body);line-height:1.65;}
-  img{display:block;max-width:100%;}
-  a{color:inherit;text-decoration:none;}
-  .wrap{max-width:820px;margin:0 auto;padding:0 22px;}
-  h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:-.015em;line-height:1.15;}
-  header{position:sticky;top:0;z-index:40;background:rgba(252,251,249,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
-  header .bar{max-width:1100px;margin:0 auto;padding:12px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
-  .logo{font-family:var(--display);letter-spacing:.14em;font-weight:700;}
-  nav a{font-size:.86rem;font-weight:600;color:var(--sub);padding:6px 10px;border-radius:999px;}
-  nav a.active,nav a:hover{color:var(--ink);background:rgba(15,23,42,.07);}
-  .hero{padding:52px 0 28px;}
-  .kicker{display:inline-block;font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan-dark);background:var(--cyan-soft);border:1px solid #bae6fd;padding:6px 12px;border-radius:999px;margin-bottom:14px;}
-  .hero h1{font-size:clamp(2rem,4.4vw,3rem);margin-bottom:12px;}
-  .hero h1 em{font-style:normal;color:var(--cyan-dark);}
-  .hero .lede{color:var(--sub);font-size:1.05rem;max-width:620px;margin-bottom:18px;}
-  .pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
-  .pills span{font-family:var(--mono);font-size:.72rem;border:1px solid var(--line);background:#fff;padding:6px 11px;border-radius:999px;color:var(--sub);}
-  .progress{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:18px 0 8px;}
-  .progress .top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.75rem;color:var(--sub);margin-bottom:8px;}
-  .bar-bg{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;}
-  .bar-fg{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--cyan-dark));transition:width .3s;}
-  .hero-pic{border-radius:16px;overflow:hidden;border:1px solid var(--line);margin:22px 0 8px;}
-  .hero-pic img{width:100%;height:280px;object-fit:cover;}
-
-  .mod{background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px 24px;margin:18px 0 28px;}
-  .mod.locked{opacity:.55;pointer-events:none;}
-  .mod h2{font-size:1.45rem;margin:6px 0 8px;}
-  .mod .num{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan-dark);}
-  .mod p{margin:0 0 12px;color:#1e293b;}
-  .mod h3{font-size:1.08rem;margin:20px 0 8px;}
-  .mod ul{margin:0 0 12px 1.15rem;}
-  .mod li{margin:0 0 6px;}
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0;}
-  .stat{background:var(--cyan-soft);border-radius:12px;padding:14px 12px;text-align:center;}
-  .stat b{display:block;font-family:var(--display);font-size:1.35rem;color:var(--cyan-dark);}
-  .stat span{font-size:.75rem;color:var(--sub);}
-  .callout{border-left:4px solid var(--cyan);background:var(--cyan-soft);padding:12px 14px;border-radius:0 10px 10px 0;margin:14px 0;color:#155e75;}
-  .warn{border-left-color:var(--red);background:var(--bad);color:#7f1d1d;}
-  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0;}
-  .tile{border:1px solid var(--line);border-radius:12px;padding:12px;}
-  .tile h4{font-size:.92rem;margin-bottom:4px;}
-  .tile p{font-size:.84rem;color:var(--sub);margin:0;}
-  audio{width:100%;margin:10px 0 16px;}
-  .quiz{background:var(--soft);border-radius:12px;padding:16px;margin-top:16px;}
-  .quiz h3{margin-top:0;}
-  .q{margin:0 0 14px;}
-  .q p{font-weight:600;margin-bottom:6px;}
-  .q label{display:block;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:5px 0;cursor:pointer;font-size:.92rem;}
-  .q label:has(input:checked){border-color:var(--cyan);background:var(--cyan-soft);}
-  .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
-  button{font-family:var(--body);font-weight:700;border:0;border-radius:999px;padding:10px 18px;cursor:pointer;}
-  .btn{background:var(--ink);color:#fff;}
-  .btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink);}
-  .ok{background:var(--ok);border-color:#86efac !important;}
-  .bad{background:var(--bad);border-color:#fca5a5 !important;}
-  .result{font-family:var(--mono);font-size:.8rem;margin-top:8px;}
-  #cert{display:none;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:28px 0;background:#fff;}
-  #cert .inner{padding:28px;text-align:center;background:linear-gradient(180deg,rgba(224,242,254,.7),#fff);}
-  #cert input{border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:1rem;width:min(320px,90%);}
-  footer{border-top:1px solid var(--line);padding:28px 0;color:var(--sub);font-size:.82rem;margin-top:24px;}
-  @media(max-width:700px){.stats,.grid3{grid-template-columns:1fr;}}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/academy.css">
 </head>
 <body>
-<header>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
   <div class="bar">
-    <a class="logo" href="academy.html">VUNVAULT</a>
+    <a class="logo" href="index.html">VUNVAULT</a>
     <nav>
+      <a href="services.html">Services</a>
       <a href="news.html">News</a>
       <a href="academy.html" class="active">Academy</a>
       <a href="press-and-media.html">Press</a>
     </nav>
+    <a class="cta" href="course-foundations.html">Start Foundations</a>
   </div>
 </header>
 
+<main id="main">
+<section class="wrap hero">
+  <div>
+    <div class="kicker">VUNVAULT Academy · Free · Self-paced</div>
+    <h1>Cybersecurity, taught like a <em>newsroom</em> — used like a job.</h1>
+    <p class="lede">Professional courses for people worldwide who need to defend phones, wallets, teams and networks. Africa-first examples. Global standards. Spoken lessons, quizzes and a certificate — no coding required to start.</p>
+    <div class="hero-actions">
+      <a class="cta" href="course-foundations.html">Begin Cybersecurity Foundations</a>
+      <a class="cta ghost" href="#catalogue">Browse the catalogue</a>
+    </div>
+    <p class="lede" style="font-size:.9rem;">Aligned to ideas in NIST CSF 2.0, the CIA triad, and everyday incident practice. Not a degree mill — a skills floor.</p>
+  </div>
+  <div class="hero-pic">
+    <img src="images/academy-campus.jpg" alt="Learners in the VUNVAULT Academy studio">
+  </div>
+</section>
+
 <div class="wrap">
-  <section class="hero">
-    <div class="kicker">Beginner · No coding · Self-paced</div>
-    <h1>Cybersecurity <em>Foundations</em></h1>
-    <p class="lede">Core concepts, real threats and practical habits — with spoken narration. Understand how attackers think, and how to stop them, without writing a line of code.</p>
-    <div class="pills">
-      <span>8 modules</span><span>~2 hours</span><span>Africa-focused examples</span><span>Voice narration</span><span>Certificate</span>
-    </div>
-    <div class="progress">
-      <div class="top"><span id="progLabel">0 of 8 modules complete</span><span id="progPct">0%</span></div>
-      <div class="bar-bg"><div class="bar-fg" id="progBar"></div></div>
-    </div>
-    <div class="hero-pic"><img src="images/academy-hero.jpg" alt="Learners in a VUNVAULT Academy session"></div>
-  </section>
-
-  <!-- MODULE 1 -->
-  <section class="mod" id="m1">
-    <div class="num">Module one</div>
-    <h2>What is cybersecurity?</h2>
-    <p>Press play to hear this lesson, then read and take the check. You need 2 of 3 to unlock the next module.</p>
-    <audio controls src="audio/mod-01.mp3"></audio>
-    <img src="images/academy-module1.jpg" alt="" style="border-radius:12px;margin:0 0 16px;width:100%;max-height:240px;object-fit:cover;">
-    <p>Cybersecurity is the practice of protecting computers, networks, applications and data from digital attacks, unauthorised access, damage or theft. It covers the password on your phone, hospital records, and the rails that move money.</p>
-    <p>Think of home security — locks, lights, a safe — applied to the digital world. A burglar must be at your door. A cybercriminal can attack from anywhere, unseen.</p>
-    <h3>Why Africa is on the front line</h3>
-    <p>Mobile money, digital banking and cloud tools brought millions into the formal economy. The same platforms are targets.</p>
-    <div class="stats">
-      <div class="stat"><b>$4B+</b><span>Lost to cybercrime in Africa yearly</span></div>
-      <div class="stat"><b>32M+</b><span>Active mobile-money users in Kenya</span></div>
-      <div class="stat"><b>70%</b><span>Of African SMEs have no security plan</span></div>
-    </div>
-    <p>These numbers are meant to motivate, not frighten. People who know the basics are far less likely to become victims.</p>
-    <h3>What it actually protects</h3>
-    <p><strong>Your money</strong> — wallets, banks, investments. <strong>Your identity</strong> — national ID, passport, biometrics. <strong>Your business</strong> — customers, secrets, operations. <strong>Your reputation</strong> — trust that took years to build.</p>
-    <div class="callout"><strong>Takeaway.</strong> Cybersecurity is personal safety, business continuity and national security. If you use a phone, you are a target and a defender.</div>
-    <div class="quiz" data-need="2">
-      <h3>Quick check</h3>
-      <div class="q" data-a="1"><p>1. Primary goal of cybersecurity?</p>
-        <label><input type="radio" name="q1a"> Making computers faster</label>
-        <label><input type="radio" name="q1a"> Protecting systems, data and networks from digital threats</label>
-        <label><input type="radio" name="q1a"> Designing better software</label>
-      </div>
-      <div class="q" data-a="1"><p>2. A real consequence of a cyberattack on a business?</p>
-        <label><input type="radio" name="q1b"> Faster internet</label>
-        <label><input type="radio" name="q1b"> Loss of customer trust and financial loss</label>
-        <label><input type="radio" name="q1b"> More storage space</label>
-      </div>
-      <div class="q" data-a="1"><p>3. Cybersecurity only matters for large corporations.</p>
-        <label><input type="radio" name="q1c"> True</label>
-        <label><input type="radio" name="q1c"> False</label>
-      </div>
-      <div class="actions">
-        <button class="btn" type="button" onclick="grade(this)">Check answers</button>
-        <button class="btn-ghost" type="button" onclick="complete(1)">Mark complete →</button>
-      </div>
-      <div class="result"></div>
-    </div>
-  </section>
-
-  <section class="mod locked" id="m2">
-    <div class="num">Module two</div>
-    <h2>The cyber threat landscape</h2>
-    <audio controls src="audio/mod-02.mp3"></audio>
-    <p>Phishing is the most common attack: someone pretends to be a bank, a company or a friend and tricks you into handing over a PIN or password.</p>
-    <div class="callout warn"><strong>Real example, Kenya.</strong> “Congratulations! Your M-Pesa won KSh 50,000. Click and enter your PIN before midnight.” Safaricom never asks for your PIN this way.</div>
-    <div class="grid3">
-      <div class="tile"><h4>Phishing</h4><p>Fake messages that steal credentials or money.</p></div>
-      <div class="tile"><h4>Malware</h4><p>Software that spies, steals or damages a device.</p></div>
-      <div class="tile"><h4>Ransomware</h4><p>Encrypts files and demands payment.</p></div>
-      <div class="tile"><h4>Social engineering</h4><p>Psychology, not code, to make you act.</p></div>
-      <div class="tile"><h4>SIM swapping</h4><p>Moving your number onto an attacker’s SIM.</p></div>
-      <div class="tile"><h4>Man-in-the-middle</h4><p>Quietly reading traffic between two parties.</p></div>
-    </div>
-    <h3>When ransomware hit a hospital</h3>
-    <p>In 2020 Life Healthcare in South Africa had records and admissions encrypted. Care went back to paper. Recovery took weeks. Healthcare, finance and government here are now regular targets.</p>
-    <p>Social engineering uses <strong>urgency</strong>, <strong>authority</strong>, <strong>fear</strong> and <strong>fake favours</strong>. Spot the trigger and you break the attack.</p>
-    <div class="quiz" data-need="2">
-      <h3>Quick check</h3>
-      <div class="q" data-a="1"><p>1. Technique that psychologically manipulates victims?</p>
-        <label><input type="radio" name="q2a"> Encryption</label>
-        <label><input type="radio" name="q2a"> Social engineering</label>
-        <label><input type="radio" name="q2a"> Patching</label>
-      </div>
-      <div class="q" data-a="1"><p>2. Example of phishing?</p>
-        <label><input type="radio" name="q2b"> Your bank’s monthly statement</label>
-        <label><input type="radio" name="q2b"> An SMS claiming a prize and asking for your PIN</label>
-        <label><input type="radio" name="q2b"> A scheduled antivirus scan</label>
-      </div>
-      <div class="q" data-a="1"><p>3. Best protection against ransomware?</p>
-        <label><input type="radio" name="q2c"> Paying quickly</label>
-        <label><input type="radio" name="q2c"> Up-to-date backups stored off-device</label>
-        <label><input type="radio" name="q2c"> Installing more antivirus only</label>
-      </div>
-      <div class="actions">
-        <button class="btn" type="button" onclick="grade(this)">Check answers</button>
-        <button class="btn-ghost" type="button" onclick="complete(2)">Mark complete →</button>
-      </div>
-      <div class="result"></div>
-    </div>
-  </section>
-
-  <section class="mod locked" id="m3">
-    <div class="num">Module three</div>
-    <h2>The CIA triad</h2>
-    <audio controls src="audio/mod-03.mp3"></audio>
-    <div class="grid3">
-      <div class="tile"><h4>Confidentiality</h4><p>Only authorised people can see the data — your balance is not public.</p></div>
-      <div class="tile"><h4>Integrity</h4><p>The number has not been silently changed in transit.</p></div>
-      <div class="tile"><h4>Availability</h4><p>Systems work when needed — hospital records at 3 a.m.</p></div>
-    </div>
-    <p>Send mobile money and all three apply: only you and the recipient should see it; the amount must not change; the service must be up when you need to pay school fees.</p>
-    <div class="callout">Ask of every control: does it protect confidentiality, integrity and availability? A “no” is a gap.</div>
-    <div class="quiz" data-need="2">
-      <h3>Quick check</h3>
-      <div class="q" data-a="2"><p>1. The “C” in CIA stands for?</p>
-        <label><input type="radio" name="q3a"> Computing</label>
-        <label><input type="radio" name="q3a"> Cybersecurity</label>
-        <label><input type="radio" name="q3a"> Confidentiality</label>
-      </div>
-      <div class="q" data-a="2"><p>2. Hospital systems offline in an emergency — which principle?</p>
-        <label><input type="radio" name="q3b"> Confidentiality</label>
-        <label><input type="radio" name="q3b"> Integrity</label>
-        <label><input type="radio" name="q3b"> Availability</label>
-      </div>
-      <div class="q" data-a="1"><p>3. A transfer silently changes from $100 to $1,000.</p>
-        <label><input type="radio" name="q3c"> Confidentiality</label>
-        <label><input type="radio" name="q3c"> Integrity</label>
-        <label><input type="radio" name="q3c"> Availability</label>
-      </div>
-      <div class="actions">
-        <button class="btn" type="button" onclick="grade(this)">Check answers</button>
-        <button class="btn-ghost" type="button" onclick="complete(3)">Mark complete →</button>
-      </div>
-      <div class="result"></div>
-    </div>
-  </section>
-
-  <section class="mod locked" id="m4">
-    <div class="num">Module four</div>
-    <h2>Passwords and authentication</h2>
-    <audio controls src="audio/mod-04.mp3"></audio>
-    <p>Stolen credentials start a huge share of breaches. Of 19 billion leaked passwords studied in 2024–25, only 6% were unique. Reuse means one leak opens every other account.</p>
-    <p><strong>password123</strong> is weak. <strong>Nairobi2026!</strong> is medium. A long random string from a manager is strong.</p>
-    <p>Use a password manager — Bitwarden, Google Password Manager or Apple Keychain. Then add MFA. Microsoft’s research: MFA blocks over 99% of identity attacks even when the password is already stolen.</p>
-    <ol>
-      <li>Enable MFA on email first — it resets everything else.</li>
-      <li>Then banking and mobile money.</li>
-      <li>Prefer an authenticator app over SMS (SIM-swap can steal SMS codes).</li>
-      <li>Print backup codes and store them offline.</li>
-    </ol>
-    <div class="quiz" data-need="2">
-      <h3>Quick check</h3>
-      <div class="q" data-a="2"><p>1. Strongest password?</p>
-        <label><input type="radio" name="q4a"> password123</label>
-        <label><input type="radio" name="q4a"> Nairobi2026!</label>
-        <label><input type="radio" name="q4a"> Xk#9mP2@rLqN (random, 12+ characters)</label>
-      </div>
-      <div class="q" data-a="1"><p>2. Main advantage of a password manager?</p>
-        <label><input type="radio" name="q4b"> Shorter passwords</label>
-        <label><input type="radio" name="q4b"> Unique strong passwords for every account</label>
-        <label><input type="radio" name="q4b"> It replaces MFA</label>
-      </div>
-      <div class="q" data-a="0"><p>3. MFA still helps if the attacker has your password.</p>
-        <label><input type="radio" name="q4c"> True</label>
-        <label><input type="radio" name="q4c"> False</label>
-      </div>
-      <div class="actions">
-        <button class="btn" type="button" onclick="grade(this)">Check answers</button>
-        <button class="btn-ghost" type="button" onclick="complete(4)">Mark complete →</button>
-      </div>
-      <div class="result"></div>
-    </div>
-  </section>
-
-  <section class="mod locked" id="m5">
-    <div class="num">Module five</div>
-    <h2>Safe browsing and online habits</h2>
-    <audio controls src="audio/mod-05.mp3"></audio>
-    <p><strong>https://</strong> and a padlock mean the connection is encrypted — not that the site is honest. Phishing sites use HTTPS too. Read the full domain: <em>safaricom.co.ke</em> is not <em>safar1com.co.ke</em>.</p>
-    <div class="callout warn">Red flags: urgency, PIN requests, misspelled domains, surprise WhatsApp links, “download this to verify.”</div>
-    <p>Do not open banking or M-Pesa on café or airport Wi-Fi without a VPN. Proton VPN is a reputable free start. Install apps only from official stores — never a “bonus M-Pesa app” from chat.</p>
-    <div class="quiz" data-need="2">
-      <h3>Quick check</h3>
-      <div class="q" data-a="1"><p>1. HTTPS guarantees a site is legitimate.</p>
-        <label><input type="radio" name="q5a"> True</label>
-        <label><input type="radio" name="q5a"> False — it only encrypts the connection</label>
-      </div>
-      <div class="q" data-a="1"><p>2. Safest use of airport Wi-Fi?</p>
-        <label><input type="radio" name="q5b"> Use it freely</label>
-        <label><input type="radio" name="q5b"> Use a VPN and avoid banking</label>
-        <label><input type="radio" name="q5b"> Turn the firewall off</label>
-      </div>
-      <div class="q" data-a="1"><p>3. A friend’s WhatsApp sends a “special M-Pesa bonus app”.</p>
-        <label><input type="radio" name="q5c"> Install it</label>
-        <label><input type="radio" name="q5c"> Ignore it; only use official stores; call your friend</label>
-        <label><input type="radio" name="q5c"> Forward it</label>
-      </div>
-      <div class="actions">
-        <button class="btn" type="button" onclick="grade(this)">Check answers</button>
-        <button class="btn-ghost" type="button" onclick="complete(5)">Mark complete →</button>
-      </div>
-      <div class="result"></div>
-    </div>
-  </section>
-
-  <section class="mod locked" id="m6">
-    <div class="num">Module six</div>
-    <h2>Device and mobile security</h2>
-    <audio controls src="audio/mod-06.mp3"></audio>
-    <p>Your phone is wallet, ID and bank. Install updates — they patch holes attackers already use. Audit app permissions. Lock every device; encryption usually follows the lock screen.</p>
-    <h3>If the phone is stolen</h3>
-    <ol>
-      <li>Change email and mobile-money passwords from another device first.</li>
-      <li>Call the network and lock the SIM so it cannot be swapped.</li>
-      <li>Use Find My Device to locate, lock or erase.</li>
-      <li>Get a police abstract for insurance and dispute fraud.</li>
-    </ol>
-    <div class="quiz" data-need="2">
-      <h3>Quick check</h3>
-      <div class="q" data-a="1"><p>1. When should you install a software update?</p>
-        <label><input type="radio" name="q6a"> Wait six months</label>
-        <label><input type="radio" name="q6a"> As soon as you reasonably can</label>
-        <label><input type="radio" name="q6a"> Never</label>
-      </div>
-      <div class="q" data-a="1"><p>2. First priority if the phone is stolen?</p>
-        <label><input type="radio" name="q6b"> Buy a new phone</label>
-        <label><input type="radio" name="q6b"> Change email and mobile-money passwords immediately</label>
-        <label><input type="radio" name="q6b"> Wait 24 hours</label>
-      </div>
-      <div class="actions">
-        <button class="btn" type="button" onclick="grade(this)">Check answers</button>
-        <button class="btn-ghost" type="button" onclick="complete(6)">Mark complete →</button>
-      </div>
-      <div class="result"></div>
-    </div>
-  </section>
-
-  <section class="mod locked" id="m7">
-    <div class="num">Module seven</div>
-    <h2>Data protection and privacy</h2>
-    <audio controls src="audio/mod-07.mp3"></audio>
-    <p>Name, ID, date of birth, phone and habits can be stitched into a fraud profile. Brokers buy this data. Criminals steal it.</p>
-    <p>In Kenya the <strong>Data Protection Act 2019</strong> requires consent, a stated purpose, security, and deletion when you no longer need the data. Fines can reach KSh 5 million; officers can face prison.</p>
-    <p><strong>3-2-1 backups:</strong> three copies, two kinds of storage, one copy off-site or in the cloud. That is how you recover from ransomware without paying.</p>
-    <p>Tighten social privacy. Work, home area and routines help attackers write convincing lures.</p>
-    <div class="quiz" data-need="2">
-      <h3>Quick check</h3>
-      <div class="q" data-a="1"><p>1. Under Kenya’s Data Protection Act, businesses must:</p>
-        <label><input type="radio" name="q7a"> Pay a monthly government fee</label>
-        <label><input type="radio" name="q7a"> Obtain consent, secure data, delete when done</label>
-        <label><input type="radio" name="q7a"> Store data only in the US</label>
-      </div>
-      <div class="q" data-a="1"><p>2. The 3-2-1 rule means:</p>
-        <label><input type="radio" name="q7b"> 3 passwords, 2 devices, 1 antivirus</label>
-        <label><input type="radio" name="q7b"> 3 copies, 2 storage types, 1 copy off-site</label>
-        <label><input type="radio" name="q7b"> Check backups three times a week</label>
-      </div>
-      <div class="actions">
-        <button class="btn" type="button" onclick="grade(this)">Check answers</button>
-        <button class="btn-ghost" type="button" onclick="complete(7)">Mark complete →</button>
-      </div>
-      <div class="result"></div>
-    </div>
-  </section>
-
-  <section class="mod locked" id="m8">
-    <div class="num">Module eight</div>
-    <h2>When things go wrong</h2>
-    <audio controls src="audio/mod-08.mp3"></audio>
-    <p>Warning signs: logins from unknown places, messages you did not send, a phone that suddenly has no service (possible SIM swap), money you did not send, apps you did not install.</p>
-    <h3>The first hour</h3>
-    <ol>
-      <li>Do not panic. Work the list.</li>
-      <li>Disconnect the device (Wi-Fi and mobile data off).</li>
-      <li>Change passwords from a clean device — email, then mobile money, then banking.</li>
-      <li>Call the bank or M-Pesa immediately. Fast reports sometimes reverse a transfer.</li>
-      <li>Screenshot everything.</li>
-      <li>Report: Kenya DCI Cybercrime Unit · Nigeria EFCC · South Africa SAPS 10111 · Interpol.</li>
-    </ol>
-    <div class="quiz" data-need="2">
-      <h3>Final assessment</h3>
-      <div class="q" data-a="1"><p>1. Phone suddenly loses all network. This could be:</p>
-        <label><input type="radio" name="q8a"> Always just a software bug</label>
-        <label><input type="radio" name="q8a"> A SIM-swap in progress</label>
-        <label><input type="radio" name="q8a"> Too many apps</label>
-      </div>
-      <div class="q" data-a="1"><p>2. First action if mobile money looks compromised?</p>
-        <label><input type="radio" name="q8b"> Post on social media</label>
-        <label><input type="radio" name="q8b"> Call the provider and freeze the account</label>
-        <label><input type="radio" name="q8b"> Wait and see</label>
-      </div>
-      <div class="q" data-a="1"><p>3. Why document evidence?</p>
-        <label><input type="radio" name="q8c"> It is not important</label>
-        <label><input type="radio" name="q8c"> Investigations, insurance and disputes</label>
-        <label><input type="radio" name="q8c"> To post proof online</label>
-      </div>
-      <div class="actions">
-        <button class="btn" type="button" onclick="grade(this)">Submit final assessment</button>
-        <button class="btn-ghost" type="button" onclick="complete(8)">Mark complete &amp; get certificate</button>
-      </div>
-      <div class="result"></div>
-    </div>
-  </section>
-
-  <section id="cert">
-    <div class="inner">
-      <div class="kicker">Certificate of completion</div>
-      <h2>VUNVAULT Academy</h2>
-      <p>This certifies that</p>
-      <p><input id="certName" placeholder="Your name" aria-label="Your name"></p>
-      <p>has successfully completed</p>
-      <p><strong>Cybersecurity Foundations</strong></p>
-      <p style="color:var(--sub);font-size:.85rem;margin-top:10px;">Awarded <span id="certDate"></span> · vunvault.com</p>
-      <div class="actions" style="justify-content:center;"><button class="btn" type="button" onclick="window.print()">Print / save</button></div>
-    </div>
-  </section>
+  <div class="metrics">
+    <div class="metric"><b>3</b><span>Live courses</span></div>
+    <div class="metric"><b>20</b><span>Modules across the catalogue</span></div>
+    <div class="metric"><b>~6 hrs</b><span>Total study if you take all three</span></div>
+    <div class="metric"><b>0</b><span>Tuition. Always.</span></div>
+  </div>
 </div>
-<footer><div class="wrap">© 2026 VUNVAULT Academy · Spoken narration is generated audio, not a filmed lecture.</div></footer>
 
-<script>
-const KEY='vv-foundations-v1';
-function load(){try{return JSON.parse(localStorage.getItem(KEY))||{done:[]}}catch(e){return{done:[]}}}
-function save(s){localStorage.setItem(KEY,JSON.stringify(s))}
-function unlock(){
-  const s=load();
-  for(let i=1;i<=8;i++){
-    const el=document.getElementById('m'+i);
-    if(!el) continue;
-    if(i===1 || s.done.includes(i-1)) el.classList.remove('locked');
-    if(s.done.includes(i)) el.style.outline='2px solid #a7f3d0';
-  }
-  const n=s.done.length;
-  document.getElementById('progLabel').textContent=n+' of 8 modules complete';
-  document.getElementById('progPct').textContent=Math.round(n/8*100)+'%';
-  document.getElementById('progBar').style.width=(n/8*100)+'%';
-  if(n===8){
-    document.getElementById('cert').style.display='block';
-    document.getElementById('certDate').textContent=new Date().toLocaleDateString();
-  }
-}
-function grade(btn){
-  const quiz=btn.closest('.quiz');
-  let ok=0,total=0;
-  quiz.querySelectorAll('.q').forEach(q=>{
-    total++;
-    const labels=[...q.querySelectorAll('label')];
-    const ans=+q.dataset.a;
-    labels.forEach((l,i)=>l.classList.remove('ok','bad'));
-    const picked=labels.findIndex(l=>l.querySelector('input').checked);
-    if(picked===ans){ok++; labels[ans].classList.add('ok');}
-    else{if(picked>=0) labels[picked].classList.add('bad'); labels[ans].classList.add('ok');}
-  });
-  const need=+quiz.dataset.need||2;
-  quiz.querySelector('.result').textContent=ok+' / '+total+' correct'+(ok>=need?' — you can mark this complete.':' — review and try again.');
-  quiz.dataset.passed=ok>=need?'1':'0';
-}
-function complete(n){
-  const quiz=document.querySelector('#m'+n+' .quiz');
-  if(quiz && quiz.dataset.passed!=='1'){
-    quiz.querySelector('.result').textContent='Pass the check first ('+quiz.dataset.need+' correct).';
-    return;
-  }
-  const s=load();
-  if(!s.done.includes(n)) s.done.push(n);
-  save(s); unlock();
-  const next=document.getElementById('m'+(n+1));
-  if(next) next.scrollIntoView({behavior:'smooth',block:'start'});
-  else document.getElementById('cert').scrollIntoView({behavior:'smooth'});
-}
-unlock();
-</script>
+<section class="wrap section" id="catalogue">
+  <h2>Catalogue</h2>
+  <p class="sub">Start at Foundations. Then clean your own estate. Then practise the first hour of an incident. That is a complete beginner-to-useful path.</p>
+  <div class="grid3">
+    <article class="card">
+      <img src="images/academy-foundations-card.jpg" alt="">
+      <div class="pad">
+        <div class="pills"><span class="live">Live</span><span>Beginner</span><span>8 modules</span></div>
+        <h3>Cybersecurity Foundations</h3>
+        <p>How attackers think, CIA triad, passwords, browsing, devices, privacy and the first hour — with spoken narration.</p>
+        <p style="font-size:.82rem;color:var(--sub);">~2 hours · Certificate VV-FND</p>
+        <a class="cta go" href="course-foundations.html">Open course →</a>
+      </div>
+    </article>
+    <article class="card">
+      <img src="images/academy-hygiene-card.jpg" alt="">
+      <div class="pad">
+        <div class="pills"><span class="live">Live</span><span>Beginner+</span><span>6 modules</span></div>
+        <h3>Digital Hygiene &amp; Self-OSINT</h3>
+        <p>Clean phones, accounts and footprint. Use open-source intelligence on yourself — legally — so SIM-swap and phishing have less to work with.</p>
+        <p style="font-size:.82rem;color:var(--sub);">~2 hours · Certificate VV-HYG</p>
+        <a class="cta go" href="course-hygiene.html">Open course →</a>
+      </div>
+    </article>
+    <article class="card">
+      <img src="images/academy-ir-card.jpg" alt="">
+      <div class="pad">
+        <div class="pills"><span class="live">Live</span><span>Practitioner</span><span>6 modules</span></div>
+        <h3>First Hour of an Incident</h3>
+        <p>Contain, communicate, evidence, freeze money, and hand off. For staff who are not a SOC — and for the SOC’s first callers.</p>
+        <p style="font-size:.82rem;color:var(--sub);">~2 hours · Certificate VV-IR1</p>
+        <a class="cta go" href="course-incident.html">Open course →</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="wrap section">
+  <h2>How it works</h2>
+  <p class="sub">Designed for a phone in a matatu or a laptop in Berlin. Progress saves in your browser.</p>
+  <div class="steps">
+    <div class="step"><i>01</i><h3>Pick a course</h3><p>Foundations first unless you already live this work.</p></div>
+    <div class="step"><i>02</i><h3>Listen or read</h3><p>Spoken narration on Foundations. Full transcripts and checklists on every track.</p></div>
+    <div class="step"><i>03</i><h3>Pass the check</h3><p>Short quizzes. You unlock the next module when you can explain it.</p></div>
+    <div class="step"><i>04</i><h3>Certificate</h3><p>Print or save a completion certificate with a course ID. No paywall.</p></div>
+  </div>
+</section>
+
+<section class="wrap section">
+  <h2>Built for the world. Grounded where the attacks already are.</h2>
+  <p class="sub">Most academies teach as if every student has a corporate SOC. We teach as if you also have M-Pesa, a county hospital VPN, and a phishing SMS at 22:00.</p>
+  <div class="grid2">
+    <div class="card"><div class="pad">
+      <h3>Global literacy</h3>
+      <p>CIA triad, NIST-style functions (Identify, Protect, Detect, Respond, Recover), MFA, backups, KEV-style patch urgency, and evidence discipline. Vocabulary hiring managers recognise.</p>
+    </div></div>
+    <div class="card"><div class="pad">
+      <h3>Front-line cases</h3>
+      <p>SIM-swap, mobile money, unpatched SSL-VPNs, print servers, and leak-site ransomware — the same patterns in Lagos, London and Manila, named in Kenyan English.</p>
+    </div></div>
+  </div>
+</section>
+
+<section class="wrap section faq">
+  <h2>FAQ</h2>
+  <details open><summary>Is this really free?</summary><p>Yes. VUNVAULT publishes the Academy as public infrastructure. No account required. Progress is stored locally in your browser.</p></details>
+  <details><summary>Is it recognised like CompTIA or a university?</summary><p>No, and we will not pretend otherwise. The certificate proves you completed this curriculum. Use it as evidence of initiative. Then sit the industry exams if you need a market credential.</p></details>
+  <details><summary>Do I need to code?</summary><p>Not for these three courses. We will not hide behind jargon. When a command or CVE appears, we explain why it matters to a human on a deadline.</p></details>
+  <details><summary>Who is it for?</summary><p>Anyone with a phone. Especially journalists, SACCO staff, teachers, founders, public servants, and junior analysts anywhere in the world.</p></details>
+  <details><summary>Spoken audio?</summary><p>Foundations includes generated spoken narration. Hygiene and First Hour are written for screen readers and silent study. We do not ship fake lecture videos.</p></details>
+</section>
+</main>
+
+<footer class="site"><div class="wrap bar">
+  <p>© 2026 VUNVAULT Academy · Defending the digital frontier — teaching the floor.</p>
+  <p><a href="news.html">Newsroom</a> · <a href="press-and-media.html">Press</a></p>
+</div></footer>
 </body>
 </html>
