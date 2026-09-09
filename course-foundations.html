@@ -3,130 +3,1715 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VUNVAULT Academy — Professional cybersecurity learning</title>
-<meta name="description" content="A free, self-paced cybersecurity academy for learners worldwide. Foundations, digital hygiene, self-OSINT and incident first-hour — with quizzes, spoken narration and certificates. Built from Africa’s front line.">
+<title>Cybersecurity Foundations · VUNVAULT Academy</title>
+<meta name="description" content="A free 12-hour cybersecurity foundations course from VUNVAULT Academy. 12 modules, animated lessons, narrated audio, hard scenario quizzes and a paid professional certificate.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 32'%3E%3Cpath d='M4 3 L16 29 L26 7' fill='none' stroke='%234da3ff' stroke-width='5'/%3E%3Cpath d='M22 3 L34 29 L44 3' fill='none' stroke='%234da3ff' stroke-width='5'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/academy.css">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ VUNVAULT ACADEMY · self-contained theme ============ */
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#05070c;color:#e9f0f8;font-family:"IBM Plex Sans",-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+::selection{background:#4da3ff;color:#04101f}
+a{color:#8fd8ff}
+.skip{position:absolute;left:-999px;top:0;background:#4da3ff;color:#04101f;padding:8px 16px;z-index:999}
+.skip:focus{left:8px;top:8px}
+/* header */
+header{position:sticky;top:0;z-index:200;background:rgba(5,7,12,.92);backdrop-filter:blur(10px);border-bottom:1px solid #1b2a3f}
+.nav{max-width:1240px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:#e9f0f8}
+.logo svg{width:34px;height:23px}
+.logo b{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;font-size:1.25rem;letter-spacing:.08em}
+.logo span{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.68rem;color:#4da3ff;letter-spacing:.22em;border-left:1px solid #24374f;padding-left:10px}
+.nav .grow{flex:1}
+.pill{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.7rem;color:#8fa6bd;border:1px solid #1b2a3f;border-radius:999px;padding:5px 12px;white-space:nowrap}
+.pill b{color:#8fd8ff}
+.backlink{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.72rem;color:#8fa6bd;text-decoration:none;letter-spacing:.06em}
+.backlink:hover{color:#8fd8ff}
+/* hero */
+.hero{border-bottom:1px solid #1b2a3f;background:radial-gradient(1100px 420px at 18% -10%,rgba(77,163,255,.14),transparent 60%),radial-gradient(700px 300px at 90% 0%,rgba(143,216,255,.07),transparent 60%)}
+.hero-in{max-width:1240px;margin:0 auto;padding:56px 24px 40px}
+.badge{display:inline-flex;gap:8px;align-items:center;font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:#8fd8ff;border:1px solid #24374f;border-radius:3px;padding:6px 14px;margin-bottom:22px}
+.badge i{width:6px;height:6px;background:#3ddc97;border-radius:50%;animation:blink 2.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.hero h1{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;text-transform:uppercase;font-size:clamp(2.4rem,6vw,4.2rem);line-height:1.0;letter-spacing:.01em;max-width:900px}
+.hero h1 em{font-style:normal;color:#4da3ff}
+.hero .sub{color:#8fa6bd;max-width:680px;margin:18px 0 26px;font-size:1.02rem}
+.meta{display:flex;flex-wrap:wrap;gap:10px 22px;font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.74rem;color:#5f7690;text-transform:uppercase;letter-spacing:.08em;border-top:1px solid #1b2a3f;padding-top:20px}
+.meta b{color:#e9f0f8}
+.pedigree{margin-top:22px;display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.pedigree div{border:1px solid #1b2a3f;border-radius:8px;padding:12px 14px;background:#0a101b}
+.pedigree b{display:block;font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.68rem;letter-spacing:.14em;color:#4da3ff;text-transform:uppercase;margin-bottom:4px}
+.pedigree p{font-size:.82rem;color:#8fa6bd;line-height:1.55}
+/* progress strip */
+.progbar{max-width:1240px;margin:0 auto;padding:0 24px 26px}
+.track{height:6px;background:#0d1524;border:1px solid #1b2a3f;border-radius:99px;overflow:hidden}
+.fill{height:100%;width:0%;background:linear-gradient(90deg,#1f6fd0,#4da3ff,#8fd8ff);transition:width .5s ease}
+.prog-label{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.7rem;color:#8fa6bd;margin-top:8px;display:block}
+/* layout */
+.layout{max-width:1240px;margin:0 auto;padding:34px 24px 90px;display:grid;grid-template-columns:280px 1fr;gap:38px;align-items:start}
+aside{position:sticky;top:74px}
+.side-title{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.68rem;letter-spacing:.2em;color:#5f7690;text-transform:uppercase;margin-bottom:12px}
+.side-nav{display:flex;flex-direction:column;gap:2px;border-left:2px solid #1b2a3f}
+.side-nav a{display:flex;gap:10px;align-items:baseline;padding:7px 12px;text-decoration:none;color:#8fa6bd;font-size:.86rem;border-left:2px solid transparent;margin-left:-2px;transition:.15s}
+.side-nav a:hover{color:#e9f0f8;background:#0a101b}
+.side-nav a.cur{color:#8fd8ff;border-left-color:#4da3ff;background:#0a101b}
+.side-nav a .n{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.68rem;color:#5f7690;min-width:20px}
+.side-nav a.done .n{color:#3ddc97}
+.side-nav a.done .n::after{content:" ✓"}
+.side-cta{margin-top:18px;border:1px solid #24374f;border-radius:10px;padding:16px;background:linear-gradient(160deg,#0a101b,#0d1524)}
+.side-cta p{font-size:.8rem;color:#8fa6bd;margin-bottom:12px;line-height:1.55}
+.btn{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.74rem;letter-spacing:.06em;border:none;border-radius:6px;padding:10px 16px;cursor:pointer;background:#4da3ff;color:#04101f;font-weight:600;transition:.15s}
+.btn:hover{background:#8fd8ff}
+.btn.ghost{background:transparent;color:#8fa6bd;border:1px solid #24374f}
+.btn.ghost:hover{color:#e9f0f8;border-color:#4da3ff}
+.btn.gold{background:#e8c37e;color:#241a08}
+.btn.gold:hover{background:#f6d795}
+.btn.wide{width:100%}
+/* modules */
+.module{border:1px solid #1b2a3f;border-radius:14px;background:#0a101b;padding:34px 34px 30px;margin-bottom:34px;scroll-margin-top:90px}
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.68rem;letter-spacing:.2em;color:#4da3ff;text-transform:uppercase;margin-bottom:10px}
+.module h2{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;text-transform:uppercase;font-size:clamp(1.6rem,3.4vw,2.3rem);line-height:1.05;margin-bottom:12px}
+.lead{color:#8fa6bd;max-width:760px;margin-bottom:18px}
+.mod-tools{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 20px}
+.objectives{list-style:none;display:grid;gap:8px;border:1px dashed #24374f;border-radius:10px;padding:16px 18px;margin-bottom:26px;background:#0d1524}
+.objectives li{font-size:.88rem;color:#8fa6bd;padding-left:22px;position:relative}
+.objectives li::before{content:"▸";position:absolute;left:4px;color:#4da3ff}
+.objectives .ob-title{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.66rem;letter-spacing:.18em;color:#5f7690;text-transform:uppercase;display:block;margin-bottom:8px;padding-left:0}
+.objectives .ob-title::before{content:none}
+.lesson{margin-bottom:24px;max-width:820px}
+.lesson h3{font-size:1.06rem;font-weight:600;color:#e9f0f8;margin-bottom:10px;padding-left:14px;border-left:3px solid #4da3ff}
+.lesson p{margin-bottom:12px;color:#c6d4e2}
+.lesson p strong{color:#e9f0f8}
+.lesson .mono{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.86em;color:#8fd8ff;background:#0d1524;padding:1px 6px;border-radius:4px;border:1px solid #1b2a3f}
+/* diagram */
+figure.diagram{border:1px solid #1b2a3f;border-radius:12px;background:#0d1524;padding:18px;margin:26px 0}
+figure.diagram svg{width:100%;height:auto;display:block}
+figure.diagram figcaption{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.7rem;color:#5f7690;margin-top:10px;letter-spacing:.04em}
+/* svg animation primitives */
+.dash{stroke-dasharray:6 8;animation:dashmove 1.6s linear infinite}
+@keyframes dashmove{to{stroke-dashoffset:-28}}
+.pulse{animation:pulse 2.2s ease-in-out infinite;transform-origin:center}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+.spin{animation:spin 14s linear infinite;transform-origin:center;transform-box:fill-box}
+@keyframes spin{to{transform:rotate(360deg)}}
+.float{animation:float 3.4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.sweep{animation:sweep 3s ease-in-out infinite}
+@keyframes sweep{0%{transform:translateX(0)}50%{transform:translateX(46px)}100%{transform:translateX(0)}}
+.blinkdot{animation:blink 1.4s infinite}
+@media (prefers-reduced-motion:reduce){.dash,.pulse,.spin,.float,.sweep,.blinkdot,.badge i{animation:none}}
+/* callouts */
+.case,.try{border-radius:10px;padding:18px 20px;margin:24px 0;max-width:820px}
+.case{border:1px solid rgba(255,180,84,.35);background:rgba(255,180,84,.06)}
+.try{border:1px solid rgba(143,216,255,.3);background:rgba(143,216,255,.05)}
+.tag{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px;display:block}
+.case .tag{color:#ffb454}.try .tag{color:#8fd8ff}
+.case h4,.try h4{font-size:.98rem;margin-bottom:8px;color:#e9f0f8}
+.case p,.try p{font-size:.9rem;color:#8fa6bd}
+.terms{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 26px}
+.chip{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.7rem;color:#8fd8ff;border:1px solid #24374f;background:#0d1524;border-radius:999px;padding:5px 12px}
+/* quiz */
+.quiz{border-top:2px solid #24374f;padding-top:22px;max-width:820px}
+.quiz-title{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:#4da3ff;margin-bottom:16px}
+.q{margin-bottom:22px}
+.qt{font-weight:600;font-size:.95rem;margin-bottom:10px;color:#e9f0f8}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;font-family:"IBM Plex Sans",-apple-system,"Segoe UI",Roboto,sans-serif;font-size:.88rem;color:#8fa6bd;background:#0d1524;border:1px solid #1b2a3f;border-radius:8px;padding:10px 14px;cursor:pointer;transition:.12s}
+.opt:hover{border-color:#4da3ff;color:#e9f0f8}
+.opt.correct{border-color:#3ddc97;color:#3ddc97;background:rgba(61,220,151,.08)}
+.opt.wrong{border-color:#ff6161;color:#ff6161;background:rgba(255,97,97,.07)}
+.opt:disabled{cursor:default;opacity:.9}
+.expl{font-size:.84rem;color:#8fa6bd;border-left:3px solid #4da3ff;padding:8px 12px;margin-top:10px;background:#0d1524;border-radius:0 6px 6px 0}
+.quiz-score{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.78rem;color:#8fd8ff;margin-top:6px}
+/* exam lock */
+.lockbox{border:1px solid #24374f;border-radius:12px;padding:28px;text-align:center;background:linear-gradient(160deg,#0a101b,#0d1524);max-width:640px;margin:0 auto}
+.lockbox h3{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;font-size:1.6rem;text-transform:uppercase;margin-bottom:10px}
+.lockbox p{color:#8fa6bd;font-size:.9rem;margin-bottom:18px}
+/* modal */
+.modal{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(3,5,9,.8);backdrop-filter:blur(6px)}
+.modal.open{display:flex}
+.modal-card{background:#0a101b;border:1px solid #24374f;border-radius:16px;max-width:460px;width:100%;padding:26px;max-height:88vh;overflow:auto}
+.modal-card h3{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;text-transform:uppercase;font-size:1.5rem;margin-bottom:6px}
+.modal-card .muted{color:#8fa6bd;font-size:.85rem;margin-bottom:16px}
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tabs button{flex:1;font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.72rem;padding:9px;border-radius:6px;border:1px solid #1b2a3f;background:transparent;color:#8fa6bd;cursor:pointer}
+.tabs button.on{background:#4da3ff;color:#04101f;border-color:#4da3ff;font-weight:600}
+.field{margin-bottom:12px}
+.field label{display:block;font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:#5f7690;margin-bottom:6px}
+.field input{width:100%;background:#0d1524;border:1px solid #24374f;border-radius:8px;color:#e9f0f8;padding:11px 12px;font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.86rem;outline:none}
+.field input:focus{border-color:#4da3ff}
+.price-row{display:flex;justify-content:space-between;align-items:baseline;border:1px dashed #24374f;border-radius:8px;padding:12px 14px;margin-bottom:16px}
+.price-row b{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;font-size:1.5rem;color:#e8c37e}
+.price-row span{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.7rem;color:#5f7690}
+.fineprint{font-size:.72rem;color:#5f7690;margin-top:12px;line-height:1.5}
+/* certificate */
+.cert{border:3px double #e8c37e;border-radius:6px;background:linear-gradient(165deg,#0c1220,#0a0f1a);padding:38px 34px;text-align:center;max-width:640px;margin:0 auto}
+.cert .clogo svg{width:52px;height:35px}
+.cert .ck{font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.64rem;letter-spacing:.3em;color:#e8c37e;text-transform:uppercase;margin:10px 0 4px}
+.cert h3{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;font-size:2rem;text-transform:uppercase;color:#e9f0f8;line-height:1.05}
+.cert .cname{font-family:"Big Shoulders Display","Arial Narrow",sans-serif;font-size:2.4rem;color:#e8c37e;margin:16px 0 6px;border-bottom:1px solid #24374f;display:inline-block;padding:0 30px 8px}
+.cert p{color:#8fa6bd;font-size:.85rem;max-width:420px;margin:8px auto}
+.cert .cmeta{display:flex;justify-content:center;gap:34px;margin-top:22px;font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.7rem;color:#5f7690}
+.cert .cmeta b{display:block;color:#e9f0f8;font-size:.78rem;margin-top:2px}
+/* toast */
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:#0d1524;border:1px solid #4da3ff;color:#e9f0f8;border-radius:10px;padding:12px 20px;font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.78rem;z-index:500;transition:.35s;opacity:0}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+footer{border-top:1px solid #1b2a3f;padding:34px 24px;text-align:center;color:#5f7690;font-family:"IBM Plex Mono",ui-monospace,"SF Mono",Consolas,monospace;font-size:.72rem;line-height:2}
+/* print: certificate only */
+@media print{body *{visibility:hidden}.cert,.cert *{visibility:visible}.cert{position:fixed;inset:0;margin:0;max-width:none;border-width:6px;background:#fff;color:#111}.cert p,.cert .cmeta{color:#333}.cert h3{color:#111}.cert .cname,.cert .ck{color:#8a6d1f}}
+/* responsive */
+@media(max-width:960px){.layout{grid-template-columns:1fr}aside{position:static}.side-nav{flex-direction:row;flex-wrap:wrap;border-left:none;gap:6px}.side-nav a{border:1px solid #1b2a3f;border-radius:999px;margin:0;padding:6px 12px;font-size:.76rem}.side-nav a.cur{border-color:#4da3ff}.module{padding:24px 18px}}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="site">
-  <div class="bar">
-    <a class="logo" href="index.html">VUNVAULT</a>
-    <nav>
-      <a href="services.html">Services</a>
-      <a href="news.html">News</a>
-      <a href="academy.html" class="active">Academy</a>
-      <a href="press-and-media.html">Press</a>
-    </nav>
-    <a class="cta" href="course-foundations.html">Start Foundations</a>
+<header>
+  <div class="nav">
+    <a class="logo" href="index.html" aria-label="VUNVAULT home">
+      <svg viewBox="0 0 48 32" aria-hidden="true"><path d="M4 3 L16 29 L26 7" fill="none" stroke="#4da3ff" stroke-width="5"/><path d="M22 3 L34 29 L44 3" fill="none" stroke="#4da3ff" stroke-width="5"/></svg>
+      <b>VUNVAULT</b><span>ACADEMY</span>
+    </a>
+    <div class="grow"></div>
+    <span class="pill" id="navPill">PROGRESS <b>0%</b></span>
+    <a class="backlink" href="index.html#academy">← vulnvault.tech</a>
   </div>
 </header>
 
-<main id="main">
-<section class="wrap hero">
-  <div>
-    <div class="kicker">VUNVAULT Academy · Free · Self-paced</div>
-    <h1>Cybersecurity, taught like a <em>newsroom</em> — used like a job.</h1>
-    <p class="lede">Professional courses for people worldwide who need to defend phones, wallets, teams and networks. Africa-first examples. Global standards. Spoken lessons, quizzes and a certificate — no coding required to start.</p>
-    <div class="hero-actions">
-      <a class="cta" href="course-foundations.html">Begin Cybersecurity Foundations</a>
-      <a class="cta ghost" href="#catalogue">Browse the catalogue</a>
+<section class="hero">
+  <div class="hero-in">
+    <div class="badge"><i></i> Cohort open · Free to learn · Certificate on completion</div>
+    <h1>Learn <em>cybersecurity</em>.</h1>
+    <p class="sub">Twelve modules. Twelve hours. Real 2026 case files, animated explainers, narrated lessons and scenario quizzes that refuse to be guessed. Built for people who defend phones, wallets, teams and networks — Africa-first examples, global standards.</p>
+    <div class="meta">
+      <span><b>12</b> modules</span><span><b>12 hrs</b> guided study</span><span><b>36</b> scenario questions + final exam</span><span><b>0</b> tuition to learn</span><span><b>KES 2,500</b> certificate &amp; final exam</span>
     </div>
-    <p class="lede" style="font-size:.9rem;">Aligned to ideas in NIST CSF 2.0, the CIA triad, and everyday incident practice. Not a degree mill — a skills floor.</p>
+    <div class="pedigree">
+      <div><b>Cisco-style structure</b><p>Short self-paced modules with objectives, hands-on “Try it” activities, per-module knowledge checks and a shareable completion credential.</p></div>
+      <div><b>SANS-style depth</b><p>Practitioner writing, real incident tradecraft, and scenario questions that test judgement — not memorised definitions.</p></div>
+      <div><b>IBM-style assessment</b><p>A summative final exam across all modules with an 80% pass mark, plus a breach-case capstone, before the certificate is issued.</p></div>
+    </div>
   </div>
-  <div class="hero-pic">
-    <img src="images/academy-campus.jpg" alt="Learners in the VUNVAULT Academy studio">
+  <div class="progbar">
+    <div class="track"><div class="fill" id="mainFill"></div></div>
+    <span class="prog-label" id="progLabel">0 of 12 modules complete</span>
   </div>
 </section>
 
-<div class="wrap">
-  <div class="metrics">
-    <div class="metric"><b>3</b><span>Live courses</span></div>
-    <div class="metric"><b>20</b><span>Modules across the catalogue</span></div>
-    <div class="metric"><b>~6 hrs</b><span>Total study if you take all three</span></div>
-    <div class="metric"><b>0</b><span>Tuition. Always.</span></div>
+<div class="layout">
+<aside>
+  <div class="side-title">Course map</div>
+  <nav class="side-nav" id="sideNav" aria-label="Modules">
+    <a href="#m1"><span class="n">01</span> How attackers think</a>
+    <a href="#m2"><span class="n">02</span> CIA triad &amp; risk</a>
+    <a href="#m3"><span class="n">03</span> Identity &amp; passwords</a>
+    <a href="#m4"><span class="n">04</span> Phishing defence</a>
+    <a href="#m5"><span class="n">05</span> Devices &amp; endpoints</a>
+    <a href="#m6"><span class="n">06</span> Networks, Wi-Fi, VPNs</a>
+    <a href="#m7"><span class="n">07</span> Privacy &amp; your data</a>
+    <a href="#m8"><span class="n">08</span> Cloud &amp; third parties</a>
+    <a href="#m9"><span class="n">09</span> CVEs &amp; patching</a>
+    <a href="#m10"><span class="n">10</span> First hour of an incident</a>
+    <a href="#m11"><span class="n">11</span> Security at work</a>
+    <a href="#m12"><span class="n">12</span> Capstone audit</a>
+    <a href="#exam"><span class="n">★</span> Final exam</a>
+  </nav>
+  <div class="side-cta">
+    <p><strong style="color:#e9f0f8">Learn free. Prove it for KES 2,500.</strong><br>The certificate + final exam unlock includes a printable credential with a verifiable ID.</p>
+    <button class="btn gold wide" id="sideUnlock">Unlock certificate</button>
+  </div>
+</aside>
+<main id="main">
+
+<section class="module" id="m1">
+  <div class="eyebrow">Module 01 · ~60 min · Threat landscape</div>
+  <h2>How attackers actually think</h2>
+  <p class="lead">Before the tools, before the malware, there is a decision chain. This module reads that chain out loud — using real incidents from 2026 — so you can see exactly where it bends and where it breaks.</p>
+  <div class="mod-tools">
+    <button class="btn listen" data-mod="1">▶ Listen to this module</button>
+    <button class="btn ghost done-btn" data-mod="1">Mark complete ✓</button>
+  </div>
+  <ul class="objectives">
+    <li class="ob-title">By the end of this module you can…</li>
+    <li>Walk the five steps of an intrusion kill chain in plain language.</li>
+    <li>Explain why edge devices — not employee laptops — are attacked first in 2026.</li>
+    <li>Describe how automation and AI compressed attack timelines from weeks to hours.</li>
+    <li>Map one real 2026 incident onto the kill chain, step by step.</li>
+  </ul>
+
+  <div class="lesson"><h3>1.1 The chain, not the “hack”</h3>
+    <p>Pop culture shows intrusions as a single dramatic “hack.” Reality is a checklist of small wins: <strong>reconnaissance</strong> (what can I learn publicly?), <strong>initial access</strong> (a password, a flaw, a person), <strong>execution</strong> (run my code), <strong>persistence</strong> (survive reboots and password resets), then <strong>lateral movement</strong> and the <strong>objective</strong> — money, data, or disruption. Defenders win by making any one link expensive enough that the attacker quits and picks an easier target.</p>
+    <p>In September 2026, Palo Alto Networks’ Unit 42 published an incident report that should reset your mental clock: an adversary used <strong>autonomous AI agents</strong> to compromise an enterprise network <strong>in under ten hours</strong>, chaining more than fifty MITRE ATT&CK techniques in automated loops — <strong>without a single zero-day</strong>. Internal reconnaissance, secret-hunting in code repositories, master-credential harvesting from a secrets manager: all known techniques, executed at machine speed. The lesson is not “AI is scary.” The lesson is: <strong>your detection and response timeline is now the product</strong>.</p>
+  </div>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 640 130" role="img" aria-label="Animated kill chain: five stages connected by moving dashed lines">
+      <line x1="86" y1="60" x2="164" y2="60" stroke="#5f7690" stroke-width="2" class="dash"/>
+      <line x1="216" y1="60" x2="294" y2="60" stroke="#5f7690" stroke-width="2" class="dash"/>
+      <line x1="346" y1="60" x2="424" y2="60" stroke="#5f7690" stroke-width="2" class="dash"/>
+      <line x1="496" y1="60" x2="554" y2="60" stroke="#5f7690" stroke-width="2" class="dash"/>
+      <circle cx="60" cy="60" r="26" fill="none" stroke="#4da3ff" stroke-width="2"/>
+      <circle cx="190" cy="60" r="26" fill="none" stroke="#4da3ff" stroke-width="2"/>
+      <circle cx="320" cy="60" r="26" fill="none" stroke="#4da3ff" stroke-width="2"/>
+      <circle cx="460" cy="60" r="26" fill="none" stroke="#4da3ff" stroke-width="2"/>
+      <circle cx="580" cy="60" r="26" fill="none" stroke="#ffb454" stroke-width="2"/>
+      <circle cx="320" cy="60" r="8" fill="#ff6161" class="pulse"/>
+      <text x="60" y="105" fill="#8fa6bd" font-size="11" text-anchor="middle" font-family="monospace">RECON</text>
+      <text x="190" y="105" fill="#8fa6bd" font-size="11" text-anchor="middle" font-family="monospace">ACCESS</text>
+      <text x="320" y="105" fill="#8fa6bd" font-size="11" text-anchor="middle" font-family="monospace">EXECUTE</text>
+      <text x="460" y="105" fill="#8fa6bd" font-size="11" text-anchor="middle" font-family="monospace">PERSIST</text>
+      <text x="580" y="105" fill="#ffb454" font-size="11" text-anchor="middle" font-family="monospace">OBJECTIVE</text>
+    </svg>
+    <figcaption>FIG 1.1 — The kill chain. Every defence you will learn in this course exists to break one of these arrows.</figcaption>
+  </figure>
+
+  <div class="lesson"><h3>1.2 Why the edge gets hit first</h3>
+    <p>Ask an attacker to rank targets and they will rank them by <strong>reachability × privilege × how nobody watches it</strong>. That is why September 2026 filled with VPN and management-platform incidents: SonicWall’s SMA1000 appliances were hit by two chained zero-days — a CVSS <strong>10.0</strong> pre-authentication flaw plus a command-injection flaw — handing attackers control of the box that controls an organisation’s entire remote workforce. N-able’s N-central, the console MSPs use to manage hundreds of client networks, needed its <strong>fourth emergency hotfix in five weeks</strong>, one of them a 10.0 pre-auth RCE.</p>
+    <p>Notice what these targets have in common: they sit at the perimeter, they hold privileged keys by design, and they get a fraction of the monitoring that laptops and identities get. An employee laptop has EDR, MFA and a nervous user. A VPN appliance has a firmware version and an open port. <strong>In 2026, the perimeter did not disappear — it concentrated</strong>, into a few dozen always-on boxes that attackers notice before you do.</p>
+  </div>
+
+  <div class="case"><span class="tag">Case file · Sep 2026</span>
+    <h4>Ten hours, fifty techniques, zero zero-days</h4>
+    <p>Unit 42’s report describes autonomous AI agents running reconnaissance, secret discovery and credential harvesting in automated execution loops. No novel exploits — just known techniques at a speed no human SOC triage queue was designed for. When you read “under ten hours,” read it as: <em>the first hour of your response is the whole battle.</em></p>
+  </div>
+
+  <div class="lesson"><h3>1.3 The economics of “you”</h3>
+    <p>Most attacks on ordinary people are <strong>commodity</strong>: automated, mass-distributed, and cheap. Breached password corpora feed credential-stuffing bots; phishing kits are rented; residential proxy pools make password spraying look like normal traffic — Datadog researchers tracked low-and-low-slow spraying against AWS root accounts across <strong>150+ organisations</strong>, deliberately paced to slip under lockout thresholds. Nobody hand-picked you; a list did.</p>
+    <p>That is oddly good news. Commodity attacks quit when cost rises: a unique password kills stuffing, phishing-resistant MFA kills most proxy kits, and a two-minute report to your bank or IT team kills the follow-on fraud. Your job in this course is not to become unbeatable — it is to become <strong>the expensive target</strong>, and to be fast and loud when something slips through.</p>
+  </div>
+
+  <div class="try"><span class="tag">Try it · 10 min</span>
+    <h4>Map your own kill chain</h4>
+    <p>Pick one service you rely on (email, mobile money, work VPN). Write five lines: what recon exists about you there (public email? phone number?), the most likely initial access (reused password? SIM swap?), what execution would look like, how an attacker would persist, and the objective. Keep it — Module 12 will make you defend every line.</p>
+  </div>
+
+  <div class="terms"><span class="chip">kill chain</span><span class="chip">initial access</span><span class="chip">lateral movement</span><span class="chip">persistence</span><span class="chip">commodity exploitation</span><span class="chip">MITRE ATT&amp;CK</span></div>
+
+  <div class="quiz" data-quiz="1">
+    <h3 class="quiz-title">Knowledge check · Module 1</h3>
+    <div class="q" data-correct="1">
+      <p class="qt">1. The Unit 42 intrusion finished in under ten hours using no zero-days. Which conclusion is most defensible?</p>
+      <div class="opts">
+        <button class="opt">Zero-days no longer matter to attackers</button>
+        <button class="opt">Speed came from automating known techniques against weak fundamentals</button>
+        <button class="opt">The victim had no security tools at all</button>
+        <button class="opt">AI agents can only succeed with zero-day exploits</button>
+      </div>
+      <p class="expl" hidden>Correct: B. The report describes 50+ known ATT&amp;CK techniques run in automated loops — fundamentals and response speed were the failure points, not exotic exploits.</p>
+    </div>
+    <div class="q" data-correct="1">
+      <p class="qt">2. A resource-limited attacker wants initial access to a mid-sized company. Based on 2026 incident patterns, the most reliable target is…</p>
+      <div class="opts">
+        <button class="opt">An employee laptop with EDR and MFA enrolled</button>
+        <button class="opt">An internet-exposed VPN appliance with an unpatched auth bypass</button>
+        <button class="opt">The company’s encrypted offline backups</button>
+        <button class="opt">A receptionist’s phone with passkeys enabled</button>
+      </div>
+      <p class="expl" hidden>Correct: B. Edge appliances are reachable, privileged and under-monitored — the SonicWall and N-able incidents show exactly this preference.</p>
+    </div>
+    <div class="q" data-correct="1">
+      <p class="qt">3. Why do spraying campaigns use residential proxies and deliberately slow login attempts?</p>
+      <div class="opts">
+        <button class="opt">To brute-force passwords faster</button>
+        <button class="opt">To evade lockouts and blend in as ordinary user traffic</button>
+        <button class="opt">To encrypt the credentials in transit</button>
+        <button class="opt">To bypass multi-factor authentication directly</button>
+      </div>
+      <p class="expl" hidden>Correct: B. Low-and-slow pacing from residential IPs defeats threshold-based lockouts and reputation blocks; it does not itself defeat MFA.</p>
+    </div>
+    <p class="quiz-score" hidden></p>
+  </div>
+</section>
+
+
+<section class="module" id="m2">
+  <div class="eyebrow">Module 02 · ~60 min · Mental models</div>
+  <h2>The CIA triad, risk, and staying sane</h2>
+  <p class="lead">Three letters carry the whole profession: confidentiality, integrity, availability. Once you can sort any incident into those buckets — and name the asset, threat, vulnerability and control in play — security stops feeling like folklore and starts feeling like engineering.</p>
+  <div class="mod-tools">
+    <button class="btn listen" data-mod="2">▶ Listen to this module</button>
+    <button class="btn ghost done-btn" data-mod="2">Mark complete ✓</button>
+  </div>
+  <ul class="objectives">
+    <li class="ob-title">By the end of this module you can…</li>
+    <li>Classify any incident’s primary impact as confidentiality, integrity or availability.</li>
+    <li>Use the asset–threat–vulnerability–risk vocabulary without hand-waving.</li>
+    <li>Explain defence in depth and “assume breach” using a real 2026 example.</li>
+    <li>Write a three-line personal risk statement (asset, threat, control).</li>
+  </ul>
+
+  <div class="lesson"><h3>2.1 CIA, with receipts</h3>
+    <p><strong>Confidentiality</strong> is about secrets staying secret: when Dropbox disclosed that ~5,000 accounts were accessed through a Lenovo ID single-sign-on verification weakness, attackers read and downloaded users’ files — a confidentiality failure. <strong>Integrity</strong> is about things being what they claim to be: the JFrog Artifactory auth-bypass (CVE-2026-82329) mattered because an attacker with admin tokens could <em>replace trusted packages with backdoored ones</em> — poisoning what every downstream build trusts. Vercel’s CEO called it an “RCE bomb” for exactly this reason.</p>
+    <p><strong>Availability</strong> is about things working when needed: the Cisco Nexus 9000 flaw (CVE-2026-20212) could crash the switch’s S1HAL process and reload the device — a data-centre outage from a single crafted packet — and ransomware’s whole business model is availability held hostage. Most real incidents hit two or three pillars at once; your job is to name the <em>primary</em> loss, because that tells you which control would have mattered most.</p>
+  </div>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 640 150" role="img" aria-label="Animated CIA triad inside a rotating dashed ring">
+      <circle cx="320" cy="75" r="66" fill="none" stroke="#24374f" stroke-width="2" stroke-dasharray="4 10" class="spin"/>
+      <path d="M320 22 L400 118 L240 118 Z" fill="none" stroke="#4da3ff" stroke-width="2"/>
+      <circle cx="320" cy="22" r="17" fill="#0d1524" stroke="#8fd8ff" stroke-width="2" class="pulse"/>
+      <circle cx="400" cy="118" r="17" fill="#0d1524" stroke="#8fd8ff" stroke-width="2" class="pulse"/>
+      <circle cx="240" cy="118" r="17" fill="#0d1524" stroke="#8fd8ff" stroke-width="2" class="pulse"/>
+      <text x="320" y="27" fill="#e9f0f8" font-size="13" text-anchor="middle" font-family="monospace">C</text>
+      <text x="400" y="123" fill="#e9f0f8" font-size="13" text-anchor="middle" font-family="monospace">I</text>
+      <text x="240" y="123" fill="#e9f0f8" font-size="13" text-anchor="middle" font-family="monospace">A</text>
+      <text x="90" y="70" fill="#8fa6bd" font-size="11" font-family="monospace">secrets stay secret</text>
+      <text x="470" y="70" fill="#8fa6bd" font-size="11" font-family="monospace">things are what</text>
+      <text x="470" y="86" fill="#8fa6bd" font-size="11" font-family="monospace">they claim to be</text>
+      <text x="90" y="100" fill="#8fa6bd" font-size="11" font-family="monospace">works when needed</text>
+    </svg>
+    <figcaption>FIG 2.1 — The triad. Every control in this course defends at least one corner.</figcaption>
+  </figure>
+
+  <div class="lesson"><h3>2.2 Asset → threat → vulnerability → risk</h3>
+    <p>Security speaks one grammar: an <strong>asset</strong> (something you value), a <strong>threat</strong> (something that can harm it), a <strong>vulnerability</strong> (a weakness the threat can use), and <strong>risk</strong> (how likely × how bad). A control reduces likelihood, impact, or both. Make it local: your asset is your <span class="mono">mobile-money line</span>; the threat is <strong>SIM-swap fraud</strong>; the vulnerability is weak identity proofing at the telco plus SMS-based codes; the risk is drained savings in an hour; controls are a porting PIN/line lock, moving MFA off SMS, and balance alerts.</p>
+    <p>This grammar also exposes lazy thinking. “We need AI security” is not a risk statement. “Our finance team’s approval workflow (asset) can be spoofed by WhatsApp impersonation (threat) because vendor bank-detail changes are never verified out-of-band (vulnerability), risking six-figure misdirected payments (impact)” — <em>that</em> is a risk statement, and it already contains its own control.</p>
+  </div>
+
+  <div class="lesson"><h3>2.3 Defence in depth, and assuming the breach</h3>
+    <p>Layers fail individually; that is why there are several. The StyleSmuggler Magento zero-day is a perfect autopsy: the <strong>patching layer could not work</strong> (no patch existed; the first victim was fully patched), yet on one compromised store the implant was found <strong>within an hour</strong> — because a merchant forwarded a weird “payment transaction failed” email to their host. A human reporting layer caught what no dashboard could.</p>
+    <p>“Assume breach” is the attitude that makes layers honest: you design as if compromise will happen, so you pre-agree what detection, containment and reporting look like. It is not pessimism; it is the difference between a fire drill and a fire panic.</p>
+  </div>
+
+  <div class="case"><span class="tag">Case file · Sep 2026</span>
+    <h4>One poisoned package, every build downstream</h4>
+    <p>Integrity attacks are force multipliers: watchTowr observed attackers minting admin tokens on exposed Artifactory instances within days of disclosure. One compromised repository can ship a backdoor to every customer that trusts its packages — which is why supply-chain roles get their own module later (Module 8).</p>
+  </div>
+
+  <div class="try"><span class="tag">Try it · 10 min</span>
+    <h4>Your 3×3 risk table</h4>
+    <p>Write three rows: asset / most plausible threat / one control you already have and one you’ll add this month. Include at least one non-digital asset (your ID documents count). This table returns in Module 12 as your audit baseline.</p>
+  </div>
+
+  <div class="terms"><span class="chip">confidentiality</span><span class="chip">integrity</span><span class="chip">availability</span><span class="chip">risk = likelihood × impact</span><span class="chip">control</span><span class="chip">defence in depth</span></div>
+
+  <div class="quiz" data-quiz="2">
+    <h3 class="quiz-title">Knowledge check · Module 2</h3>
+    <div class="q" data-correct="1">
+      <p class="qt">1. An attacker silently replaces an internal build artifact with a backdoored version; nothing crashes and nothing leaks yet. The pillar primarily under attack is…</p>
+      <div class="opts">
+        <button class="opt">Confidentiality</button>
+        <button class="opt">Integrity</button>
+        <button class="opt">Availability</button>
+        <button class="opt">None — no impact has occurred</button>
+      </div>
+      <p class="expl" hidden>Correct: B. Trust in the artifact is broken even before anyone runs it; that is an integrity attack.</p>
+    </div>
+    <div class="q" data-correct="2">
+      <p class="qt">2. Ransomware encrypts a hospital’s scheduling and imaging systems; elective surgery is cancelled for a week. The primary loss is…</p>
+      <div class="opts">
+        <button class="opt">Confidentiality, because ransomware groups always leak data</button>
+        <button class="opt">Integrity, because files were modified</button>
+        <button class="opt">Availability, because care delivery stopped</button>
+        <button class="opt">Authenticity, because backups were encrypted</button>
+      </div>
+      <p class="expl" hidden>Correct: C. Modified files are an integrity symptom, but the scenario’s defining harm — services unavailable — is availability. (Exfiltration, if proven, would add confidentiality.)</p>
+    </div>
+    <div class="q" data-correct="1">
+      <p class="qt">3. Which control most directly reduces SIM-swap risk to your mobile-money account?</p>
+      <div class="opts">
+        <button class="opt">A longer email password</button>
+        <button class="opt">A line/porting PIN with the telco plus moving MFA off SMS to app or passkey</button>
+        <button class="opt">Antivirus on the phone</button>
+        <button class="opt">Renaming contacts so “Mum” isn’t obvious</button>
+      </div>
+      <p class="expl" hidden>Correct: B. The attack targets number ownership and SMS codes; a porting PIN blocks the swap and non-SMS MFA removes the payoff.</p>
+    </div>
+    <p class="quiz-score" hidden></p>
+  </div>
+</section>
+
+
+<section class="module" id="m3">
+  <div class="eyebrow">Module 03 · ~60 min · Identity</div>
+  <h2>Passwords, MFA, passkeys — and the session thieves</h2>
+  <p class="lead">Identity is the new perimeter: attackers would rather log in as you than break in around you. This module builds your credential stack from the floor up — and shows the two tricks (stolen sessions, phished relays) that skip MFA entirely.</p>
+  <div class="mod-tools">
+    <button class="btn listen" data-mod="3">▶ Listen to this module</button>
+    <button class="btn ghost done-btn" data-mod="3">Mark complete ✓</button>
+  </div>
+  <ul class="objectives">
+    <li class="ob-title">By the end of this module you can…</li>
+    <li>Explain credential stuffing and why one reused password becomes many breaches.</li>
+    <li>Rank SMS OTP, TOTP and passkeys by phishing resistance, with reasons.</li>
+    <li>Describe how stolen session cookies bypass MFA after login.</li>
+    <li>Build a personal credential stack: manager + unique passphrases + passkeys.</li>
+  </ul>
+
+  <div class="lesson"><h3>3.1 Credentials are the new perimeter</h3>
+    <p>Every breach corpus ever leaked is still for sale, and bots never sleep: <strong>credential stuffing</strong> fires your old email+password pairs at hundreds of services until something opens. Strength is irrelevant here — <strong>uniqueness</strong> is the defence. One password reused across five services means one breached forum from 2019 owns your 2026.</p>
+    <p>The practical floor in 2026: a <strong>password manager</strong>, and inside it a unique passphrase per service (four or more random words beat eight clever characters, and they’re typeable). The manager also kills the visual tell of phishing: it simply will not autofill on <span class="mono">paypa1.com</span>.</p>
+  </div>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 640 140" role="img" aria-label="Animated lock with two pulsing factors and a shield">
+      <rect x="270" y="60" width="100" height="62" rx="10" fill="none" stroke="#4da3ff" stroke-width="2.5"/>
+      <path d="M292 60 V44 a28 28 0 0 1 56 0 V60" fill="none" stroke="#4da3ff" stroke-width="2.5"/>
+      <circle cx="320" cy="88" r="9" fill="#8fd8ff" class="pulse"/>
+      <circle cx="150" cy="90" r="24" fill="none" stroke="#8fd8ff" stroke-width="2" class="pulse"/>
+      <circle cx="490" cy="90" r="24" fill="none" stroke="#3ddc97" stroke-width="2" class="pulse"/>
+      <text x="150" y="95" fill="#e9f0f8" font-size="11" text-anchor="middle" font-family="monospace">pwd</text>
+      <text x="490" y="95" fill="#e9f0f8" font-size="11" text-anchor="middle" font-family="monospace">2nd</text>
+      <line x1="176" y1="90" x2="266" y2="90" stroke="#5f7690" stroke-width="2" class="dash"/>
+      <line x1="374" y1="90" x2="464" y2="90" stroke="#5f7690" stroke-width="2" class="dash"/>
+      <text x="60" y="30" fill="#8fa6bd" font-size="11" font-family="monospace">something you know</text>
+      <text x="452" y="30" fill="#8fa6bd" font-size="11" font-family="monospace">something you have</text>
+    </svg>
+    <figcaption>FIG 3.1 — Two factors, one door. The second factor only helps if it cannot be phished or swapped.</figcaption>
+  </figure>
+
+  <div class="lesson"><h3>3.2 MFA that can be phished — and MFA that can’t</h3>
+    <p><strong>SMS codes</strong> die to SIM swaps and to real-time phishing relays that proxy your login while you type. <strong>TOTP apps</strong> beat SMS but still type into a fake site happily. <strong>Passkeys (FIDO2)</strong> are cryptographic and origin-bound: the key refuses to sign for a lookalike domain, which is why they are called phishing-resistant. Choose downward only when you must: passkey → TOTP → SMS → nothing is the wrong order.</p>
+    <p>And know MFA’s two bypasses so you respect its limits. First, <strong>session theft</strong>: after a successful login, your browser holds a session cookie — steal that (infostealer malware, or a compromised machine) and the attacker <em>is</em> logged in; no password, no MFA prompt. In 2026 researchers tracked info-stealers specifically harvesting authenticated AI-assistant session cookies to read corporate chat histories. Second, <strong>MFA itself can be backdoored</strong>: CISA’s Gunra ransomware advisory describes attackers editing a victim’s VDI portal so one attacker-chosen OTP always succeeded.</p>
+  </div>
+
+  <div class="lesson"><h3>3.3 Your credential stack, in order</h3>
+    <p>Build it like a building: <strong>manager</strong> (the floor), <strong>unique passphrases everywhere</strong> (the walls), <strong>passkeys where offered</strong> (the doors), <strong>TOTP as fallback</strong> (the spare keys), and <strong>session hygiene</strong> (the locks): sign out of shared devices, treat “stay logged in” on public machines as a donation, and when an account behaves strangely, rotate the password <em>and revoke active sessions</em> — rotating without revoking leaves the stolen session alive.</p>
+  </div>
+
+  <div class="case"><span class="tag">Case file · 2026</span>
+    <h4>The cookies that bypassed MFA</h4>
+    <p>Info-stealer campaigns extracted stored browser cookies for authenticated AI-assistant sessions straight from infected employee machines — no password, no MFA prompt, full conversation history including code and confidential context. MFA protects the door; it cannot protect a copied key already inside the room.</p>
+  </div>
+
+  <div class="try"><span class="tag">Try it · 15 min</span>
+    <h4>Move your five crown jewels</h4>
+    <p>Email, mobile money/bank, primary social, work account, cloud drive: give each a unique manager-generated passphrase today; enable passkeys on at least two. Then open one service’s security page and find the “active sessions / sign out everywhere” button — know where it lives before you need it.</p>
+  </div>
+
+  <div class="terms"><span class="chip">credential stuffing</span><span class="chip">TOTP</span><span class="chip">passkey / FIDO2</span><span class="chip">session cookie</span><span class="chip">AiTM relay</span><span class="chip">session revocation</span></div>
+
+  <div class="quiz" data-quiz="3">
+    <h3 class="quiz-title">Knowledge check · Module 3</h3>
+    <div class="q" data-correct="1">
+      <p class="qt">1. A user with strong TOTP MFA is taken over without the MFA ever being broken. Most likely mechanism?</p>
+      <div class="opts">
+        <button class="opt">Brute-forcing the password offline</button>
+        <button class="opt">A stolen live session cookie reused by the attacker</button>
+        <button class="opt">Guessing the six-digit code in time</button>
+        <button class="opt">A keylogger capturing the password only</button>
+      </div>
+      <p class="expl" hidden>Correct: B. Sessions are post-authentication; presenting a valid cookie skips the login (and MFA) entirely.</p>
+    </div>
+    <div class="q" data-correct="2">
+      <p class="qt">2. Which factor best resists a real-time adversary-in-the-middle phishing proxy?</p>
+      <div class="opts">
+        <button class="opt">SMS one-time code</button>
+        <button class="opt">Email-delivered code</button>
+        <button class="opt">FIDO2 passkey</button>
+        <button class="opt">TOTP code</button>
+      </div>
+      <p class="expl" hidden>Correct: C. Passkeys sign per-origin; a proxy on a lookalike domain cannot obtain a valid assertion, while codes typed into a relay work fine for the attacker.</p>
+    </div>
+    <div class="q" data-correct="1">
+      <p class="qt">3. Why is password reuse catastrophic even when the reused password is long and “strong”?</p>
+      <div class="opts">
+        <button class="opt">Long passwords are actually weaker than short complex ones</button>
+        <button class="opt">One breached site exposes the same secret elsewhere, and stuffing automates the retry</button>
+        <button class="opt">Reuse forces frequent expiry</button>
+        <button class="opt">Managers cannot store reused passwords</button>
+      </div>
+      <p class="expl" hidden>Correct: B. Strength defends against guessing; reuse defeats you via other people’s breaches. Uniqueness is the property that matters here.</p>
+    </div>
+    <p class="quiz-score" hidden></p>
+  </div>
+</section>
+
+
+<section class="module" id="m4">
+  <div class="eyebrow">Module 04 · ~60 min · Social engineering</div>
+  <h2>Phishing defence for the WhatsApp era</h2>
+  <p class="lead">The most exploited vulnerability in 2026 is still a person trying to be helpful, fast, or polite. This module replaces “don’t click links” with a working method: recognise the pressure, verify out-of-band, and make reporting a reflex instead of a confession.</p>
+  <div class="mod-tools">
+    <button class="btn listen" data-mod="4">▶ Listen to this module</button>
+    <button class="btn ghost done-btn" data-mod="4">Mark complete ✓</button>
+  </div>
+  <ul class="objectives">
+    <li class="ob-title">By the end of this module you can…</li>
+    <li>Name the four pressure levers every social-engineering lure pulls.</li>
+    <li>Apply an out-of-band verification habit to payment and credential changes.</li>
+    <li>Spot channel-hopping and tech-support-scam patterns (Quick Assist, refunds).</li>
+    <li>Execute the first five minutes after a suspected click, in order.</li>
+  </ul>
+
+  <div class="lesson"><h3>4.1 Anatomy of a lure</h3>
+    <p>Every social-engineering message, in any channel, pulls some combination of four levers: <strong>urgency</strong> (“within 24 hours”), <strong>authority</strong> (“CEO”, “bank fraud desk”, “Geek Squad refunds”), <strong>fear or greed</strong> (“failed transfer”, “you won”), and <strong>effort-minimisation</strong> (“just click to confirm”, “just run Quick Assist so I can fix it”). The 2026 twist is channel diversity: email for the office, SMS and WhatsApp for the wallet, voice calls for the anxious — and remote-support tools as the payload, as Huntress documented with rogue ScreenConnect installs seeded by Quick Assist tech-support scams and fake refund lures.</p>
+    <p>Notice what the levers attack: not your intelligence, your <strong>context</strong>. You are tired, mid-task, polite, or scared of looking silly. That is why the defence is procedural, not personal: a habit that runs even when you are tired.</p>
+  </div>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 640 140" role="img" aria-label="Animated phishing hook dangling over an envelope">
+      <rect x="250" y="70" width="140" height="56" rx="8" fill="none" stroke="#4da3ff" stroke-width="2"/>
+      <path d="M250 74 L320 104 L390 74" fill="none" stroke="#4da3ff" stroke-width="2"/>
+      <g class="float">
+        <path d="M320 8 V58 q0 16 -14 16 q-12 0 -12 -12 q0 -10 10 -10" fill="none" stroke="#ff6161" stroke-width="2.5"/>
+        <circle cx="320" cy="8" r="5" fill="#ff6161" class="blinkdot"/>
+      </g>
+      <text x="80" y="40" fill="#8fa6bd" font-size="11" font-family="monospace">urgency · authority</text>
+      <text x="80" y="58" fill="#8fa6bd" font-size="11" font-family="monospace">fear/greed · easy path</text>
+      <text x="450" y="98" fill="#8fa6bd" font-size="11" font-family="monospace">the hook is the</text>
+      <text x="450" y="114" fill="#8fa6bd" font-size="11" font-family="monospace">pressure, not the link</text>
+    </svg>
+    <figcaption>FIG 4.1 — The payload changes (link, file, call-back, remote tool); the four levers never do.</figcaption>
+  </figure>
+
+  <div class="lesson"><h3>4.2 The verification habit that ends most fraud</h3>
+    <p>One habit beats a thousand warnings: <strong>verify out-of-band</strong>. Any request to change payment details, reset credentials, or grant remote access gets confirmed through a channel the message did not provide — the number on your card, the contact in your contract, walking over to the desk. Business-email-compensation fraud collapses against it; so does the “new WhatsApp number” CEO scam. Second habit: <strong>channel-hopping is a red flag</strong>. “Email me on WhatsApp” / “call this number” exists to escape the channel your organisation monitors.</p>
+    <p>Third: treat <strong>unexpected remote-access requests</strong> as hostile by default. Nobody legitimate needs you to run Quick Assist or install a remote client to “fix” a refund. In the ScreenConnect worm incidents, the initial accesses were exactly this: a support scam, a phishing MSI, a fake Geek Squad refund form.</p>
+  </div>
+
+  <div class="lesson"><h3>4.3 The first five minutes after a click</h3>
+    <p>Order matters more than speed: <strong>stop</strong> (do not type anything more), <strong>disconnect the trust, not the evidence</strong> — on a credential phish, change the password <em>from a different device</em> and revoke active sessions; on a file/executable, isolate the machine from the network but keep it powered on for forensics; <strong>report</strong> to bank/IT/telecom with screenshots; <strong>warn your contacts</strong> if identity or email is involved so the follow-on scam fails. Then breathe: reporting fast is a win, and organisations that punish reporters train their staff to hide breaches instead.</p>
+    <p>Remember the StyleSmuggler merchant: the fastest detection in that incident was a forwarded “weird email.” Your report is not an admission — it is a sensor.</p>
+  </div>
+
+  <div class="case"><span class="tag">Case file · Aug–Sep 2026</span>
+    <h4>“Let me help you fix that refund”</h4>
+    <p>Huntress traced three unrelated intrusions to the same social shape: a victim persuaded to run a remote-support tool or open a “refund” lure, deploying rogue ScreenConnect clients that then spread worm-like to whoever connected next — including help-desk technicians arriving to help. Kindness, weaponised; verification, absent.</p>
+  </div>
+
+  <div class="try"><span class="tag">Try it · 10 min</span>
+    <h4>Run a two-person drill</h4>
+    <p>Take a real scam SMS you’ve received. With one family member or colleague, rehearse: read it aloud, name which of the four levers it pulls, then perform the out-of-band check together (find the official number independently). Finish by agreeing one code word that means “verify me, I might be impersonated.”</p>
+  </div>
+
+  <div class="terms"><span class="chip">phishing</span><span class="chip">vishing / smishing</span><span class="chip">pretexting</span><span class="chip">out-of-band verification</span><span class="chip">channel-hopping</span><span class="chip">tech-support scam</span></div>
+
+  <div class="quiz" data-quiz="4">
+    <h3 class="quiz-title">Knowledge check · Module 4</h3>
+    <div class="q" data-correct="1">
+      <p class="qt">1. An SMS from your “bank” asks you to call the number in the message about a failed transfer. Best next action?</p>
+      <div class="opts">
+        <button class="opt">Call the number in the SMS — it’s official-looking</button>
+        <button class="opt">Call the number on the back of your card or in your banking app</button>
+        <button class="opt">Reply STOP and wait</button>
+        <button class="opt">Open the link to view the “failed transfer”</button>
+      </div>
+      <p class="expl" hidden>Correct: B. Out-of-band verification uses a channel the message did not supply; the SMS number is attacker-controlled by definition.</p>
+    </div>
+    <div class="q" data-correct="1">
+      <p class="qt">2. A “CEO” messages from a new WhatsApp number requesting an urgent supplier bank-detail change. The single strongest control is…</p>
+      <div class="opts">
+        <button class="opt">Reply and ask a personal question</button>
+        <button class="opt">Call back on the CEO’s known, previously-used number</button>
+        <button class="opt">Check the profile photo carefully</button>
+        <button class="opt">Ask them to email the request instead</button>
+      </div>
+      <p class="expl" hidden>Correct: B. Only a channel the attacker does not control verifies identity; moving to email still lands in attacker-controlled territory if the account is spoofed internally.</p>
+    </div>
+    <div class="q" data-correct="1">
+      <p class="qt">3. An employee reports within two minutes that they entered credentials on a phishing page. The best first organisational response is…</p>
+      <div class="opts">
+        <button class="opt">Open a disciplinary review to deter repeat mistakes</button>
+        <button class="opt">Thank them, reset the password from a clean device, and revoke active sessions</button>
+        <button class="opt">Wait to see whether anything is misused</button>
+        <button class="opt">Reimage the machine immediately, discarding logs</button>
+      </div>
+      <p class="expl" hidden>Correct: B. Speed of reporting is the asset to protect; revocation closes the window the phished credentials opened. Destroying logs destroys evidence.</p>
+    </div>
+    <p class="quiz-score" hidden></p>
+  </div>
+</section>
+
+<section class="module" id="m5">
+  <div class="eyebrow">Module 05 · ~60 min · Endpoints</div>
+  <h2>Devices: the computers you actually own</h2>
+  <p class="lead">Your phone is your bank, your ID wallet and your office. This module hardens the endpoints you personally control — and explains what “EDR”, “MDM” and “sideloading” mean when a company asks to put them on your machine.</p>
+  <div class="mod-tools">
+    <button class="btn listen" data-mod="5">▶ Listen to this module</button>
+    <button class="btn ghost done-btn" data-mod="5">Mark complete ✓</button>
+  </div>
+  <ul class="objectives">
+    <li class="ob-title">By the end of this module you can…</li>
+    <li>Explain why updates are a security control, and set a personal patch rule.</li>
+    <li>Distinguish antivirus, EDR and MDM — and what each can and cannot see.</li>
+    <li>Describe how signed-but-malicious apps and AV exclusions defeat “trust”.</li>
+    <li>Run a 10-minute phone hardening pass (SIM PIN, 2FA, sources, updates).</li>
+  </ul>
+
+  <div class="lesson"><h3>5.1 Updates are a security feature, not a nuisance</h3>
+    <p>Every patch is a public confession of a flaw — and attackers read confessions faster than defenders deploy them. The September 2026 Exchange story is the archetype: fix shipped 11 August, working exploit code public by 27 August, and Shadowserver still counted <strong>21,899 exposed unpatched servers</strong> on 1 September. Patch latency <em>is</em> the exploit window.</p>
+    <p>Your personal rule should be boring and absolute: <strong>OS and browser updates within 72 hours</strong> when rated critical (Chrome’s actively-exploited V8 zero-day, CVE-2026-85046, was fixed by an emergency update — the sixth Chrome zero-day of 2026), everything else within two weeks, auto-update on for apps wherever offered. And remember the uncomfortable footnote: sometimes the security product itself is the surface — Microsoft spent September racing to patch “ShieldBreak”, a privilege-escalation flaw in Defender’s own malware engine with a public PoC since August.</p>
+  </div>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 640 150" role="img" aria-label="Animated concentric defence layers around a phone">
+      <rect x="230" y="20" width="180" height="110" rx="18" fill="none" stroke="#24374f" stroke-width="2" class="pulse"/>
+      <rect x="255" y="38" width="130" height="74" rx="14" fill="none" stroke="#4da3ff" stroke-width="2" class="pulse" style="animation-delay:.5s"/>
+      <rect x="280" y="54" width="80" height="42" rx="8" fill="none" stroke="#8fd8ff" stroke-width="2" class="pulse" style="animation-delay:1s"/>
+      <rect x="305" y="64" width="30" height="22" rx="4" fill="#0d1524" stroke="#3ddc97" stroke-width="2"/>
+      <text x="320" y="145" fill="#8fa6bd" font-size="11" text-anchor="middle" font-family="monospace">you → lock+encryption → updates → EDR/AV → network</text>
+      <text x="60" y="60" fill="#8fa6bd" font-size="11" font-family="monospace">layers fail</text>
+      <text x="60" y="76" fill="#8fa6bd" font-size="11" font-family="monospace">individually —</text>
+      <text x="60" y="92" fill="#8fa6bd" font-size="11" font-family="monospace">that’s why plural</text>
+    </svg>
+    <figcaption>FIG 5.1 — Endpoint defence in depth. The innermost layer (lock + encryption) is the one thieves meet first.</figcaption>
+  </figure>
+
+  <div class="lesson"><h3>5.2 AV, EDR, MDM — the alphabet, decoded</h3>
+    <p><strong>Antivirus</strong> matches known bad files. <strong>EDR</strong> (endpoint detection &amp; response) watches behaviour — process trees, odd PowerShell, credential access — and lets a SOC respond. <strong>MDM</strong> (mobile device management) is the enrolment layer: enforced encryption, patch policy, remote wipe for company data. When an employer asks to enrol your personal phone, the honest question is <em>what can they see and what can they wipe</em> — usually work-profile data, not your photos, but ask in writing.</p>
+    <p>And know how endpoints actually fall in 2026: not by exotic malware, but by <strong>trust misplacement</strong>. Kaspersky tracked “Silver Fox” distributing the ValleyRAT backdoor inside a <em>genuinely signed</em> Chinese wallpaper app — signed, because signatures prove provenance, not intent — and running it under trusted processes while victims were socially engineered into adding it to their <strong>antivirus exclusions</strong>. An exclusion is a hole you dug yourself.</p>
+  </div>
+
+  <div class="lesson"><h3>5.3 The ten-minute phone hardening pass</h3>
+    <p>In order of payoff: <strong>lock + encryption</strong> (biometric + strong PIN; modern phones encrypt by default — verify); <strong>SIM PIN</strong> plus a telco porting/line lock (Module 3’s SIM-swap control); <strong>app sources</strong> — store-only installs, no sideloaded APKs chasing “premium free”; <strong>messaging 2FA</strong> (WhatsApp/Telegram two-step PIN); <strong>auto-update</strong> on for OS, browser, banking apps; <strong>Find My Device</strong> on; and a permissions sweep — does the torch app really need contacts? Charge-only on strange USB ports is paranoia-lite: the realistic risk is low, the habit is free.</p>
+  </div>
+
+  <div class="case"><span class="tag">Case file · Sep 2026</span>
+    <h4>The backdoor the user whitelisted</h4>
+    <p>ValleyRAT’s disguise worked because victims were coached into adding the “adware” to antivirus exclusions — then the backdoor ran under trusted process names. Signature valid, user consent obtained, AV blind. Trust is a configuration; attackers configure it too.</p>
+  </div>
+
+  <div class="try"><span class="tag">Try it · 10 min</span>
+    <h4>Phone hardening pass</h4>
+    <p>Do all five now: confirm auto-updates on; set SIM PIN; enable messaging-app two-step verification; review permissions on your three most-permissioned apps and revoke one each; confirm Find My Device and screen-lock timeout (&lt;2 min).</p>
+  </div>
+
+  <div class="terms"><span class="chip">EDR</span><span class="chip">MDM</span><span class="chip">sideloading</span><span class="chip">AV exclusion</span><span class="chip">n-day vs zero-day</span><span class="chip">SIM PIN</span></div>
+
+  <div class="quiz" data-quiz="5">
+    <h3 class="quiz-title">Knowledge check · Module 5</h3>
+    <div class="q" data-correct="2">
+      <p class="qt">1. ValleyRAT shipped inside a genuinely code-signed app. Why doesn’t the signature make it safe?</p>
+      <div class="opts">
+        <button class="opt">Signatures expire quickly</button>
+        <button class="opt">Signatures only prove the file wasn’t modified after signing</button>
+        <button class="opt">A signature proves who built it — not that the builder is benign</button>
+        <button class="opt">Antivirus ignores all signed files</button>
+      </div>
+      <p class="expl" hidden>Correct: C. Signing attests provenance/integrity; attackers obtain and abuse real certificates, so “signed” never means “safe”.</p>
+    </div>
+    <div class="q" data-correct="0">
+      <p class="qt">2. A “support agent” walks a user through adding an app to the antivirus exclusion list. The exclusion matters because…</p>
+      <div class="opts">
+        <button class="opt">It creates a deliberate blind spot the malware can live in</button>
+        <button class="opt">It speeds up the computer, which malware needs</button>
+        <button class="opt">It encrypts the app so AV can’t read it</button>
+        <button class="opt">It only affects cloud scanning, which is harmless</button>
+      </div>
+      <p class="expl" hidden>Correct: A. Exclusions tell every control to look away — the cheapest persistence trick in social engineering.</p>
+    </div>
+    <div class="q" data-correct="1">
+      <p class="qt">3. Which single configuration most reduces the impact of a stolen, powered-off phone?</p>
+      <div class="opts">
+        <button class="opt">Having antivirus installed</button>
+        <button class="opt">Full-disk encryption with a strong lock-screen secret</button>
+        <button class="opt">Keeping fewer apps installed</button>
+        <button class="opt">Using a pattern lock</button>
+      </div>
+      <p class="expl" hidden>Correct: B. Encryption turns a stolen device into a brick of ciphertext; patterns and app counts change little, and AV doesn’t protect data at rest.</p>
+    </div>
+    <p class="quiz-score" hidden></p>
+  </div>
+</section>
+
+
+<section class="module" id="m6">
+  <div class="eyebrow">Module 06 · ~60 min · Networks</div>
+  <h2>Routers, Wi-Fi and the VPN truth</h2>
+  <p class="lead">Your router is a computer that decides what reaches your home — and in 2026, perimeter routers were among the most-abused devices on the internet. Here’s how to own yours, survive café Wi-Fi, and know exactly what a VPN does and doesn’t do.</p>
+  <div class="mod-tools">
+    <button class="btn listen" data-mod="6">▶ Listen to this module</button>
+    <button class="btn ghost done-btn" data-mod="6">Mark complete ✓</button>
+  </div>
+  <ul class="objectives">
+    <li class="ob-title">By the end of this module you can…</li>
+    <li>Harden a home router: admin creds, firmware, WPA2/3, guest isolation.</li>
+    <li>Explain the realistic risks of public Wi-Fi and the rules that neutralise them.</li>
+    <li>State precisely what a VPN protects you from — and what it doesn’t.</li>
+    <li>Explain why unpatched routers become botnet and proxy infrastructure.</li>
+  </ul>
+
+  <div class="lesson"><h3>6.1 Your router is an edge device (act like it)</h3>
+    <p>Everything in Module 1 about “the edge” applies to the box under your TV: always on, privileged, unwatched. September 2026 reporting on MikroTik RouterOS flaws described exactly the downstream abuse: unpatched perimeter appliances used for <strong>unauthorised config changes, packet interception, command proxies and DDoS botnets</strong>. Separately, the “Fire Ant” espionage campaign planted covert GRE tunnels inside Cisco IOS XR routers to siphon live traffic — routers as spy hardware.</p>
+    <p>The home checklist is short and unglamorous: <strong>change the factory admin password</strong> (still the #1 router failure); <strong>update firmware</strong> and enable auto-update if present; <strong>WPA2-AES or WPA3</strong>, never WEP/open; <strong>disable WPS</strong>; put IoT gadgets and guests on a <strong>guest network</strong> so a compromised bulb can’t reach your laptop; and disable remote admin from the internet unless you can explain why you need it.</p>
+  </div>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 640 140" role="img" aria-label="Animated path from device through router shield to internet cloud">
+      <rect x="60" y="55" width="70" height="40" rx="8" fill="none" stroke="#8fd8ff" stroke-width="2"/>
+      <rect x="250" y="45" width="90" height="60" rx="10" fill="none" stroke="#4da3ff" stroke-width="2.5"/>
+      <path d="M295 58 l16 6 v10 q0 12 -16 18 q-16 -6 -16 -18 v-10 z" fill="none" stroke="#3ddc97" stroke-width="2" class="pulse"/>
+      <ellipse cx="520" cy="75" rx="70" ry="38" fill="none" stroke="#5f7690" stroke-width="2"/>
+      <line x1="132" y1="75" x2="246" y2="75" stroke="#5f7690" stroke-width="2" class="dash"/>
+      <line x1="342" y1="75" x2="448" y2="75" stroke="#5f7690" stroke-width="2" class="dash"/>
+      <circle cx="600" cy="30" r="6" fill="#ff6161" class="pulse"/>
+      <text x="95" y="115" fill="#8fa6bd" font-size="11" text-anchor="middle" font-family="monospace">device</text>
+      <text x="295" y="125" fill="#8fa6bd" font-size="11" text-anchor="middle" font-family="monospace">your router = your edge</text>
+      <text x="520" y="79" fill="#8fa6bd" font-size="11" text-anchor="middle" font-family="monospace">internet</text>
+    </svg>
+    <figcaption>FIG 6.1 — The shield is configuration, not hardware: admin password, firmware, WPA3, guest isolation.</figcaption>
+  </figure>
+
+  <div class="lesson"><h3>6.2 Public Wi-Fi: the real risk model</h3>
+    <p>HTTPS encrypts your traffic’s contents end-to-end, so the old “everyone reads your passwords at the café” story is mostly dead. The <em>living</em> risks are: <strong>rogue/evil-twin access points</strong> with convincing names; attacks on the <strong>unencrypted leftovers</strong> (captive portals, legacy protocols, local file sharing, printer discovery); and simple <strong>local proximity</strong> — same network means your device can be scanned and probed directly. Rules: forget networks after use, disable auto-join, keep the device firewall on, and for anything sensitive on untrusted Wi-Fi use your phone’s hotspot or a VPN.</p>
+  </div>
+
+  <div class="lesson"><h3>6.3 What a VPN does — and the marketing lie</h3>
+    <p>A VPN encrypts the hop between you and the VPN server and masks your traffic from the <em>local</em> network — genuinely valuable on hotel and café Wi-Fi, and for routing around censorship or hostile networks. It does <strong>not</strong> make you anonymous to the sites you log into (they still see your account), it does <strong>not</strong> block malware or phishing, and it does <strong>not</strong> replace device security — you are simply extending trust to the VPN provider. Choose providers like you choose banks; free VPNs are usually the product.</p>
+  </div>
+
+  <div class="case"><span class="tag">Case file · 2026</span>
+    <h4>Tunnels inside the tunnel-makers</h4>
+    <p>Fire Ant’s campaign hid GRE tunnels in router configs and exfiltrated live packet captures; MikroTik abuse turned neglected routers into proxy fleets. The pattern for defenders: inventory the routers you forgot (home, branch, SOHO), because attackers already have.</p>
+  </div>
+
+  <div class="try"><span class="tag">Try it · 15 min</span>
+    <h4>Router audit</h4>
+    <p>Log into your router (sticker or 192.168.x.1): change admin password if default; note firmware version and check for updates; confirm WPA2-AES/WPA3; disable WPS; enable guest network for IoT. Write the model + firmware date somewhere you’ll find it next quarter.</p>
+  </div>
+
+  <div class="terms"><span class="chip">WPA3</span><span class="chip">evil twin</span><span class="chip">guest network</span><span class="chip">firmware</span><span class="chip">VPN tunnel</span><span class="chip">GRE tunnel</span></div>
+
+  <div class="quiz" data-quiz="6">
+    <h3 class="quiz-title">Knowledge check · Module 6</h3>
+    <div class="q" data-correct="1">
+      <p class="qt">1. With HTTPS everywhere, what is the primary realistic risk of open café Wi-Fi?</p>
+      <div class="opts">
+        <button class="opt">HTTPS encryption is disabled on Wi-Fi networks</button>
+        <button class="opt">A hostile local network can run rogue services, probe your device and attack unencrypted leftovers</button>
+        <button class="opt">The ISP reads your HTTPS content</button>
+        <button class="opt">Wi-Fi signals cannot be encrypted at all</button>
+      </div>
+      <p class="expl" hidden>Correct: B. Content is protected; position is the risk — rogue APs, local scanning and any plaintext protocol or service discovery still bite.</p>
+    </div>
+    <div class="q" data-correct="0">
+      <p class="qt">2. On hostile hotel Wi-Fi, a reputable VPN’s main protection is…</p>
+      <div class="opts">
+        <button class="opt">Encrypting traffic to the VPN server so local on-path observers can’t read or inject it</button>
+        <button class="opt">Making you anonymous to every website you log into</button>
+        <button class="opt">Blocking malware downloads and phishing pages</button>
+        <button class="opt">Replacing the need for device encryption</button>
+      </div>
+      <p class="expl" hidden>Correct: A. The VPN shields the local hop; logged-in sites still identify you, and malware/phishing travel fine inside the tunnel.</p>
+    </div>
+    <div class="q" data-correct="2">
+      <p class="qt">3. Per 2026 reporting, the most common real-world fate of neglected, unpatched SOHO routers is…</p>
+      <div class="opts">
+        <button class="opt">Spontaneous hardware failure</button>
+        <button class="opt">Being ignored by attackers in favour of cloud targets</button>
+        <button class="opt">Recruitment into botnets, proxy infrastructure or covert tunnelling</button>
+        <button class="opt">Automatic manufacturer recall</button>
+      </div>
+      <p class="expl" hidden>Correct: C. MikroTik abuse and IOS XR espionage both treat routers as durable, privileged footholds — quiet, reachable, and rarely logged.</p>
+    </div>
+    <p class="quiz-score" hidden></p>
+  </div>
+</section>
+
+
+<section class="module" id="m7">
+  <div class="eyebrow">Module 07 · ~60 min · Privacy &amp; data</div>
+  <h2>Your data: what exists, who holds it, what the law says</h2>
+  <p class="lead">Privacy is security’s quiet twin: the data that exists about you is the map attackers plan with. This module inventories that map, translates Kenya’s Data Protection Act into plain rights, and cuts your exposed surface in an afternoon.</p>
+  <div class="mod-tools">
+    <button class="btn listen" data-mod="7">▶ Listen to this module</button>
+    <button class="btn ghost done-btn" data-mod="7">Mark complete ✓</button>
+  </div>
+  <ul class="objectives">
+    <li class="ob-title">By the end of this module you can…</li>
+    <li>List the four places personal data leaks from (breaches, brokers, telemetry, you).</li>
+    <li>Summarise Kenya DPA 2019 rights: consent, access, correction, erasure, breach notice.</li>
+    <li>Reduce app/service data exposure with a permissions and backups pass.</li>
+    <li>Explain how oversharing becomes reconnaissance for account recovery attacks.</li>
+  </ul>
+
+  <div class="lesson"><h3>7.1 The map that already exists</h3>
+    <p>Assume four copies of “you” are circulating: <strong>breach corpora</strong> (old leaks, forever for sale — check your email on a breach-lookup service today), <strong>data brokers and ad ecosystems</strong> (inferred profiles, location histories), <strong>app telemetry</strong> (contacts, photos metadata, usage), and <strong>you</strong> (posts, tags, check-ins, the school name in your bio). Scammers compose these copies: your pet’s name in a 2019 post is a password-reset answer in 2026.</p>
+    <p>Metadata deserves special suspicion: a “harmless” photo can carry GPS coordinates, device model and timestamp. Strip or disable location tagging for public posts, and remember that the audience of a “friends-only” post includes every friend’s compromised account.</p>
+  </div>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 640 140" role="img" aria-label="Animated data dots flowing toward a locked vault, some deflected">
+      <circle cx="80" cy="40" r="5" fill="#8fd8ff" class="pulse"/>
+      <circle cx="80" cy="75" r="5" fill="#8fd8ff" class="pulse" style="animation-delay:.4s"/>
+      <circle cx="80" cy="110" r="5" fill="#8fd8ff" class="pulse" style="animation-delay:.8s"/>
+      <line x1="95" y1="40" x2="250" y2="62" stroke="#5f7690" stroke-width="2" class="dash"/>
+      <line x1="95" y1="75" x2="250" y2="75" stroke="#5f7690" stroke-width="2" class="dash"/>
+      <line x1="95" y1="110" x2="250" y2="88" stroke="#5f7690" stroke-width="2" class="dash"/>
+      <rect x="255" y="45" width="120" height="60" rx="10" fill="none" stroke="#4da3ff" stroke-width="2.5"/>
+      <rect x="300" y="62" width="30" height="26" rx="5" fill="none" stroke="#3ddc97" stroke-width="2"/>
+      <path d="M306 62 v-8 a9 9 0 0 1 18 0 v8" fill="none" stroke="#3ddc97" stroke-width="2"/>
+      <path d="M390 60 q40 -18 70 -6" fill="none" stroke="#ff6161" stroke-width="2" class="pulse"/>
+      <path d="M390 90 q40 18 70 6" fill="none" stroke="#ff6161" stroke-width="2" class="pulse" style="animation-delay:.6s"/>
+      <text x="315" y="125" fill="#8fa6bd" font-size="11" text-anchor="middle" font-family="monospace">consent · purpose · minimisation</text>
+      <text x="480" y="50" fill="#ff6161" font-size="11" font-family="monospace">excess collection</text>
+      <text x="480" y="105" fill="#ff6161" font-size="11" font-family="monospace">refused</text>
+    </svg>
+    <figcaption>FIG 7.1 — Data-protection law in one picture: what enters must be necessary, consented, and lockable.</figcaption>
+  </figure>
+
+  <div class="lesson"><h3>7.2 Kenya’s DPA 2019, in human sentences</h3>
+    <p>The Act says, in effect: your personal data may only be collected with a <strong>lawful basis (usually your informed consent)</strong>, only for a <strong>stated purpose</strong>, only as much as is <strong>necessary</strong>; you may <strong>ask what is held</strong> about you, <strong>correct</strong> it, and in many cases <strong>demand deletion</strong>; and when it is breached, the holder must notify the regulator — and where the harm is real, you — <strong>without undue delay</strong>. The Office of the Data Protection Commissioner (ODPC) is your escalation route when a company stonewalls you.</p>
+    <p>Use it practically: when an app demands contacts “or you can’t continue,” that is a purpose-limitation conversation; when a company you left still emails you, that is an erasure request; when your bank breaches, notification is not a favour — it is the law.</p>
+  </div>
+
+  <div class="lesson"><h3>7.3 The afternoon cleanup</h3>
+    <p>Four passes, in order: <strong>breach pass</strong> (lookup your email; rotate everything listed); <strong>permissions pass</strong> (revoke contacts/location/mic from apps that don’t earn them); <strong>backup pass</strong> (enable end-to-end-encrypted cloud backups for WhatsApp and device, or accept that your “private” chats sit in someone’s cloud in plaintext); <strong>visibility pass</strong> (social: hide birthday year, old posts audit, stranger-followers prune). None of this makes you invisible; all of it makes you <em>expensive</em>.</p>
+  </div>
+
+  <div class="case"><span class="tag">Case file · Sep 2026</span>
+    <h4>When someone else’s weak check becomes your open door</h4>
+    <p>Dropbox’s incident: attackers abused an email-verification weakness in Lenovo ID, then Dropbox’s federated login accepted the asserted email without a second challenge — ~5,000 accounts accessed. Your data’s safety can depend on a partner company’s verification logic you have never heard of. Federated convenience is borrowed trust; inventory what is connected (Module 8).</p>
+  </div>
+
+  <div class="try"><span class="tag">Try it · 15 min</span>
+    <h4>Breach + permissions double-pass</h4>
+    <p>1) Run your primary email through a reputable breach-lookup service; change every password that appears. 2) In phone settings, sort apps by permissions; revoke one permission from each of your three greediest apps. 3) Turn on encrypted chat backups if offered.</p>
+  </div>
+
+  <div class="terms"><span class="chip">personal data</span><span class="chip">data controller</span><span class="chip">consent</span><span class="chip">purpose limitation</span><span class="chip">right to erasure</span><span class="chip">metadata</span></div>
+
+  <div class="quiz" data-quiz="7">
+    <h3 class="quiz-title">Knowledge check · Module 7</h3>
+    <div class="q" data-correct="2">
+      <p class="qt">1. The Dropbox–Lenovo ID incident’s core lesson is…</p>
+      <div class="opts">
+        <button class="opt">Passwords are obsolete</button>
+        <button class="opt">Email addresses are secret identifiers</button>
+        <button class="opt">Federated login is only as strong as the weakest partner’s identity verification</button>
+        <button class="opt">Cloud storage cannot be secured</button>
+      </div>
+      <p class="expl" hidden>Correct: C. Dropbox trusted an assertion produced by Lenovo ID’s flawed email verification; owning an inbox address was treated as proving identity.</p>
+    </div>
+    <div class="q" data-correct="3">
+      <p class="qt">2. Which set counts as personal data under Kenya’s DPA-style protections?</p>
+      <div class="opts">
+        <button class="opt">Only government IDs and bank numbers</button>
+        <button class="opt">Only data you typed into forms</button>
+        <button class="opt">Only contact details</button>
+        <button class="opt">Identifiers and linked activity — name, phone, IP, location history, online IDs</button>
+      </div>
+      <p class="expl" hidden>Correct: D. Personal data is anything relating to an identified or identifiable person, including technical identifiers and inferred/located activity.</p>
+    </div>
+    <div class="q" data-correct="0">
+      <p class="qt">3. Why disable location metadata on publicly shared photos?</p>
+      <div class="opts">
+        <button class="opt">It hands strangers a precise map of your home, routines and current position</button>
+        <button class="opt">It makes photos load slower</button>
+        <button class="opt">GPS tags corrupt image quality</button>
+        <button class="opt">Platforms delete geotagged photos</button>
+      </div>
+      <p class="expl" hidden>Correct: A. Embedded coordinates plus timestamps are free reconnaissance for stalking, burglary timing and social-engineering prep.</p>
+    </div>
+    <p class="quiz-score" hidden></p>
+  </div>
+</section>
+
+
+<section class="module" id="m8">
+  <div class="eyebrow">Module 08 · ~60 min · Cloud &amp; third parties</div>
+  <h2>Cloud accounts, SaaS and the vendors holding your keys</h2>
+  <p class="lead">Most of your life runs on other people’s computers. This module teaches the shared-responsibility split, the OAuth/grant inventory nobody does, backup strategy that survives ransomware, and the vendor question that separates mature organisations from lucky ones.</p>
+  <div class="mod-tools">
+    <button class="btn listen" data-mod="8">▶ Listen to this module</button>
+    <button class="btn ghost done-btn" data-mod="8">Mark complete ✓</button>
+  </div>
+  <ul class="objectives">
+    <li class="ob-title">By the end of this module you can…</li>
+    <li>Explain the shared-responsibility model with one concrete example per layer.</li>
+    <li>Audit and revoke third-party app grants (OAuth) on your cloud accounts.</li>
+    <li>Design a 3-2-1 backup scheme with one immutable or offline copy.</li>
+    <li>Ask a vendor the four questions that expose their real security posture.</li>
+  </ul>
+
+  <div class="lesson"><h3>8.1 Shared responsibility, without the slide deck</h3>
+    <p>The provider secures <em>the cloud</em>: physical datacentres, hypervisors, the fabric. You secure <em>in the cloud</em>: your accounts, your configurations, your data, your sharing links. Nearly every “cloud breach” headline is a <strong>your-side</strong> failure: an over-broad sharing link, a storage bucket left public, an unrevoked ex-employee grant. Default-deny is the posture: private by default, shared deliberately, reviewed quarterly.</p>
+  </div>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 640 150" role="img" aria-label="Animated shared responsibility stack with sweep highlight on the customer layer">
+      <rect x="200" y="20" width="240" height="32" rx="6" fill="none" stroke="#5f7690" stroke-width="2"/>
+      <rect x="200" y="58" width="240" height="32" rx="6" fill="none" stroke="#4da3ff" stroke-width="2"/>
+      <rect x="200" y="96" width="240" height="32" rx="6" fill="none" stroke="#3ddc97" stroke-width="2.5"/>
+      <g class="sweep"><rect x="206" y="100" width="60" height="24" rx="4" fill="rgba(61,220,151,.18)"/></g>
+      <text x="320" y="41" fill="#8fa6bd" font-size="11" text-anchor="middle" font-family="monospace">PROVIDER: fabric, hardware, hypervisor</text>
+      <text x="320" y="79" fill="#8fa6bd" font-size="11" text-anchor="middle" font-family="monospace">SHARED: config baselines, logging</text>
+      <text x="320" y="117" fill="#e9f0f8" font-size="11" text-anchor="middle" font-family="monospace">YOU: accounts, data, grants, backups</text>
+      <text x="470" y="117" fill="#3ddc97" font-size="11" font-family="monospace">← most breaches live here</text>
+    </svg>
+    <figcaption>FIG 8.1 — The layer you own is the layer that leaks. Sweep = where audit effort belongs.</figcaption>
+  </figure>
+
+  <div class="lesson"><h3>8.2 Grants, integrations and the shadow perimeter</h3>
+    <p>Every “Sign in with X” and every connected app is a standing permission: read my mail, post as me, see my files. Attackers love <strong>OAuth abuse</strong> because it needs no password — the token is the key. Twice a year, open your Google/Microsoft/account “third-party access” page and revoke ruthlessly; anything you don’t recognise gets evicted, not investigated. The Dropbox incident adds the federation clause: integrations can also inherit a partner’s verification weaknesses, so the inventory includes SSO links, not just apps.</p>
+  </div>
+
+  <div class="lesson"><h3>8.3 Backups that survive ransomware, and exits that survive vendors</h3>
+    <p><strong>3-2-1</strong>: three copies, two media, one offsite — and in 2026, one <strong>immutable or offline</strong>, because ransomware now deletes reachable backups first. Test a restore quarterly; an untested backup is a rumour. Then the vendor exit question: if this SaaS vanished tonight, what would you get back, in what format, how fast? “Your data is yours” should be a download button, not a slogan.</p>
+    <p>And when a vendor is breached, respond like JetBrains’ customers were told to: <strong>rotate what you entrusted</strong>. JetBrains disclosed that attackers entered through its own unpatched TeamCity server (CVE-2026-63077), took a 2024 backup of its Cadence service and touched AWS credentials — users were told to revoke/rotate everything used in Cadence executions and treat those outputs as untrusted. Your vendor’s patch hygiene is your risk; the four questions: <em>how do you patch, how fast? what do you hold about us? how would you notify us, and within how long? can we export and leave?</em></p>
+  </div>
+
+  <div class="case"><span class="tag">Case file · Aug–Sep 2026</span>
+    <h4>The vendor that told everyone to patch — except itself</h4>
+    <p>JetBrains disclosed CVE-2026-63077 on 27 July, warned customers, and was itself breached through an unpatched instance from 8–24 August. The irony is the lesson: supplier security claims age like fish. Verify with questions, contracts and rotation drills — not brochures.</p>
+  </div>
+
+  <div class="try"><span class="tag">Try it · 15 min</span>
+    <h4>Grant purge + backup proof</h4>
+    <p>Open third-party access on your two biggest cloud accounts; revoke at least three stale grants. Then locate your most important document’s backup: when was it last copied, where does it live, and could you restore it tonight? If any answer is “unsure,” that’s this month’s project.</p>
+  </div>
+
+  <div class="terms"><span class="chip">shared responsibility</span><span class="chip">OAuth grant</span><span class="chip">token abuse</span><span class="chip">3-2-1 backups</span><span class="chip">immutable copy</span><span class="chip">vendor exit plan</span></div>
+
+  <div class="quiz" data-quiz="8">
+    <h3 class="quiz-title">Knowledge check · Module 8</h3>
+    <div class="q" data-correct="1">
+      <p class="qt">1. After the JetBrains Cadence disclosure, the most important action for affected users was…</p>
+      <div class="opts">
+        <button class="opt">Deleting their JetBrains accounts</button>
+        <button class="opt">Rotating every credential/secret used in Cadence executions and treating outputs as untrusted</button>
+        <button class="opt">Moving all workloads off cloud services permanently</button>
+        <button class="opt">Waiting for JetBrains to confirm which buckets were accessed</button>
+      </div>
+      <p class="expl" hidden>Correct: B. Compromise of the execution environment means anything presented to it is assumed taken; rotation closes the reuse path while scope is still unknown.</p>
+    </div>
+    <div class="q" data-correct="2">
+      <p class="qt">2. In the shared-responsibility model, which item is normally YOUR side?</p>
+      <div class="opts">
+        <button class="opt">Physical datacentre security</button>
+        <button class="opt">Hypervisor patching</button>
+        <button class="opt">Data classification, access configuration and sharing settings</button>
+        <button class="opt">Underlying network fabric</button>
+      </div>
+      <p class="expl" hidden>Correct: C. Providers own the cloud’s substrate; customers own what their accounts, configs and links expose.</p>
+    </div>
+    <div class="q" data-correct="0">
+      <p class="qt">3. Why keep one immutable or offline backup copy?</p>
+      <div class="opts">
+        <button class="opt">Ransomware and intruders target reachable backups first; an immutable copy survives encryption and deletion</button>
+        <button class="opt">It compresses better</button>
+        <button class="opt">Cloud providers require it by law</button>
+        <button class="opt">Offline copies restore faster than SSDs</button>
+      </div>
+      <p class="expl" hidden>Correct: A. If every backup is writable from the compromised environment, “backup” is just the attacker’s second encryption target.</p>
+    </div>
+    <p class="quiz-score" hidden></p>
+  </div>
+</section>
+
+<section class="module" id="m9">
+  <div class="eyebrow">Module 09 · ~60 min · Vulnerabilities</div>
+  <h2>CVEs, CVSS and the patching economy</h2>
+  <p class="lead">“Critical vulnerability” is a headline; CVE-2026-20212 (CVSS 9.8, AV:N/AC:L/PR:N/UI:N) is a sentence you can actually act on. This module teaches you to read advisories like an analyst — and to understand why patching alone never finishes the job.</p>
+  <div class="mod-tools">
+    <button class="btn listen" data-mod="9">▶ Listen to this module</button>
+    <button class="btn ghost done-btn" data-mod="9">Mark complete ✓</button>
+  </div>
+  <ul class="objectives">
+    <li class="ob-title">By the end of this module you can…</li>
+    <li>Decode a CVE entry: identifier, CVSS vector, affected versions, workaround vs fix.</li>
+    <li>Explain why reachability and chaining outrank raw CVSS in prioritisation.</li>
+    <li>Describe the KEV catalogue and what listing changes operationally.</li>
+    <li>Explain “fully patched but compromised” using StyleSmuggler.</li>
+  </ul>
+
+  <div class="lesson"><h3>9.1 Reading an advisory like an analyst</h3>
+    <p>Every advisory answers five questions: <strong>what</strong> (CVE id + weakness class), <strong>how bad</strong> (CVSS — note the vector: network? complexity? privileges? user interaction?), <strong>who is affected</strong> (exact versions/PIDs), <strong>is it exploited</strong> (KEV listing, vendor PSIRT language), and <strong>what now</strong> (fixed release vs workaround). Cisco’s September advisory is a clean specimen: CVE-2026-20212, CVSS 9.8, vector AV:N/AC:L/PR:N/UI:N — reachable over the network, easy, no credentials, no click — because TCP ports 43210/43211 sat open in the default VRF; fix = upgraded NX-OS; workaround = iACLs blocking those ports.</p>
+    <p>Two reading habits separate pros from panic: <strong>CVSS is severity, not risk</strong> — a 9.8 buried in a sealed management VLAN loses to a 7.5 facing the internet with no auth; and <strong>“workaround” is not “fix”</strong> — it is a bridge you pay tolls on until the real release lands.</p>
+  </div>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 640 140" role="img" aria-label="Animated patch conveyor belt with vulnerability boxes and a gauge">
+      <line x1="60" y1="95" x2="470" y2="95" stroke="#5f7690" stroke-width="3" class="dash"/>
+      <g class="sweep"><rect x="90" y="60" width="42" height="32" rx="6" fill="none" stroke="#ff6161" stroke-width="2"/></g>
+      <rect x="230" y="60" width="42" height="32" rx="6" fill="none" stroke="#ffb454" stroke-width="2"/>
+      <rect x="360" y="60" width="42" height="32" rx="6" fill="none" stroke="#3ddc97" stroke-width="2"/>
+      <circle cx="560" cy="70" r="34" fill="none" stroke="#4da3ff" stroke-width="2"/>
+      <line x1="560" y1="70" x2="584" y2="50" stroke="#8fd8ff" stroke-width="2.5" class="spin" style="animation-duration:3s"/>
+      <text x="111" y="118" fill="#ff6161" font-size="10" text-anchor="middle" font-family="monospace">disclosed</text>
+      <text x="251" y="118" fill="#ffb454" font-size="10" text-anchor="middle" font-family="monospace">patched</text>
+      <text x="381" y="118" fill="#3ddc97" font-size="10" text-anchor="middle" font-family="monospace">deployed</text>
+      <text x="560" y="122" fill="#8fa6bd" font-size="10" text-anchor="middle" font-family="monospace">exposure clock</text>
+    </svg>
+    <figcaption>FIG 9.1 — The window that matters is between “disclosed” and “deployed.” Attackers watch the same belt.</figcaption>
+  </figure>
+
+  <div class="lesson"><h3>9.2 The exposure economy</h3>
+    <p>Disclosure starts a race both sides can see. Shadowserver’s internet-wide scans flagged <strong>21,899 Exchange servers</strong> still unpatched against CVE-2026-62911 three weeks after the fix — the same count attackers use as a shopping list. End-of-support makes it structural: Exchange 2016/2019 fixes ride on paid Extended Security Updates that end 31 October 2026, after which “unpatched” becomes permanent. And “it’s internal only” is a topology hope, not a control: Cisco’s own advisory notes a switch needn’t face the internet if a compromised segment can reach it.</p>
+    <p>Prioritisation, then, is exposure math: <strong>KEV-listed or actively exploited → now</strong>; internet-reachable unauthenticated RCE → this week; everything else on SLA. KEV (CISA’s Known Exploited Vulnerabilities catalogue) is the profession’s agreement to stop debating scores once real exploitation exists — SonicWall’s chained SMA1000 flaws landed there within days of disclosure.</p>
+  </div>
+
+  <div class="lesson"><h3>9.3 Chains, and the patched-but-compromised paradox</h3>
+    <p>Attackers compose flaws the way chefs compose flavours: SonicWall’s 10.0 pre-auth SSRF bought privileged reach; the 7.8 command injection cashed it in — individually “just” two CVEs, together an unauthenticated takeover. Which brings us to the paradox every practitioner must internalise: <strong>patch status does not equal safety</strong>. StyleSmuggler’s first victim ran the highest patch level available with a clean patch report — and was compromised by a flaw no vendor had described yet. Vulnerability management is therefore three jobs, not one: <strong>inventory</strong> (you cannot patch what you forgot), <strong>exposure reduction</strong> (disable GraphQL, block ports, segment), and <strong>detection</strong> (for the flaw with no CVE yet).</p>
+  </div>
+
+  <div class="case"><span class="tag">Case file · Sep 2026</span>
+    <h4>Two open ports, root on the switch</h4>
+    <p>Cisco found CVE-2026-20212 itself, while closing a support ticket — a reminder that criticals often surface quietly. The ports (43210/43211) were open <em>by default</em>. Default configurations are the attacker’s standing invitation; your job is to rescind it.</p>
+  </div>
+
+  <div class="try"><span class="tag">Try it · 15 min</span>
+    <h4>Decode one real advisory</h4>
+    <p>Open any current vendor advisory (Cisco PSIRT, SAP notes, or a KEV entry). Extract five fields: CVE, CVSS vector, affected versions, exploitation status, fix vs workaround. Write a three-line summary a manager could act on. If your three lines change a decision, you’ve learned the module.</p>
+  </div>
+
+  <div class="terms"><span class="chip">CVE</span><span class="chip">CVSS vector</span><span class="chip">KEV catalogue</span><span class="chip">exploit chain</span><span class="chip">workaround ≠ fix</span><span class="chip">exposure window</span></div>
+
+  <div class="quiz" data-quiz="9">
+    <h3 class="quiz-title">Knowledge check · Module 9</h3>
+    <div class="q" data-correct="1">
+      <p class="qt">1. Flaw A: CVSS 9.8, reachable only from a sealed management VLAN. Flaw B: CVSS 7.5, internet-facing, unauthenticated. With limited patch capacity this week, you fix…</p>
+      <div class="opts">
+        <button class="opt">A first — higher score always wins</button>
+        <button class="opt">B first — reachability and authentication requirements drive real risk</button>
+        <button class="opt">Neither — both are theoretical</button>
+        <button class="opt">Whichever vendor replies first</button>
+      </div>
+      <p class="expl" hidden>Correct: B. CVSS measures intrinsic severity; risk multiplies it by exposure. An unreachable 9.8 is a scheduled task; a reachable 7.5 is an incident waiting.</p>
+    </div>
+    <div class="q" data-correct="2">
+      <p class="qt">2. A vulnerability appears in CISA’s KEV catalogue. Operationally, this means…</p>
+      <div class="opts">
+        <button class="opt">It has a high CVSS score</button>
+        <button class="opt">It affects government systems only</button>
+        <button class="opt">Real exploitation is evidenced, so it jumps the queue regardless of score</button>
+        <button class="opt">A patch does not exist yet</button>
+      </div>
+      <p class="expl" hidden>Correct: C. KEV records observed exploitation; that evidence outweighs theoretical scoring in prioritisation.</p>
+    </div>
+    <div class="q" data-correct="0">
+      <p class="qt">3. StyleSmuggler compromised a store running the highest available patch level with a clean patch report. The defensible conclusion is…</p>
+      <div class="opts">
+        <button class="opt">Patch status proves nothing about flaws no vendor has described yet — exposure reduction and detection must carry that risk</button>
+        <button class="opt">Patch reporting tools are useless and should be removed</button>
+        <button class="opt">The store must have been lying about its patch level</button>
+        <button class="opt">Magento is uniquely insecure compared to all platforms</button>
+      </div>
+      <p class="expl" hidden>Correct: A. Patching defends the known; zero-days are the unknown — layers two and three (exposure, detection) exist precisely for them.</p>
+    </div>
+    <p class="quiz-score" hidden></p>
+  </div>
+</section>
+
+
+<section class="module" id="m10">
+  <div class="eyebrow">Module 10 · ~60 min · Incident response</div>
+  <h2>The first hour: your personal incident playbook</h2>
+  <p class="lead">Unit 42’s ten-hour breach and your drained mobile-money account run on the same clock: the first hour decides the outcome. This module gives you containment orders, evidence habits and reporting routes — for work incidents and for the ones that hit your own wallet.</p>
+  <div class="mod-tools">
+    <button class="btn listen" data-mod="10">▶ Listen to this module</button>
+    <button class="btn ghost done-btn" data-mod="10">Mark complete ✓</button>
+  </div>
+  <ul class="objectives">
+    <li class="ob-title">By the end of this module you can…</li>
+    <li>Execute correct first actions for credential phish, device malware and bank fraud — in order.</li>
+    <li>Preserve evidence without playing forensic hero.</li>
+    <li>Name the reporting routes for personal and organisational incidents (incl. Kenya).</li>
+    <li>Explain why post-incident resets include MFA seeds and sessions, not just passwords.</li>
+  </ul>
+
+  <div class="lesson"><h3>10.1 Detect without destroying</h3>
+    <p>Detection signals are usually mundane: a bank SMS you didn’t trigger, a “password changed” mail you didn’t request, a device that’s hot and slow at 3am, colleagues receiving strange messages “from you,” a supplier invoice with new bank details. The first discipline: <strong>stop feeding the incident</strong> — no more typing, no more clicking — and the second: <strong>don’t destroy evidence</strong>. Reformatting the laptop feels like cleanup and is, forensically, arson. Screenshots, timestamps, message headers and the powered-on machine are your case file.</p>
+  </div>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 640 140" role="img" aria-label="Animated incident clock with first-hour timeline">
+      <circle cx="110" cy="70" r="44" fill="none" stroke="#4da3ff" stroke-width="2.5"/>
+      <line x1="110" y1="70" x2="110" y2="38" stroke="#8fd8ff" stroke-width="3" class="spin" style="animation-duration:4s"/>
+      <circle cx="110" cy="70" r="4" fill="#8fd8ff"/>
+      <line x1="190" y1="70" x2="600" y2="70" stroke="#24374f" stroke-width="3"/>
+      <circle cx="210" cy="70" r="8" fill="#ff6161" class="pulse"/>
+      <circle cx="330" cy="70" r="8" fill="#ffb454" class="pulse" style="animation-delay:.4s"/>
+      <circle cx="450" cy="70" r="8" fill="#4da3ff" class="pulse" style="animation-delay:.8s"/>
+      <circle cx="570" cy="70" r="8" fill="#3ddc97" class="pulse" style="animation-delay:1.2s"/>
+      <text x="210" y="100" fill="#8fa6bd" font-size="10" text-anchor="middle" font-family="monospace">STOP &amp; isolate</text>
+      <text x="330" y="100" fill="#8fa6bd" font-size="10" text-anchor="middle" font-family="monospace">revoke &amp; rotate</text>
+      <text x="450" y="100" fill="#8fa6bd" font-size="10" text-anchor="middle" font-family="monospace">report</text>
+      <text x="570" y="100" fill="#8fa6bd" font-size="10" text-anchor="middle" font-family="monospace">recover &amp; learn</text>
+      <text x="210" y="45" fill="#ff6161" font-size="10" text-anchor="middle" font-family="monospace">0–5 min</text>
+    </svg>
+    <figcaption>FIG 10.1 — The first hour, in four moves. Order is the security property.</figcaption>
+  </figure>
+
+  <div class="lesson"><h3>10.2 Containment orders, by scenario</h3>
+    <p><strong>Credential phish:</strong> change the password <em>from a different, clean device</em>, then revoke active sessions and tokens — rotating without revoking leaves the attacker’s session sipping coffee in your account. <strong>Device malware/ransomware:</strong> disconnect network (Wi-Fi off, cable out) but keep power on; do not wipe; hand to IT/forensics. <strong>Bank or mobile-money fraud:</strong> call the fraud line from a known number, request hold/reversal windows, change credentials from clean device, then written report. <strong>SIM-swap signs</strong> (signal dead + reset SMS elsewhere): telco line lock immediately, then every SMS-dependent MFA moves to app/passkey.</p>
+    <p>At work, the same shapes scale: isolate, preserve, escalate with a timeline attached. Speed beats completeness in the first report; completeness beats poetry in the second.</p>
+  </div>
+
+  <div class="lesson"><h3>10.3 Report routes, and the resets people forget</h3>
+    <p>Personal incidents in Kenya have real doors: your bank’s fraud desk and the payments-reversal process, telco fraud lines, the <strong>DCI Cybercrime Unit</strong> for criminal matters, the <strong>ODPC</strong> when your personal data is breached by an organisation, and <strong>CERT.ke / CAK</strong> context for service-level incidents. Organisational incidents follow your IR procedure (Module 11) and statutory clocks — GDPR’s 72 hours, Kenya DPA’s notification duty.</p>
+    <p>Post-incident, reset what the attacker touched, not just what they typed: <strong>passwords, active sessions, OAuth grants, API keys — and MFA enrolments</strong>. CISA’s Gunra ransomware advisory describes attackers editing a victim’s VDI portal so an attacker-chosen OTP always succeeded: if MFA itself was tampered with, “we changed the password” is a lullaby. Re-enrol MFA from scratch, and review MFA method downgrade history where logs allow.</p>
+  </div>
+
+  <div class="case"><span class="tag">Case file · 2026</span>
+    <h4>The OTP that always said yes</h4>
+    <p>Gunra actors modified authentication portal files so one chosen OTP always passed — MFA as a backdoor, not a wall. Their toolkit also stole session cookies and dumped credentials from stores. Moral: post-incident, audit the authentication path itself, or you reinstall trust into a rigged lock.</p>
+  </div>
+
+  <div class="try"><span class="tag">Try it · 10 min</span>
+    <h4>Write your IR card</h4>
+    <p>Five lines, wallet or notes app: bank fraud number (from card, not inbox); telco line-lock route; work IT/SOC contact; where your password manager emergency kit lives; your family/code-word verification phrase. Test one line tonight by actually finding the number.</p>
+  </div>
+
+  <div class="terms"><span class="chip">containment</span><span class="chip">eradication</span><span class="chip">recovery</span><span class="chip">evidence preservation</span><span class="chip">session revocation</span><span class="chip">MFA re-enrolment</span></div>
+
+  <div class="quiz" data-quiz="10">
+    <h3 class="quiz-title">Knowledge check · Module 10</h3>
+    <div class="q" data-correct="2">
+      <p class="qt">1. A laptop shows early ransomware behaviour (files renaming, heavy disk). Best first action?</p>
+      <div class="opts">
+        <button class="opt">Reformat immediately to stop encryption</button>
+        <button class="opt">Shut down and leave it off for a week</button>
+        <button class="opt">Disconnect network, keep powered on, escalate with timestamps</button>
+        <button class="opt">Run a personal “cleaner” utility and hope</button>
+      </div>
+      <p class="expl" hidden>Correct: C. Isolation stops spread; power preserves memory/evidence; reformatting destroys both the case and sometimes recoverable keys.</p>
+    </div>
+    <div class="q" data-correct="1">
+      <p class="qt">2. Why change a phished password from a DIFFERENT device?</p>
+      <div class="opts">
+        <button class="opt">It’s faster on another device</button>
+        <button class="opt">The compromised device may be watched or infected — a new secret typed into it is handed straight back</button>
+        <button class="opt">Password policies require device diversity</button>
+        <button class="opt">The phished site blocks the original IP</button>
+      </div>
+      <p class="expl" hidden>Correct: B. Clean-device rotation plus session revocation closes both the credential and the live-session paths.</p>
+    </div>
+    <div class="q" data-correct="0">
+      <p class="qt">3. After an incident where MFA may have been tampered with (Gunra-style), what must be reset beyond passwords?</p>
+      <div class="opts">
+        <button class="opt">MFA enrolments/seeds, active sessions, OAuth grants and API keys</button>
+        <button class="opt">Nothing — MFA is hardware-grade and cannot persist compromise</button>
+        <button class="opt">Only the wallpaper, to mark the new era</button>
+        <button class="opt">The user’s job title</button>
+      </div>
+      <p class="expl" hidden>Correct: A. Authentication infrastructure is part of the blast radius; re-enrol from scratch and revoke standing tokens.</p>
+    </div>
+    <p class="quiz-score" hidden></p>
+  </div>
+</section>
+
+
+<section class="module" id="m11">
+  <div class="eyebrow">Module 11 · ~60 min · Security at work</div>
+  <h2>Policies, standards, procedures — and you</h2>
+  <p class="lead">Organisations defend through documents and culture; attackers exploit the gap between them. This module decodes the governance pyramid (policy → standards &amp; guidelines → procedures), shows where your daily habits sit inside it, and makes the case that reporting culture is a control.</p>
+  <div class="mod-tools">
+    <button class="btn listen" data-mod="11">▶ Listen to this module</button>
+    <button class="btn ghost done-btn" data-mod="11">Mark complete ✓</button>
+  </div>
+  <ul class="objectives">
+    <li class="ob-title">By the end of this module you can…</li>
+    <li>Distinguish policies, standards, guidelines and procedures with examples.</li>
+    <li>Locate your daily obligations inside acceptable-use and remote-work rules.</li>
+    <li>Explain why near-miss reporting is a detection control, not a confession.</li>
+    <li>Draft a three-line verification rule for your team.</li>
+  </ul>
+
+  <div class="lesson"><h3>11.1 The governance pyramid, decoded</h3>
+    <p><strong>Policies</strong> are the broad statements of intent — “client data is handled as if it were our own crown jewels.” <strong>Standards</strong> are specific mandatory requirements for an area or technology — “MFA must be enforced on all administrative access”; <strong>guidelines</strong> are the recommended cousins (“you should prefer phishing-resistant methods”). <strong>Procedures</strong> are the step-by-step executions — the eight-move vulnerability remediation workflow, the joiners-movers-leavers checklist with its 24-hour revocation clock. Policies say <em>why</em>; standards say <em>what, exactly</em>; procedures say <em>how, in order, by whom</em>.</p>
+    <p>Why care if you’re not “management”? Because every audit, client questionnaire and incident post-mortem runs on this pyramid — and because the fastest way to look senior in a security conversation is to ask which layer a decision belongs to. “That’s a policy question” and “that needs a procedure” are complete, professional sentences.</p>
+  </div>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 640 150" role="img" aria-label="Animated governance pyramid: policy, standards, procedures">
+      <rect x="250" y="18" width="140" height="34" rx="6" fill="none" stroke="#8fd8ff" stroke-width="2" class="pulse"/>
+      <rect x="200" y="60" width="240" height="34" rx="6" fill="none" stroke="#4da3ff" stroke-width="2" class="pulse" style="animation-delay:.5s"/>
+      <rect x="150" y="102" width="340" height="34" rx="6" fill="none" stroke="#3ddc97" stroke-width="2" class="pulse" style="animation-delay:1s"/>
+      <text x="320" y="40" fill="#e9f0f8" font-size="12" text-anchor="middle" font-family="monospace">POLICY — intent</text>
+      <text x="320" y="82" fill="#e9f0f8" font-size="12" text-anchor="middle" font-family="monospace">STANDARDS &amp; GUIDELINES — requirements</text>
+      <text x="320" y="124" fill="#e9f0f8" font-size="12" text-anchor="middle" font-family="monospace">PROCEDURES — steps, owners, clocks</text>
+      <text x="540" y="40" fill="#8fa6bd" font-size="10" font-family="monospace">why</text>
+      <text x="540" y="82" fill="#8fa6bd" font-size="10" font-family="monospace">what</text>
+      <text x="540" y="124" fill="#8fa6bd" font-size="10" font-family="monospace">how</text>
+    </svg>
+    <figcaption>FIG 11.1 — The pyramid. Contradictions flow upward for resolution; execution flows downward.</figcaption>
+  </figure>
+
+  <div class="lesson"><h3>11.2 Where you live in the pyramid</h3>
+    <p>Your daily obligations are procedures wearing casual clothes: lock screens and clean desks (confidentiality), no shared accounts (accountability — a shared login is a shared identity, and “who did it?” becomes unanswerable), asset returns on exit, visitor escorting, and acceptable-use boundaries (company systems for company work, personal data off company devices and vice versa). Remote work extends the corporate edge into Module 6 territory: your home router is now infrastructure your employer’s data transits — which is why sane remote-work standards mandate updates, disk encryption and private networks for sensitive calls.</p>
+    <p>And the cultural clause, which no tool can replace: <strong>reporting speed is a control</strong>. The StyleSmuggler implant found within an hour was found because a merchant forwarded a weird email without feeling silly. Organisations that punish reporters train staff to hide breaches; organisations that thank them install a human sensor network for free.</p>
+  </div>
+
+  <div class="lesson"><h3>11.3 When procedures meet worms</h3>
+    <p>The ScreenConnect worm is a procedures autopsy: initial accesses were social (Quick Assist scam, phishing MSI, fake refund lure), but the propagation exploited a missing verification step — technicians connecting to infected hosts with no “confirm origin” gate, and file transfer left enabled. ConnectWise’s interim advice (disable file transfer until patched) is exactly what a procedure is: a written brake applied at organisational speed. Your takeaway: any tool that can move files or control screens needs a written “verify before you connect” rule — and the discipline to follow it at 4:55pm on a Friday.</p>
+  </div>
+
+  <div class="case"><span class="tag">Case file · Sep 2026</span>
+    <h4>The help desk as patient zero… and vector</h4>
+    <p>Huntress’s three incidents shared one gap: no procedure required verifying a support session’s origin before connecting or transferring files. The malware repaid the kindness by pushing its four-stage VBScript chain onto every new connection — including the technicians’ own environments.</p>
+  </div>
+
+  <div class="try"><span class="tag">Try it · 10 min</span>
+    <h4>Draft your team’s verification rule</h4>
+    <p>Three lines, plain language: (1) which requests always require out-of-band verification (payments, credentials, remote access); (2) the approved verification channel; (3) the no-blame reporting route and its SLA. Post it for comment — a rule the team edits is a rule the team obeys.</p>
+  </div>
+
+  <div class="terms"><span class="chip">policy</span><span class="chip">standard</span><span class="chip">guideline</span><span class="chip">procedure</span><span class="chip">acceptable use</span><span class="chip">reporting culture</span></div>
+
+  <div class="quiz" data-quiz="11">
+    <h3 class="quiz-title">Knowledge check · Module 11</h3>
+    <div class="q" data-correct="1">
+      <p class="qt">1. “All remote administrative access must use multi-factor authentication; the step-by-step enrolment workflow is documented in PR-03.” The first clause and the referenced document are, respectively…</p>
+      <div class="opts">
+        <button class="opt">A policy and a guideline</button>
+        <button class="opt">A standard and a procedure</button>
+        <button class="opt">A guideline and a policy</button>
+        <button class="opt">A procedure and a standard</button>
+      </div>
+      <p class="expl" hidden>Correct: B. “Must” + specific technology requirement = standard; numbered steps with owners = procedure.</p>
+    </div>
+    <div class="q" data-correct="2">
+      <p class="qt">2. A colleague borrows your unlocked laptop “for five minutes” and sends an email from your account. The core security property damaged is…</p>
+      <div class="opts">
+        <button class="opt">Availability</button>
+        <button class="opt">Confidentiality of the email server</button>
+        <button class="opt">Accountability — actions can no longer be attributed to a person</button>
+        <button class="opt">Integrity of the Wi-Fi</button>
+      </div>
+      <p class="expl" hidden>Correct: C. Shared sessions destroy non-repudiation; this is why shared logins are standard-level prohibitions, not etiquette.</p>
+    </div>
+    <div class="q" data-correct="0">
+      <p class="qt">3. Why treat near-miss reports (clicked, noticed, reported) as a detection control?</p>
+      <div class="opts">
+        <button class="opt">Early human signals often precede any tool alert; punishing them hides future incidents</button>
+        <button class="opt">They satisfy audit paperwork quotas</button>
+        <button class="opt">They prove the user was careless</button>
+        <button class="opt">They reduce antivirus licence counts</button>
+      </div>
+      <p class="expl" hidden>Correct: A. The two-minute report is a sensor reading; culture determines whether the sensor stays connected.</p>
+    </div>
+    <p class="quiz-score" hidden></p>
+  </div>
+</section>
+
+
+<section class="module" id="m12">
+  <div class="eyebrow">Module 12 · ~60 min · Capstone</div>
+  <h2>The audit: defend your own kill chain</h2>
+  <p class="lead">Everything converges here. You will re-open the kill-chain map from Module 1 and the risk table from Module 2, audit your real estate against a twelve-point checklist, schedule the rituals that keep it true, and choose your next step in the profession — Cisco, SANS/GIAC, IBM or the VunVault lab path.</p>
+  <div class="mod-tools">
+    <button class="btn listen" data-mod="12">▶ Listen to this module</button>
+    <button class="btn ghost done-btn" data-mod="12">Mark complete ✓</button>
+  </div>
+  <ul class="objectives">
+    <li class="ob-title">By the end of this module you can…</li>
+    <li>Score your personal security estate against a twelve-point audit.</li>
+    <li>Prioritise remediation by risk, not by anxiety.</li>
+    <li>Install four quarterly rituals that keep the audit true.</li>
+    <li>Map a credible certification pathway from where you stand today.</li>
+  </ul>
+
+  <div class="lesson"><h3>12.1 The twelve-point audit</h3>
+    <p>Score each item Yes/No; every No is a scheduled task, not a shame: <strong>1</strong> Unique passphrases via manager on email, money, work, cloud. <strong>2</strong> Phishing-resistant or app MFA on those four (no SMS on money). <strong>3</strong> SIM PIN + telco line lock. <strong>4</strong> Devices encrypted, locked &lt;2 min, Find-My on. <strong>5</strong> OS/browser auto-update on; critical patches &lt;72h habit. <strong>6</strong> Router: admin password changed, firmware current, WPA2/3, guest net for IoT. <strong>7</strong> Backups 3-2-1 with one immutable/offline copy, restore tested this quarter. <strong>8</strong> Cloud grants purged in last 6 months; sharing links default-private. <strong>9</strong> Breach-lookup run; exposed passwords rotated. <strong>10</strong> App permissions swept; encrypted chat backups on. <strong>11</strong> IR card written; family code-word agreed. <strong>12</strong> Verification rule (Module 11) practised with at least one other human.</p>
+  </div>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 640 150" role="img" aria-label="Animated shield with checks appearing and a sweep highlight">
+      <path d="M320 15 L410 45 v40 q0 40 -90 60 q-90 -20 -90 -60 V45 Z" fill="none" stroke="#4da3ff" stroke-width="2.5"/>
+      <g class="pulse"><path d="M295 75 l18 18 l34 -38" fill="none" stroke="#3ddc97" stroke-width="4"/></g>
+      <g class="sweep"><rect x="238" y="30" width="26" height="100" rx="6" fill="rgba(143,216,255,.10)"/></g>
+      <text x="120" y="60" fill="#8fa6bd" font-size="11" font-family="monospace">12 checks ·</text>
+      <text x="120" y="78" fill="#8fa6bd" font-size="11" font-family="monospace">every “no” is</text>
+      <text x="120" y="96" fill="#8fa6bd" font-size="11" font-family="monospace">a scheduled task</text>
+      <text x="470" y="78" fill="#8fa6bd" font-size="11" font-family="monospace">repeat quarterly →</text>
+    </svg>
+    <figcaption>FIG 12.1 — The shield is a habit, not a purchase. Sweep = the quarterly pass.</figcaption>
+  </figure>
+
+  <div class="lesson"><h3>12.2 Rituals that keep it true</h3>
+    <p>Security decays silently: grants accumulate, firmware ages, backups rot. Four quarterly rituals arrest the decay — <strong>grant purge</strong> (third-party access pages), <strong>restore test</strong> (one real file, end to end), <strong>patch &amp; firmware day</strong> (router, IoT, neglected laptops), and <strong>access &amp; session review</strong> (active sessions, old devices, ex-accounts). Diarise them like tax dates. Re-run the twelve-point audit twice a year; track your score as a number, because numbers move behaviour that intentions cannot.</p>
+  </div>
+
+  <div class="lesson"><h3>12.3 Where you go from here</h3>
+    <p>If this course landed, the profession has doors at every level: <strong>Cisco Networking Academy / Skills for All</strong> for structured, lab-heavy fundamentals and the CCST track; <strong>IBM’s Cybersecurity Analyst certificate</strong> path for a broad analyst stack with a breach-case capstone; <strong>CompTIA Security+</strong> as the classic first credential; and when you’re ready for practitioner depth, <strong>SANS courses with GIAC certifications</strong> (SEC275/GFACT is the friendly on-ramp). Pair any of them with hands-on repetition — labs, CTFs, home-lab builds — because every one of these bodies certifies <em>skill</em>, and skill is a contact sport. VunVault’s own labs and this Academy’s future modules sit in the same tradition: learn by doing, then prove it under exam conditions.</p>
+    <p>Whatever you choose, keep the two sentences this course was built on: <strong>make yourself the expensive target, and be fast and loud when something slips through.</strong> Everything else is syllabus.</p>
+  </div>
+
+  <div class="case"><span class="tag">Capstone case · Sep 2026</span>
+    <h4>Ten hours versus your first hour</h4>
+    <p>Unit 42’s AI-accelerated intrusion compressed fifty techniques into a working day. Your counter-compression is smaller and just as real: an IR card in your wallet, a code-word in your family, a restore tested last quarter. Speed is a prepared artefact.</p>
+  </div>
+
+  <div class="try"><span class="tag">Try it · 20 min</span>
+    <h4>Close the loop</h4>
+    <p>Run the twelve-point audit honestly; schedule your four quarterly rituals in a calendar today; pick one certification pathway and write down the first concrete step (course page, exam voucher, study group). Then take the final exam — 80% to earn the certificate, exactly like the big programmes.</p>
+  </div>
+
+  <div class="terms"><span class="chip">capstone</span><span class="chip">residual risk</span><span class="chip">security rituals</span><span class="chip">certification pathway</span><span class="chip">CPE / continuing education</span></div>
+
+  <div class="quiz" data-quiz="12">
+    <h3 class="quiz-title">Knowledge check · Module 12</h3>
+    <div class="q" data-correct="1">
+      <p class="qt">1. Your audit finds: email password reused on three forums (no MFA), and mobile money protected only by SMS codes. Most defensible FIRST fix?</p>
+      <div class="opts">
+        <button class="opt">Mobile money first — it holds the cash</button>
+        <button class="opt">Email first — it is the reset hub for every other account, then telco line lock + non-SMS MFA for money</button>
+        <button class="opt">Delete the forum accounts and wait</button>
+        <button class="opt">Buy a new phone</button>
+      </div>
+      <p class="expl" hidden>Correct: B. Compromised email resets everything downstream; secure the identity hub, then remove SMS-dependence and add the porting lock.</p>
+    </div>
+    <div class="q" data-correct="2">
+      <p class="qt">2. Which ritual directly detects accumulated third-party access risk?</p>
+      <div class="opts">
+        <button class="opt">Weekly antivirus scans</button>
+        <button class="opt">Monthly wallpaper changes</button>
+        <button class="opt">Quarterly review of connected apps / OAuth grants and active sessions</button>
+        <button class="opt">Annual password expiry</button>
+      </div>
+      <p class="expl" hidden>Correct: C. Grants and sessions are standing permissions; only an inventory ritual sees them pile up.</p>
+    </div>
+    <div class="q" data-correct="0">
+      <p class="qt">3. A career-changer with this course completed asks for the best-aligned FIRST credential. Most sensible recommendation?</p>
+      <div class="opts">
+        <button class="opt">An entry-level track (e.g. Cisco CCST/NetAcad path, CompTIA Security+, or IBM certificate stack) paired with hands-on labs</button>
+        <button class="opt">GIAC GSE — the expert portfolio certification</button>
+        <button class="opt">GXPN exploit-researcher certification</button>
+        <button class="opt">No certifications until a university degree</button>
+      </div>
+      <p class="expl" hidden>Correct: A. Foundations first, labs always; elite certifications assume practitioner mileage you build, not skip.</p>
+    </div>
+    <p class="quiz-score" hidden></p>
+  </div>
+</section>
+
+<section class="module" id="exam">
+  <div class="eyebrow">Summative assessment · 12 questions · pass mark 80%</div>
+  <h2>Final exam &amp; certificate</h2>
+  <p class="lead">Twelve scenario questions drawn across all modules, in the style of the summative assessments used by the big programmes: judgement first, memory second. Select an answer per question, then submit. 80% or better — with your certificate unlocked — issues the VUNVAULT Academy credential.</p>
+
+  <div id="examLock" class="lockbox">
+    <h3>Certificate track locked</h3>
+    <p>All twelve modules and their knowledge checks are free, forever. The final exam and the printable, ID-bearing certificate are the paid tier: <strong style="color:#e8c37e">KES 2,500 / USD 19</strong> — one payment, lifetime attempts.</p>
+    <button class="btn gold" id="examUnlockBtn">Unlock final exam &amp; certificate</button>
+    <p class="fineprint">Sandbox checkout in this build: payment rails (M-Pesa Daraja / Stripe / PayPal) plug in at the marked integration points.</p>
+  </div>
+
+  <div id="examBody" hidden>
+    <div class="quiz" data-quiz="exam" data-mode="exam">
+      <h3 class="quiz-title">Final examination · select then submit</h3>
+      <div class="q" data-correct="2">
+        <p class="qt">1. An intrusion harvests master credentials from a secrets manager within hours, using no zero-days. Which investment shrinks the impact window most?</p>
+        <div class="opts"><button class="opt">Higher CVSS thresholds in the patch policy</button><button class="opt">Annual pen-testing only</button><button class="opt">Short-lived credentials, segmentation, and faster detection-to-response loops</button><button class="opt">A bigger firewall licence</button></div>
+        <p class="expl" hidden>Automation beats slow loops; limiting standing secrets and detecting fast is the counter to machine-speed chains.</p>
+      </div>
+      <div class="q" data-correct="1">
+        <p class="qt">2. Which control best detects silent tampering of build artifacts before deployment?</p>
+        <div class="opts"><button class="opt">Antivirus on developer laptops</button><button class="opt">Verifying signatures/hashes against a trusted source at deploy time</button><button class="opt">Longer passwords in CI</button><button class="opt">Disabling logging to reduce noise</button></div>
+        <p class="expl" hidden>Integrity is proven by verification at consumption; AV sees malware, not subtle substitution.</p>
+      </div>
+      <div class="q" data-correct="0">
+        <p class="qt">3. A stolen session cookie is in use by an attacker. Which action actually ends that access?</p>
+        <div class="opts"><button class="opt">Revoking active sessions / rotating tokens (with password change)</button><button class="opt">Changing the password alone</button><button class="opt">Enabling MFA for next login</button><button class="opt">Clearing your own browser cache</button></div>
+        <p class="expl" hidden>Sessions live until revoked; password-only rotation leaves the cookie valid.</p>
+      </div>
+      <div class="q" data-correct="3">
+        <p class="qt">4. A supplier email changes bank details and says “call me on this number to confirm.” You…</p>
+        <div class="opts"><button class="opt">Call the number in the email</button><button class="opt">Reply asking for a signed letter</button><button class="opt">Pay a small test amount first</button><button class="opt">Call the number from the original contract or statement</button></div>
+        <p class="expl" hidden>Out-of-band means a channel the message did not supply; attacker-supplied numbers verify nothing.</p>
+      </div>
+      <div class="q" data-correct="1">
+        <p class="qt">5. Why does EDR catch “living-off-the-land” abuse that signature AV typically misses?</p>
+        <div class="opts"><button class="opt">EDR has bigger signature databases</button><button class="opt">EDR watches behaviour — process trees, odd command lines, credential access — not just known-bad files</button><button class="opt">EDR blocks all PowerShell by default</button><button class="opt">EDR runs in the cloud only</button></div>
+        <p class="expl" hidden>Legitimate tools misused have no malicious signature; behaviour is the tell.</p>
+      </div>
+      <div class="q" data-correct="2">
+        <p class="qt">6. The primary security benefit of a guest network is…</p>
+        <div class="opts"><button class="opt">Faster internet for visitors</button><button class="opt">Hiding your Wi-Fi name</button><button class="opt">Isolating IoT and untrusted devices from your main LAN</button><button class="opt">Replacing the need for WPA3</button></div>
+        <p class="expl" hidden>Segmentation limits blast radius: a compromised bulb should not reach your laptop.</p>
+      </div>
+      <div class="q" data-correct="1">
+        <p class="qt">7. A company that collected your phone number for delivery now wants to use it for ad targeting. Under DPA-style law it must…</p>
+        <div class="opts"><button class="opt">Nothing — consent at collection covers all future uses</button><button class="opt">Establish a fresh lawful basis (typically new, informed consent) for the new purpose</button><button class="opt">Notify only the regulator</button><button class="opt">Anonymise your name but keep the number</button></div>
+        <p class="expl" hidden>Purpose limitation: data collected for one stated purpose cannot silently migrate to another.</p>
+      </div>
+      <div class="q" data-correct="0">
+        <p class="qt">8. Which backup property defeats “encrypt the backups first” ransomware playbooks?</p>
+        <div class="opts"><button class="opt">One copy immutable or offline, unreachable from the working environment</button><button class="opt">Backups stored on the same NAS as production</button><button class="opt">Faster backup windows</button><button class="opt">Compression</button></div>
+        <p class="expl" hidden>Reachable backups are just the attacker’s second target; immutability breaks the chain.</p>
+      </div>
+      <div class="q" data-correct="2">
+        <p class="qt">9. A flaw with CVSS 6.5 enters CISA KEV while a 9.1 stays unlisted. Prioritisation?</p>
+        <div class="opts"><button class="opt">9.1 first, always</button><button class="opt">Whichever has a nicer advisory PDF</button><button class="opt">The KEV-listed 6.5 first — evidenced exploitation outranks theoretical severity</button><button class="opt">Defer both to next quarter</button></div>
+        <p class="expl" hidden>KEV is proof of real-world abuse; that evidence reorders the queue.</p>
+      </div>
+      <div class="q" data-correct="1">
+        <p class="qt">10. Early ransomware behaviour on a work laptop. Forensically correct first move?</p>
+        <div class="opts"><button class="opt">Power off and reimage from scratch immediately</button><button class="opt">Disconnect network, keep powered on, preserve state and escalate</button><button class="opt">Delete the suspicious files manually</button><button class="opt">Continue working to observe the attacker</button></div>
+        <p class="expl" hidden>Memory and artefacts die with power-offs and reimages; isolation preserves both case and options.</p>
+      </div>
+      <div class="q" data-correct="3">
+        <p class="qt">11. “Revoke leaver access within 24 hours; IT executes, HR triggers, Security samples five leavers quarterly.” This document is a…</p>
+        <div class="opts"><button class="opt">Policy</button><button class="opt">Standard</button><button class="opt">Guideline</button><button class="opt">Procedure</button></div>
+        <p class="expl" hidden>Steps, owners and clocks = procedure; the 24-hour rule it implements is the standard.</p>
+      </div>
+      <div class="q" data-correct="2">
+        <p class="qt">12. Which ritual detects backup rot (backups that exist but cannot restore)?</p>
+        <div class="opts"><button class="opt">Counting backup files weekly</button><button class="opt">Trusting the backup job’s green ticks</button><button class="opt">Quarterly end-to-end restore test of a real file</button><button class="opt">Buying more storage</button></div>
+        <p class="expl" hidden>An untested backup is a rumour; only a restore proves it.</p>
+      </div>
+      <button class="btn" id="examSubmit">Submit examination</button>
+      <p class="quiz-score" id="examResult" hidden></p>
+      <button class="btn gold" id="certBtn" hidden>Generate my certificate</button>
+    </div>
+  </div>
+</section>
+</main>
+</div>
+
+
+<div class="modal" id="checkout" role="dialog" aria-modal="true" aria-label="Checkout">
+  <div class="modal-card">
+    <h3>Unlock the certificate track</h3>
+    <p class="muted">Final exam (12 questions, 80% pass) + printable certificate with verifiable ID. Lifetime attempts included.</p>
+    <div class="price-row"><b>KES 2,500</b><span>≈ USD 19 · one-time</span></div>
+    <div class="tabs">
+      <button id="tabMpesa" class="on">M-Pesa</button>
+      <button id="tabCard">Card</button>
+    </div>
+    <div id="payMpesa">
+      <div class="field"><label>M-Pesa phone number</label><input id="mpesaPhone" type="tel" placeholder="+2547XX XXX XXX"></div>
+      <button class="btn wide" id="stkBtn">Send STK push</button>
+      <div id="stkStep2" hidden style="margin-top:14px">
+        <p class="muted" style="margin-bottom:10px">STK push sent (sandbox). Approve the prompt on your phone, then confirm below.</p>
+        <button class="btn gold wide" id="stkApprove">I approved it — confirm payment</button>
+      </div>
+      
+    </div>
+    <div id="payCard" hidden>
+      <div class="field"><label>Card number</label><input id="cardNum" inputmode="numeric" placeholder="4242 4242 4242 4242"></div>
+      <div style="display:flex;gap:10px">
+        <div class="field" style="flex:1"><label>Expiry</label><input id="cardExp" placeholder="MM/YY"></div>
+        <div class="field" style="flex:1"><label>CVC</label><input id="cardCvc" placeholder="123"></div>
+      </div>
+      <button class="btn wide" id="cardPay">Pay KES 2,500</button>
+      
+    </div>
+    <p class="fineprint">Sandbox build: no real money moves. In production this modal calls your payment backend and only unlocks on a verified webhook/callback.</p>
+    <button class="btn ghost wide" id="closeCheckout" style="margin-top:12px">Cancel</button>
   </div>
 </div>
 
-<section class="wrap section" id="catalogue">
-  <h2>Catalogue</h2>
-  <p class="sub">Start at Foundations. Then clean your own estate. Then practise the first hour of an incident. That is a complete beginner-to-useful path.</p>
-  <div class="grid3">
-    <article class="card">
-      <img src="images/academy-foundations-card.jpg" alt="">
-      <div class="pad">
-        <div class="pills"><span class="live">Live</span><span>Beginner</span><span>8 modules</span></div>
+
+<div class="modal" id="certModal" role="dialog" aria-modal="true" aria-label="Certificate">
+  <div class="modal-card" style="max-width:700px">
+    <div id="certForm">
+      <h3>Your certificate</h3>
+      <p class="muted">Passed the final examination. Enter the name exactly as it should appear.</p>
+      <div class="field"><label>Full name</label><input id="certName" placeholder="e.g. Natasha Bukenya"></div>
+      <button class="btn gold wide" id="certMake">Issue certificate</button>
+      <button class="btn ghost wide" id="closeCert" style="margin-top:10px">Close</button>
+    </div>
+    <div id="certView" hidden>
+      <div class="cert" id="certPaper">
+        <div class="clogo"><svg viewBox="0 0 48 32" aria-hidden="true"><path d="M4 3 L16 29 L26 7" fill="none" stroke="#4da3ff" stroke-width="5"/><path d="M22 3 L34 29 L44 3" fill="none" stroke="#4da3ff" stroke-width="5"/></svg></div>
+        <div class="ck">VUNVAULT Academy · Certificate of Completion</div>
         <h3>Cybersecurity Foundations</h3>
-        <p>How attackers think, CIA triad, passwords, browsing, devices, privacy and the first hour — with spoken narration.</p>
-        <p style="font-size:.82rem;color:var(--sub);">~2 hours · Certificate VV-FND</p>
-        <a class="cta go" href="course-foundations.html">Open course →</a>
+        <div class="cname" id="certWho">—</div>
+        <p>has completed the twelve-module, twelve-hour Foundations programme — threat landscape, identity, phishing defence, endpoints, networks, privacy, cloud &amp; third-party risk, vulnerability management, incident response and governance — and passed the summative examination with a score of 80% or higher.</p>
+        <div class="cmeta">
+          <span>DATE<b id="certDate">—</b></span>
+          <span>CERTIFICATE ID<b id="certId">—</b></span>
+          <span>HOURS<b>12 guided</b></span>
+        </div>
       </div>
-    </article>
-    <article class="card">
-      <img src="images/academy-hygiene-card.jpg" alt="">
-      <div class="pad">
-        <div class="pills"><span class="live">Live</span><span>Beginner+</span><span>6 modules</span></div>
-        <h3>Digital Hygiene &amp; Self-OSINT</h3>
-        <p>Clean phones, accounts and footprint. Use open-source intelligence on yourself — legally — so SIM-swap and phishing have less to work with.</p>
-        <p style="font-size:.82rem;color:var(--sub);">~2 hours · Certificate VV-HYG</p>
-        <a class="cta go" href="course-hygiene.html">Open course →</a>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <button class="btn wide" id="certPrint">Print / save as PDF</button>
+        <button class="btn ghost wide" id="closeCert2">Close</button>
       </div>
-    </article>
-    <article class="card">
-      <img src="images/academy-ir-card.jpg" alt="">
-      <div class="pad">
-        <div class="pills"><span class="live">Live</span><span>Practitioner</span><span>6 modules</span></div>
-        <h3>First Hour of an Incident</h3>
-        <p>Contain, communicate, evidence, freeze money, and hand off. For staff who are not a SOC — and for the SOC’s first callers.</p>
-        <p style="font-size:.82rem;color:var(--sub);">~2 hours · Certificate VV-IR1</p>
-        <a class="cta go" href="course-incident.html">Open course →</a>
-      </div>
-    </article>
+    </div>
   </div>
-</section>
+</div>
 
-<section class="wrap section">
-  <h2>How it works</h2>
-  <p class="sub">Designed for a phone in a matatu or a laptop in Berlin. Progress saves in your browser.</p>
-  <div class="steps">
-    <div class="step"><i>01</i><h3>Pick a course</h3><p>Foundations first unless you already live this work.</p></div>
-    <div class="step"><i>02</i><h3>Listen or read</h3><p>Spoken narration on Foundations. Full transcripts and checklists on every track.</p></div>
-    <div class="step"><i>03</i><h3>Pass the check</h3><p>Short quizzes. You unlock the next module when you can explain it.</p></div>
-    <div class="step"><i>04</i><h3>Certificate</h3><p>Print or save a completion certificate with a course ID. No paywall.</p></div>
-  </div>
-</section>
+<div id="toast" role="status"></div>
 
-<section class="wrap section">
-  <h2>Built for the world. Grounded where the attacks already are.</h2>
-  <p class="sub">Most academies teach as if every student has a corporate SOC. We teach as if you also have M-Pesa, a county hospital VPN, and a phishing SMS at 22:00.</p>
-  <div class="grid2">
-    <div class="card"><div class="pad">
-      <h3>Global literacy</h3>
-      <p>CIA triad, NIST-style functions (Identify, Protect, Detect, Respond, Recover), MFA, backups, KEV-style patch urgency, and evidence discipline. Vocabulary hiring managers recognise.</p>
-    </div></div>
-    <div class="card"><div class="pad">
-      <h3>Front-line cases</h3>
-      <p>SIM-swap, mobile money, unpatched SSL-VPNs, print servers, and leak-site ransomware — the same patterns in Lagos, London and Manila, named in Kenyan English.</p>
-    </div></div>
-  </div>
-</section>
+<footer>
+  VUNVAULT ACADEMY · Cybersecurity Foundations v2.0 · 12 modules / 12 hours<br>
+  Case files sourced from public vendor advisories and security reporting, Jan–Sep 2026 (Cisco, SonicWall, Adobe/Sansec, N-able, JFrog/watchTowr, JetBrains, Huntress, Unit 42, CISA, Shadowserver, Google).<br>
+  Narration uses your device’s built-in speech engine — no audio files, no tracking. Progress is stored only in this browser.
+</footer>
 
-<section class="wrap section faq">
-  <h2>FAQ</h2>
-  <details open><summary>Is this really free?</summary><p>Yes. VUNVAULT publishes the Academy as public infrastructure. No account required. Progress is stored locally in your browser.</p></details>
-  <details><summary>Is it recognised like CompTIA or a university?</summary><p>No, and we will not pretend otherwise. The certificate proves you completed this curriculum. Use it as evidence of initiative. Then sit the industry exams if you need a market credential.</p></details>
-  <details><summary>Do I need to code?</summary><p>Not for these three courses. We will not hide behind jargon. When a command or CVE appears, we explain why it matters to a human on a deadline.</p></details>
-  <details><summary>Who is it for?</summary><p>Anyone with a phone. Especially journalists, SACCO staff, teachers, founders, public servants, and junior analysts anywhere in the world.</p></details>
-  <details><summary>Spoken audio?</summary><p>Foundations includes generated spoken narration. Hygiene and First Hour are written for screen readers and silent study. We do not ship fake lecture videos.</p></details>
-</section>
-</main>
+<script>
+(function(){
+  "use strict";
+  var $=function(s,c){return (c||document).querySelector(s)},
+      $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+  var KEY="vvf2_state";
+  var state;
+  try{state=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){state={}}
+  state.done=state.done||{}; state.scores=state.scores||{}; state.paid=!!state.paid; state.name=state.name||"";
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+  function toast(msg){var t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove("show")},3200);}
 
-<footer class="site"><div class="wrap bar">
-  <p>© 2026 VUNVAULT Academy · Defending the digital frontier — teaching the floor.</p>
-  <p><a href="news.html">Newsroom</a> · <a href="press-and-media.html">Press</a></p>
-</div></footer>
-</body>
+  /*  progress  */
+  function updateProgress(){
+    var n=Object.keys(state.done).filter(function(k){return state.done[k]}).length;
+    var pct=Math.round(n/12*100);
+    $("#mainFill").style.width=pct+"%";
+    $("#progLabel").textContent=n+" of 12 modules complete"+(state.paid?" · certificate track unlocked":"");
+    $("#navPill").innerHTML="PROGRESS <b>"+pct+"%</b>";
+    $$(".side-nav a").forEach(function(a){
+      var id=(a.getAttribute("href")||"").replace("#","");
+      if(state.done[id])a.classList.add("done");else a.classList.remove("done");
+    });
+  }
+  $$(".done-btn").forEach(function(b){
+    b.addEventListener("click",function(){
+      var m=b.getAttribute("data-mod");
+      state.done["m"+m]=!state.done["m"+m]; save(); updateProgress();
+      toast(state.done["m"+m]?("Module "+m+" marked complete ✓"):("Module "+m+" reopened"));
+    });
+  });
+
+  /*  quizzes (immediate feedback)  */
+  $$('.quiz[data-mode!="exam"] .q').forEach(function(q){
+    var opts=$$(".opt",q), correct=parseInt(q.getAttribute("data-correct"),10), answered=false;
+    opts.forEach(function(o,i){
+      o.addEventListener("click",function(){
+        if(answered)return; answered=true;
+        opts.forEach(function(x){x.disabled=true});
+        o.classList.add(i===correct?"correct":"wrong");
+        if(i!==correct)opts[correct].classList.add("correct");
+        $(".expl",q).hidden=false;
+        var quiz=q.closest(".quiz"), qs=$$(".q",quiz), doneQ=qs.filter(function(x){return x._done||(x._done=true,false)||true});
+        var all=qs.every(function(x){return x.querySelector(".opt.correct")||x.querySelector(".opt.wrong")});
+        if(all){
+          var sc=qs.filter(function(x){return x.querySelector(".opt.disabled-ok")|| (function(){var sel=x.querySelector(".opt.wrong");return !sel})() }).length;
+          var row=$(".quiz-score",quiz);
+          row.hidden=false; row.textContent="Score: "+sc+"/"+qs.length+(sc===qs.length?" — flawless.":" — review the explanations above.");
+          var qid=quiz.getAttribute("data-quiz");
+          state.scores[qid]=Math.max(state.scores[qid]||0,sc); save();
+        }
+      });
+    });
+  });
+
+  /*  narration (Web Speech API)  */
+  var speaking=null, keepAlive=null;
+  function moduleText(sec){
+    var parts=[];
+    $$("h2, .lead, .lesson h3, .lesson p, .case p, .try p",sec).forEach(function(el){parts.push(el.textContent.trim())});
+    return parts.join(". ").replace(/\s+/g," ");
+  }
+  function chunk(t){var m=t.match(/[^.!?]+[.!?]*/g)||[t];var out=[],cur="";m.forEach(function(s){if((cur+s).length>220){out.push(cur);cur=s}else cur+=s});if(cur)out.push(cur);return out}
+  function pickVoice(){
+    try{
+      var vs=speechSynthesis.getVoices()||[];
+      if(!vs.length)return null;
+      var en=vs.filter(function(v){return (v.lang||"").toLowerCase().indexOf("en")===0});
+      var pref=en.filter(function(v){return /gb|us/i.test(v.lang)})[0];
+      return pref||en[0]||vs[0];
+    }catch(e){return null}
+  }
+  function stopSpeech(){
+    if(keepAlive){clearInterval(keepAlive);keepAlive=null}
+    if("speechSynthesis" in window){try{speechSynthesis.cancel()}catch(e){}}
+    if(speaking){speaking.textContent="▶ Listen to this module";speaking=null}
+  }
+  $$(".listen").forEach(function(b){
+    b.addEventListener("click",function(){
+      if(!("speechSynthesis" in window)){toast("This browser has no speech engine. Open the page in Chrome or Edge.");return}
+      if(speaking===b){stopSpeech();return}
+      stopSpeech();
+      var sec=document.getElementById("m"+b.getAttribute("data-mod"));
+      var pieces=chunk(moduleText(sec)); var i=0; speaking=b; b.textContent="■ Stop narration";
+      var voice=pickVoice();
+      if(!voice){try{speechSynthesis.onvoiceschanged=function(){voice=pickVoice()}}catch(e){}}
+      try{speechSynthesis.resume()}catch(e){}
+      keepAlive=setInterval(function(){try{if(speechSynthesis.speaking)speechSynthesis.resume()}catch(e){}},8000);
+      (function next(){
+        if(i>=pieces.length||speaking!==b){stopSpeech();return}
+        var u=new SpeechSynthesisUtterance(pieces[i]); i=i+1;
+        u.rate=1.02;
+        if(voice)u.voice=voice;
+        u.onend=next;
+        u.onerror=function(ev){stopSpeech();toast("Speech engine said: "+(ev&&ev.error?ev.error:"blocked")+". Open this page in its own browser tab with sound on.")};
+        try{speechSynthesis.speak(u)}catch(e){stopSpeech();toast("Could not start speech: "+e.message)}
+      })();
+      if(window.self!==window.top){toast("Embedded preview detected: if silent, open this page in its own tab (audio is often blocked inside embeds).")}
+    });
+  });
+  window.addEventListener("beforeunload",stopSpeech);
+
+  /*  checkout  */
+  var co=$("#checkout");
+  function openCo(){co.classList.add("open")}
+  function closeCo(){co.classList.remove("open")}
+  $("#sideUnlock").addEventListener("click",openCo);
+  $("#examUnlockBtn").addEventListener("click",openCo);
+  $("#closeCheckout").addEventListener("click",closeCo);
+  co.addEventListener("click",function(e){if(e.target===co)closeCo()});
+  $("#tabMpesa").addEventListener("click",function(){$("#tabMpesa").classList.add("on");$("#tabCard").classList.remove("on");$("#payMpesa").hidden=false;$("#payCard").hidden=true});
+  $("#tabCard").addEventListener("click",function(){$("#tabCard").classList.add("on");$("#tabMpesa").classList.remove("on");$("#payCard").hidden=false;$("#payMpesa").hidden=true});
+  $("#stkBtn").addEventListener("click",function(){
+    var p=$("#mpesaPhone").value.trim();
+    if(p.length<9){toast("Enter a valid M-Pesa number first.");return}
+    $("#stkStep2").hidden=false; toast("STK push sent to "+p+" (sandbox)");
+  });
+  $("#stkApprove").addEventListener("click",function(){paid()});
+  $("#cardPay").addEventListener("click",function(){
+    if($("#cardNum").value.replace(/\D/g,"").length<12){toast("Card number looks incomplete (sandbox).");return}
+    paid();
+  });
+  function paid(){
+    state.paid=true; save(); closeCo(); unlockExam();
+    toast("Payment confirmed (sandbox) — final exam & certificate unlocked 🎓");
+  }
+  function unlockExam(){
+    if(!state.paid)return;
+    $("#examLock").hidden=true; $("#examBody").hidden=false;
+    updateProgress();
+  }
+  if(state.paid)unlockExam();
+
+  /*  exam (select then submit)  */
+  $$('#examBody .q').forEach(function(q){
+    $$(".opt",q).forEach(function(o){
+      o.addEventListener("click",function(){
+        $$(".opt",q).forEach(function(x){x.classList.remove("sel");x.style.borderColor="";x.style.color=""});
+        o.style.borderColor="#8fd8ff"; o.style.color="#e9f0f8"; q._sel=o;
+      });
+    });
+  });
+  $("#examSubmit").addEventListener("click",function(){
+    var qs=$$("#examBody .q"), unanswered=qs.filter(function(q){return !q._sel});
+    if(unanswered.length){toast(unanswered.length+" question(s) still unanswered.");return}
+    var sc=0;
+    qs.forEach(function(q){
+      var correct=parseInt(q.getAttribute("data-correct"),10);
+      var idx=$$(".opt",q).indexOf(q._sel);
+      var ok=idx===correct; if(ok)sc++;
+      q._sel.classList.add(ok?"correct":"wrong");
+      if(!ok)$$(".opt",q)[correct].classList.add("correct");
+      $(".expl",q).hidden=false;
+      $$(".opt",q).forEach(function(x){x.disabled=true});
+    });
+    var pct=Math.round(sc/qs.length*100), row=$("#examResult");
+    row.hidden=false;
+    row.textContent="Result: "+sc+"/"+qs.length+" ("+pct+"%) — "+(pct>=80?"PASS. Certificate unlocked below.":"below the 80% pass mark. Review the modules and retake — attempts are unlimited.");
+    state.scores.exam=Math.max(state.scores.exam||0,sc); save();
+    if(pct>=80)$("#certBtn").hidden=false;
+    $("#examSubmit").disabled=true;
+  });
+
+  /*  certificate  */
+  var cm=$("#certModal");
+  $("#certBtn").addEventListener("click",function(){cm.classList.add("open");$("#certForm").hidden=false;$("#certView").hidden=true;$("#certName").value=state.name});
+  $("#closeCert").addEventListener("click",function(){cm.classList.remove("open")});
+  $("#closeCert2").addEventListener("click",function(){cm.classList.remove("open")});
+  cm.addEventListener("click",function(e){if(e.target===cm)cm.classList.remove("open")});
+  $("#certMake").addEventListener("click",function(){
+    var n=$("#certName").value.trim();
+    if(!n){toast("Enter the name for the certificate.");return}
+    state.name=n; save();
+    $("#certWho").textContent=n;
+    $("#certDate").textContent=new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
+    $("#certId").textContent="VV-CF-2026-"+String(Math.floor(1000+Math.random()*9000));
+    $("#certForm").hidden=true; $("#certView").hidden=false;
+  });
+  $("#certPrint").addEventListener("click",function(){window.print()});
+
+  /*  sidebar current highlight  */
+  $$(".side-nav a").forEach(function(a){
+    a.addEventListener("click",function(){$$(".side-nav a").forEach(function(x){x.classList.remove("cur")});a.classList.add("cur")});
+  });
+
+  updateProgress();
+})();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a38823231ae1f01f',t:'MTc4ODk3NzI5NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
