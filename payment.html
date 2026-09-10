@@ -8,7 +8,8 @@
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
 
   <!-- Paystack Inline JS -->
-  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <script src="https://js.paystack.co/v1/inline.js"
+    onerror="document.getElementById('ps-load-error').style.display='block'"></script>
 
   <style>
     :root {
@@ -91,6 +92,22 @@
     .plan .price { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
     .plan .price span { font-size: 12px; font-weight: 500; color: var(--slate-light); }
     .plan .desc { font-size: 13px; color: var(--slate); line-height: 1.4; }
+
+    .currency-toggle {
+      display: flex; gap: 6px; max-width: 440px; margin: 0 auto 30px;
+      background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 5px;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+    }
+
+    .cur-btn {
+      flex: 1; padding: 11px 8px; border: none; border-radius: 10px;
+      background: transparent; color: var(--slate); font-weight: 700; font-size: 13px;
+      cursor: pointer; transition: background 0.15s, color 0.15s;
+    }
+
+    .cur-btn.active { background: var(--navy); color: #fff; }
+
+    .amt-alt { font-size: 12px; color: var(--slate-light); margin-top: 3px; }
 
     .card {
       max-width: 480px;
@@ -199,29 +216,38 @@
     <h1>Choose What You're Paying For</h1>
     <p class="page-subtitle">Select a plan below, then complete your details to pay securely with Paystack.</p>
 
+    <div class="currency-toggle" role="group" aria-label="Payment currency">
+      <button type="button" class="cur-btn active" data-cur="KES">KSh (KES) — works now</button>
+      <button type="button" class="cur-btn" data-cur="USD">$ (USD) — needs dashboard approval</button>
+    </div>
+
     <div class="plans" id="plans">
-      <div class="plan" data-id="starter" data-amount="29900" data-label="Small Business / Starter — per scan">
+      <div class="plan" data-id="starter" data-amount="29900" data-amount-kes="3890000" data-label="Small Business / Starter — per scan">
         <h3>Small Business / Starter</h3>
-        <div class="price">$299 <span>/ per scan</span></div>
+        <div class="price"><span class="amt-main">$299</span> <span>/ per scan</span></div>
+        <div class="amt-alt">≈ KSh 38,900</div>
         <div class="desc">Affordable starter vulnerability scans with clear, actionable executive reporting.</div>
       </div>
 
-      <div class="plan" data-id="sacco" data-amount="89900" data-label="SACCO & Fintech Compliance — per assessment">
+      <div class="plan" data-id="sacco" data-amount="89900" data-amount-kes="11650000" data-label="SACCO & Fintech Compliance — per assessment">
         <span class="badge">Recommended</span>
         <h3>SACCO &amp; Fintech Compliance</h3>
-        <div class="price">$899 <span>/ per assessment</span></div>
+        <div class="price"><span class="amt-main">$899</span> <span>/ per assessment</span></div>
+        <div class="amt-alt">≈ KSh 116,500</div>
         <div class="desc">Regulation-aware testing for financial institutions, M-Pesa gateways &amp; Central Bank readiness.</div>
       </div>
 
-      <div class="plan" data-id="enterprise" data-amount="249900" data-label="IT / Enterprise Retainer — monthly">
+      <div class="plan" data-id="enterprise" data-amount="249900" data-amount-kes="32390000" data-label="IT / Enterprise Retainer — monthly">
         <h3>IT / Enterprise Retainer</h3>
-        <div class="price">$2,499 <span>/ per month</span></div>
+        <div class="price"><span class="amt-main">$2,499</span> <span>/ per month</span></div>
+        <div class="amt-alt">≈ KSh 323,900</div>
         <div class="desc">Full-scope retainer testing, continuous red teaming &amp; board-ready reporting.</div>
       </div>
 
-      <div class="plan" data-id="certificate" data-amount="4900" data-label="Cybersecurity Foundations Certificate">
+      <div class="plan" data-id="certificate" data-amount="4900" data-amount-kes="635000" data-label="Cybersecurity Foundations Certificate">
         <h3>Foundations Certificate</h3>
-        <div class="price">$49 <span>/ one-time</span></div>
+        <div class="price"><span class="amt-main">$49</span> <span>/ one-time</span></div>
+        <div class="amt-alt">≈ KSh 6,350</div>
         <div class="desc">Unlock your official certificate for the Cybersecurity Foundations course.</div>
       </div>
     </div>
@@ -232,7 +258,7 @@
         <span id="selected-price">$0.00</span>
       </div>
       <div class="line-item total">
-        <span>Total (USD)</span>
+        <span id="currency-total-label">Total (KES)</span>
         <span id="amount-display">$0.00</span>
       </div>
 
@@ -249,15 +275,71 @@
 
       <div class="secure-note">🔒 Secured by Paystack</div>
 
+      <div id="test-mode-note" style="display:none; margin-top:16px; padding:12px 14px; border-radius:10px; font-size:12.5px; line-height:1.5; background:#fffbeb; color:#92400e; border:1px solid #fde68a;">
+        <strong>🧪 Test mode</strong> — no real money moves yet. Pay with test card
+        <code>4084 0840 8408 4081</code>, any future expiry, CVV <code>408</code>, OTP <code>123456</code>.
+        (Real payments activate automatically once you swap in your <code>pk_live_</code> key.)
+      </div>
+
+      <div id="usd-note" style="display:none; margin-top:16px; padding:12px 14px; border-radius:10px; font-size:12.5px; line-height:1.5; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;">
+        💵 <strong>USD selected.</strong> USD payouts must be enabled on your Paystack account first
+        (Dashboard → Settings → Accounts → <em>Add USD account</em> — needs a USD domiciliary bank account, ~24h approval).
+        If it's not approved yet, Paystack will refuse the charge with "Currency not supported by merchant" —
+        switch back to <strong>KSh</strong>, which works right now.
+      </div>
+
+      <div id="ps-load-error" style="display:none; margin-top:16px; padding:12px 14px; border-radius:10px; font-size:13px; background:#fef2f2; color:#b91c1c; border:1px solid #fecaca;">
+        ⚠️ Couldn't load the Paystack payment module (no internet, ad-blocker, or a sandboxed preview). Check your connection and reload this page in a normal browser tab.
+      </div>
+
       <div id="status-msg"></div>
     </div>
   </main>
 
   <script>
-    // ⚠️ Replace with your PAYSTACK PUBLIC KEY (starts with pk_test_ for testing, pk_live_ once verified & live)
+    // ── Paystack public key (pk_test_ = test mode, no real money; swap to pk_live_ when you go live) ──
     const PAYSTACK_PUBLIC_KEY = "pk_test_c4745af29f737a7baf433fcdcdab7e4512ac3179";
 
-    let selectedPlan = null;
+    // KES works with every Kenyan Paystack account today. USD starts working the moment
+    // "Add USD account" on your Paystack dashboard (Settings → Accounts) is approved.
+    let currency = "KES";
+    let selectedPlan = null; // { id, usd, kes, label } — amounts in smallest subunit (cents)
+
+    function fmtAmount(cur, subunit) {
+      if (cur === "KES") return "KSh " + Math.round(subunit / 100).toLocaleString("en-KE");
+      return "$" + (subunit / 100).toLocaleString("en-US", { minimumFractionDigits: 2 });
+    }
+
+    function amountIn(cur, plan) { return cur === "KES" ? plan.kes : plan.usd; }
+
+    function renderPrices() {
+      const other = currency === "KES" ? "USD" : "KES";
+      document.querySelectorAll(".plan").forEach(function (el) {
+        const plan = { usd: parseInt(el.dataset.amount, 10), kes: parseInt(el.dataset.amountKes, 10) };
+        el.querySelector(".amt-main").textContent = fmtAmount(currency, amountIn(currency, plan));
+        el.querySelector(".amt-alt").textContent = "≈ " + fmtAmount(other, amountIn(other, plan));
+      });
+    }
+
+    function renderCheckout() {
+      if (!selectedPlan) return;
+      const priceDisplay = fmtAmount(currency, amountIn(currency, selectedPlan));
+      document.getElementById("selected-label").textContent = selectedPlan.label;
+      document.getElementById("selected-price").textContent = priceDisplay;
+      document.getElementById("amount-display").textContent = priceDisplay;
+      document.getElementById("currency-total-label").textContent = "Total (" + currency + ")";
+      document.getElementById("pay-btn").textContent = "Pay " + priceDisplay;
+    }
+
+    function setCurrency(cur) {
+      currency = cur;
+      document.querySelectorAll(".cur-btn").forEach(function (b) {
+        b.classList.toggle("active", b.dataset.cur === cur);
+      });
+      document.getElementById("usd-note").style.display = cur === "USD" ? "block" : "none";
+      renderPrices();
+      renderCheckout();
+    }
 
     const planEls = document.querySelectorAll(".plan");
     planEls.forEach(function (el) {
@@ -267,21 +349,33 @@
 
         selectedPlan = {
           id: el.dataset.id,
-          amount: parseInt(el.dataset.amount, 10),
+          usd: parseInt(el.dataset.amount, 10),
+          kes: parseInt(el.dataset.amountKes, 10),
           label: el.dataset.label
         };
 
-        const priceDisplay = "$" + (selectedPlan.amount / 100).toLocaleString(undefined, { minimumFractionDigits: 2 });
-
-        document.getElementById("selected-label").textContent = selectedPlan.label;
-        document.getElementById("selected-price").textContent = priceDisplay;
-        document.getElementById("amount-display").textContent = priceDisplay;
-
-        const payBtn = document.getElementById("pay-btn");
-        payBtn.disabled = false;
-        payBtn.textContent = "Pay " + priceDisplay;
+        renderCheckout();
+        document.getElementById("pay-btn").disabled = false;
       });
     });
+
+    document.querySelectorAll(".cur-btn").forEach(function (b) {
+      b.addEventListener("click", function () { setCurrency(b.dataset.cur); });
+    });
+
+    // ── Auto-select plan/currency from the URL, e.g. payment.html?plan=sacco or &cur=USD ──
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const planId = (params.get("plan") || "").toLowerCase();
+      if (planId) {
+        const el = document.querySelector('.plan[data-id="' + planId + '"]');
+        if (el) el.click();
+      }
+      setCurrency((params.get("cur") || "KES").toUpperCase() === "USD" ? "USD" : "KES");
+      setTimeout(function () {
+        document.querySelector(".card").scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 150);
+    })();
 
     function payWithPaystack() {
       const fullname = document.getElementById("fullname").value.trim();
@@ -305,19 +399,34 @@
         return;
       }
 
+      const amount = amountIn(currency, selectedPlan);
+      const priceDisplay = fmtAmount(currency, amount);
+
+      // Show test-mode instructions while in test mode (pk_test_)
+      document.getElementById("test-mode-note").style.display =
+        PAYSTACK_PUBLIC_KEY.indexOf("pk_test_") === 0 ? "block" : "none";
+
+      if (typeof PaystackPop === "undefined") {
+        statusMsg.className = "error";
+        statusMsg.textContent = "Payment module didn't load (no internet, ad-blocker or sandboxed preview). Reconnect / disable your blocker and reload, then try again.";
+        document.getElementById("ps-load-error").style.display = "block";
+        return;
+      }
+
       payBtn.disabled = true;
       payBtn.textContent = "Processing...";
 
       const handler = PaystackPop.setup({
         key: PAYSTACK_PUBLIC_KEY,
         email: email,
-        amount: selectedPlan.amount,
-        currency: "USD",
+        amount: amount,
+        currency: currency,
         metadata: {
           custom_fields: [
             { display_name: "Full Name", variable_name: "full_name", value: fullname },
             { display_name: "Company", variable_name: "company", value: company || "N/A" },
-            { display_name: "Plan", variable_name: "plan", value: selectedPlan.label }
+            { display_name: "Plan", variable_name: "plan", value: selectedPlan.label },
+            { display_name: "Currency", variable_name: "currency", value: currency }
           ]
         },
         callback: function (response) {
@@ -331,7 +440,7 @@
           statusMsg.className = "error";
           statusMsg.textContent = "Payment window closed. You have not been charged.";
           payBtn.disabled = false;
-          payBtn.textContent = "Pay $" + (selectedPlan.amount / 100).toLocaleString(undefined, { minimumFractionDigits: 2 });
+          payBtn.textContent = "Pay " + priceDisplay;
         }
       });
 
@@ -339,5 +448,5 @@
     }
   </script>
 
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a38fd787ef7b793c',t:'MTc4OTA1ODA4NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
