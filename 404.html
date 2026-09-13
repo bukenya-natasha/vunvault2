@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Not Found — VUNVAULT</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<style>
+:root{--navy:#0f172a;--border:#e2e8f0;--bg:#fcfbf9;--accent:#38bdf8;--accent2:#0ea5e9}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--navy);min-height:100vh;display:flex;flex-direction:column}
+header{background:var(--navy);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
+header .logo{font-weight:800;letter-spacing:.5px;display:flex;align-items:center;gap:10px}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px}
+.card{max-width:560px;width:100%;background:#fff;border:1px solid var(--border);border-radius:20px;padding:40px 32px;text-align:center;box-shadow:0 10px 30px rgba(15,23,42,.08)}
+.badge{display:inline-block;background:#e0f2fe;color:#0369a1;font-size:11px;font-weight:700;letter-spacing:1px;padding:6px 12px;border-radius:999px;margin-bottom:16px;border:1px solid #bae6fd}
+h1{font-size:42px;font-weight:900;margin-bottom:12px;line-height:1.1}
+h1 span{color:var(--accent2)}
+p{color:#64748b;font-size:16px;line-height:1.6;margin-bottom:24px}
+.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.btn{padding:12px 22px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;display:inline-block;transition:.15s}
+.btn-primary{background:var(--navy);color:#fff}
+.btn-primary:hover{background:#1e293b;transform:translateY(-1px)}
+.btn-ghost{background:#fff;border:1px solid var(--border);color:var(--navy)}
+.btn-ghost:hover{background:#f8fafc}
+.search{position:relative;max-width:380px;margin:0 auto 20px}
+.search input{width:100%;padding:12px 14px 12px 40px;border:1px solid var(--border);border-radius:10px;font-size:14px;outline:none}
+.search input:focus{border-color:var(--accent)}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#94a3b8}
+.links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;font-size:13px}
+.links a{color:#64748b;text-decoration:none}.links a:hover{color:var(--navy);text-decoration:underline}
+footer{text-align:center;padding:20px;color:#94a3b8;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <svg width="28" height="28" viewBox="0 0 100 100"><path d="M50 12 L84 26 V58 C84 74 70 88 50 94 C30 88 16 74 16 58 V26 Z" fill="none" stroke="#38bdf8" stroke-width="5"/></svg>
+    VUNVAULT
+  </div>
+  <a href="./index.html" style="color:#cbd5e1;text-decoration:none;font-size:14px">← Home</a>
+</header>
+<main>
+<div class="card">
+<div class="badge">404 — SECURITY SCAN MISSED THIS PAGE</div>
+<h1>We couldn't find <span>that door</span>.</h1>
+<p>The page you requested doesn't exist, moved, or was never in scope. If you think this is a misconfiguration, let us know — we treat broken links like vulnerabilities.</p>
+
+<div class="search">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+<input id="search" type="text" placeholder="Search services, academy, pricing..." aria-label="Search site">
+</div>
+
+<div class="actions">
+<a href="./index.html" class="btn btn-primary">Go to Homepage</a>
+<a href="./index.html#contact" class="btn btn-ghost">Contact Support</a>
+</div>
+
+<div class="links">
+<a href="./index.html#services">Services</a>
+<a href="./index.html#pricing">Pricing</a>
+<a href="./index.html#academy">Academy</a>
+<a href="./privacy.html">Privacy</a>
+<a href="./terms.html">Terms</a>
+<a href="./sitemap.xml">Sitemap</a>
+</div>
+
+<div style="margin-top:28px;padding:16px;background:#f8fafc;border:1px solid var(--border);border-radius:10px;font-size:13px;color:#475569;text-align:left">
+<strong>Quick fix checklist:</strong><br>
+• Check the URL for typos<br>
+• Go back and request a security assessment instead<br>
+• If you followed a link from our site, <a href="/cdn-cgi/l/email-protection#422a272e2e2d0234372c3423372e366c212d2f" style="color:#0284c7">report it</a> — we fix broken links within 24h
+</div>
+</div>
+</main>
+<footer>© 2026 VUNVAULT • Nairobi, Kenya • We find the cracks before they do.</footer>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Simple client-side search routing
+document.getElementById('search').addEventListener('keydown', e=>{
+  if(e.key==='Enter'){
+    const q=e.target.value.toLowerCase().trim();
+    if(!q) return;
+    if(q.includes('service')||q.includes('pen')||q.includes('vuln')) location.href='./index.html#services';
+    else if(q.includes('price')||q.includes('plan')||q.includes('cost')) location.href='./index.html#pricing';
+    else if(q.includes('academy')||q.includes('course')||q.includes('cert')) location.href='./index.html#academy';
+    else if(q.includes('contact')||q.includes('assess')) location.href='./index.html#contact';
+    else if(q.includes('privacy')) location.href='./privacy.html';
+    else if(q.includes('term')) location.href='./terms.html';
+    else location.href='./index.html';
+  }
+});
+// Log 404 for analytics
+if(window.gtag){ gtag('event','404',{page_location:location.href,page_referrer:document.referrer}); }
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3a80441c8fb13af',t:'MTc4OTMxMTU3NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
