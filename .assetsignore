@@ -8,3 +8,4 @@ wrangler.jsonc
 wrangler.toml
 .assetsignore
 vunvault-chat-worker.js
+worker.js
