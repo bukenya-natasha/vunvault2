@@ -1,0 +1,10 @@
+.git/
+.github/
+node_modules/
+.env*
+.dev.vars*
+wrangler.json
+wrangler.jsonc
+wrangler.toml
+.assetsignore
+vunvault-chat-worker.js
