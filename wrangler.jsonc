@@ -1,0 +1,14 @@
+{
+  "name": "vunvault2",
+  "compatibility_date": "2026-09-15",
+  "assets": {
+    "directory": "."
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "vunvault",
+      "database_id": "01e52d7f-6c2c-48d2-a517-63c5af23decc"
+    }
+  ]
+}
