@@ -1,0 +1,4458 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VUNVAULT Content Moderation — pre-publication review queue for blog posts, news announcements, threat advisories and product listings before they render live on the public website.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="vun1.css">
+    <title>VUNVAULT — Content Moderation</title>
+
+    <style>
+      /* ==========================================================================
+         ADMIN SHELL — shared across all Command Center modules
+         ========================================================================== */
+
+      body.adm-body {
+        background:
+          radial-gradient(90% 42% at 50% 0%, rgba(59, 153, 252, 0.07), transparent 62%),
+          var(--paper);
+      }
+
+      /* ---------------------------------------------------------------- Header */
+      .adm-header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .adm-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        flex: 0 0 auto;
+      }
+
+      .adm-brand-tile {
+        width: 2.35rem;
+        height: 2.35rem;
+        border-radius: 12px;
+        background: linear-gradient(145deg, var(--dark), #000000);
+        border: 1px solid rgba(59, 153, 252, 0.35);
+        box-shadow: 0 0 0 1px rgba(59, 153, 252, 0.08), 0 6px 18px -10px var(--brand-glow);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: box-shadow var(--dur) var(--ease);
+      }
+
+      .adm-brand:hover .adm-brand-tile {
+        box-shadow: 0 0 0 1px rgba(59, 153, 252, 0.28), 0 10px 26px -12px var(--brand-glow);
+      }
+
+      .adm-brand-tile img { width: 1.5rem; height: 1.5rem; object-fit: contain; }
+
+      .adm-brand-name {
+        font-weight: 800;
+        font-size: 1.2rem;
+        letter-spacing: 0.14em;
+        color: var(--ink);
+      }
+
+      .adm-brand-sub {
+        display: block;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--brand-strong);
+        margin-top: 1px;
+      }
+
+      .adm-status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 14px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #0f766e;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        border-radius: var(--r-full);
+        white-space: nowrap;
+      }
+
+      .adm-status-dot { position: relative; display: inline-flex; width: 8px; height: 8px; }
+      .adm-status-dot span { position: absolute; inset: 0; border-radius: var(--r-full); background: var(--ok); }
+      .adm-status-dot span:last-child {
+        animation: ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+        opacity: 0.6;
+      }
+
+      .adm-user-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 14px 6px 6px;
+        border-radius: var(--r-full);
+        background: #ffffff;
+        border: 1px solid var(--line);
+        box-shadow: 0 6px 18px -14px rgba(10, 13, 18, 0.5);
+        white-space: nowrap;
+      }
+
+      .adm-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        flex: 0 0 auto;
+      }
+
+      .adm-user-meta { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+
+      .adm-user-label {
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+
+      .adm-user-name { font-size: 0.78rem; font-weight: 800; color: var(--ink); }
+
+      .adm-user-role {
+        font-size: 9.5px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--brand-strong);
+      }
+
+      /* ------------------------------------------------------------- Navigation */
+      .adm-nav {
+        display: none;
+        align-items: center;
+        gap: 4px;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .adm-nav::-webkit-scrollbar { display: none; }
+
+      .adm-nav a {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 13px;
+        font-size: 0.74rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+        border-radius: var(--r-full);
+        color: var(--ink-soft);
+        transition: color var(--dur) var(--ease), background-color var(--dur) var(--ease),
+                    box-shadow var(--dur) var(--ease);
+      }
+
+      .adm-nav a:hover { color: var(--brand-strong); background-color: var(--brand-tint); }
+
+      .adm-nav a[aria-current="page"] {
+        color: var(--brand-strong);
+        background-color: var(--brand-tint);
+        box-shadow: inset 0 0 0 1px var(--brand-line);
+        font-weight: 800;
+      }
+
+      .adm-nav-signout { color: var(--critical) !important; }
+      .adm-nav-signout:hover {
+        background-color: rgba(244, 63, 94, 0.1) !important;
+        color: #be123c !important;
+      }
+
+      .adm-hamburger {
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+        transition: background-color var(--dur) var(--ease),
+                    border-color var(--dur) var(--ease),
+                    box-shadow var(--dur) var(--ease);
+      }
+
+      .adm-hamburger:hover {
+        border-color: var(--brand-line);
+        box-shadow: 0 6px 18px -12px var(--brand-glow);
+      }
+
+      .adm-hamburger-bar {
+        display: block;
+        width: 20px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--ink);
+        transition: transform 0.28s var(--ease), opacity 0.2s var(--ease),
+                    background-color var(--dur) var(--ease), width 0.28s var(--ease);
+      }
+
+      .adm-hamburger.is-active { background: var(--dark); border-color: rgba(59, 153, 252, 0.4); }
+      .adm-hamburger.is-active .adm-hamburger-bar { background: var(--brand); }
+      .adm-hamburger.is-active .adm-hamburger-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .adm-hamburger.is-active .adm-hamburger-bar:nth-child(2) { opacity: 0; width: 0; }
+      .adm-hamburger.is-active .adm-hamburger-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+      /* --------------------------------------------------------- Mobile drawer */
+      .adm-drawer {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: linear-gradient(180deg, var(--dark) 0%, #05070a 100%);
+        border-top: 1px solid rgba(59, 153, 252, 0.18);
+        border-bottom: 1px solid rgba(59, 153, 252, 0.18);
+        box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.7);
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: max-height 0.42s var(--ease), opacity 0.3s var(--ease),
+                    transform 0.35s var(--ease), visibility 0.42s var(--ease);
+      }
+
+      .adm-drawer.is-open {
+        max-height: 640px;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .adm-drawer-list { display: flex; flex-direction: column; padding: 12px 20px 22px; }
+      .adm-drawer-list li + li { border-top: 1px solid rgba(255, 255, 255, 0.06); }
+
+      .adm-drawer-list a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 6px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #d6dde8;
+        transition: color var(--dur) var(--ease), padding-left var(--dur) var(--ease);
+      }
+
+      .adm-drawer-list a::after {
+        content: "→";
+        font-size: 0.85rem;
+        color: var(--brand);
+        opacity: 0;
+        transform: translateX(-6px);
+        transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+      }
+
+      .adm-drawer-list a:hover,
+      .adm-drawer-list a:focus-visible { color: var(--brand); padding-left: 12px; outline: none; }
+
+      .adm-drawer-list a:hover::after,
+      .adm-drawer-list a:focus-visible::after { opacity: 1; transform: translateX(0); }
+
+      .adm-drawer-list a[aria-current="page"] { color: var(--brand); font-weight: 800; }
+
+      .adm-drawer-signout {
+        margin-top: 14px;
+        justify-content: center !important;
+        padding: 13px 18px !important;
+        border-radius: var(--r-full);
+        background: rgba(244, 63, 94, 0.12);
+        border: 1px solid rgba(244, 63, 94, 0.4);
+        color: #fda4af !important;
+        font-weight: 800 !important;
+      }
+
+      .adm-drawer-signout::after { display: none; }
+
+      .adm-drawer-signout:hover {
+        padding-left: 18px !important;
+        color: #ffffff !important;
+        background: rgba(244, 63, 94, 0.28) !important;
+      }
+
+      @media (min-width: 1080px) {
+        .adm-nav { display: flex; }
+        .adm-hamburger { display: none; }
+      }
+
+      /* ------------------------------------------------------------ Page shell */
+      .adm-main { flex: 1 1 auto; padding: 28px 0 64px; }
+
+      .adm-shell {
+        max-width: 88rem;
+        margin-inline: auto;
+        padding-inline: 16px;
+      }
+
+      @media (min-width: 640px) { .adm-shell { padding-inline: 24px; } }
+      @media (min-width: 1024px) { .adm-shell { padding-inline: 32px; } }
+
+      .adm-page-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        padding-bottom: 22px;
+        margin-bottom: 26px;
+        border-bottom: 1px solid var(--line-soft);
+      }
+
+      .adm-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--brand-strong);
+      }
+
+      .adm-eyebrow::before {
+        content: "";
+        width: 22px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--brand);
+      }
+
+      .adm-page-title {
+        margin-top: 10px;
+        font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.15;
+        color: var(--ink);
+      }
+
+      .adm-page-sub {
+        margin-top: 8px;
+        max-width: 76ch;
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: var(--ink-muted);
+      }
+
+      .adm-head-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+
+      /* ------------------------------------------------------------------ Buttons */
+      .adm-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 12px 20px;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        border-radius: var(--r-full);
+        border: 1px solid transparent;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: transform 0.2s var(--ease), filter 0.2s var(--ease),
+                    box-shadow 0.2s var(--ease), background-color 0.2s var(--ease),
+                    border-color 0.2s var(--ease), color 0.2s var(--ease);
+      }
+
+      .adm-btn:active { transform: translateY(1px) scale(0.985); }
+      .adm-btn svg { flex: 0 0 auto; }
+
+      .adm-btn-primary {
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand) 0%, var(--brand-strong) 100%);
+        border-color: rgba(59, 153, 252, 0.5);
+        box-shadow: 0 14px 30px -16px var(--brand-glow),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+      }
+
+      .adm-btn-primary:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.06);
+        box-shadow: 0 20px 40px -18px var(--brand-glow);
+      }
+
+      .adm-btn-ghost {
+        color: var(--ink);
+        background: #ffffff;
+        border-color: var(--line);
+        box-shadow: 0 6px 18px -16px rgba(10, 13, 18, 0.6);
+      }
+
+      .adm-btn-ghost:hover {
+        transform: translateY(-2px);
+        border-color: var(--brand-line);
+        color: var(--brand-strong);
+        box-shadow: 0 14px 30px -20px var(--brand-glow);
+      }
+
+      .adm-btn-dark {
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--dark), #05070a);
+        border-color: rgba(59, 153, 252, 0.32);
+      }
+
+      .adm-btn-dark:hover {
+        transform: translateY(-2px);
+        border-color: var(--brand);
+        box-shadow: 0 18px 34px -20px var(--brand-glow);
+      }
+
+      .adm-btn-danger {
+        color: #ffffff;
+        background: linear-gradient(135deg, #f43f5e, #be123c);
+        border-color: rgba(244, 63, 94, 0.55);
+        box-shadow: 0 14px 30px -16px rgba(244, 63, 94, 0.7);
+      }
+
+      .adm-btn-danger:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.07);
+        box-shadow: 0 20px 40px -18px rgba(244, 63, 94, 0.85);
+      }
+
+      .adm-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+        filter: none !important;
+        box-shadow: none !important;
+      }
+
+      /* ----------------------------------------------------------- KPI ribbon */
+      .adm-kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 26px;
+      }
+
+      @media (max-width: 1380px) { .adm-kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+      @media (max-width: 760px)  { .adm-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 460px)  { .adm-kpi-grid { grid-template-columns: 1fr; } }
+
+      .adm-kpi {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        padding: 18px 18px 16px;
+        border-radius: 16px;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        box-shadow: 0 12px 30px -26px rgba(10, 13, 18, 0.5);
+        transition: transform 0.25s var(--ease), border-color 0.25s var(--ease),
+                    box-shadow 0.25s var(--ease);
+      }
+
+      .adm-kpi::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--brand), transparent);
+        opacity: 0.75;
+      }
+
+      .adm-kpi:hover {
+        transform: translateY(-3px);
+        border-color: var(--brand-line);
+        box-shadow: 0 22px 44px -30px var(--brand-glow);
+      }
+
+      .adm-kpi-label {
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+
+      .adm-kpi-value {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: clamp(1.5rem, 2.6vw, 1.95rem);
+        font-weight: 800;
+        letter-spacing: -0.035em;
+        line-height: 1;
+        color: var(--ink);
+      }
+
+      .adm-kpi-delta { font-size: 10.5px; font-weight: 700; color: var(--ink-muted); }
+      .adm-kpi-delta--up   { color: #047857; }
+      .adm-kpi-delta--down { color: #be123c; }
+      .adm-kpi-delta--warn { color: #b45309; }
+
+      /* -------------------------------------------------------------- Cards */
+      .adm-card {
+        display: flex;
+        flex-direction: column;
+        border-radius: 18px;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        box-shadow: 0 18px 44px -38px rgba(10, 13, 18, 0.55);
+        overflow: hidden;
+      }
+
+      .adm-card--dark {
+        background:
+          radial-gradient(80% 120% at 100% 0%, rgba(59, 153, 252, 0.16), transparent 62%),
+          linear-gradient(160deg, var(--dark) 0%, #070b11 100%);
+        border-color: rgba(59, 153, 252, 0.26);
+        box-shadow: 0 26px 56px -34px rgba(0, 0, 0, 0.7);
+        color: #ffffff;
+      }
+
+      .adm-card-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 20px 22px 16px;
+        border-bottom: 1px solid var(--line-soft);
+      }
+
+      .adm-card--dark .adm-card-head { border-bottom-color: rgba(255, 255, 255, 0.08); }
+
+      .adm-card-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+      }
+
+      .adm-card--dark .adm-card-title { color: #ffffff; }
+      .adm-card-title svg { color: var(--brand); flex: 0 0 auto; }
+
+      .adm-card-note {
+        margin-top: 5px;
+        font-size: 0.74rem;
+        line-height: 1.6;
+        color: var(--ink-muted);
+        max-width: 68ch;
+      }
+
+      .adm-card--dark .adm-card-note { color: #93a2b5; }
+
+      .adm-card-body { flex: 1 1 auto; padding: 20px 22px 24px; }
+
+      .adm-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        border-radius: var(--r-full);
+        white-space: nowrap;
+        color: var(--brand-strong);
+        background: var(--brand-tint);
+        border: 1px solid var(--brand-line);
+      }
+
+      .adm-tag--ok   { color: #047857; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.35); }
+      .adm-tag--warn { color: #b45309; background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.35); }
+      .adm-tag--crit { color: #be123c; background: rgba(244, 63, 94, 0.1); border-color: rgba(244, 63, 94, 0.35); }
+
+      /* -------------------------------------------------------------- Tables */
+      .adm-table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+      .adm-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.78rem;
+      }
+
+      .adm-table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-muted);
+        background: #f6f8fb;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+
+      .adm-table tbody td {
+        padding: 14px 16px;
+        vertical-align: top;
+        color: var(--ink);
+        border-bottom: 1px solid var(--line-soft);
+      }
+
+      .adm-table tbody tr:nth-child(even) { background: #fbfcfd; }
+      .adm-table tbody tr { transition: background-color var(--dur) var(--ease); }
+      .adm-table tbody tr:hover { background: var(--brand-tint); }
+
+      .adm-table tfoot td {
+        padding: 13px 16px;
+        font-size: 0.76rem;
+        font-weight: 800;
+        color: var(--ink);
+        background: #f6f8fb;
+        border-top: 1px solid var(--line);
+      }
+
+      .adm-num { text-align: right; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+
+      .adm-mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+
+      .adm-strong { font-weight: 800; }
+
+      .adm-badge {
+        display: inline-block;
+        padding: 4px 11px;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        border-radius: var(--r-full);
+        white-space: nowrap;
+        border: 1px solid transparent;
+      }
+
+      .adm-badge--ok    { color: #065f46; background: #ecfdf5; border-color: #a7f3d0; }
+      .adm-badge--warn  { color: #92400e; background: #fffbeb; border-color: #fde68a; }
+      .adm-badge--crit  { color: #9f1239; background: #fff1f2; border-color: #fecdd3; }
+      .adm-badge--info  { color: var(--brand-strong); background: var(--brand-tint); border-color: var(--brand-line); }
+      .adm-badge--muted { color: var(--ink-muted); background: #f4f4f5; border-color: var(--line); }
+
+      /* --------------------------------------------------------------- Footer */
+      .adm-footer {
+        border-top: 1px solid var(--line-soft);
+        background: linear-gradient(180deg, var(--paper), #f6f7f9);
+      }
+
+      .adm-footer-inner {
+        max-width: 88rem;
+        margin-inline: auto;
+        padding: 34px 16px 30px;
+      }
+
+      @media (min-width: 640px) { .adm-footer-inner { padding-inline: 24px; } }
+      @media (min-width: 1024px) { .adm-footer-inner { padding-inline: 32px; } }
+
+      .adm-footer-meta {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        margin: 0;
+      }
+
+      @media (max-width: 860px) { .adm-footer-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 480px) { .adm-footer-meta { grid-template-columns: 1fr; } }
+
+      .adm-footer-meta dt {
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+
+      .adm-footer-meta dd {
+        margin: 6px 0 0;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: var(--ink-soft);
+      }
+
+      .adm-footer-bottom {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-top: 26px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line-soft);
+        font-size: 0.72rem;
+        color: var(--ink-muted);
+      }
+
+      .adm-footer-links { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
+      .adm-footer-links a { font-weight: 600; transition: color var(--dur) var(--ease); }
+      .adm-footer-links a:hover { color: var(--brand-strong); }
+
+      /* ==========================================================================
+         CONTENT MODERATION — queue, content cards, review modal
+         ========================================================================== */
+
+      .cm-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
+        gap: 20px;
+        align-items: start;
+        margin-bottom: 20px;
+      }
+
+      @media (max-width: 1180px) { .cm-layout { grid-template-columns: 1fr; } }
+
+      .cm-col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+
+      /* ------------------------------------------------------------- Toolbar */
+      .cm-toolbar {
+        margin-bottom: 18px;
+        padding: 20px 22px;
+        border-radius: 18px;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        box-shadow: 0 16px 40px -36px rgba(10, 13, 18, 0.6);
+      }
+
+      .cm-toolbar-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .cm-toolbar-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 0.86rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+
+      .cm-toolbar-title svg { color: var(--brand); }
+
+      .cm-results {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 10.5px;
+        font-weight: 700;
+        color: var(--ink-muted);
+      }
+
+      .cm-results strong { color: var(--brand-strong); }
+
+      .cm-toolbar-grid {
+        display: grid;
+        grid-template-columns: minmax(220px, 2.2fr) repeat(3, minmax(140px, 1fr)) auto;
+        gap: 12px;
+        align-items: end;
+      }
+
+      @media (max-width: 1180px) {
+        .cm-toolbar-grid { grid-template-columns: minmax(220px, 2fr) repeat(2, minmax(140px, 1fr)); }
+      }
+
+      @media (max-width: 720px) {
+        .cm-toolbar-grid { grid-template-columns: 1fr; }
+      }
+
+      .cm-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+
+      .cm-field-label {
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+
+      .cm-input-wrap { position: relative; display: flex; align-items: center; }
+
+      .cm-input-icon {
+        position: absolute;
+        left: 13px;
+        color: var(--ink-faint);
+        pointer-events: none;
+        display: inline-flex;
+      }
+
+      .cm-input,
+      .cm-select {
+        width: 100%;
+        padding: 11px 14px;
+        font-size: 0.8rem;
+        color: var(--ink);
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        outline: none;
+        transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+      }
+
+      .cm-input { padding-left: 38px; }
+
+      .cm-input::placeholder { color: var(--ink-faint); }
+
+      .cm-input:focus,
+      .cm-select:focus {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px var(--brand-tint);
+      }
+
+      .cm-select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%233B99FC' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 34px;
+        cursor: pointer;
+      }
+
+      .cm-toolbar-actions { display: flex; gap: 8px; }
+
+      .cm-clear-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 11px 18px;
+        font-size: 0.76rem;
+        font-weight: 800;
+        color: var(--brand-strong);
+        background: var(--brand-tint);
+        border: 1px solid var(--brand-line);
+        border-radius: 12px;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all var(--dur) var(--ease);
+      }
+
+      .cm-clear-btn:hover {
+        background: var(--brand);
+        border-color: var(--brand);
+        color: #ffffff;
+      }
+
+      /* ------------------------------------------------------------ Queue table */
+      .cm-table { min-width: 1180px; }
+
+      .cm-content-cell {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        min-width: 0;
+        max-width: 34ch;
+      }
+
+      .cm-thumb {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        background: linear-gradient(145deg, var(--dark), #060a10);
+        border: 1px solid rgba(59, 153, 252, 0.3);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+        overflow: hidden;
+      }
+
+      .cm-thumb svg { width: 22px; height: 22px; }
+
+      .cm-thumb--blog     { color: var(--brand-soft); }
+      .cm-thumb--news     { color: #34d399; }
+      .cm-thumb--advisory { color: #fb7185; }
+      .cm-thumb--product  { color: #fbbf24; }
+
+      .cm-content-body { min-width: 0; }
+
+      .cm-title {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--ink);
+        line-height: 1.4;
+      }
+
+      .cm-excerpt {
+        display: block;
+        margin-top: 4px;
+        font-size: 10.5px;
+        line-height: 1.6;
+        color: var(--ink-muted);
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+
+      .cm-slug {
+        display: block;
+        margin-top: 5px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 9.5px;
+        color: var(--ink-faint);
+      }
+
+      /* Type badge */
+      .cm-type {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 11px;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        border-radius: var(--r-full);
+        white-space: nowrap;
+        border: 1px solid transparent;
+      }
+
+      .cm-type--blog     { color: var(--brand-strong); background: var(--brand-tint); border-color: var(--brand-line); }
+      .cm-type--news     { color: #065f46; background: #ecfdf5; border-color: #a7f3d0; }
+      .cm-type--advisory { color: #9f1239; background: #fff1f2; border-color: #fecdd3; }
+      .cm-type--product  { color: #92400e; background: #fffbeb; border-color: #fde68a; }
+
+      /* Author */
+      .cm-author {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+
+      .cm-author-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        flex: 0 0 auto;
+      }
+
+      .cm-author-body { min-width: 0; }
+
+      .cm-author-name {
+        display: block;
+        font-size: 0.74rem;
+        font-weight: 800;
+        color: var(--ink);
+        line-height: 1.3;
+      }
+
+      .cm-author-meta {
+        display: block;
+        margin-top: 2px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 9.5px;
+        color: var(--ink-faint);
+      }
+
+      /* Risk chips */
+      .cm-risk-stack { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; }
+
+      .cm-risk {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 9px;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        border-radius: var(--r-full);
+        white-space: nowrap;
+        border: 1px solid transparent;
+      }
+
+      .cm-risk--brand  { color: #6d28d9; background: #f5f3ff; border-color: #ddd6fe; }
+      .cm-risk--legal  { color: #9f1239; background: #fff1f2; border-color: #fecdd3; }
+      .cm-risk--pii    { color: #92400e; background: #fffbeb; border-color: #fde68a; }
+      .cm-risk--claim  { color: #1d4ed8; background: #eff6ff; border-color: #bfdbfe; }
+      .cm-risk--clean  { color: #065f46; background: #ecfdf5; border-color: #a7f3d0; }
+
+      /* Status */
+      .cm-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        border-radius: var(--r-full);
+        white-space: nowrap;
+        border: 1px solid transparent;
+      }
+
+      .cm-status::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      .cm-status--pending     { color: #92400e; background: #fffbeb; border-color: #fde68a; }
+      .cm-status--inreview    { color: var(--brand-strong); background: var(--brand-tint); border-color: var(--brand-line); }
+      .cm-status--changes     { color: #7c2d12; background: #ffedd5; border-color: #fed7aa; }
+      .cm-status--approved    { color: #065f46; background: #ecfdf5; border-color: #a7f3d0; }
+      .cm-status--rejected    { color: #9f1239; background: #fff1f2; border-color: #fecdd3; }
+      .cm-status--scheduled   { color: #1d4ed8; background: #eff6ff; border-color: #bfdbfe; }
+
+      /* Row actions */
+      .cm-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        min-width: 210px;
+      }
+
+      .cm-act {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 13px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        border-radius: var(--r-full);
+        cursor: pointer;
+        white-space: nowrap;
+        color: var(--ink);
+        background: #ffffff;
+        border: 1px solid var(--line);
+        transition: all 0.2s var(--ease);
+      }
+
+      .cm-act:hover {
+        transform: translateY(-1px);
+        color: var(--brand-strong);
+        border-color: var(--brand-line);
+        box-shadow: 0 12px 24px -18px var(--brand-glow);
+      }
+
+      .cm-act--primary {
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        border-color: rgba(59, 153, 252, 0.5);
+        box-shadow: 0 12px 26px -16px var(--brand-glow);
+      }
+
+      .cm-act--primary:hover { color: #ffffff; filter: brightness(1.06); }
+
+      .cm-act--ok     { color: #065f46; background: #ecfdf5; border-color: #a7f3d0; }
+      .cm-act--ok:hover { color: #ffffff; background: linear-gradient(135deg, #10b981, #047857); border-color: transparent; }
+
+      .cm-act--danger { color: #be123c; background: #fff1f2; border-color: #fecdd3; }
+      .cm-act--danger:hover { color: #ffffff; background: linear-gradient(135deg, #f43f5e, #be123c); border-color: transparent; }
+
+      .cm-act:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .cm-icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        color: var(--ink-soft);
+        background: #f4f6f9;
+        border: 1px solid var(--line);
+        transition: all 0.2s var(--ease);
+      }
+
+      .cm-icon-btn:hover {
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        border-color: transparent;
+        transform: translateY(-1px);
+      }
+
+      /* Empty state */
+      .cm-empty {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 54px 22px;
+        text-align: center;
+      }
+
+      .cm-empty.is-visible { display: flex; }
+
+      .cm-empty-icon {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--brand);
+        background: var(--brand-tint);
+        border: 1px solid var(--brand-line);
+      }
+
+      .cm-empty-title { font-size: 1rem; font-weight: 800; color: var(--ink); }
+      .cm-empty-text { font-size: 0.8rem; color: var(--ink-muted); max-width: 44ch; line-height: 1.65; }
+
+      /* -------------------------------------------------------- Sidebar panels */
+      .cm-panel { display: flex; flex-direction: column; gap: 16px; }
+
+      .cm-panel-section { display: flex; flex-direction: column; gap: 12px; }
+
+      .cm-panel-section + .cm-panel-section {
+        padding-top: 16px;
+        border-top: 1px solid var(--line-soft);
+      }
+
+      .adm-card--dark .cm-panel-section + .cm-panel-section {
+        border-top-color: rgba(255, 255, 255, 0.08);
+      }
+
+      .cm-panel-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+
+      .adm-card--dark .cm-panel-title { color: #7d8b9e; }
+
+      .cm-panel-title svg { color: var(--brand); flex: 0 0 auto; }
+
+      .cm-status-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 0.74rem;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .adm-card--dark .cm-status-row { color: #93a2b5; }
+
+      .cm-status-row strong {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.74rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+
+      .adm-card--dark .cm-status-row strong { color: #ffffff; }
+
+      .cm-actions-stack { display: flex; flex-direction: column; gap: 10px; }
+      .cm-actions-stack .adm-btn { width: 100%; }
+
+      .cm-action-note {
+        font-size: 10px;
+        line-height: 1.6;
+        color: var(--ink-faint);
+        text-align: center;
+      }
+
+      .adm-card--dark .cm-action-note { color: #64748b; }
+
+      /* Distribution bars */
+      .cm-dist { display: flex; flex-direction: column; gap: 10px; }
+
+      .cm-dist-row {
+        display: grid;
+        grid-template-columns: minmax(90px, 1.2fr) minmax(60px, 2.6fr) auto;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .cm-dist-name {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      .adm-card--dark .cm-dist-name { color: #e2e8f0; }
+
+      .cm-dist-count {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 10.5px;
+        font-weight: 800;
+        color: var(--brand-soft);
+        min-width: 24px;
+        text-align: right;
+      }
+
+      progress.cm-progress {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 100%;
+        height: 7px;
+        border: 0;
+        border-radius: var(--r-full);
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.09);
+        display: block;
+      }
+
+      progress.cm-progress::-webkit-progress-bar {
+        background: rgba(255, 255, 255, 0.09);
+        border-radius: var(--r-full);
+      }
+
+      progress.cm-progress::-webkit-progress-value {
+        border-radius: var(--r-full);
+        background: linear-gradient(90deg, var(--brand-strong), var(--brand-soft));
+      }
+
+      progress.cm-progress::-moz-progress-bar {
+        border-radius: var(--r-full);
+        background: linear-gradient(90deg, var(--brand-strong), var(--brand-soft));
+      }
+
+      progress.cm-progress--ok::-webkit-progress-value { background: linear-gradient(90deg, #047857, #34d399); }
+      progress.cm-progress--ok::-moz-progress-bar { background: linear-gradient(90deg, #047857, #34d399); }
+
+      progress.cm-progress--warn::-webkit-progress-value { background: linear-gradient(90deg, #d97706, #fbbf24); }
+      progress.cm-progress--warn::-moz-progress-bar { background: linear-gradient(90deg, #d97706, #fbbf24); }
+
+      progress.cm-progress--crit::-webkit-progress-value { background: linear-gradient(90deg, #be123c, #fb7185); }
+      progress.cm-progress--crit::-moz-progress-bar { background: linear-gradient(90deg, #be123c, #fb7185); }
+
+      /* Activity feed */
+      .cm-activity { display: flex; flex-direction: column; gap: 12px; }
+
+      .cm-activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+        padding-bottom: 12px;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+      }
+
+      .cm-activity-item:last-child { border-bottom: 0; padding-bottom: 0; }
+
+      .cm-activity-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-top: 5px;
+        flex: 0 0 auto;
+        background: var(--brand);
+        box-shadow: 0 0 10px -2px var(--brand-glow);
+      }
+
+      .cm-activity-dot--ok   { background: var(--ok); box-shadow: 0 0 10px -2px rgba(16, 185, 129, 0.9); }
+      .cm-activity-dot--warn { background: var(--high); box-shadow: 0 0 10px -2px rgba(245, 158, 11, 0.9); }
+      .cm-activity-dot--crit { background: var(--critical); box-shadow: 0 0 10px -2px rgba(244, 63, 94, 0.9); }
+
+      .cm-activity-body { min-width: 0; }
+
+      .cm-activity-text {
+        display: block;
+        font-size: 0.72rem;
+        line-height: 1.6;
+        color: #cbd5e1;
+      }
+
+      .cm-activity-text strong { color: #ffffff; }
+
+      .cm-activity-time {
+        display: block;
+        margin-top: 3px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 9.5px;
+        color: #64748b;
+      }
+
+      /* Editorial guidelines card */
+      .cm-guidelines { display: flex; flex-direction: column; gap: 10px; }
+
+      .cm-guideline {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+        padding: 12px 13px;
+        border-radius: 12px;
+        background: #f8fafc;
+        border: 1px solid var(--line-soft);
+      }
+
+      .cm-guideline-num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 9.5px;
+        font-weight: 800;
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        flex: 0 0 auto;
+        margin-top: 1px;
+      }
+
+      .cm-guideline-body { min-width: 0; }
+
+      .cm-guideline-title {
+        display: block;
+        font-size: 0.74rem;
+        font-weight: 800;
+        color: var(--ink);
+        line-height: 1.4;
+      }
+
+      .cm-guideline-text {
+        display: block;
+        margin-top: 3px;
+        font-size: 10.5px;
+        line-height: 1.6;
+        color: var(--ink-muted);
+      }
+
+      /* ------------------------------------------------------------- Modal */
+      .cm-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 300;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        opacity: 0;
+        transition: opacity 0.22s var(--ease);
+      }
+
+      .cm-modal[hidden] { display: none !important; }
+      .cm-modal.is-open { opacity: 1; }
+
+      .cm-modal-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(5, 7, 10, 0.78);
+        backdrop-filter: blur(7px);
+        -webkit-backdrop-filter: blur(7px);
+      }
+
+      .cm-modal-window {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        width: min(900px, 100%);
+        max-height: 92vh;
+        border-radius: 18px;
+        overflow: hidden;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.9);
+        transform: translateY(18px) scale(0.985);
+        transition: transform 0.28s var(--ease);
+      }
+
+      .cm-modal.is-open .cm-modal-window { transform: translateY(0) scale(1); }
+
+      .cm-modal-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 20px 22px 16px;
+        background:
+          radial-gradient(90% 140% at 100% 0%, rgba(59, 153, 252, 0.22), transparent 62%),
+          linear-gradient(160deg, var(--dark), #070b11);
+        color: #ffffff;
+      }
+
+      .cm-modal-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--brand);
+      }
+
+      .cm-modal-title {
+        margin-top: 8px;
+        font-size: 1.14rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: #ffffff;
+        line-height: 1.35;
+      }
+
+      .cm-modal-sub {
+        margin-top: 6px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 10.5px;
+        color: #93a2b5;
+        word-break: break-word;
+      }
+
+      .cm-modal-close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        cursor: pointer;
+        color: #93a2b5;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        transition: all 0.2s var(--ease);
+        flex: 0 0 auto;
+      }
+
+      .cm-modal-close:hover { color: #ffffff; background: rgba(244, 63, 94, 0.3); border-color: rgba(244, 63, 94, 0.5); }
+
+      .cm-modal-body {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(59, 153, 252, 0.35) transparent;
+      }
+
+      .cm-modal-body::-webkit-scrollbar { width: 8px; }
+      .cm-modal-body::-webkit-scrollbar-thumb {
+        background: rgba(59, 153, 252, 0.3);
+        border-radius: 9999px;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+      }
+
+      .cm-modal-section-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+        margin-bottom: 12px;
+      }
+
+      /* Modal content preview */
+      .cm-preview-body {
+        padding: 18px 20px;
+        border-radius: 14px;
+        background: #f8fafc;
+        border: 1px solid var(--line-soft);
+      }
+
+      .cm-preview-title {
+        font-size: 1.05rem;
+        font-weight: 800;
+        letter-spacing: -0.015em;
+        line-height: 1.4;
+        color: var(--ink);
+        margin: 0 0 8px;
+      }
+
+      .cm-preview-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+        font-size: 10.5px;
+        font-weight: 600;
+        color: var(--ink-muted);
+      }
+
+      .cm-preview-meta span { display: inline-flex; align-items: center; gap: 5px; }
+
+      .cm-preview-excerpt {
+        font-size: 0.82rem;
+        line-height: 1.75;
+        color: var(--ink-soft);
+        margin: 0;
+      }
+
+      .cm-preview-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 14px;
+      }
+
+      .cm-preview-tag {
+        padding: 4px 10px;
+        font-size: 10px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-weight: 700;
+        color: var(--ink-soft);
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-radius: var(--r-full);
+      }
+
+      /* Modal checklist */
+      .cm-checklist { display: flex; flex-direction: column; gap: 2px; }
+
+      .cm-checklist-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 13px 14px;
+        border-radius: 12px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: background-color 0.18s var(--ease), border-color 0.18s var(--ease);
+      }
+
+      .cm-checklist-item:hover { background: #f8fafc; border-color: var(--line-soft); }
+      .cm-checklist-item.is-done { background: rgba(16, 185, 129, 0.06); border-color: rgba(16, 185, 129, 0.28); }
+
+      .cm-checklist-item input {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 17px;
+        height: 17px;
+        margin-top: 2px;
+        border-radius: 5px;
+        border: 1.5px solid var(--line);
+        background: #ffffff;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.18s var(--ease);
+        flex: 0 0 auto;
+      }
+
+      .cm-checklist-item input:checked {
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        border-color: transparent;
+      }
+
+      .cm-checklist-item input:checked::after {
+        content: "";
+        width: 5px;
+        height: 9px;
+        border: solid #ffffff;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg) translate(-1px, -1px);
+      }
+
+      .cm-checklist-text { min-width: 0; }
+
+      .cm-checklist-title {
+        display: block;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--ink);
+        line-height: 1.5;
+      }
+
+      .cm-checklist-hint {
+        display: block;
+        margin-top: 3px;
+        font-size: 10.5px;
+        line-height: 1.55;
+        color: var(--ink-muted);
+      }
+
+      /* Decision radios */
+      .cm-decisions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+
+      @media (max-width: 620px) { .cm-decisions { grid-template-columns: 1fr; } }
+
+      .cm-decision { position: relative; display: block; cursor: pointer; }
+
+      .cm-decision input {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+        pointer-events: none;
+      }
+
+      .cm-decision-card {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        height: 100%;
+        padding: 15px 16px;
+        border-radius: 13px;
+        background: #ffffff;
+        border: 1.5px solid var(--line);
+        transition: all 0.2s var(--ease);
+      }
+
+      .cm-decision:hover .cm-decision-card { border-color: var(--brand-line); }
+
+      .cm-decision-title {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 0.78rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+
+      .cm-decision-text { font-size: 10.5px; line-height: 1.6; color: var(--ink-muted); }
+
+      .cm-decision input:focus-visible + .cm-decision-card { box-shadow: 0 0 0 3px var(--brand-tint); }
+
+      .cm-decision input:checked + .cm-decision-card--approve {
+        background: #ecfdf5;
+        border-color: #10b981;
+        box-shadow: 0 12px 26px -18px rgba(16, 185, 129, 0.8);
+      }
+
+      .cm-decision input:checked + .cm-decision-card--changes {
+        background: #fffbeb;
+        border-color: #f59e0b;
+        box-shadow: 0 12px 26px -18px rgba(245, 158, 11, 0.8);
+      }
+
+      .cm-decision input:checked + .cm-decision-card--reject {
+        background: #fff1f2;
+        border-color: #f43f5e;
+        box-shadow: 0 12px 26px -18px rgba(244, 63, 94, 0.8);
+      }
+
+      /* Reviewer notes */
+      .cm-note-field { display: flex; flex-direction: column; gap: 8px; }
+
+      .cm-textarea {
+        width: 100%;
+        min-height: 104px;
+        padding: 13px 15px;
+        font-size: 0.8rem;
+        font-family: inherit;
+        line-height: 1.65;
+        color: var(--ink);
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        resize: vertical;
+        outline: none;
+        transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+      }
+
+      .cm-textarea::placeholder { color: var(--ink-faint); }
+
+      .cm-textarea:focus {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px var(--brand-tint);
+      }
+
+      /* Reviewer identity */
+      .cm-reviewer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 18px;
+        padding: 14px 16px;
+        border-radius: 13px;
+        background: #f8fafc;
+        border: 1px solid var(--line-soft);
+      }
+
+      .cm-reviewer-label {
+        display: block;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+
+      .cm-reviewer-value {
+        display: block;
+        margin-top: 3px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      /* Modal footer */
+      .cm-modal-foot {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 16px 22px;
+        background: #f8fafc;
+        border-top: 1px solid var(--line-soft);
+      }
+
+      .cm-modal-foot-note {
+        font-size: 10.5px;
+        color: var(--ink-muted);
+        max-width: 48ch;
+        line-height: 1.6;
+      }
+
+      .cm-modal-foot-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+      /* ------------------------------------------------------------- Toasts */
+      .cm-toast-stack {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        z-index: 400;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: min(380px, calc(100vw - 40px));
+        pointer-events: none;
+      }
+
+      .cm-toast {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+        padding: 13px 16px;
+        border-radius: 13px;
+        background: linear-gradient(160deg, var(--dark), #070b11);
+        border: 1px solid rgba(59, 153, 252, 0.32);
+        box-shadow: 0 22px 44px -24px rgba(0, 0, 0, 0.85);
+        color: #e2e8f0;
+        font-size: 0.76rem;
+        line-height: 1.55;
+        pointer-events: auto;
+        animation: cmToastIn 0.3s var(--ease) both;
+      }
+
+      .cm-toast.is-leaving { animation: cmToastOut 0.28s var(--ease) both; }
+
+      .cm-toast svg { flex: 0 0 auto; margin-top: 1px; }
+
+      .cm-toast--ok   { border-color: rgba(16, 185, 129, 0.4); }
+      .cm-toast--ok svg { color: #34d399; }
+      .cm-toast--warn { border-color: rgba(245, 158, 11, 0.4); }
+      .cm-toast--warn svg { color: #fbbf24; }
+      .cm-toast--crit { border-color: rgba(244, 63, 94, 0.45); }
+      .cm-toast--crit svg { color: #fb7185; }
+      .cm-toast--info svg { color: var(--brand-soft); }
+
+      .cm-toast strong { color: #ffffff; display: block; margin-bottom: 2px; font-weight: 800; }
+
+      @keyframes cmToastIn {
+        from { opacity: 0; transform: translateY(12px) scale(0.98); }
+        to   { opacity: 1; transform: translateY(0) scale(1); }
+      }
+
+      @keyframes cmToastOut {
+        from { opacity: 1; transform: translateY(0) scale(1); }
+        to   { opacity: 0; transform: translateY(10px) scale(0.98); }
+      }
+
+      /* ------------------------------------------------------- Reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .adm-kpi, .adm-btn, .cm-act, .cm-icon-btn, .cm-toast,
+        .cm-modal, .cm-modal-window, .adm-hamburger-bar,
+        .cm-input, .cm-select, .cm-textarea {
+          transition-duration: 0.001ms !important;
+          animation-duration: 0.001ms !important;
+          transform: none !important;
+        }
+        .adm-status-dot span:last-child { animation: none !important; }
+      }
+
+      /* ---------------------------------------------------------------- Print */
+      @media print {
+        .adm-hamburger, .adm-head-actions, .adm-nav, .cm-toolbar,
+        .cm-actions, .cm-modal, .cm-toast-stack, .cm-actions-stack { display: none !important; }
+        body.adm-body { background: #ffffff; }
+        .adm-card, .adm-kpi { box-shadow: none; border-color: #cccccc; }
+      }
+    </style>
+  </head>
+
+  <body class="adm-body">
+    <div class="min-h-screen flex flex-col font-sans relative">
+
+      <!-- ===================================================================
+           HEADER — brand, live status, authenticated user, navigation
+      ==================================================================== -->
+      <header class="sticky top-0 z-50 bg-[#fcfbf9]/95 backdrop-blur-md border-b border-neutral-200/80 transition-all duration-200">
+
+        <div class="adm-shell py-3 adm-header-inner">
+
+          <!-- Brand -->
+          <a href="admin.html" class="adm-brand" aria-label="VUNVAULT administrative home">
+            <span class="adm-brand-tile">
+              <img src="logo.svg" alt="VUNVAULT" width="24" height="24">
+            </span>
+            <span>
+              <span class="adm-brand-name">VUNVAULT</span>
+              <span class="adm-brand-sub">Command Center</span>
+            </span>
+          </a>
+
+          <!-- System status -->
+          <span class="adm-status-pill" role="status" aria-live="polite">
+            <span class="adm-status-dot" aria-hidden="true"><span></span><span></span></span>
+            <span>SYS: OPERATIONAL</span>
+          </span>
+
+          <!-- Authenticated user -->
+          <div class="adm-user-chip" title="Authenticated administrative session">
+            <span class="adm-avatar" aria-hidden="true">ER</span>
+            <span class="adm-user-meta">
+              <span class="adm-user-label">Logged in as</span>
+              <span class="adm-user-name">e.reed@vunvault.com</span>
+              <span class="adm-user-role">Super Administrator</span>
+            </span>
+          </div>
+
+          <!-- Desktop navigation -->
+          <nav class="adm-nav" aria-label="Administrative sections">
+            <a href="admin.html">Dashboard Overview</a>
+            <a href="scan-queue.html">Scan Queue</a>
+            <a href="zero-day.html">Zero-Day Intel</a>
+            <a href="user-management.html">User Management</a>
+            <a href="content-moderation.html" aria-current="page">Content Moderation</a>
+            <a href="audit-logs.html">Audit Logs</a>
+            <a href="profile-settings.html">Profile Settings</a>
+            <a href="logout.html" class="adm-nav-signout">Sign Out</a>
+          </nav>
+
+          <!-- Mobile hamburger -->
+          <button id="adm-menu-toggle"
+                  class="adm-hamburger"
+                  type="button"
+                  aria-label="Toggle administrative navigation menu"
+                  aria-expanded="false"
+                  aria-controls="adm-mobile-menu">
+            <span class="adm-hamburger-bar"></span>
+            <span class="adm-hamburger-bar"></span>
+            <span class="adm-hamburger-bar"></span>
+          </button>
+        </div>
+
+        <!-- Mobile drawer -->
+        <nav id="adm-mobile-menu" class="adm-drawer" aria-label="Administrative sections (mobile)">
+          <ul class="adm-drawer-list">
+            <li><a href="admin.html">Dashboard Overview</a></li>
+            <li><a href="scan-queue.html">Scan Queue &amp; Job Assessment</a></li>
+            <li><a href="zero-day.html">Zero-Day Intel</a></li>
+            <li><a href="user-management.html">User &amp; Access Management</a></li>
+            <li><a href="content-moderation.html" aria-current="page">Content Moderation</a></li>
+            <li><a href="audit-logs.html">System Audit Logs</a></li>
+            <li><a href="profile-settings.html">Profile Settings</a></li>
+            <li><a href="logout.html" class="adm-drawer-signout">Sign Out</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <!-- ===================================================================
+           MAIN — Pre-Publication Review Queue
+      ==================================================================== -->
+      <main class="adm-main">
+        <div class="adm-shell">
+
+          <!-- ------------------------------------------------- Page heading -->
+          <div class="adm-page-head">
+            <div>
+              <span class="adm-eyebrow">Pre-Publication Review Queue</span>
+              <h1 class="adm-page-title">Content Moderation</h1>
+              <p class="adm-page-sub">
+                Every blog post, news announcement, threat advisory and product listing authored by staff must
+                clear editorial review before it renders live on the public website.
+              </p>
+            </div>
+
+            <!-- -------------------------------------------- Quick actions -->
+            <div class="adm-head-actions">
+              <button type="button" class="adm-btn adm-btn-primary" id="cm-review-next">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <path d="m5 3 14 9-14 9V3z"/>
+                </svg>
+                <span>Review Next Item</span>
+              </button>
+
+              <button type="button" class="adm-btn adm-btn-dark" id="cm-export-queue">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <path d="M7 10l5 5 5-5"/>
+                  <path d="M12 15V3"/>
+                </svg>
+                <span>Export Review Log</span>
+              </button>
+
+              <button type="button" class="adm-btn adm-btn-ghost" id="cm-refresh-queue">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+                  <path d="M21 3v6h-6"/>
+                </svg>
+                <span>Refresh Queue</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- =============================================================
+               KPI RIBBON
+          ============================================================== -->
+          <section aria-labelledby="cm-kpi-heading">
+            <h2 id="cm-kpi-heading" class="sr-only">Content moderation indicators</h2>
+
+            <div class="adm-kpi-grid">
+
+              <article class="adm-kpi">
+                <span class="adm-kpi-label">Awaiting Review</span>
+                <span class="adm-kpi-value" data-kpi="pending" data-count="14">14</span>
+                <span class="adm-kpi-delta adm-kpi-delta--warn">● Blocking publication</span>
+              </article>
+
+              <article class="adm-kpi">
+                <span class="adm-kpi-label">Changes Requested</span>
+                <span class="adm-kpi-value" data-kpi="changes" data-count="5">5</span>
+                <span class="adm-kpi-delta adm-kpi-delta--warn">● Returned to authors</span>
+              </article>
+
+              <article class="adm-kpi">
+                <span class="adm-kpi-label">Approved Today</span>
+                <span class="adm-kpi-value" data-kpi="approved-today" data-count="9">9</span>
+                <span class="adm-kpi-delta adm-kpi-delta--up">▲ Queued for publication</span>
+              </article>
+
+              <article class="adm-kpi">
+                <span class="adm-kpi-label">Rejected (7 days)</span>
+                <span class="adm-kpi-value" data-kpi="rejected-7d" data-count="3">3</span>
+                <span class="adm-kpi-delta adm-kpi-delta--down">2 legal · 1 unsupported claim</span>
+              </article>
+
+              <article class="adm-kpi">
+                <span class="adm-kpi-label">Avg. Review Time</span>
+                <span class="adm-kpi-value">2.4<small>h</small></span>
+                <span class="adm-kpi-delta adm-kpi-delta--up">▼ 18% faster this week</span>
+              </article>
+
+              <article class="adm-kpi">
+                <span class="adm-kpi-label">Published (30 days)</span>
+                <span class="adm-kpi-value" data-kpi="published-30d" data-count="62">62</span>
+                <span class="adm-kpi-delta adm-kpi-delta--up">▲ 12% vs. previous period</span>
+              </article>
+
+            </div>
+          </section>
+
+          <!-- =============================================================
+               TOOLBAR + QUEUE + SIDEBAR
+          ============================================================== -->
+          <div class="cm-layout">
+
+            <!-- =========================================================
+                 LEFT — FILTER TOOLBAR + REVIEW QUEUE
+            ========================================================== -->
+            <div class="cm-col">
+
+              <!-- ---------------- Toolbar ---------------- -->
+              <section class="cm-toolbar" aria-labelledby="cm-filter-heading">
+
+                <div class="cm-toolbar-head">
+                  <h2 class="cm-toolbar-title" id="cm-filter-heading">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="M22 3H2l8 9.46V19l4 2v-8.54z"/>
+                    </svg>
+                    Filter &amp; Search Queue
+                  </h2>
+
+                  <span class="cm-results" role="status" aria-live="polite">
+                    Showing <strong id="cm-visible-count">10</strong> of <strong id="cm-total-count">10</strong> items
+                  </span>
+                </div>
+
+                <div class="cm-toolbar-grid">
+
+                  <div class="cm-field">
+                    <label class="cm-field-label" for="cm-search">Search</label>
+                    <div class="cm-input-wrap">
+                      <span class="cm-input-icon" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                             stroke-linejoin="round">
+                          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                        </svg>
+                      </span>
+                      <input id="cm-search"
+                             class="cm-input"
+                             type="search"
+                             placeholder="Title, slug, author or tag…"
+                             autocomplete="off"
+                             spellcheck="false">
+                    </div>
+                  </div>
+
+                  <div class="cm-field">
+                    <label class="cm-field-label" for="cm-filter-type">Content Type</label>
+                    <select id="cm-filter-type" class="cm-select">
+                      <option value="">All types</option>
+                      <option value="blog">Blog Post</option>
+                      <option value="news">News Announcement</option>
+                      <option value="advisory">Threat Advisory</option>
+                      <option value="product">Product Listing</option>
+                    </select>
+                  </div>
+
+                  <div class="cm-field">
+                    <label class="cm-field-label" for="cm-filter-status">Review Status</label>
+                    <select id="cm-filter-status" class="cm-select">
+                      <option value="">All statuses</option>
+                      <option value="pending">Pending Review</option>
+                      <option value="inreview">In Review</option>
+                      <option value="changes">Changes Requested</option>
+                      <option value="approved">Approved</option>
+                      <option value="rejected">Rejected</option>
+                    </select>
+                  </div>
+
+                  <div class="cm-field">
+                    <label class="cm-field-label" for="cm-filter-risk">Risk Flag</label>
+                    <select id="cm-filter-risk" class="cm-select">
+                      <option value="">Any flag</option>
+                      <option value="legal">Legal review required</option>
+                      <option value="pii">Contains PII</option>
+                      <option value="claim">Unverified claim</option>
+                      <option value="brand">Brand-sensitive</option>
+                      <option value="clean">No flags</option>
+                    </select>
+                  </div>
+
+                  <div class="cm-toolbar-actions">
+                    <button type="button" class="cm-clear-btn" id="cm-clear-filters">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                      </svg>
+                      <span>Reset</span>
+                    </button>
+                  </div>
+
+                </div>
+              </section>
+
+              <!-- ---------------- Queue table ---------------- -->
+              <section class="adm-card" aria-labelledby="cm-queue-heading">
+
+                <div class="adm-card-head">
+                  <div>
+                    <h2 class="adm-card-title" id="cm-queue-heading">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/>
+                        <path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>
+                      </svg>
+                      Pending Publication Queue
+                    </h2>
+                    <p class="adm-card-note">
+                      Content authored by staff members awaiting editorial sign-off before it renders on the
+                      public website. Nothing here is visible to clients or the public yet.
+                    </p>
+                  </div>
+                  <span class="adm-tag adm-tag--warn">14 Awaiting Review</span>
+                </div>
+
+                <div class="adm-table-wrap">
+                  <table class="adm-table cm-table">
+                    <caption class="sr-only">
+                      Content awaiting pre-publication review with type, author, risk flags and moderation actions
+                    </caption>
+
+                    <thead>
+                      <tr>
+                        <th scope="col">Content</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">Submitted</th>
+                        <th scope="col">Risk Flags</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="cm-tbody">
+
+                      <!-- ============ ROW 1 — Blog post, pending, legal flag ============ -->
+                      <tr class="cm-row"
+                          data-title="Kenya State House Cyber Security Audit &amp; Risk Analysis"
+                          data-type="blog"
+                          data-status="pending"
+                          data-risk="legal"
+                          data-author="Amara Njoroge"
+                          data-slug="/blog/kenya-state-house-cyber-audit"
+                          data-search="kenya state house cyber security audit risk analysis blog amara njoroge legal review government">
+
+                        <td>
+                          <div class="cm-content-cell">
+                            <span class="cm-thumb cm-thumb--blog" aria-hidden="true">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                   stroke-linejoin="round">
+                                <path d="M12 5v16"/>
+                                <path d="M20 19A2 2 0 0 0 22 17V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10"/>
+                                <path d="M4 19a2 2 0 0 0 2 2h12"/>
+                              </svg>
+                            </span>
+                            <span class="cm-content-body">
+                              <span class="cm-title">Kenya State House Cyber Security Audit &amp; Risk Analysis</span>
+                              <span class="cm-excerpt">An investigative analysis of government digital perimeter vulnerabilities and defence protocols, based on open-source intelligence.</span>
+                              <span class="cm-slug">/blog/kenya-state-house-cyber-audit</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td><span class="cm-type cm-type--blog">Blog Post</span></td>
+
+                        <td>
+                          <div class="cm-author">
+                            <span class="cm-author-avatar" aria-hidden="true">AN</span>
+                            <span class="cm-author-body">
+                              <span class="cm-author-name">Amara Njoroge</span>
+                              <span class="cm-author-meta">Offensive Security</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td class="adm-mono">24 Sep · 08:12</td>
+
+                        <td>
+                          <div class="cm-risk-stack">
+                            <span class="cm-risk cm-risk--legal">Legal review</span>
+                            <span class="cm-risk cm-risk--pii">Sensitive naming</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-status-stack">
+                            <span class="cm-status cm-status--pending">Pending Review</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-actions">
+                            <button type="button" class="cm-act cm-act--primary"
+                                    data-cm-action="review" data-cm-title="Kenya State House Cyber Security Audit &amp; Risk Analysis">Review</button>
+                            <button type="button" class="cm-act cm-act--ok"
+                                    data-cm-action="approve" data-cm-title="Kenya State House Cyber Security Audit &amp; Risk Analysis">Approve</button>
+                            <button type="button" class="cm-icon-btn"
+                                    data-cm-action="preview" data-cm-title="Kenya State House Cyber Security Audit &amp; Risk Analysis"
+                                    title="Preview as reader" aria-label="Preview as reader">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                                   stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- ============ ROW 2 — Threat advisory, pending, high priority ============ -->
+                      <tr class="cm-row"
+                          data-title="Apache Struts 2 OGNL Injection — Emergency Client Advisory"
+                          data-type="advisory"
+                          data-status="pending"
+                          data-risk="clean"
+                          data-author="Fatima Hassan"
+                          data-slug="/advisories/cve-2026-21447"
+                          data-search="apache struts ognl injection emergency client advisory cve-2026-21447 fatima hassan threat intelligence">
+
+                        <td>
+                          <div class="cm-content-cell">
+                            <span class="cm-thumb cm-thumb--advisory" aria-hidden="true">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                   stroke-linejoin="round">
+                                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
+                                <path d="M12 9v4"/><path d="M12 17h.01"/>
+                              </svg>
+                            </span>
+                            <span class="cm-content-body">
+                              <span class="cm-title">Apache Struts 2 OGNL Injection — Emergency Client Advisory</span>
+                              <span class="cm-excerpt">Urgent remediation guidance for CVE-2026-21447. Requires immediate publication across all affected client dashboards.</span>
+                              <span class="cm-slug">/advisories/cve-2026-21447</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td><span class="cm-type cm-type--advisory">Threat Advisory</span></td>
+
+                        <td>
+                          <div class="cm-author">
+                            <span class="cm-author-avatar" aria-hidden="true">FH</span>
+                            <span class="cm-author-body">
+                              <span class="cm-author-name">Fatima Hassan</span>
+                              <span class="cm-author-meta">Threat Intelligence</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td class="adm-mono">24 Sep · 09:02</td>
+
+                        <td>
+                          <div class="cm-risk-stack">
+                            <span class="cm-risk cm-risk--clean">No flags</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-status-stack">
+                            <span class="cm-status cm-status--pending">Pending Review</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-actions">
+                            <button type="button" class="cm-act cm-act--primary"
+                                    data-cm-action="review" data-cm-title="Apache Struts 2 OGNL Injection — Emergency Client Advisory">Review</button>
+                            <button type="button" class="cm-act cm-act--ok"
+                                    data-cm-action="approve" data-cm-title="Apache Struts 2 OGNL Injection — Emergency Client Advisory">Approve</button>
+                            <button type="button" class="cm-icon-btn"
+                                    data-cm-action="preview" data-cm-title="Apache Struts 2 OGNL Injection — Emergency Client Advisory"
+                                    title="Preview as reader" aria-label="Preview as reader">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                                   stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- ============ ROW 3 — Product listing, pending ============ -->
+                      <tr class="cm-row"
+                          data-title="VUNVAULT Sentinel — Continuous Attack Surface Monitoring"
+                          data-type="product"
+                          data-status="pending"
+                          data-risk="claim"
+                          data-author="Brian Otieno"
+                          data-slug="/products/sentinel"
+                          data-search="vunvault sentinel continuous attack surface monitoring product listing brian otieno">
+
+                        <td>
+                          <div class="cm-content-cell">
+                            <span class="cm-thumb cm-thumb--product" aria-hidden="true">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                   stroke-linejoin="round">
+                                <path d="m7.5 4.27 9 5.15"/>
+                                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+                                <path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>
+                              </svg>
+                            </span>
+                            <span class="cm-content-body">
+                              <span class="cm-title">VUNVAULT Sentinel — Continuous Attack Surface Monitoring</span>
+                              <span class="cm-excerpt">Product listing describing continuous perimeter monitoring with automated alerting and quarterly re-assessment.</span>
+                              <span class="cm-slug">/products/sentinel</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td><span class="cm-type cm-type--product">Product Listing</span></td>
+
+                        <td>
+                          <div class="cm-author">
+                            <span class="cm-author-avatar" aria-hidden="true">BO</span>
+                            <span class="cm-author-body">
+                              <span class="cm-author-name">Brian Otieno</span>
+                              <span class="cm-author-meta">Curriculum &amp; Product</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td class="adm-mono">23 Sep · 16:48</td>
+
+                        <td>
+                          <div class="cm-risk-stack">
+                            <span class="cm-risk cm-risk--claim">Unverified claim</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-status-stack">
+                            <span class="cm-status cm-status--pending">Pending Review</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-actions">
+                            <button type="button" class="cm-act cm-act--primary"
+                                    data-cm-action="review" data-cm-title="VUNVAULT Sentinel — Continuous Attack Surface Monitoring">Review</button>
+                            <button type="button" class="cm-act"
+                                    data-cm-action="changes" data-cm-title="VUNVAULT Sentinel — Continuous Attack Surface Monitoring">Request Changes</button>
+                            <button type="button" class="cm-icon-btn"
+                                    data-cm-action="preview" data-cm-title="VUNVAULT Sentinel — Continuous Attack Surface Monitoring"
+                                    title="Preview as reader" aria-label="Preview as reader">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                                   stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- ============ ROW 4 — News, in review ============ -->
+                      <tr class="cm-row"
+                          data-title="VUNVAULT Partners With East African Fintech Alliance"
+                          data-type="news"
+                          data-status="inreview"
+                          data-risk="brand"
+                          data-author="Grace Wanjiru"
+                          data-slug="/news/east-african-fintech-alliance"
+                          data-search="vunvault partners east african fintech alliance news announcement grace wanjiru press">
+
+                        <td>
+                          <div class="cm-content-cell">
+                            <span class="cm-thumb cm-thumb--news" aria-hidden="true">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                   stroke-linejoin="round">
+                                <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/>
+                                <path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>
+                              </svg>
+                            </span>
+                            <span class="cm-content-body">
+                              <span class="cm-title">VUNVAULT Partners With East African Fintech Alliance</span>
+                              <span class="cm-excerpt">Joint press announcement covering a new regional security partnership and shared threat intelligence programme.</span>
+                              <span class="cm-slug">/news/east-african-fintech-alliance</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td><span class="cm-type cm-type--news">News Announcement</span></td>
+
+                        <td>
+                          <div class="cm-author">
+                            <span class="cm-author-avatar" aria-hidden="true">GW</span>
+                            <span class="cm-author-body">
+                              <span class="cm-author-name">Grace Wanjiru</span>
+                              <span class="cm-author-meta">Compliance &amp; Comms</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td class="adm-mono">23 Sep · 11:30</td>
+
+                        <td>
+                          <div class="cm-risk-stack">
+                            <span class="cm-risk cm-risk--brand">Brand-sensitive</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-status-stack">
+                            <span class="cm-status cm-status--inreview">In Review</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-actions">
+                            <button type="button" class="cm-act cm-act--primary"
+                                    data-cm-action="review" data-cm-title="VUNVAULT Partners With East African Fintech Alliance">Continue Review</button>
+                            <button type="button" class="cm-act cm-act--ok"
+                                    data-cm-action="approve" data-cm-title="VUNVAULT Partners With East African Fintech Alliance">Approve</button>
+                            <button type="button" class="cm-icon-btn"
+                                    data-cm-action="preview" data-cm-title="VUNVAULT Partners With East African Fintech Alliance"
+                                    title="Preview as reader" aria-label="Preview as reader">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                                   stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- ============ ROW 5 — Blog, changes requested ============ -->
+                      <tr class="cm-row"
+                          data-title="Africa's Cyber Awakening: How the Continent Is Fighting Back"
+                          data-type="blog"
+                          data-status="changes"
+                          data-risk="pii"
+                          data-author="Amara Njoroge"
+                          data-slug="/blog/africa-cyber-awakening"
+                          data-search="africa cyber awakening continent fighting back blog amara njoroge pii personal data">
+
+                        <td>
+                          <div class="cm-content-cell">
+                            <span class="cm-thumb cm-thumb--blog" aria-hidden="true">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                   stroke-linejoin="round">
+                                <path d="M12 5v16"/>
+                                <path d="M20 19A2 2 0 0 0 22 17V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10"/>
+                                <path d="M4 19a2 2 0 0 0 2 2h12"/>
+                              </svg>
+                            </span>
+                            <span class="cm-content-body">
+                              <span class="cm-title">Africa's Cyber Awakening: How the Continent Is Fighting Back</span>
+                              <span class="cm-excerpt">An in-depth analysis of evolving threat landscapes across Kenya, Ghana and Nigeria, citing recent incident case studies.</span>
+                              <span class="cm-slug">/blog/africa-cyber-awakening</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td><span class="cm-type cm-type--blog">Blog Post</span></td>
+
+                        <td>
+                          <div class="cm-author">
+                            <span class="cm-author-avatar" aria-hidden="true">AN</span>
+                            <span class="cm-author-body">
+                              <span class="cm-author-name">Amara Njoroge</span>
+                              <span class="cm-author-meta">Offensive Security</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td class="adm-mono">22 Sep · 14:20</td>
+
+                        <td>
+                          <div class="cm-risk-stack">
+                            <span class="cm-risk cm-risk--pii">Contains PII</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-status-stack">
+                            <span class="cm-status cm-status--changes">Changes Requested</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-actions">
+                            <button type="button" class="cm-act cm-act--primary"
+                                    data-cm-action="review" data-cm-title="Africa's Cyber Awakening: How the Continent Is Fighting Back">Re-review</button>
+                            <button type="button" class="cm-act"
+                                    data-cm-action="remind" data-cm-title="Africa's Cyber Awakening: How the Continent Is Fighting Back">Remind Author</button>
+                            <button type="button" class="cm-icon-btn"
+                                    data-cm-action="preview" data-cm-title="Africa's Cyber Awakening: How the Continent Is Fighting Back"
+                                    title="Preview as reader" aria-label="Preview as reader">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                                   stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- ============ ROW 6 — News, approved ============ -->
+                      <tr class="cm-row"
+                          data-title="VUNVAULT Opens Regional Security Operations Hub in Accra"
+                          data-type="news"
+                          data-status="approved"
+                          data-risk="clean"
+                          data-author="Grace Wanjiru"
+                          data-slug="/news/accra-soc-hub"
+                          data-search="vunvault opens regional security operations hub accra news grace wanjiru approved">
+
+                        <td>
+                          <div class="cm-content-cell">
+                            <span class="cm-thumb cm-thumb--news" aria-hidden="true">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                   stroke-linejoin="round">
+                                <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/>
+                                <path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>
+                              </svg>
+                            </span>
+                            <span class="cm-content-body">
+                              <span class="cm-title">VUNVAULT Opens Regional Security Operations Hub in Accra</span>
+                              <span class="cm-excerpt">Announcement of the new Ghana-based SOC facility supporting West African clients with 24/7 monitoring.</span>
+                              <span class="cm-slug">/news/accra-soc-hub</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td><span class="cm-type cm-type--news">News Announcement</span></td>
+
+                        <td>
+                          <div class="cm-author">
+                            <span class="cm-author-avatar" aria-hidden="true">GW</span>
+                            <span class="cm-author-body">
+                              <span class="cm-author-name">Grace Wanjiru</span>
+                              <span class="cm-author-meta">Compliance &amp; Comms</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td class="adm-mono">21 Sep · 10:15</td>
+
+                        <td>
+                          <div class="cm-risk-stack">
+                            <span class="cm-risk cm-risk--clean">No flags</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-status-stack">
+                            <span class="cm-status cm-status--approved">Approved</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-actions">
+                            <button type="button" class="cm-act cm-act--ok"
+                                    data-cm-action="publish" data-cm-title="VUNVAULT Opens Regional Security Operations Hub in Accra">Publish Now</button>
+                            <button type="button" class="cm-act"
+                                    data-cm-action="schedule" data-cm-title="VUNVAULT Opens Regional Security Operations Hub in Accra">Schedule</button>
+                            <button type="button" class="cm-icon-btn"
+                                    data-cm-action="preview" data-cm-title="VUNVAULT Opens Regional Security Operations Hub in Accra"
+                                    title="Preview as reader" aria-label="Preview as reader">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                                   stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- ============ ROW 7 — Product listing, pending ============ -->
+                      <tr class="cm-row"
+                          data-title="VUNVAULT Academy — Security Foundations Certification"
+                          data-type="product"
+                          data-status="pending"
+                          data-risk="clean"
+                          data-author="Brian Otieno"
+                          data-slug="/products/academy-foundations"
+                          data-search="vunvault academy security foundations certification product listing brian otieno training">
+
+                        <td>
+                          <div class="cm-content-cell">
+                            <span class="cm-thumb cm-thumb--product" aria-hidden="true">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                   stroke-linejoin="round">
+                                <path d="m7.5 4.27 9 5.15"/>
+                                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+                                <path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>
+                              </svg>
+                            </span>
+                            <span class="cm-content-body">
+                              <span class="cm-title">VUNVAULT Academy — Security Foundations Certification</span>
+                              <span class="cm-excerpt">Product page for the free cybersecurity foundations track with certificate of completion.</span>
+                              <span class="cm-slug">/products/academy-foundations</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td><span class="cm-type cm-type--product">Product Listing</span></td>
+
+                        <td>
+                          <div class="cm-author">
+                            <span class="cm-author-avatar" aria-hidden="true">BO</span>
+                            <span class="cm-author-body">
+                              <span class="cm-author-name">Brian Otieno</span>
+                              <span class="cm-author-meta">Curriculum &amp; Product</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td class="adm-mono">23 Sep · 09:41</td>
+
+                        <td>
+                          <div class="cm-risk-stack">
+                            <span class="cm-risk cm-risk--clean">No flags</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-status-stack">
+                            <span class="cm-status cm-status--pending">Pending Review</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-actions">
+                            <button type="button" class="cm-act cm-act--primary"
+                                    data-cm-action="review" data-cm-title="VUNVAULT Academy — Security Foundations Certification">Review</button>
+                            <button type="button" class="cm-act cm-act--ok"
+                                    data-cm-action="approve" data-cm-title="VUNVAULT Academy — Security Foundations Certification">Approve</button>
+                            <button type="button" class="cm-icon-btn"
+                                    data-cm-action="preview" data-cm-title="VUNVAULT Academy — Security Foundations Certification"
+                                    title="Preview as reader" aria-label="Preview as reader">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                                   stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- ============ ROW 8 — Advisory, rejected ============ -->
+                      <tr class="cm-row"
+                          data-title="Unverified Ransomware Attribution — Vendor X Campaign"
+                          data-type="advisory"
+                          data-status="rejected"
+                          data-risk="claim"
+                          data-author="Daniel Mwangi"
+                          data-slug="/advisories/vendor-x-ransomware"
+                          data-search="unverified ransomware attribution vendor x campaign daniel mwangi advisory rejected">
+
+                        <td>
+                          <div class="cm-content-cell">
+                            <span class="cm-thumb cm-thumb--advisory" aria-hidden="true">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                   stroke-linejoin="round">
+                                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
+                                <path d="M12 9v4"/><path d="M12 17h.01"/>
+                              </svg>
+                            </span>
+                            <span class="cm-content-body">
+                              <span class="cm-title">Unverified Ransomware Attribution — Vendor X Campaign</span>
+                              <span class="cm-excerpt">Advisory attributing an active campaign to a named threat actor based on unattributed telemetry.</span>
+                              <span class="cm-slug">/advisories/vendor-x-ransomware</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td><span class="cm-type cm-type--advisory">Threat Advisory</span></td>
+
+                        <td>
+                          <div class="cm-author">
+                            <span class="cm-author-avatar" aria-hidden="true">DM</span>
+                            <span class="cm-author-body">
+                              <span class="cm-author-name">Daniel Mwangi</span>
+                              <span class="cm-author-meta">Security Automation</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td class="adm-mono">22 Sep · 08:55</td>
+
+                        <td>
+                          <div class="cm-risk-stack">
+                            <span class="cm-risk cm-risk--claim">Unverified claim</span>
+                            <span class="cm-risk cm-risk--legal">Attribution risk</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-status-stack">
+                            <span class="cm-status cm-status--rejected">Rejected</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-actions">
+                            <button type="button" class="cm-act"
+                                    data-cm-action="reopen" data-cm-title="Unverified Ransomware Attribution — Vendor X Campaign">Reopen</button>
+                            <button type="button" class="cm-act cm-act--danger"
+                                    data-cm-action="archive" data-cm-title="Unverified Ransomware Attribution — Vendor X Campaign">Archive</button>
+                            <button type="button" class="cm-icon-btn"
+                                    data-cm-action="preview" data-cm-title="Unverified Ransomware Attribution — Vendor X Campaign"
+                                    title="Preview as reader" aria-label="Preview as reader">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                                   stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- ============ ROW 9 — Blog, pending, brand ============ -->
+                      <tr class="cm-row"
+                          data-title="Why Most SACCOs Fail Their Central Bank Security Audit"
+                          data-type="blog"
+                          data-status="pending"
+                          data-risk="brand"
+                          data-author="Grace Wanjiru"
+                          data-slug="/blog/sacco-central-bank-audit"
+                          data-search="why most saccos fail central bank security audit blog grace wanjiru brand compliance">
+
+                        <td>
+                          <div class="cm-content-cell">
+                            <span class="cm-thumb cm-thumb--blog" aria-hidden="true">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                   stroke-linejoin="round">
+                                <path d="M12 5v16"/>
+                                <path d="M20 19A2 2 0 0 0 22 17V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10"/>
+                                <path d="M4 19a2 2 0 0 0 2 2h12"/>
+                              </svg>
+                            </span>
+                            <span class="cm-content-body">
+                              <span class="cm-title">Why Most SACCOs Fail Their Central Bank Security Audit</span>
+                              <span class="cm-excerpt">Practical breakdown of the six most common regulatory findings and how to close them before examination.</span>
+                              <span class="cm-slug">/blog/sacco-central-bank-audit</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td><span class="cm-type cm-type--blog">Blog Post</span></td>
+
+                        <td>
+                          <div class="cm-author">
+                            <span class="cm-author-avatar" aria-hidden="true">GW</span>
+                            <span class="cm-author-body">
+                              <span class="cm-author-name">Grace Wanjiru</span>
+                              <span class="cm-author-meta">Compliance &amp; Comms</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td class="adm-mono">24 Sep · 07:28</td>
+
+                        <td>
+                          <div class="cm-risk-stack">
+                            <span class="cm-risk cm-risk--brand">Brand-sensitive</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-status-stack">
+                            <span class="cm-status cm-status--pending">Pending Review</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-actions">
+                            <button type="button" class="cm-act cm-act--primary"
+                                    data-cm-action="review" data-cm-title="Why Most SACCOs Fail Their Central Bank Security Audit">Review</button>
+                            <button type="button" class="cm-act cm-act--ok"
+                                    data-cm-action="approve" data-cm-title="Why Most SACCOs Fail Their Central Bank Security Audit">Approve</button>
+                            <button type="button" class="cm-icon-btn"
+                                    data-cm-action="preview" data-cm-title="Why Most SACCOs Fail Their Central Bank Security Audit"
+                                    title="Preview as reader" aria-label="Preview as reader">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                                   stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+
+                      <!-- ============ ROW 10 — Advisory, pending ============ -->
+                      <tr class="cm-row"
+                          data-title="Cisco IOS XE Authentication Bypass — Client Mitigation Brief"
+                          data-type="advisory"
+                          data-status="pending"
+                          data-risk="clean"
+                          data-author="Fatima Hassan"
+                          data-slug="/advisories/cve-2026-0091"
+                          data-search="cisco ios xe authentication bypass client mitigation brief cve-2026-0091 fatima hassan">
+
+                        <td>
+                          <div class="cm-content-cell">
+                            <span class="cm-thumb cm-thumb--advisory" aria-hidden="true">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                                   stroke-linejoin="round">
+                                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
+                                <path d="M12 9v4"/><path d="M12 17h.01"/>
+                              </svg>
+                            </span>
+                            <span class="cm-content-body">
+                              <span class="cm-title">Cisco IOS XE Authentication Bypass — Client Mitigation Brief</span>
+                              <span class="cm-excerpt">Compensating controls and patching guidance for CVE-2026-0091 affecting IOS XE Web UI deployments.</span>
+                              <span class="cm-slug">/advisories/cve-2026-0091</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td><span class="cm-type cm-type--advisory">Threat Advisory</span></td>
+
+                        <td>
+                          <div class="cm-author">
+                            <span class="cm-author-avatar" aria-hidden="true">FH</span>
+                            <span class="cm-author-body">
+                              <span class="cm-author-name">Fatima Hassan</span>
+                              <span class="cm-author-meta">Threat Intelligence</span>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td class="adm-mono">24 Sep · 06:48</td>
+
+                        <td>
+                          <div class="cm-risk-stack">
+                            <span class="cm-risk cm-risk--clean">No flags</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-status-stack">
+                            <span class="cm-status cm-status--pending">Pending Review</span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="cm-actions">
+                            <button type="button" class="cm-act cm-act--primary"
+                                    data-cm-action="review" data-cm-title="Cisco IOS XE Authentication Bypass — Client Mitigation Brief">Review</button>
+                            <button type="button" class="cm-act cm-act--ok"
+                                    data-cm-action="approve" data-cm-title="Cisco IOS XE Authentication Bypass — Client Mitigation Brief">Approve</button>
+                            <button type="button" class="cm-icon-btn"
+                                    data-cm-action="preview" data-cm-title="Cisco IOS XE Authentication Bypass — Client Mitigation Brief"
+                                    title="Preview as reader" aria-label="Preview as reader">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                                   stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+
+                    </tbody>
+
+                    <tfoot>
+                      <tr>
+                        <td colspan="7">
+                          Content approved here is queued for publication, not immediately visible. Use the content editor to schedule a live time.
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+
+                <!-- Empty state -->
+                <div class="cm-empty" id="cm-empty">
+                  <span class="cm-empty-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                    </svg>
+                  </span>
+                  <span class="cm-empty-title">No content matches the current filters</span>
+                  <span class="cm-empty-text">
+                    Adjust your search terms or reset the filters to see the full pre-publication review queue.
+                  </span>
+                  <button type="button" class="adm-btn adm-btn-ghost" id="cm-empty-reset">Reset Filters</button>
+                </div>
+
+              </section>
+
+            </div>
+
+            <!-- =========================================================
+                 RIGHT — SIDEBAR
+            ========================================================== -->
+            <aside class="cm-col" aria-label="Moderation controls">
+
+              <!-- ---------- Review workflow panel ---------- -->
+              <section class="adm-card adm-card--dark">
+                <div class="adm-card-head">
+                  <div>
+                    <h2 class="adm-card-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <path d="M9 12l2 2 4-4"/>
+                        <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.66 0 3.22.45 4.56 1.24"/>
+                      </svg>
+                      Review Workflow
+                    </h2>
+                    <p class="adm-card-note">
+                      Every item must clear editorial review before it can be published to the public website.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="adm-card-body cm-panel">
+
+                  <div class="cm-panel-section">
+                    <span class="cm-panel-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                      </svg>
+                      Queue Snapshot
+                    </span>
+
+                    <div class="cm-status-row">
+                      <span>Pending review</span>
+                      <strong>14</strong>
+                    </div>
+                    <div class="cm-status-row">
+                      <span>In review</span>
+                      <strong>3</strong>
+                    </div>
+                    <div class="cm-status-row">
+                      <span>Changes requested</span>
+                      <strong>5</strong>
+                    </div>
+                    <div class="cm-status-row">
+                      <span>Approved (not yet live)</span>
+                      <strong>9</strong>
+                    </div>
+                    <div class="cm-status-row">
+                      <span>Oldest waiting item</span>
+                      <strong>36 h</strong>
+                    </div>
+                  </div>
+
+                  <div class="cm-panel-section">
+                    <span class="cm-panel-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                      </svg>
+                      Bulk Actions
+                    </span>
+
+                    <div class="cm-actions-stack">
+                      <button type="button" class="adm-btn adm-btn-ghost" id="cm-bulk-approve">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <path d="M20 6 9 17l-5-5"/>
+                        </svg>
+                        <span>Approve All Flag-Free</span>
+                      </button>
+
+                      <button type="button" class="adm-btn adm-btn-dark" id="cm-bulk-escalate">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>
+                        </svg>
+                        <span>Escalate Flagged Items</span>
+                      </button>
+
+                      <button type="button" class="adm-btn adm-btn-ghost" id="cm-bulk-remind">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <rect x="2" y="4" width="20" height="16" rx="2"/>
+                          <path d="m22 7-8.99 5.73a2 2 0 0 1-2.01 0L2 7"/>
+                        </svg>
+                        <span>Remind All Authors</span>
+                      </button>
+                    </div>
+
+                    <p class="cm-action-note">
+                      Bulk approvals still require individual confirmation per item.
+                    </p>
+                  </div>
+
+                </div>
+              </section>
+
+              <!-- ---------- Content type distribution ---------- -->
+              <section class="adm-card adm-card--dark" aria-labelledby="cm-dist-heading">
+                <div class="adm-card-head">
+                  <div>
+                    <h2 class="adm-card-title" id="cm-dist-heading">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 3v18h18"/>
+                        <path d="M8 17V9"/><path d="M13 17V5"/><path d="M18 17v-6"/>
+                      </svg>
+                      Queue by Content Type
+                    </h2>
+                    <p class="adm-card-note">Breakdown of the 14 items currently awaiting review.</p>
+                  </div>
+                  <span class="adm-tag">14 Items</span>
+                </div>
+
+                <div class="adm-card-body">
+                  <div class="cm-dist">
+
+                    <div class="cm-dist-row">
+                      <span class="cm-dist-name">Blog Post</span>
+                      <progress class="cm-progress" value="6" max="14">6</progress>
+                      <span class="cm-dist-count">6</span>
+                    </div>
+
+                    <div class="cm-dist-row">
+                      <span class="cm-dist-name">Threat Advisory</span>
+                      <progress class="cm-progress cm-progress--crit" value="4" max="14">4</progress>
+                      <span class="cm-dist-count">4</span>
+                    </div>
+
+                    <div class="cm-dist-row">
+                      <span class="cm-dist-name">News Announcement</span>
+                      <progress class="cm-progress cm-progress--ok" value="2" max="14">2</progress>
+                      <span class="cm-dist-count">2</span>
+                    </div>
+
+                    <div class="cm-dist-row">
+                      <span class="cm-dist-name">Product Listing</span>
+                      <progress class="cm-progress cm-progress--warn" value="2" max="14">2</progress>
+                      <span class="cm-dist-count">2</span>
+                    </div>
+
+                  </div>
+                </div>
+              </section>
+
+              <!-- ---------- Editorial guidelines ---------- -->
+              <section class="adm-card" aria-labelledby="cm-guidelines-heading">
+                <div class="adm-card-head">
+                  <div>
+                    <h2 class="adm-card-title" id="cm-guidelines-heading">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/>
+                      </svg>
+                      Pre-Publication Guidelines
+                    </h2>
+                    <p class="adm-card-note">The five checks every reviewer must complete before approving content.</p>
+                  </div>
+                </div>
+
+                <div class="adm-card-body">
+                  <div class="cm-guidelines">
+
+                    <div class="cm-guideline">
+                      <span class="cm-guideline-num">01</span>
+                      <span class="cm-guideline-body">
+                        <span class="cm-guideline-title">No unverified claims</span>
+                        <span class="cm-guideline-text">Every technical assertion must trace to a cited source or internal test evidence.</span>
+                      </span>
+                    </div>
+
+                    <div class="cm-guideline">
+                      <span class="cm-guideline-num">02</span>
+                      <span class="cm-guideline-body">
+                        <span class="cm-guideline-title">No client or personal data</span>
+                        <span class="cm-guideline-text">Screenshots, logs and case studies must be fully anonymised before publication.</span>
+                      </span>
+                    </div>
+
+                    <div class="cm-guideline">
+                      <span class="cm-guideline-num">03</span>
+                      <span class="cm-guideline-body">
+                        <span class="cm-guideline-title">Legal review completed where flagged</span>
+                        <span class="cm-guideline-text">Named entities, government bodies and vendor attribution require legal sign-off.</span>
+                      </span>
+                    </div>
+
+                    <div class="cm-guideline">
+                      <span class="cm-guideline-num">04</span>
+                      <span class="cm-guideline-body">
+                        <span class="cm-guideline-title">Brand voice consistent</span>
+                        <span class="cm-guideline-text">Tone, terminology and product naming must match the VUNVAULT editorial standard.</span>
+                      </span>
+                    </div>
+
+                    <div class="cm-guideline">
+                      <span class="cm-guideline-num">05</span>
+                      <span class="cm-guideline-body">
+                        <span class="cm-guideline-title">Publication path selected</span>
+                        <span class="cm-guideline-text">Decide whether the item publishes immediately, on schedule, or requires a client-only release.</span>
+                      </span>
+                    </div>
+
+                  </div>
+                </div>
+              </section>
+
+              <!-- ---------- Recent moderation activity ---------- -->
+              <section class="adm-card adm-card--dark" aria-labelledby="cm-activity-heading">
+                <div class="adm-card-head">
+                  <div>
+                    <h2 class="adm-card-title" id="cm-activity-heading">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/>
+                        <path d="M12 6v6l4 2"/>
+                      </svg>
+                      Recent Moderation Activity
+                    </h2>
+                    <p class="adm-card-note">Last six editorial decisions across the queue.</p>
+                  </div>
+                  <span class="adm-tag">Live</span>
+                </div>
+
+                <div class="adm-card-body">
+                  <div class="cm-activity">
+
+                    <div class="cm-activity-item">
+                      <span class="cm-activity-dot cm-activity-dot--ok"></span>
+                      <span class="cm-activity-body">
+                        <span class="cm-activity-text">
+                          <strong>e.reed</strong> approved <em>VUNVAULT Opens Regional SOC Hub in Accra</em>.
+                        </span>
+                        <span class="cm-activity-time">Today · 09:41 UTC</span>
+                      </span>
+                    </div>
+
+                    <div class="cm-activity-item">
+                      <span class="cm-activity-dot cm-activity-dot--warn"></span>
+                      <span class="cm-activity-body">
+                        <span class="cm-activity-text">
+                          <strong>e.reed</strong> requested changes on <em>Africa's Cyber Awakening</em> — PII in case study.
+                        </span>
+                        <span class="cm-activity-time">Today · 09:22 UTC</span>
+                      </span>
+                    </div>
+
+                    <div class="cm-activity-item">
+                      <span class="cm-activity-dot cm-activity-dot--crit"></span>
+                      <span class="cm-activity-body">
+                        <span class="cm-activity-text">
+                          <strong>e.reed</strong> rejected <em>Unverified Ransomware Attribution</em> — attribution risk.
+                        </span>
+                        <span class="cm-activity-time">Yesterday · 17:04 UTC</span>
+                      </span>
+                    </div>
+
+                    <div class="cm-activity-item">
+                      <span class="cm-activity-dot"></span>
+                      <span class="cm-activity-body">
+                        <span class="cm-activity-text">
+                          <strong>a.njoroge</strong> submitted <em>Kenya State House Cyber Security Audit</em> for review.
+                        </span>
+                        <span class="cm-activity-time">Today · 08:12 UTC</span>
+                      </span>
+                    </div>
+
+                    <div class="cm-activity-item">
+                      <span class="cm-activity-dot cm-activity-dot--ok"></span>
+                      <span class="cm-activity-body">
+                        <span class="cm-activity-text">
+                          <strong>f.hassan</strong> published advisory <em>CVE-2026-3327</em> to client dashboards.
+                        </span>
+                        <span class="cm-activity-time">Yesterday · 14:32 UTC</span>
+                      </span>
+                    </div>
+
+                    <div class="cm-activity-item">
+                      <span class="cm-activity-dot cm-activity-dot--warn"></span>
+                      <span class="cm-activity-body">
+                        <span class="cm-activity-text">
+                          <strong>g.wanjiru</strong> submitted <em>East African Fintech Alliance</em> — legal flag raised.
+                        </span>
+                        <span class="cm-activity-time">Yesterday · 11:30 UTC</span>
+                      </span>
+                    </div>
+
+                  </div>
+                </div>
+              </section>
+
+            </aside>
+          </div>
+
+        </div>
+      </main>
+
+      <!-- ===================================================================
+           FOOTER
+      ==================================================================== -->
+      <footer class="adm-footer">
+        <div class="adm-footer-inner">
+
+          <dl class="adm-footer-meta">
+            <div>
+              <dt>System Build</dt>
+              <dd>VUNVAULT Admin Core v4.2.1</dd>
+            </div>
+            <div>
+              <dt>Encryption Standard</dt>
+              <dd>AES-256-GCM</dd>
+            </div>
+            <div>
+              <dt>Node Identifier</dt>
+              <dd>node-nbo-01 · NBO-CORE</dd>
+            </div>
+            <div>
+              <dt>Session Reference</dt>
+              <dd>ADM-2026-0924-7F3A</dd>
+            </div>
+          </dl>
+
+          <div class="adm-footer-bottom">
+            <span>© 2026 VUNVAULT. All rights reserved. Editorial decisions are logged and audited.</span>
+
+            <nav class="adm-footer-links" aria-label="Administrative footer">
+              <a href="admin.html">Dashboard</a>
+              <a href="audit-logs.html">Audit Logs</a>
+              <a href="profile-settings.html">Profile Settings</a>
+              <a href="logout.html">Sign Out</a>
+            </nav>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- ===================================================================
+         MODERATION REVIEW MODAL
+    ==================================================================== -->
+    <div id="cm-review-modal"
+         class="cm-modal"
+         hidden
+         aria-hidden="true"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="cm-review-title">
+
+      <div class="cm-modal-backdrop" data-cm-close></div>
+
+      <div class="cm-modal-window" role="document">
+
+        <!-- Head -->
+        <div class="cm-modal-head">
+          <div>
+            <span class="cm-modal-eyebrow">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 12l2 2 4-4"/>
+                <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.66 0 3.22.45 4.56 1.24"/>
+              </svg>
+              Pre-Publication Review
+            </span>
+            <h2 class="cm-modal-title" id="cm-review-title">Editorial sign-off</h2>
+            <p class="cm-modal-sub">
+              <span id="cm-modal-slug">/</span>
+            </p>
+          </div>
+
+          <button type="button" class="cm-modal-close" data-cm-close aria-label="Close review">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Body -->
+        <div class="cm-modal-body">
+
+          <!-- Content preview -->
+          <div>
+            <div class="cm-modal-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              Content Preview
+            </div>
+
+            <div class="cm-preview-body">
+              <h3 class="cm-preview-title" id="cm-modal-preview-title">—</h3>
+              <div class="cm-preview-meta">
+                <span id="cm-modal-preview-type">—</span>
+                <span>·</span>
+                <span id="cm-modal-preview-author">—</span>
+                <span>·</span>
+                <span id="cm-modal-preview-date">—</span>
+              </div>
+              <p class="cm-preview-excerpt" id="cm-modal-preview-excerpt">
+                Full content preview is rendered here for the reviewer.
+              </p>
+              <div class="cm-preview-tags" id="cm-modal-preview-tags">
+                <span class="cm-preview-tag">no tags</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Checklist -->
+          <div>
+            <div class="cm-modal-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5"/>
+              </svg>
+              Mandatory Editorial Checklist
+            </div>
+
+            <div class="cm-checklist" id="cm-checklist">
+
+              <label class="cm-checklist-item">
+                <input type="checkbox" class="cm-gate-check" data-check="accuracy">
+                <span class="cm-checklist-text">
+                  <span class="cm-checklist-title">Technical accuracy verified</span>
+                  <span class="cm-checklist-hint">Every technical claim traces to a citation, internal test result or public advisory.</span>
+                </span>
+              </label>
+
+              <label class="cm-checklist-item">
+                <input type="checkbox" class="cm-gate-check" data-check="privacy">
+                <span class="cm-checklist-text">
+                  <span class="cm-checklist-title">No client or personal data present</span>
+                  <span class="cm-checklist-hint">Screenshots, logs and case studies are fully anonymised.</span>
+                </span>
+              </label>
+
+              <label class="cm-checklist-item">
+                <input type="checkbox" class="cm-gate-check" data-check="legal">
+                <span class="cm-checklist-text">
+                  <span class="cm-checklist-title">Legal review cleared (where flagged)</span>
+                  <span class="cm-checklist-hint">Named entities, government references and vendor attribution are signed off.</span>
+                </span>
+              </label>
+
+              <label class="cm-checklist-item">
+                <input type="checkbox" class="cm-gate-check" data-check="brand">
+                <span class="cm-checklist-text">
+                  <span class="cm-checklist-title">Brand voice and terminology consistent</span>
+                  <span class="cm-checklist-hint">Tone, product naming and formatting match the VUNVAULT editorial standard.</span>
+                </span>
+              </label>
+
+              <label class="cm-checklist-item">
+                <input type="checkbox" class="cm-gate-check" data-check="publication">
+                <span class="cm-checklist-text">
+                  <span class="cm-checklist-title">Publication path decided</span>
+                  <span class="cm-checklist-hint">Immediate, scheduled or client-only release has been agreed with the author.</span>
+                </span>
+              </label>
+
+            </div>
+          </div>
+
+          <!-- Decision -->
+          <div>
+            <div class="cm-modal-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+              Editorial Decision
+            </div>
+
+            <div class="cm-decisions">
+
+              <label class="cm-decision">
+                <input type="radio" name="cm-decision" value="approve">
+                <span class="cm-decision-card cm-decision-card--approve">
+                  <span class="cm-decision-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="M20 6 9 17l-5-5"/>
+                    </svg>
+                    Approve for Publication
+                  </span>
+                  <span class="cm-decision-text">Clears the item for the public website and any scheduled client release.</span>
+                </span>
+              </label>
+
+              <label class="cm-decision">
+                <input type="radio" name="cm-decision" value="changes">
+                <span class="cm-decision-card cm-decision-card--changes">
+                  <span class="cm-decision-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="M12 20h9"/>
+                      <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                    </svg>
+                    Request Changes
+                  </span>
+                  <span class="cm-decision-text">Returns the item to the author with reviewer notes attached.</span>
+                </span>
+              </label>
+
+              <label class="cm-decision">
+                <input type="radio" name="cm-decision" value="reject">
+                <span class="cm-decision-card cm-decision-card--reject">
+                  <span class="cm-decision-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                    </svg>
+                    Reject
+                  </span>
+                  <span class="cm-decision-text">Marks the item invalid with feedback. It will not be published.</span>
+                </span>
+              </label>
+
+            </div>
+          </div>
+
+          <!-- Reviewer notes -->
+          <div class="cm-note-field">
+            <label class="cm-field-label" for="cm-review-note">
+              <span>Reviewer Notes</span>
+              <span class="cm-hint">Recorded in the audit log and sent to the author if changes are requested.</span>
+            </label>
+            <textarea id="cm-review-note"
+                      class="cm-textarea"
+                      placeholder="Summarise what was checked, any residual concerns and the rationale for this decision…"></textarea>
+          </div>
+
+          <!-- Reviewer identity -->
+          <div class="cm-reviewer">
+            <span>
+              <span class="cm-reviewer-label">Reviewer</span>
+              <span class="cm-reviewer-value">e.reed@vunvault.com</span>
+            </span>
+            <span>
+              <span class="cm-reviewer-label">Role</span>
+              <span class="cm-reviewer-value">Super Administrator</span>
+            </span>
+            <span>
+              <span class="cm-reviewer-label">Decision Timestamp</span>
+              <span class="cm-reviewer-value" id="cm-modal-timestamp">—</span>
+            </span>
+          </div>
+
+        </div>
+
+        <!-- Foot -->
+        <div class="cm-modal-foot">
+          <span class="cm-modal-foot-note" id="cm-modal-hint">
+            Complete all five editorial checks and select a decision to enable the action.
+          </span>
+
+          <div class="cm-modal-foot-actions">
+            <button type="button" class="adm-btn adm-btn-ghost" data-cm-close>Cancel</button>
+            <button type="button" class="adm-btn adm-btn-primary" id="cm-confirm-decision" disabled>
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5"/>
+              </svg>
+              <span>Confirm Decision</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Toast stack -->
+    <div class="cm-toast-stack" id="cm-toast-stack" aria-live="polite" aria-atomic="false"></div>
+<!-- ===================================================================
+     MODERATION → PUBLISH BRIDGE
+     -------------------------------------------------------------------
+     • Hydrates the review queue with real submissions written to
+       localStorage["vunvault_posts"] by blogger.html.
+     • Promotes any post the admin approves into
+       localStorage["approved_blog_posts"] — the key blog.html reads.
+
+     Must load BEFORE the moderation script below: that script captures
+     its `rows` list at parse time, so hydration has to happen first or
+     the new rows are invisible to filtering and row actions.
+==================================================================== -->
+<script>
+(function () {
+  "use strict";
+
+  var POSTS_KEY    = "vunvault_posts";
+  var APPROVED_KEY = "approved_blog_posts";
+  var ADMIN_ID     = "e.reed@vunvault.com";
+
+  /* ------------------------------------------------- storage helpers */
+  function readArray(key) {
+    try {
+      var raw = window.localStorage.getItem(key);
+      if (!raw) return [];
+      var parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (err) { return []; }
+  }
+
+  function writeArray(key, list) {
+    try {
+      window.localStorage.setItem(key, JSON.stringify(list));
+      return true;
+    } catch (err) { return false; }
+  }
+
+  /* ----------------------------------------------------- formatting */
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function pad2(n) { return String(n).padStart(2, "0"); }
+
+  var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  function shortStamp(iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return "—";
+    return d.getDate() + " " + MONTHS[d.getMonth()] + " · " +
+           pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+  }
+
+  function initialsFromName(name) {
+    var p = String(name || "").trim().split(/\s+/).filter(Boolean);
+    if (!p.length) return "?";
+    if (p.length === 1) return p[0].charAt(0).toUpperCase();
+    return (p[0].charAt(0) + p[p.length - 1].charAt(0)).toUpperCase();
+  }
+
+  /* ---------------------------------------------------- post accessors */
+  function authorNameOf(post) {
+    var a = post.author;
+    if (a && typeof a === "object") return a.name || "Unknown author";
+    if (typeof a === "string" && a.trim()) return a.trim();
+    return "Unknown author";
+  }
+
+  function authorRoleOf(post) {
+    var a = post.author;
+    if (a && typeof a === "object") return a.role || "Contributor";
+    return "Contributor";
+  }
+
+  function displaySlug(post) {
+    var prefix = post.slugPrefix || "/blog/";
+    return prefix + (post.slug || "");
+  }
+
+  function excerptOf(post, max) {
+    var e = String(post.excerpt || "").trim();
+    if (!e) e = String(post.content || "").replace(/<[^>]+>/g, " ").trim();
+    if (e.length > max) e = e.slice(0, max - 1) + "…";
+    return e || "No excerpt provided.";
+  }
+
+  function isPending(post) {
+    var s = String(post.status || "").toLowerCase();
+    return s === "pending_moderation" || s === "pending" || s === "";
+  }
+
+  /* ------------------------------------------------------- row builder */
+  function buildRow(post) {
+    var tr = document.createElement("tr");
+    tr.className = "cm-row";
+    tr.setAttribute("data-post-id", post.id);
+    tr.setAttribute("data-source", "vunvault_posts");
+    tr.setAttribute("data-title", post.title || "Untitled");
+    tr.setAttribute("data-type", "blog");
+    tr.setAttribute("data-status", "pending");
+    tr.setAttribute("data-risk", "clean");
+    tr.setAttribute("data-author", authorNameOf(post));
+    tr.setAttribute("data-slug", displaySlug(post));
+
+    var tags = Array.isArray(post.tags) ? post.tags.join(" ") : "";
+    tr.setAttribute("data-search", [
+      post.title, post.slug, post.category, authorNameOf(post),
+      tags, post.excerpt
+    ].join(" ").toLowerCase());
+
+    var aName = authorNameOf(post);
+    var aInit = initialsFromName(aName);
+    var aRole = authorRoleOf(post);
+    var title = post.title || "Untitled";
+
+    tr.innerHTML =
+      '<td>' +
+        '<div class="cm-content-cell">' +
+          '<span class="cm-thumb cm-thumb--blog" aria-hidden="true">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
+              '<path d="M12 5v16"/>' +
+              '<path d="M20 19A2 2 0 0 0 22 17V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10"/>' +
+              '<path d="M4 19a2 2 0 0 0 2 2h12"/>' +
+            '</svg>' +
+          '</span>' +
+          '<span class="cm-content-body">' +
+            '<span class="cm-title">' + esc(title) + '</span>' +
+            '<span class="cm-excerpt">' + esc(excerptOf(post, 160)) + '</span>' +
+            '<span class="cm-slug">' + esc(displaySlug(post)) + '</span>' +
+          '</span>' +
+        '</div>' +
+      '</td>' +
+      '<td><span class="cm-type cm-type--blog">Blog Post</span></td>' +
+      '<td>' +
+        '<div class="cm-author">' +
+          '<span class="cm-author-avatar" aria-hidden="true">' + esc(aInit) + '</span>' +
+          '<span class="cm-author-body">' +
+            '<span class="cm-author-name">' + esc(aName) + '</span>' +
+            '<span class="cm-author-meta">' + esc(aRole) + '</span>' +
+          '</span>' +
+        '</div>' +
+      '</td>' +
+      '<td class="adm-mono">' + esc(shortStamp(post.createdAt)) + '</td>' +
+      '<td><div class="cm-risk-stack">' +
+        '<span class="cm-risk cm-risk--clean">No flags</span>' +
+      '</div></td>' +
+      '<td><div class="cm-status-stack">' +
+        '<span class="cm-status cm-status--pending">Pending Review</span>' +
+      '</div></td>' +
+      '<td>' +
+        '<div class="cm-actions">' +
+          '<button type="button" class="cm-act cm-act--primary" data-cm-action="review" data-cm-title="' + esc(title) + '">Review</button>' +
+          '<button type="button" class="cm-act cm-act--ok" data-cm-action="approve" data-cm-title="' + esc(title) + '">Approve</button>' +
+          '<button type="button" class="cm-act cm-act--danger" data-cm-action="reject" data-cm-title="' + esc(title) + '">Reject</button>' +
+        '</div>' +
+      '</td>';
+
+    return tr;
+  }
+
+  /* ------------------------------------------------------- hydration */
+  function hydrate() {
+    var tbody = document.getElementById("cm-tbody");
+    if (!tbody) return;
+
+    /* Idempotent: wipe any previous hydration pass first */
+    Array.prototype.slice.call(
+      tbody.querySelectorAll('[data-source="vunvault_posts"]')
+    ).forEach(function (n) { if (n.parentNode) n.parentNode.removeChild(n); });
+
+    var pending = readArray(POSTS_KEY).filter(isPending);
+    if (!pending.length) return;
+
+    /* Newest first */
+    pending.sort(function (a, b) {
+      return new Date(b.createdAt || 0).getTime() -
+             new Date(a.createdAt || 0).getTime();
+    });
+
+    var anchor = tbody.firstElementChild;
+    pending.forEach(function (post) {
+      var row = buildRow(post);
+      if (anchor) tbody.insertBefore(row, anchor);
+      else tbody.appendChild(row);
+    });
+  }
+
+  /* ------------------------------------------------- publish / reject */
+  function findIndex(list, id) {
+    for (var i = 0; i < list.length; i++) {
+      if (list[i] && list[i].id === id) return i;
+    }
+    return -1;
+  }
+
+  function approvePost(postId) {
+    var posts = readArray(POSTS_KEY);
+    var idx = findIndex(posts, postId);
+    if (idx === -1) return;
+
+    var post = posts[idx];
+    var now  = new Date().toISOString();
+
+    post.status      = "approved";
+    post.approvedAt  = now;
+    post.publishedAt = post.publishedAt || now;
+    post.approvedBy  = ADMIN_ID;
+    posts[idx] = post;
+    writeArray(POSTS_KEY, posts);
+
+    /* Promote into blog.html's feed */
+    var feed = readArray(APPROVED_KEY);
+    var fi = findIndex(feed, post.id);
+    if (fi !== -1) feed[fi] = post;
+    else feed.push(post);
+    writeArray(APPROVED_KEY, feed);
+  }
+
+  function rejectPost(postId) {
+    var posts = readArray(POSTS_KEY);
+    var idx = findIndex(posts, postId);
+    if (idx === -1) return;
+    posts[idx].status     = "rejected";
+    posts[idx].rejectedAt = new Date().toISOString();
+    posts[idx].rejectedBy = ADMIN_ID;
+    writeArray(POSTS_KEY, posts);
+  }
+
+  /* --------------------------------------------- bridge subscription */
+  document.addEventListener("vunvault:moderation-status", function (event) {
+    var d = event && event.detail;
+    if (!d || !d.row) return;
+
+    var postId = d.row.getAttribute("data-post-id");
+    if (!postId) return;                       /* static demo row — nothing to publish */
+
+    if (d.status === "approved")      approvePost(postId);
+    else if (d.status === "rejected") rejectPost(postId);
+  });
+
+  /* --------------------------------------------------------- boot */
+  /* Run synchronously — the DOM above is fully parsed, and we must
+     hydrate BEFORE the moderation script captures its `rows` list. */
+  hydrate();
+})();
+</script>
+    <!-- ===================================================================
+         INLINE WIRING — drawer, filters, decisions, bulk actions
+    ==================================================================== -->
+    <script>
+      (function () {
+        "use strict";
+
+        /* ================================================================
+           0. Utilities
+        ================================================================ */
+        var $  = function (sel, ctx) { return (ctx || document).querySelector(sel); };
+        var $$ = function (sel, ctx) {
+          return Array.prototype.slice.call((ctx || document).querySelectorAll(sel));
+        };
+
+        var pad = function (n) { return String(n).padStart(2, "0"); };
+
+        var utcStamp = function () {
+          var d = new Date();
+          return d.getUTCFullYear() + "-" + pad(d.getUTCMonth() + 1) + "-" + pad(d.getUTCDate()) +
+                 " " + pad(d.getUTCHours()) + ":" + pad(d.getUTCMinutes()) + " UTC";
+        };
+
+        var escapeHtml = function (str) {
+          return String(str || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+        };
+
+        /* ================================================================
+           1. Mobile drawer
+        ================================================================ */
+        var toggle = $("#adm-menu-toggle");
+        var menu   = $("#adm-mobile-menu");
+
+        if (toggle && menu) {
+          var setOpen = function (open) {
+            menu.classList.toggle("is-open", open);
+            toggle.classList.toggle("is-active", open);
+            toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            document.body.classList.toggle("nav-open", open);
+          };
+
+          toggle.addEventListener("click", function () {
+            setOpen(!menu.classList.contains("is-open"));
+          });
+
+          menu.addEventListener("click", function (event) {
+            if (event.target.closest("a")) setOpen(false);
+          });
+
+          document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") setOpen(false);
+          });
+
+          window.addEventListener("resize", function () {
+            if (window.innerWidth >= 1080) setOpen(false);
+          });
+        }
+
+        /* ================================================================
+           2. Toasts
+        ================================================================ */
+        var toastStack = $("#cm-toast-stack");
+
+        var ICONS = {
+          ok:   '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+          warn: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
+          crit: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>',
+          info: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>'
+        };
+
+        function toast(kind, title, message) {
+          if (!toastStack) return;
+
+          var el = document.createElement("div");
+          el.className = "cm-toast cm-toast--" + (kind || "info");
+          el.innerHTML = (ICONS[kind] || ICONS.info) +
+            "<span><strong>" + escapeHtml(title) + "</strong>" + escapeHtml(message || "") + "</span>";
+
+          toastStack.appendChild(el);
+
+          window.setTimeout(function () {
+            el.classList.add("is-leaving");
+            window.setTimeout(function () {
+              if (el.parentNode) el.parentNode.removeChild(el);
+            }, 300);
+          }, 4400);
+        }
+
+        /* ================================================================
+           3. KPI counters
+        ================================================================ */
+        var reduced = window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        var counters = $$("[data-count]");
+
+        if (!reduced && counters.length) {
+          counters.forEach(function (el) {
+            var target = parseInt(el.getAttribute("data-count"), 10);
+            if (isNaN(target)) return;
+
+            var duration = 900;
+            var start    = null;
+
+            var step = function (timestamp) {
+              if (start === null) start = timestamp;
+              var progress = Math.min((timestamp - start) / duration, 1);
+              var eased    = 1 - Math.pow(1 - progress, 3);
+              el.textContent = Math.round(target * eased).toLocaleString("en-US");
+              if (progress < 1) window.requestAnimationFrame(step);
+              else el.textContent = target.toLocaleString("en-US");
+            };
+
+            el.textContent = "0";
+            window.requestAnimationFrame(step);
+          });
+        }
+
+        /* ================================================================
+           4. Queue filtering
+        ================================================================ */
+        var tbody        = $("#cm-tbody");
+        var rows         = $$(".cm-row", tbody);
+        var searchInput  = $("#cm-search");
+        var filterType   = $("#cm-filter-type");
+        var filterStatus = $("#cm-filter-status");
+        var filterRisk   = $("#cm-filter-risk");
+        var visibleCount = $("#cm-visible-count");
+        var totalCount   = $("#cm-total-count");
+        var emptyState   = $("#cm-empty");
+
+        if (totalCount) totalCount.textContent = String(rows.length);
+
+        function normalise(value) {
+          return String(value || "").toLowerCase().trim();
+        }
+
+        function applyFilters() {
+          var q      = normalise(searchInput && searchInput.value);
+          var type   = filterType ? filterType.value : "";
+          var status = filterStatus ? filterStatus.value : "";
+          var risk   = filterRisk ? filterRisk.value : "";
+
+          var visible = 0;
+
+          rows.forEach(function (row) {
+            var haystack = normalise(
+              row.getAttribute("data-search") + " " +
+              row.getAttribute("data-title") + " " +
+              row.getAttribute("data-author") + " " +
+              row.getAttribute("data-slug")
+            );
+
+            var matchSearch = !q || haystack.indexOf(q) !== -1;
+            var matchType   = !type   || row.getAttribute("data-type") === type;
+            var matchStatus = !status || row.getAttribute("data-status") === status;
+
+            var rowRisk = normalise(row.getAttribute("data-risk"));
+            var matchRisk = !risk || rowRisk === risk;
+
+            var show = matchSearch && matchType && matchStatus && matchRisk;
+
+            row.style.display = show ? "" : "none";
+            if (show) visible++;
+          });
+
+          if (visibleCount) visibleCount.textContent = String(visible);
+          if (emptyState) emptyState.classList.toggle("is-visible", visible === 0);
+        }
+
+        [searchInput, filterType, filterStatus, filterRisk].forEach(function (el) {
+          if (!el) return;
+          el.addEventListener("input", applyFilters);
+          el.addEventListener("change", applyFilters);
+        });
+
+        function resetFilters() {
+          if (searchInput)  searchInput.value = "";
+          if (filterType)   filterType.value = "";
+          if (filterStatus) filterStatus.value = "";
+          if (filterRisk)   filterRisk.value = "";
+          applyFilters();
+        }
+
+        var clearBtn = $("#cm-clear-filters");
+        if (clearBtn) {
+          clearBtn.addEventListener("click", function () {
+            resetFilters();
+            toast("info", "Filters cleared", "Showing the full pre-publication review queue.");
+          });
+        }
+
+        var emptyReset = $("#cm-empty-reset");
+        if (emptyReset) emptyReset.addEventListener("click", resetFilters);
+
+        /* ================================================================
+           5. Status helpers
+        ================================================================ */
+function setStatus(row, status, label) {
+  if (!row) return;
+  row.setAttribute("data-status", status);
+
+  var stack = row.querySelector(".cm-status-stack");
+  if (stack) {
+    stack.innerHTML = '<span class="cm-status cm-status--' + status + '">' + escapeHtml(label) + '</span>';
+  }
+
+  /* Bridge hook — the publish script appended below listens for this
+     event to promote / reject the matching entry in vunvault_posts. */
+  try {
+    document.dispatchEvent(new CustomEvent("vunvault:moderation-status", {
+      detail: { row: row, status: status, label: label }
+    }));
+  } catch (err) { /* older browsers — non-fatal */ }
+}
+
+        var STATUS_LABEL = {
+          pending:     "Pending Review",
+          inreview:    "In Review",
+          changes:     "Changes Requested",
+          approved:    "Approved",
+          rejected:    "Rejected"
+        };
+
+        /* ================================================================
+           6. Review modal
+        ================================================================ */
+        var modal        = $("#cm-review-modal");
+        var gateChecks   = $$(".cm-gate-check");
+        var confirmBtn   = $("#cm-confirm-decision");
+        var reviewNote   = $("#cm-review-note");
+        var modalHint    = $("#cm-modal-hint");
+        var modalSlug    = $("#cm-modal-slug");
+        var modalTitle   = $("#cm-modal-preview-title");
+        var modalType    = $("#cm-modal-preview-type");
+        var modalAuthor  = $("#cm-modal-preview-author");
+        var modalDate    = $("#cm-modal-preview-date");
+        var modalExcerpt = $("#cm-modal-preview-excerpt");
+        var modalTags    = $("#cm-modal-preview-tags");
+        var modalTs      = $("#cm-modal-timestamp");
+
+        var activeRow    = null;
+        var lastFocused  = null;
+
+        var TYPE_LABEL = {
+          blog:     "Blog Post",
+          news:     "News Announcement",
+          advisory: "Threat Advisory",
+          product:  "Product Listing"
+        };
+
+        var RISK_TAG = {
+          legal: "Legal review",
+          pii:   "Contains PII",
+          claim: "Unverified claim",
+          brand: "Brand-sensitive",
+          clean: "No flags"
+        };
+
+        function resetGateForm() {
+          gateChecks.forEach(function (cb) {
+            cb.checked = false;
+            var item = cb.closest(".cm-checklist-item");
+            if (item) item.classList.remove("is-done");
+          });
+
+          $$('input[name="cm-decision"]').forEach(function (radio) { radio.checked = false; });
+
+          if (reviewNote) reviewNote.value = "";
+          if (confirmBtn) confirmBtn.disabled = true;
+
+          if (modalHint) {
+            modalHint.textContent =
+              "Complete all five editorial checks and select a decision to enable the action.";
+          }
+        }
+
+        function openReview(row) {
+          if (!modal || !row) return;
+
+          activeRow = row;
+          lastFocused = document.activeElement;
+
+          var title  = row.getAttribute("data-title") || "Untitled";
+          var slug   = row.getAttribute("data-slug") || "/";
+          var type   = row.getAttribute("data-type") || "";
+          var author = row.getAttribute("data-author") || "—";
+          var risk   = normalise(row.getAttribute("data-risk"));
+
+          var excerptEl = row.querySelector(".cm-excerpt");
+          var excerpt = excerptEl ? excerptEl.textContent.trim() : "";
+
+          if (modalSlug)    modalSlug.textContent    = slug;
+          if (modalTitle)   modalTitle.textContent   = title;
+          if (modalType)    modalType.textContent    = TYPE_LABEL[type] || type;
+          if (modalAuthor)  modalAuthor.textContent  = author;
+          if (modalDate)    modalDate.textContent    = "Submitted " + utcStamp();
+          if (modalExcerpt) modalExcerpt.textContent = excerpt;
+          if (modalTs)      modalTs.textContent      = utcStamp();
+
+          if (modalTags) {
+            modalTags.innerHTML = "";
+            var tag = document.createElement("span");
+            tag.className = "cm-preview-tag";
+            tag.textContent = RISK_TAG[risk] || "No flags";
+            modalTags.appendChild(tag);
+
+            var typeTag = document.createElement("span");
+            typeTag.className = "cm-preview-tag";
+            typeTag.textContent = TYPE_LABEL[type] || type;
+            modalTags.appendChild(typeTag);
+          }
+
+          resetGateForm();
+
+          modal.hidden = false;
+          modal.setAttribute("aria-hidden", "false");
+          void modal.offsetWidth;
+          modal.classList.add("is-open");
+          document.body.classList.add("nav-open");
+
+          window.setTimeout(function () {
+            var first = $(".cm-gate-check", modal);
+            if (first) first.focus();
+          }, 140);
+        }
+
+        function closeReview() {
+          if (!modal) return;
+
+          modal.classList.remove("is-open");
+          modal.setAttribute("aria-hidden", "true");
+          document.body.classList.remove("nav-open");
+
+          window.setTimeout(function () {
+            modal.hidden = true;
+            activeRow = null;
+            if (lastFocused && typeof lastFocused.focus === "function") {
+              lastFocused.focus();
+            }
+          }, 240);
+        }
+
+        $$("[data-cm-close]").forEach(function (el) {
+          el.addEventListener("click", closeReview);
+        });
+
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape" && modal && modal.classList.contains("is-open")) {
+            closeReview();
+          }
+        });
+
+        function validateGate() {
+          var allChecked = gateChecks.every(function (cb) { return cb.checked; });
+          var decision = $('input[name="cm-decision"]:checked');
+          var ready = allChecked && !!decision;
+
+          if (confirmBtn) confirmBtn.disabled = !ready;
+
+          if (modalHint) {
+            if (!allChecked && !decision) {
+              modalHint.textContent =
+                "Complete all five editorial checks and select a decision to enable the action.";
+            } else if (!allChecked) {
+              var remaining = gateChecks.filter(function (cb) { return !cb.checked; }).length;
+              modalHint.textContent =
+                remaining + " editorial check(s) still outstanding before a decision can be confirmed.";
+            } else if (!decision) {
+              modalHint.textContent =
+                "All editorial checks complete — select a decision to continue.";
+            } else {
+              modalHint.textContent =
+                "All checks complete. Confirming will write this editorial decision to the audit log.";
+            }
+          }
+
+          return ready;
+        }
+
+        gateChecks.forEach(function (cb) {
+          cb.addEventListener("change", function () {
+            var item = cb.closest(".cm-checklist-item");
+            if (item) item.classList.toggle("is-done", cb.checked);
+            validateGate();
+          });
+        });
+
+        $$('input[name="cm-decision"]').forEach(function (radio) {
+          radio.addEventListener("change", validateGate);
+        });
+
+        if (confirmBtn) {
+          confirmBtn.addEventListener("click", function () {
+            if (!validateGate() || !activeRow) return;
+
+            var decision = $('input[name="cm-decision"]:checked');
+            if (!decision) return;
+
+            var value = decision.value;
+            var title = activeRow.getAttribute("data-title") || "item";
+            var note  = reviewNote ? reviewNote.value.trim() : "";
+
+            closeReview();
+
+            if (value === "approve") {
+              setStatus(activeRow, "approved", "Approved");
+              toast("ok", "Content approved",
+                    '"' + title + '" cleared for publication' + (note ? " with reviewer notes." : "."));
+            } else if (value === "changes") {
+              setStatus(activeRow, "changes", "Changes Requested");
+              toast("warn", "Changes requested",
+                    '"' + title + '" returned to the author for revision.');
+            } else {
+              setStatus(activeRow, "rejected", "Rejected");
+              toast("crit", "Content rejected",
+                    '"' + title + '" archived. No further review unless reopened.');
+            }
+
+            applyFilters();
+          });
+        }
+
+        /* ================================================================
+           7. Row action delegation
+        ================================================================ */
+        if (tbody) {
+          tbody.addEventListener("click", function (event) {
+            var btn = event.target.closest("[data-cm-action]");
+            if (!btn) return;
+
+            var action = btn.getAttribute("data-cm-action");
+            var title  = btn.getAttribute("data-cm-title") || "item";
+            var row    = btn.closest(".cm-row");
+
+            switch (action) {
+              case "review":
+                openReview(row);
+                break;
+
+              case "approve":
+                setStatus(row, "approved", "Approved");
+                toast("ok", "Content approved",
+                      '"' + title + '" cleared for the publication queue.');
+                applyFilters();
+                break;
+
+              case "changes":
+                setStatus(row, "changes", "Changes Requested");
+                toast("warn", "Changes requested",
+                      '"' + title + '" returned to the author with reviewer notes.');
+                applyFilters();
+                break;
+                case "reject":
+  setStatus(row, "rejected", "Rejected");
+  toast("crit", "Content rejected", '"' + title + '" archived.');
+  applyFilters();
+  break;
+
+              case "publish":
+                setStatus(row, "approved", "Published");
+                toast("ok", "Content published",
+                      '"' + title + '" is now live on the public website.');
+                applyFilters();
+                break;
+
+              case "schedule":
+                setStatus(row, "approved", "Scheduled");
+                toast("info", "Publication scheduled",
+                      '"' + title + '" will go live at the next scheduled slot.');
+                applyFilters();
+                break;
+
+              case "remind":
+                toast("info", "Author reminded",
+                      '"' + title + '" — notification sent to the author.');
+                break;
+
+              case "reopen":
+                setStatus(row, "pending", "Pending Review");
+                toast("info", "Item reopened",
+                      '"' + title + '" returned to the pending review queue.');
+                applyFilters();
+                break;
+
+              case "archive":
+                setStatus(row, "rejected", "Archived");
+                toast("crit", "Content archived",
+                      '"' + title + '" permanently archived.');
+                applyFilters();
+                break;
+
+              case "preview":
+                toast("info", "Reader preview",
+                      '"' + title + '" — rendering as it would appear to the public.');
+                break;
+
+              default:
+                toast("info", "Action recorded", title + " — " + action + " logged.");
+            }
+          });
+        }
+
+        /* ================================================================
+           8. Page-level quick actions
+        ================================================================ */
+        var reviewNext = $("#cm-review-next");
+        if (reviewNext) {
+          reviewNext.addEventListener("click", function () {
+            var firstPending = rows.find(function (row) {
+              return row.style.display !== "none" &&
+                     row.getAttribute("data-status") === "pending";
+            });
+
+            if (!firstPending) {
+              toast("info", "Queue clear", "No items are currently pending review.");
+              return;
+            }
+
+            openReview(firstPending);
+          });
+        }
+
+        var exportBtn = $("#cm-export-queue");
+        if (exportBtn) {
+          exportBtn.addEventListener("click", function () {
+            exportBtn.disabled = true;
+            var label = exportBtn.querySelector("span");
+            var original = label ? label.textContent : "";
+            if (label) label.textContent = "Exporting…";
+
+            window.setTimeout(function () {
+              if (label) label.textContent = original;
+              exportBtn.disabled = false;
+              toast("ok", "Review log exported",
+                    "CSV generated with editorial decisions, reviewers and timestamps.");
+            }, 900);
+          });
+        }
+
+        var refreshBtn = $("#cm-refresh-queue");
+        if (refreshBtn) {
+          refreshBtn.addEventListener("click", function () {
+            refreshBtn.disabled = true;
+            var label = refreshBtn.querySelector("span");
+            var original = label ? label.textContent : "";
+            if (label) label.textContent = "Refreshing…";
+
+            window.setTimeout(function () {
+              if (label) label.textContent = original;
+              refreshBtn.disabled = false;
+              toast("ok", "Queue refreshed", "Synced at " + utcStamp() + ".");
+            }, 900);
+          });
+        }
+
+        /* ================================================================
+           9. Bulk actions
+        ================================================================ */
+        var bulkApprove = $("#cm-bulk-approve");
+        if (bulkApprove) {
+          bulkApprove.addEventListener("click", function () {
+            var clean = rows.filter(function (row) {
+              return row.getAttribute("data-risk") === "clean" &&
+                     row.getAttribute("data-status") === "pending";
+            });
+
+            if (!clean.length) {
+              toast("warn", "Nothing to approve",
+                    "No flag-free pending items are currently in the queue.");
+              return;
+            }
+
+            clean.forEach(function (row) {
+              setStatus(row, "approved", "Approved");
+            });
+
+            toast("ok", "Bulk approval complete",
+                  clean.length + " flag-free item(s) cleared for publication.");
+            applyFilters();
+          });
+        }
+
+        var bulkEscalate = $("#cm-bulk-escalate");
+        if (bulkEscalate) {
+          bulkEscalate.addEventListener("click", function () {
+            var flagged = rows.filter(function (row) {
+              var r = row.getAttribute("data-risk");
+              return r === "legal" || r === "pii" || r === "claim";
+            });
+
+            if (!flagged.length) {
+              toast("info", "No escalations needed",
+                    "No legal, PII or unverified-claim items are currently in the queue.");
+              return;
+            }
+
+            toast("warn", "Items escalated",
+                  flagged.length + " flagged item(s) escalated to the legal and compliance desk.");
+          });
+        }
+
+        var bulkRemind = $("#cm-bulk-remind");
+        if (bulkRemind) {
+          bulkRemind.addEventListener("click", function () {
+            var changes = rows.filter(function (row) {
+              return row.getAttribute("data-status") === "changes";
+            });
+
+            if (!changes.length) {
+              toast("info", "No reminders needed",
+                    "No items are currently waiting on author revisions.");
+              return;
+            }
+
+            toast("ok", "Authors reminded",
+                  changes.length + " author(s) notified about outstanding revision requests.");
+          });
+        }
+
+        /* ================================================================
+           10. Initialise
+        ================================================================ */
+        applyFilters();
+        /* ================================================================
+   HYDRATE PROFILE FROM LOCALSTORAGE
+   Updates header avatar (circular) + display name on every load.
+   ================================================================ */
+function hydrateProfileFromStorage() {
+  var raw;
+  try {
+    raw = window.localStorage.getItem("vunvault:profile");
+  } catch (err) {
+    return;                                   // storage blocked / private mode
+  }
+  if (!raw) return;
+
+  var profile;
+  try {
+    profile = JSON.parse(raw);
+  } catch (err) {
+    return;                                   // corrupt payload — bail quietly
+  }
+
+  /* ---------- 1. Header circular avatar ---------- */
+  var avatarEl = document.querySelector(".adm-avatar");
+  if (avatarEl) {
+    if (profile.avatar) {
+      avatarEl.innerHTML = "";
+      var img = document.createElement("img");
+      img.src              = profile.avatar;
+      img.alt              = profile.name || "Profile picture";
+      img.style.width      = "100%";
+      img.style.height     = "100%";
+      img.style.objectFit  = "cover";
+      img.style.borderRadius = "50%";
+      img.style.display    = "block";
+      avatarEl.appendChild(img);
+
+      // Ensure the parent clips to a circle even if CSS isn't updated.
+      avatarEl.style.overflow = "hidden";
+      avatarEl.style.padding  = "0";
+    } else if (profile.initials) {
+      avatarEl.textContent = profile.initials;
+    }
+  }
+
+  /* ---------- 2. Header display name ---------- */
+  var nameEl = document.querySelector(".adm-user-name");
+  if (nameEl) {
+    if (profile.name) {
+      nameEl.textContent = profile.name;      // display name
+    } else if (profile.email) {
+      nameEl.textContent = profile.email;     // fallback
+    }
+  }
+}
+
+hydrateProfileFromStorage();
+
+      })();
+    </script>
+  </body>
+</html>

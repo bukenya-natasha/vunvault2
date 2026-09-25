@@ -1,0 +1,4855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="VUNVAULT Blogger Content Studio — draft, preview and submit articles for pre-publication moderation.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0A0D12">
+<link rel="stylesheet" href="vun1.css">
+<title>Content Studio — VUNVAULT</title>
+
+<!-- ==================================================================
+     PAGE-SCOPED STYLES
+     Everything is namespaced with .vbg- (VUNVAULT Blogger) so it can
+     never collide with vun1.css. All colour / radius / motion values
+     fall back to the brand tokens if vun1.css is unavailable.
+     ================================================================== -->
+<style>
+  /* ---------------------------------------------------------------- reset */
+  *, *::before, *::after { box-sizing: border-box; }
+
+  [hidden] { display: none !important; }
+
+  .sr-only {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ------------------------------------------------------------- tokens */
+  body.vbg-body {
+    --vg-brand:        var(--brand, #3B99FC);
+    --vg-brand-strong: var(--brand-strong, #1E7BE0);
+    --vg-brand-soft:   var(--brand-soft, #6FB6FF);
+    --vg-brand-tint:   var(--brand-tint, rgba(59, 153, 252, 0.10));
+    --vg-brand-line:   var(--brand-line, rgba(59, 153, 252, 0.28));
+    --vg-brand-glow:   var(--brand-glow, rgba(59, 153, 252, 0.45));
+    --vg-dark:         var(--dark, #0A0D12);
+    --vg-ink:          var(--ink, #111418);
+    --vg-ink-soft:     var(--ink-soft, #3F4652);
+    --vg-ink-muted:    var(--ink-muted, #6B7280);
+    --vg-ink-faint:    var(--ink-faint, #9CA3AF);
+    --vg-line:         var(--line, #E5E7EB);
+    --vg-line-soft:    var(--line-soft, #F1F2F4);
+    --vg-paper:        var(--paper, #FCFBF9);
+    --vg-ok:           var(--ok, #10B981);
+    --vg-critical:     var(--critical, #F43F5E);
+    --vg-high:         var(--high, #F59E0B);
+    --vg-ease:         var(--ease, cubic-bezier(0.4, 0, 0.2, 1));
+    --vg-dur:          var(--dur, 200ms);
+    --vg-r-full:       var(--r-full, 9999px);
+    --vg-r-md:         var(--r-md, 12px);
+    --vg-r-lg:         var(--r-lg, 14px);
+    --vg-r-xl:         var(--r-xl, 18px);
+    --vg-r-2xl:        var(--r-2xl, 22px);
+
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--vg-ink);
+    background:
+      radial-gradient(90% 42% at 50% 0%, rgba(59, 153, 252, 0.06), transparent 62%),
+      var(--vg-paper);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body.vbg-body.nav-open { overflow: hidden; }
+
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; }
+  img { max-width: 100%; display: block; }
+
+  /* ------------------------------------------------------------- shell */
+  .vbg-shell {
+    width: 100%;
+    max-width: 88rem;
+    margin-inline: auto;
+    padding-inline: 16px;
+  }
+  @media (min-width: 640px)  { .vbg-shell { padding-inline: 24px; } }
+  @media (min-width: 1024px) { .vbg-shell { padding-inline: 32px; } }
+
+  .vbg-page { display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* =================================================================
+     ACCESS RESTRICTED STATE
+     ================================================================= */
+  .vbg-denied {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px 90px;
+  }
+
+  .vbg-denied-card {
+    position: relative;
+    overflow: hidden;
+    width: min(720px, 100%);
+    padding: 44px 40px 40px;
+    text-align: center;
+    border-radius: var(--vg-r-2xl);
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgba(59, 153, 252, 0.10), transparent 58%),
+      #ffffff;
+    border: 1px solid rgba(59, 153, 252, 0.22);
+    box-shadow: 0 40px 90px -50px rgba(10, 13, 18, 0.55);
+  }
+
+  .vbg-denied-glow {
+    position: absolute;
+    top: -55%;
+    right: -12%;
+    width: 48%;
+    height: 200%;
+    background: radial-gradient(closest-side, var(--vg-brand-glow), transparent 72%);
+    filter: blur(72px);
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .vbg-denied-icon {
+    position: relative;
+    z-index: 1;
+    display: inline-grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    margin-bottom: 22px;
+    border-radius: 50%;
+    color: var(--vg-brand-strong);
+    background: var(--vg-brand-tint);
+    border: 1px solid var(--vg-brand-line);
+    box-shadow: 0 0 0 10px rgba(59, 153, 252, 0.06);
+  }
+
+  .vbg-denied-eyebrow {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    padding: 6px 14px;
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--vg-brand-strong);
+    background: var(--vg-brand-tint);
+    border: 1px solid var(--vg-brand-line);
+    border-radius: var(--vg-r-full);
+  }
+
+  .vbg-denied-title {
+    position: relative;
+    z-index: 1;
+    margin: 18px 0 0;
+    font-size: clamp(1.5rem, 3.4vw, 2.05rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    color: var(--vg-ink);
+  }
+
+  .vbg-denied-text {
+    position: relative;
+    z-index: 1;
+    margin: 14px auto 0;
+    max-width: 54ch;
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: var(--vg-ink-muted);
+  }
+
+  .vbg-denied-list {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 10px;
+    margin: 26px 0 0;
+    padding: 0;
+    list-style: none;
+    text-align: left;
+  }
+
+  .vbg-denied-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 13px 15px;
+    font-size: 0.79rem;
+    line-height: 1.65;
+    color: var(--vg-ink-soft);
+    background: #f8fafc;
+    border: 1px solid var(--vg-line-soft);
+    border-radius: var(--vg-r-md);
+  }
+
+  .vbg-denied-list svg { flex: 0 0 auto; margin-top: 2px; color: var(--vg-brand); }
+
+  .vbg-denied-actions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 30px;
+  }
+
+  .vbg-demo-note {
+    position: relative;
+    z-index: 1;
+    margin: 22px 0 0;
+    font-size: 0.68rem;
+    line-height: 1.6;
+    color: var(--vg-ink-faint);
+  }
+
+  /* =================================================================
+     BUTTONS
+     ================================================================= */
+  .vbg-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 12px 22px;
+    font-size: 0.79rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    border-radius: var(--vg-r-full);
+    border: 1px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: transform 0.2s var(--vg-ease), filter 0.2s var(--vg-ease),
+                box-shadow 0.2s var(--vg-ease), background-color 0.2s var(--vg-ease),
+                border-color 0.2s var(--vg-ease), color 0.2s var(--vg-ease);
+  }
+
+  .vbg-btn svg { flex: 0 0 auto; }
+  .vbg-btn:active { transform: translateY(1px) scale(0.985); }
+
+  .vbg-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+  }
+
+  .vbg-btn--primary {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--vg-brand) 0%, var(--vg-brand-strong) 100%);
+    border-color: rgba(59, 153, 252, 0.5);
+    box-shadow: 0 14px 30px -16px var(--vg-brand-glow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  }
+  .vbg-btn--primary:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+    box-shadow: 0 20px 40px -18px var(--vg-brand-glow);
+  }
+
+  .vbg-btn--dark {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--vg-dark), #05070a);
+    border-color: rgba(59, 153, 252, 0.32);
+  }
+  .vbg-btn--dark:hover {
+    transform: translateY(-2px);
+    border-color: var(--vg-brand);
+    box-shadow: 0 18px 34px -20px var(--vg-brand-glow);
+  }
+
+  .vbg-btn--ghost {
+    color: var(--vg-ink);
+    background: #ffffff;
+    border-color: var(--vg-line);
+    box-shadow: 0 6px 18px -16px rgba(10, 13, 18, 0.6);
+  }
+  .vbg-btn--ghost:hover {
+    transform: translateY(-2px);
+    color: var(--vg-brand-strong);
+    border-color: var(--vg-brand-line);
+    box-shadow: 0 14px 30px -20px var(--vg-brand-glow);
+  }
+
+  .vbg-btn--quiet {
+    color: var(--vg-ink-muted);
+    background: transparent;
+    border-color: var(--vg-line);
+    font-weight: 700;
+  }
+  .vbg-btn--quiet:hover {
+    color: var(--vg-ink);
+    background: #f8fafc;
+    border-color: #d4d7dd;
+  }
+
+  .vbg-btn--danger {
+    color: #be123c;
+    background: #fff1f2;
+    border-color: #fecdd3;
+  }
+  .vbg-btn--danger:hover {
+    color: #ffffff;
+    background: linear-gradient(135deg, #f43f5e, #be123c);
+    border-color: transparent;
+    transform: translateY(-2px);
+  }
+
+  .vbg-btn--sm { padding: 9px 16px; font-size: 0.72rem; }
+
+  /* =================================================================
+     HEADER
+     ================================================================= */
+  .vbg-header {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    background: rgba(252, 251, 249, 0.94);
+    backdrop-filter: blur(14px) saturate(1.3);
+    -webkit-backdrop-filter: blur(14px) saturate(1.3);
+    border-bottom: 1px solid rgba(17, 20, 24, 0.08);
+  }
+
+  .vbg-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 12px;
+  }
+
+  /* ---- brand ---- */
+  .vbg-brand { display: inline-flex; align-items: center; gap: 12px; flex: 0 0 auto; }
+
+  .vbg-brand-tile {
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: 12px;
+    background: linear-gradient(145deg, var(--vg-dark), #000000);
+    border: 1px solid rgba(59, 153, 252, 0.35);
+    box-shadow: 0 0 0 1px rgba(59, 153, 252, 0.08), 0 6px 18px -10px var(--vg-brand-glow);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow var(--vg-dur) var(--vg-ease);
+  }
+  .vbg-brand:hover .vbg-brand-tile {
+    box-shadow: 0 0 0 1px rgba(59, 153, 252, 0.3), 0 10px 26px -12px var(--vg-brand-glow);
+  }
+  .vbg-brand-tile img { width: 1.5rem; height: 1.5rem; object-fit: contain; }
+
+  .vbg-brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+
+  .vbg-brand-name {
+    font-weight: 800;
+    font-size: 1.12rem;
+    letter-spacing: 0.14em;
+    color: var(--vg-ink);
+  }
+
+  .vbg-brand-sub {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--vg-brand-strong);
+    margin-top: 2px;
+  }
+
+  /* ---- desktop nav ---- */
+  .vbg-nav {
+    display: none;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .vbg-nav::-webkit-scrollbar { display: none; }
+
+  .vbg-nav a {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 13px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    border-radius: var(--vg-r-full);
+    color: var(--vg-ink-soft);
+    transition: color var(--vg-dur) var(--vg-ease), background-color var(--vg-dur) var(--vg-ease);
+  }
+
+  .vbg-nav a:hover { color: var(--vg-brand-strong); background: var(--vg-brand-tint); }
+
+  .vbg-nav a[aria-current="page"] {
+    color: var(--vg-brand-strong);
+    background: var(--vg-brand-tint);
+    box-shadow: inset 0 0 0 1px var(--vg-brand-line);
+    font-weight: 800;
+  }
+
+  .vbg-nav-signout { color: var(--vg-critical) !important; }
+  .vbg-nav-signout:hover {
+    background: rgba(244, 63, 94, 0.1) !important;
+    color: #be123c !important;
+  }
+
+  /* ---- header right ---- */
+  .vbg-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 0 0 auto;
+  }
+
+  .vbg-verified-badge {
+    display: none;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 13px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #065f46;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    border-radius: var(--vg-r-full);
+  }
+  .vbg-verified-badge svg { flex: 0 0 auto; color: var(--vg-ok); }
+
+  @media (min-width: 900px) { .vbg-verified-badge { display: inline-flex; } }
+
+  .vbg-user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 14px 5px 5px;
+    border-radius: var(--vg-r-full);
+    background: #ffffff;
+    border: 1px solid var(--vg-line);
+    box-shadow: 0 6px 18px -14px rgba(10, 13, 18, 0.5);
+    white-space: nowrap;
+    transition: border-color var(--vg-dur) var(--vg-ease), box-shadow var(--vg-dur) var(--vg-ease);
+  }
+  .vbg-user-chip:hover {
+    border-color: var(--vg-brand-line);
+    box-shadow: 0 10px 26px -18px var(--vg-brand-glow);
+  }
+
+  .vbg-avatar {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--vg-brand), var(--vg-brand-strong));
+  }
+  .vbg-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+  .vbg-avatar--lg { width: 56px; height: 56px; font-size: 18px; }
+
+  .vbg-avatar-badge {
+    position: absolute;
+    right: -2px;
+    bottom: -2px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: var(--vg-ok);
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.4);
+  }
+
+  .vbg-user-meta { display: none; flex-direction: column; line-height: 1.25; min-width: 0; }
+  @media (min-width: 560px) { .vbg-user-meta { display: flex; } }
+
+  .vbg-user-label {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--vg-ink-faint);
+  }
+
+  .vbg-user-name {
+    font-size: 0.77rem;
+    font-weight: 800;
+    color: var(--vg-ink);
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ---- hamburger ---- */
+  .vbg-hamburger {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    border: 1px solid var(--vg-line);
+    background: #ffffff;
+    cursor: pointer;
+    transition: background-color var(--vg-dur) var(--vg-ease),
+                border-color var(--vg-dur) var(--vg-ease),
+                box-shadow var(--vg-dur) var(--vg-ease);
+  }
+  .vbg-hamburger:hover {
+    border-color: var(--vg-brand-line);
+    box-shadow: 0 6px 18px -12px var(--vg-brand-glow);
+  }
+
+  .vbg-hamburger-bar {
+    display: block;
+    width: 19px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--vg-ink);
+    transition: transform 0.28s var(--vg-ease), opacity 0.2s var(--vg-ease),
+                background-color var(--vg-dur) var(--vg-ease), width 0.28s var(--vg-ease);
+  }
+
+  .vbg-hamburger.is-active { background: var(--vg-dark); border-color: rgba(59, 153, 252, 0.4); }
+  .vbg-hamburger.is-active .vbg-hamburger-bar { background: var(--vg-brand); }
+  .vbg-hamburger.is-active .vbg-hamburger-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .vbg-hamburger.is-active .vbg-hamburger-bar:nth-child(2) { opacity: 0; width: 0; }
+  .vbg-hamburger.is-active .vbg-hamburger-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  @media (min-width: 1080px) {
+    .vbg-nav { display: flex; }
+    .vbg-hamburger { display: none; }
+  }
+
+  /* ---- mobile drawer ---- */
+  .vbg-drawer {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, var(--vg-dark) 0%, #05070a 100%);
+    border-top: 1px solid rgba(59, 153, 252, 0.18);
+    border-bottom: 1px solid rgba(59, 153, 252, 0.18);
+    box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: max-height 0.42s var(--vg-ease), opacity 0.3s var(--vg-ease),
+                transform 0.35s var(--vg-ease), visibility 0.42s var(--vg-ease);
+  }
+
+  .vbg-drawer.is-open {
+    max-height: 620px;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .vbg-drawer-list {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 20px 22px;
+    margin: 0;
+    list-style: none;
+  }
+
+  .vbg-drawer-list li + li { border-top: 1px solid rgba(255, 255, 255, 0.06); }
+
+  .vbg-drawer-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #d6dde8;
+    transition: color var(--vg-dur) var(--vg-ease), padding-left var(--vg-dur) var(--vg-ease);
+  }
+
+  .vbg-drawer-list a::after {
+    content: "→";
+    font-size: 0.85rem;
+    color: var(--vg-brand);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity var(--vg-dur) var(--vg-ease), transform var(--vg-dur) var(--vg-ease);
+  }
+
+  .vbg-drawer-list a:hover,
+  .vbg-drawer-list a:focus-visible { color: var(--vg-brand); padding-left: 12px; outline: none; }
+
+  .vbg-drawer-list a:hover::after,
+  .vbg-drawer-list a:focus-visible::after { opacity: 1; transform: translateX(0); }
+
+  .vbg-drawer-signout {
+    margin-top: 14px;
+    justify-content: center !important;
+    padding: 13px 18px !important;
+    border-radius: var(--vg-r-full);
+    background: rgba(244, 63, 94, 0.12);
+    border: 1px solid rgba(244, 63, 94, 0.4);
+    color: #fda4af !important;
+    font-weight: 800 !important;
+  }
+  .vbg-drawer-signout::after { display: none; }
+  .vbg-drawer-signout:hover {
+    padding-left: 18px !important;
+    color: #ffffff !important;
+    background: rgba(244, 63, 94, 0.28) !important;
+  }
+
+  /* =================================================================
+     MAIN LAYOUT
+     ================================================================= */
+  .vbg-main { flex: 1 1 auto; padding: 30px 0 70px; }
+
+  .vbg-page-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 22px;
+    padding-bottom: 22px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--vg-line-soft);
+  }
+
+  .vbg-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--vg-brand-strong);
+  }
+  .vbg-eyebrow::before {
+    content: "";
+    width: 22px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--vg-brand);
+  }
+
+  .vbg-page-title {
+    margin: 10px 0 0;
+    font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    color: var(--vg-ink);
+  }
+
+  .vbg-page-sub {
+    margin: 8px 0 0;
+    max-width: 72ch;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--vg-ink-muted);
+  }
+
+  /* ---- action bar ---- */
+  .vbg-actionbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .vbg-actionbar-note {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 7px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--vg-ink-faint);
+  }
+
+  .vbg-save-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--vg-ink-faint);
+    transition: background-color var(--vg-dur) var(--vg-ease);
+  }
+  .vbg-save-dot.is-dirty { background: var(--vg-high); }
+  .vbg-save-dot.is-saved { background: var(--vg-ok); }
+
+  /* =================================================================
+     EDITOR GRID
+     ================================================================= */
+  .vbg-editor-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr);
+    gap: 22px;
+    align-items: start;
+  }
+
+  @media (max-width: 1180px) {
+    .vbg-editor-grid { grid-template-columns: 1fr; }
+  }
+
+  .vbg-col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+
+  /* =================================================================
+     CARDS
+     ================================================================= */
+  .vbg-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--vg-r-xl);
+    background: #ffffff;
+    border: 1px solid var(--vg-line);
+    box-shadow: 0 18px 44px -40px rgba(10, 13, 18, 0.55);
+    overflow: hidden;
+  }
+
+  .vbg-card--dark {
+    background:
+      radial-gradient(80% 120% at 100% 0%, rgba(59, 153, 252, 0.16), transparent 62%),
+      linear-gradient(160deg, var(--vg-dark) 0%, #070b11 100%);
+    border-color: rgba(59, 153, 252, 0.26);
+    box-shadow: 0 26px 56px -34px rgba(0, 0, 0, 0.7);
+    color: #ffffff;
+  }
+
+  .vbg-card-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 18px 22px 15px;
+    border-bottom: 1px solid var(--vg-line-soft);
+  }
+
+  .vbg-card--dark .vbg-card-head { border-bottom-color: rgba(255, 255, 255, 0.08); }
+
+  .vbg-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 0.98rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--vg-ink);
+  }
+
+  .vbg-card--dark .vbg-card-title { color: #ffffff; }
+  .vbg-card-title svg { color: var(--vg-brand); flex: 0 0 auto; }
+
+  .vbg-card-note {
+    margin: 5px 0 0;
+    font-size: 0.73rem;
+    line-height: 1.6;
+    color: var(--vg-ink-muted);
+    max-width: 68ch;
+  }
+
+  .vbg-card--dark .vbg-card-note { color: #93a2b5; }
+
+  .vbg-card-body { flex: 1 1 auto; padding: 20px 22px 24px; }
+
+  .vbg-card-icon {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    color: var(--vg-brand-strong);
+    background: var(--vg-brand-tint);
+    border: 1px solid var(--vg-brand-line);
+  }
+
+  /* =================================================================
+     FORM FIELDS
+     ================================================================= */
+  .vbg-field { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+  .vbg-field + .vbg-field { margin-top: 18px; }
+
+  .vbg-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--vg-ink-muted);
+  }
+
+  .vbg-label-req { color: var(--vg-critical); }
+
+  .vbg-label-hint {
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: none;
+    color: var(--vg-ink-faint);
+  }
+
+  .vbg-input,
+  .vbg-select,
+  .vbg-textarea {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    color: var(--vg-ink);
+    background: #ffffff;
+    border: 1px solid var(--vg-line);
+    border-radius: var(--vg-r-md);
+    outline: none;
+    transition: border-color var(--vg-dur) var(--vg-ease),
+                box-shadow var(--vg-dur) var(--vg-ease),
+                background-color var(--vg-dur) var(--vg-ease);
+  }
+
+  .vbg-input::placeholder,
+  .vbg-textarea::placeholder { color: var(--vg-ink-faint); }
+
+  .vbg-input:hover,
+  .vbg-select:hover,
+  .vbg-textarea:hover { border-color: #d4d7dd; }
+
+  .vbg-input:focus,
+  .vbg-select:focus,
+  .vbg-textarea:focus {
+    border-color: var(--vg-brand);
+    box-shadow: 0 0 0 3px var(--vg-brand-tint);
+  }
+
+  .vbg-input.is-invalid,
+  .vbg-select.is-invalid,
+  .vbg-textarea.is-invalid {
+    border-color: var(--vg-critical);
+    box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.16);
+  }
+
+  .vbg-input--title {
+    padding: 16px 18px;
+    font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+
+  .vbg-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%233B99FC' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 38px;
+    cursor: pointer;
+  }
+
+  .vbg-textarea {
+    min-height: 110px;
+    resize: vertical;
+    line-height: 1.7;
+  }
+
+  /* ---- slug ---- */
+  .vbg-slug-wrap {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--vg-line);
+    border-radius: var(--vg-r-md);
+    background: #ffffff;
+    overflow: hidden;
+    transition: border-color var(--vg-dur) var(--vg-ease), box-shadow var(--vg-dur) var(--vg-ease);
+  }
+
+  .vbg-slug-wrap:focus-within {
+    border-color: var(--vg-brand);
+    box-shadow: 0 0 0 3px var(--vg-brand-tint);
+  }
+
+  .vbg-slug-prefix {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--vg-ink-faint);
+    background: #f6f8fb;
+    border-right: 1px solid var(--vg-line);
+    white-space: nowrap;
+  }
+
+  .vbg-slug-wrap .vbg-input {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.78rem;
+  }
+
+  .vbg-slug-lock {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    border: 0;
+    border-left: 1px solid var(--vg-line);
+    background: #ffffff;
+    color: var(--vg-ink-faint);
+    cursor: pointer;
+    transition: color var(--vg-dur) var(--vg-ease), background-color var(--vg-dur) var(--vg-ease);
+  }
+  .vbg-slug-lock:hover { color: var(--vg-brand-strong); background: var(--vg-brand-tint); }
+  .vbg-slug-lock.is-locked { color: var(--vg-brand-strong); background: var(--vg-brand-tint); }
+
+  .vbg-hint {
+    font-size: 0.7rem;
+    line-height: 1.55;
+    color: var(--vg-ink-faint);
+  }
+
+  /* =================================================================
+     RICH TEXT EDITOR
+     ================================================================= */
+  .vbg-editor {
+    border: 1px solid var(--vg-line);
+    border-radius: var(--vg-r-md);
+    overflow: hidden;
+    background: #ffffff;
+    transition: border-color var(--vg-dur) var(--vg-ease), box-shadow var(--vg-dur) var(--vg-ease);
+  }
+
+  .vbg-editor:focus-within {
+    border-color: var(--vg-brand);
+    box-shadow: 0 0 0 3px var(--vg-brand-tint);
+  }
+
+  .vbg-editor.is-invalid {
+    border-color: var(--vg-critical);
+    box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.16);
+  }
+
+  /* NOTE: this toolbar cannot use position:sticky — both .vbg-card and
+     .vbg-editor set `overflow: hidden`, which turns them into the sticky
+     containing block and makes the toolbar effectively static anyway. */
+  .vbg-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 10px;
+    background: #f6f8fb;
+    border-bottom: 1px solid var(--vg-line);
+  }
+
+  .vbg-tool {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 8px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--vg-ink-soft);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.18s var(--vg-ease);
+  }
+
+  .vbg-tool:hover {
+    color: var(--vg-brand-strong);
+    background: #ffffff;
+    border-color: var(--vg-brand-line);
+    box-shadow: 0 6px 14px -12px var(--vg-brand-glow);
+  }
+
+  .vbg-tool:active { transform: translateY(1px); }
+
+  .vbg-tool:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--vg-brand-tint);
+  }
+
+  .vbg-tool-divider {
+    width: 1px;
+    height: 20px;
+    margin: 0 5px;
+    background: var(--vg-line);
+  }
+
+  .vbg-editor-area {
+    width: 100%;
+    min-height: 460px;
+    padding: 20px 22px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size: 0.84rem;
+    line-height: 1.85;
+    color: var(--vg-ink);
+    background: #ffffff;
+    border: 0;
+    outline: none;
+    resize: vertical;
+    tab-size: 2;
+  }
+
+  .vbg-editor-area::placeholder { color: var(--vg-ink-faint); }
+
+  .vbg-editor-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    background: #f6f8fb;
+    border-top: 1px solid var(--vg-line);
+  }
+
+  .vbg-editor-stats {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--vg-ink-muted);
+  }
+
+  .vbg-editor-stats strong { color: var(--vg-ink); font-weight: 800; }
+
+  .vbg-editor-stats .is-warn { color: var(--vg-high); }
+  .vbg-editor-stats .is-ok   { color: var(--vg-ok); }
+
+  .vbg-editor-markdown-note {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--vg-ink-faint);
+  }
+
+  /* =================================================================
+     FEATURED IMAGE
+     ================================================================= */
+  .vbg-drop {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 26px 18px;
+    text-align: center;
+    border: 1.5px dashed var(--vg-line);
+    border-radius: var(--vg-r-md);
+    background: #fbfcfd;
+    cursor: pointer;
+    transition: border-color 0.2s var(--vg-ease), background-color 0.2s var(--vg-ease),
+                transform 0.2s var(--vg-ease);
+  }
+
+  .vbg-drop:hover,
+  .vbg-drop:focus-visible {
+    border-color: var(--vg-brand-line);
+    background: var(--vg-brand-tint);
+    outline: none;
+  }
+
+  .vbg-drop.is-dragover {
+    border-color: var(--vg-brand);
+    background: rgba(59, 153, 252, 0.14);
+    transform: scale(1.01);
+  }
+
+  .vbg-drop-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: var(--vg-brand-strong);
+    background: var(--vg-brand-tint);
+    border: 1px solid var(--vg-brand-line);
+  }
+
+  .vbg-drop-title { font-size: 0.78rem; font-weight: 800; color: var(--vg-ink); }
+  .vbg-drop-text { font-size: 0.7rem; line-height: 1.55; color: var(--vg-ink-muted); }
+
+  .vbg-img-preview {
+    position: relative;
+    border-radius: var(--vg-r-md);
+    overflow: hidden;
+    border: 1px solid var(--vg-line);
+    background: #0A0D12;
+  }
+
+  .vbg-img-preview img {
+    width: 100%;
+    max-height: 260px;
+    object-fit: cover;
+  }
+
+  .vbg-img-remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: #ffffff;
+    background: rgba(10, 13, 18, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: background-color 0.2s var(--vg-ease), transform 0.2s var(--vg-ease);
+  }
+  .vbg-img-remove:hover { background: rgba(244, 63, 94, 0.9); transform: rotate(90deg); }
+
+  .vbg-img-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #93a2b5;
+    background: #0A0D12;
+    border-top: 1px solid rgba(59, 153, 252, 0.22);
+  }
+
+  .vbg-divider-or {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 16px 0;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--vg-ink-faint);
+  }
+  .vbg-divider-or::before,
+  .vbg-divider-or::after {
+    content: "";
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--vg-line);
+  }
+
+  /* =================================================================
+     TAGS
+     ================================================================= */
+  .vbg-tag-field {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px;
+    min-height: 48px;
+    padding: 8px 10px;
+    border: 1px solid var(--vg-line);
+    border-radius: var(--vg-r-md);
+    background: #ffffff;
+    cursor: text;
+    transition: border-color var(--vg-dur) var(--vg-ease), box-shadow var(--vg-dur) var(--vg-ease);
+  }
+
+  .vbg-tag-field:focus-within {
+    border-color: var(--vg-brand);
+    box-shadow: 0 0 0 3px var(--vg-brand-tint);
+  }
+
+  .vbg-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 6px 5px 11px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: var(--vg-brand-strong);
+    background: var(--vg-brand-tint);
+    border: 1px solid var(--vg-brand-line);
+    border-radius: var(--vg-r-full);
+    animation: vbgChipIn 0.22s var(--vg-ease) both;
+  }
+
+  @keyframes vbgChipIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  .vbg-chip-x {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    color: inherit;
+    background: rgba(59, 153, 252, 0.18);
+    border: 0;
+    cursor: pointer;
+    transition: background-color 0.18s var(--vg-ease), color 0.18s var(--vg-ease);
+  }
+  .vbg-chip-x:hover { background: var(--vg-critical); color: #ffffff; }
+
+  .vbg-tag-entry {
+    flex: 1 1 120px;
+    min-width: 120px;
+    padding: 4px 2px;
+    font-size: 0.8rem;
+    font-family: inherit;
+    color: var(--vg-ink);
+    background: transparent;
+    border: 0;
+    outline: none;
+  }
+  .vbg-tag-entry::placeholder { color: var(--vg-ink-faint); }
+
+  .vbg-tag-suggest {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .vbg-tag-suggest-label {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--vg-ink-faint);
+    margin-right: 2px;
+  }
+
+  .vbg-tag-suggest button {
+    padding: 4px 10px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--vg-ink-soft);
+    background: #f6f8fb;
+    border: 1px solid var(--vg-line);
+    border-radius: var(--vg-r-full);
+    cursor: pointer;
+    transition: all 0.18s var(--vg-ease);
+  }
+
+  .vbg-tag-suggest button:hover {
+    color: var(--vg-brand-strong);
+    background: var(--vg-brand-tint);
+    border-color: var(--vg-brand-line);
+  }
+
+  /* =================================================================
+     AUTHOR CARD
+     ================================================================= */
+  .vbg-author {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .vbg-author-body { min-width: 0; }
+
+  .vbg-author-name {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--vg-ink);
+  }
+
+  .vbg-author-role {
+    display: block;
+    margin-top: 3px;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vg-brand-strong);
+  }
+
+  .vbg-author-bio {
+    margin: 12px 0 0;
+    font-size: 0.76rem;
+    line-height: 1.7;
+    color: var(--vg-ink-muted);
+  }
+
+  .vbg-author-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 14px;
+  }
+
+  .vbg-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: var(--vg-r-full);
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+
+  .vbg-pill--ok   { color: #065f46; background: #ecfdf5; border-color: #a7f3d0; }
+  .vbg-pill--info { color: var(--vg-brand-strong); background: var(--vg-brand-tint); border-color: var(--vg-brand-line); }
+  .vbg-pill--muted{ color: var(--vg-ink-muted); background: #f4f4f5; border-color: var(--vg-line); }
+
+  /* =================================================================
+     CHECKLIST
+     ================================================================= */
+  .vbg-checklist { display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 0; list-style: none; }
+
+  .vbg-check-item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 9px 10px;
+    border-radius: 10px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--vg-ink-soft);
+    transition: background-color 0.2s var(--vg-ease);
+  }
+
+  .vbg-check-item.is-done { color: var(--vg-ink); background: rgba(16, 185, 129, 0.07); }
+
+  .vbg-check-mark {
+    flex: 0 0 auto;
+    display: inline-grid;
+    place-items: center;
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    color: var(--vg-ink-faint);
+    background: #f1f2f4;
+    border: 1px solid var(--vg-line);
+    transition: all 0.2s var(--vg-ease);
+  }
+
+  .vbg-check-item.is-done .vbg-check-mark {
+    color: #ffffff;
+    background: linear-gradient(135deg, #10b981, #047857);
+    border-color: transparent;
+  }
+
+  .vbg-check-mark svg { opacity: 0; transition: opacity 0.2s var(--vg-ease); }
+  .vbg-check-item.is-done .vbg-check-mark svg { opacity: 1; }
+
+  .vbg-check-req {
+    margin-left: auto;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vg-critical);
+  }
+  .vbg-check-item.is-done .vbg-check-req { display: none; }
+
+  /* =================================================================
+     SUBMISSIONS LIST
+     ================================================================= */
+  .vbg-sub-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .vbg-sub {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: var(--vg-r-md);
+    background: #fbfcfd;
+    border: 1px solid var(--vg-line-soft);
+    transition: border-color 0.22s var(--vg-ease), background-color 0.22s var(--vg-ease),
+                transform 0.22s var(--vg-ease);
+  }
+
+  .vbg-sub:hover {
+    border-color: var(--vg-brand-line);
+    background: #ffffff;
+    transform: translateY(-1px);
+  }
+
+  .vbg-sub-thumb {
+    flex: 0 0 auto;
+    width: 54px;
+    height: 54px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    color: var(--vg-brand-soft);
+    background: linear-gradient(145deg, var(--vg-dark), #060a10);
+    border: 1px solid rgba(59, 153, 252, 0.3);
+  }
+  .vbg-sub-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+  .vbg-sub-body { min-width: 0; flex: 1 1 auto; }
+
+  .vbg-sub-title {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 800;
+    line-height: 1.4;
+    color: var(--vg-ink);
+  }
+
+  .vbg-sub-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    margin-top: 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--vg-ink-faint);
+  }
+
+  .vbg-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 11px;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: var(--vg-r-full);
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+
+  .vbg-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .vbg-status--pending_moderation { color: #92400e; background: #fffbeb; border-color: #fde68a; }
+  .vbg-status--draft              { color: var(--vg-ink-muted); background: #f4f4f5; border-color: var(--vg-line); }
+  .vbg-status--approved           { color: #065f46; background: #ecfdf5; border-color: #a7f3d0; }
+  .vbg-status--rejected           { color: #9f1239; background: #fff1f2; border-color: #fecdd3; }
+  .vbg-status--published          { color: #1d4ed8; background: #eff6ff; border-color: #bfdbfe; }
+
+  .vbg-sub-actions { display: flex; flex-wrap: wrap; gap: 7px; flex: 0 0 auto; }
+
+  .vbg-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--vg-ink-soft);
+    background: #ffffff;
+    border: 1px solid var(--vg-line);
+    transition: all 0.2s var(--vg-ease);
+  }
+  .vbg-icon-btn:hover {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--vg-brand), var(--vg-brand-strong));
+    border-color: transparent;
+    transform: translateY(-1px);
+  }
+
+  .vbg-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .vbg-empty-icon {
+    display: grid;
+    place-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: var(--vg-brand);
+    background: var(--vg-brand-tint);
+    border: 1px solid var(--vg-brand-line);
+  }
+
+  .vbg-empty-title { font-size: 0.9rem; font-weight: 800; color: var(--vg-ink); }
+  .vbg-empty-text { font-size: 0.76rem; line-height: 1.65; color: var(--vg-ink-muted); max-width: 42ch; }
+
+  /* =================================================================
+     PREVIEW MODAL
+     ================================================================= */
+  .vbg-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    opacity: 0;
+    transition: opacity 0.22s var(--vg-ease);
+  }
+
+  .vbg-modal[hidden] { display: none !important; }
+  .vbg-modal.is-open { opacity: 1; }
+
+  .vbg-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 7, 10, 0.78);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+  }
+
+  .vbg-modal-window {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: min(940px, 100%);
+    max-height: 92vh;
+    border-radius: var(--vg-r-xl);
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid var(--vg-line);
+    box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.9);
+    transform: translateY(18px) scale(0.985);
+    transition: transform 0.28s var(--vg-ease);
+  }
+
+  .vbg-modal.is-open .vbg-modal-window { transform: translateY(0) scale(1); }
+
+  .vbg-modal-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px 17px;
+    background:
+      radial-gradient(90% 140% at 100% 0%, rgba(59, 153, 252, 0.22), transparent 62%),
+      linear-gradient(160deg, var(--vg-dark), #070b11);
+    color: #ffffff;
+  }
+
+  .vbg-modal-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--vg-brand);
+  }
+
+  .vbg-modal-title {
+    margin: 8px 0 0;
+    font-size: 1.12rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.35;
+    color: #ffffff;
+  }
+
+  .vbg-modal-sub {
+    margin: 6px 0 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 10.5px;
+    color: #93a2b5;
+    word-break: break-word;
+  }
+
+  .vbg-modal-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #93a2b5;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    transition: all 0.2s var(--vg-ease);
+  }
+  .vbg-modal-close:hover {
+    color: #ffffff;
+    background: rgba(244, 63, 94, 0.3);
+    border-color: rgba(244, 63, 94, 0.5);
+    transform: rotate(90deg);
+  }
+
+  .vbg-modal-body {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 0 0 26px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(59, 153, 252, 0.35) transparent;
+  }
+
+  .vbg-modal-body::-webkit-scrollbar { width: 8px; }
+  .vbg-modal-body::-webkit-scrollbar-thumb {
+    background: rgba(59, 153, 252, 0.3);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  /* ---- article render ---- */
+  .vbg-article-cover {
+    width: 100%;
+    max-height: 340px;
+    object-fit: cover;
+    display: block;
+    background: #0A0D12;
+  }
+
+  .vbg-article-inner { padding: 26px 30px 0; }
+
+  .vbg-article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .vbg-article-cat {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 13px;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--vg-brand-strong);
+    background: var(--vg-brand-tint);
+    border: 1px solid var(--vg-brand-line);
+    border-radius: var(--vg-r-full);
+  }
+
+  .vbg-article-author {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--vg-ink-muted);
+  }
+
+  .vbg-article-author .vbg-avatar { width: 26px; height: 26px; font-size: 10px; }
+
+  .vbg-article h1 {
+    margin: 0 0 14px;
+    font-size: clamp(1.5rem, 3.4vw, 2.05rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.22;
+    color: var(--vg-ink);
+  }
+
+  .vbg-article h2 {
+    margin: 30px 0 12px;
+    font-size: 1.28rem;
+    font-weight: 800;
+    letter-spacing: -0.018em;
+    line-height: 1.3;
+    color: var(--vg-ink);
+  }
+
+  .vbg-article h3 {
+    margin: 24px 0 10px;
+    font-size: 1.08rem;
+    font-weight: 800;
+    letter-spacing: -0.012em;
+    color: var(--vg-ink);
+  }
+
+  .vbg-article h4,
+  .vbg-article h5,
+  .vbg-article h6 {
+    margin: 20px 0 8px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--vg-ink);
+  }
+
+  .vbg-article p {
+    margin: 0 0 16px;
+    font-size: 0.92rem;
+    line-height: 1.85;
+    color: var(--vg-ink-soft);
+  }
+
+  .vbg-article ul,
+  .vbg-article ol {
+    margin: 0 0 18px;
+    padding-left: 24px;
+    font-size: 0.92rem;
+    line-height: 1.85;
+    color: var(--vg-ink-soft);
+  }
+
+  .vbg-article li { margin-bottom: 7px; }
+
+  .vbg-article blockquote {
+    margin: 22px 0;
+    padding: 16px 20px;
+    font-size: 0.9rem;
+    font-style: italic;
+    line-height: 1.8;
+    color: var(--vg-ink-soft);
+    background: var(--vg-brand-tint);
+    border-left: 3px solid var(--vg-brand);
+    border-radius: 0 var(--vg-r-md) var(--vg-r-md) 0;
+  }
+
+  .vbg-article pre {
+    margin: 22px 0;
+    padding: 18px 20px;
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: #d6e4f5;
+    background: linear-gradient(160deg, var(--vg-dark), #070b11);
+    border: 1px solid rgba(59, 153, 252, 0.24);
+    border-radius: var(--vg-r-md);
+  }
+
+  .vbg-article code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.82em;
+    padding: 2px 6px;
+    color: var(--vg-brand-strong);
+    background: var(--vg-brand-tint);
+    border: 1px solid var(--vg-brand-line);
+    border-radius: 5px;
+  }
+
+  .vbg-article pre code {
+    padding: 0;
+    color: inherit;
+    background: transparent;
+    border: 0;
+  }
+
+  .vbg-article a { color: var(--vg-brand-strong); text-decoration: underline; text-underline-offset: 2px; }
+  .vbg-article a:hover { color: var(--vg-brand); }
+
+  .vbg-article hr {
+    margin: 30px 0;
+    border: 0;
+    height: 1px;
+    background: var(--vg-line);
+  }
+
+  .vbg-article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 26px;
+    padding-top: 22px;
+    border-top: 1px solid var(--vg-line-soft);
+  }
+
+  .vbg-article-tags span {
+    padding: 5px 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--vg-ink-soft);
+    background: #f6f8fb;
+    border: 1px solid var(--vg-line);
+    border-radius: var(--vg-r-full);
+  }
+
+  .vbg-article-excerpt {
+    margin: 0 0 22px;
+    padding: 16px 18px;
+    font-size: 0.86rem;
+    font-style: italic;
+    line-height: 1.75;
+    color: var(--vg-ink-muted);
+    background: #f8fafc;
+    border-left: 3px solid var(--vg-line);
+    border-radius: 0 var(--vg-r-md) var(--vg-r-md) 0;
+  }
+
+  .vbg-modal-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 16px 24px;
+    background: #f8fafc;
+    border-top: 1px solid var(--vg-line-soft);
+  }
+
+  .vbg-modal-foot-note {
+    font-size: 10.5px;
+    line-height: 1.6;
+    color: var(--vg-ink-muted);
+    max-width: 46ch;
+  }
+
+  .vbg-modal-foot-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  /* =================================================================
+     TOASTS
+     ================================================================= */
+  .vbg-toast-stack {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 400;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: min(390px, calc(100vw - 40px));
+    pointer-events: none;
+  }
+
+  .vbg-toast {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 14px 16px;
+    border-radius: var(--vg-r-md);
+    background: linear-gradient(160deg, var(--vg-dark), #070b11);
+    border: 1px solid rgba(59, 153, 252, 0.32);
+    box-shadow: 0 22px 44px -24px rgba(0, 0, 0, 0.85);
+    color: #e2e8f0;
+    font-size: 0.76rem;
+    line-height: 1.55;
+    pointer-events: auto;
+    animation: vbgToastIn 0.3s var(--vg-ease) both;
+  }
+
+  .vbg-toast.is-leaving { animation: vbgToastOut 0.28s var(--vg-ease) both; }
+  .vbg-toast svg { flex: 0 0 auto; margin-top: 1px; }
+
+  .vbg-toast--ok   { border-color: rgba(16, 185, 129, 0.42); }
+  .vbg-toast--ok svg { color: #34d399; }
+  .vbg-toast--warn { border-color: rgba(245, 158, 11, 0.42); }
+  .vbg-toast--warn svg { color: #fbbf24; }
+  .vbg-toast--crit { border-color: rgba(244, 63, 94, 0.45); }
+  .vbg-toast--crit svg { color: #fb7185; }
+  .vbg-toast--info svg { color: var(--vg-brand-soft); }
+
+  .vbg-toast strong { display: block; margin-bottom: 2px; color: #ffffff; font-weight: 800; }
+
+  @keyframes vbgToastIn {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes vbgToastOut {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to   { opacity: 0; transform: translateY(10px) scale(0.98); }
+  }
+
+  /* =================================================================
+     FOOTER
+     ================================================================= */
+  .vbg-footer {
+    border-top: 1px solid var(--vg-line-soft);
+    background: linear-gradient(180deg, var(--vg-paper), #f6f7f9);
+  }
+
+  .vbg-footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 26px;
+    font-size: 0.73rem;
+    color: var(--vg-ink-muted);
+  }
+
+  .vbg-footer-links { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
+  .vbg-footer-links a { font-weight: 600; transition: color var(--vg-dur) var(--vg-ease); }
+  .vbg-footer-links a:hover { color: var(--vg-brand-strong); }
+
+  /* =================================================================
+     RESPONSIVE
+     ================================================================= */
+  @media (max-width: 760px) {
+    .vbg-page-head { flex-direction: column; align-items: stretch; }
+    .vbg-actionbar { width: 100%; }
+    .vbg-actionbar .vbg-btn { flex: 1 1 auto; }
+    .vbg-actionbar-note { justify-content: flex-start; }
+    .vbg-card-body { padding: 18px 16px 20px; }
+    .vbg-card-head { padding: 16px 16px 14px; }
+    .vbg-editor-area { min-height: 340px; padding: 16px; }
+    .vbg-article-inner { padding: 20px 18px 0; }
+    .vbg-modal { padding: 12px; }
+    .vbg-modal-foot { flex-direction: column; align-items: stretch; }
+    .vbg-modal-foot .vbg-btn { width: 100%; }
+    .vbg-toast-stack { left: 16px; right: 16px; bottom: 16px; max-width: none; }
+    .vbg-footer-inner { flex-direction: column; text-align: center; }
+  }
+
+  /* =================================================================
+     REDUCED MOTION
+     ================================================================= */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .vbg-modal-window { transform: none !important; }
+  }
+</style>
+</head>
+
+<body class="vbg-body">
+
+<!-- ===================================================================
+     PRELOADER — matches the vun1.css 4-second orbital sweep
+==================================================================== -->
+<div id="preloader" class="preloader" role="status" aria-live="polite" aria-label="Loading VUNVAULT">
+  <div class="preloader-inner">
+
+    <div class="preloader-mark">
+      <div class="preloader-stage" aria-hidden="true">
+        <span class="preloader-ring preloader-ring--1"></span>
+        <span class="preloader-ring preloader-ring--2"></span>
+        <span class="preloader-ring preloader-ring--3"></span>
+        <span class="preloader-halo"></span>
+      </div>
+
+      <img src="logo.svg" alt="VUNVAULT Logo" class="preloader-logo">
+    </div>
+
+    <div class="preloader-wordmark">VUNVAULT</div>
+
+    <div class="preloader-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+         aria-valuenow="100" aria-label="Page loading progress">
+      <span class="preloader-progress-fill"></span>
+    </div>
+
+    <span class="preloader-caption">Establishing secure channel</span>
+  </div>
+</div>
+
+
+<div class="vbg-page">
+
+  <!-- ===================================================================
+       HEADER — brand, quick links, verified badge, profile chip
+  ==================================================================== -->
+  <header class="vbg-header" id="vbgHeader" hidden>
+    <div class="vbg-shell vbg-header-inner">
+
+      <!-- Brand -->
+      <a href="vun.html" class="vbg-brand" aria-label="VUNVAULT home">
+        <span class="vbg-brand-tile">
+          <img src="logo.svg" alt="VUNVAULT" width="24" height="24">
+        </span>
+        <span class="vbg-brand-text">
+          <span class="vbg-brand-name">VUNVAULT</span>
+          <span class="vbg-brand-sub">Content Studio</span>
+        </span>
+      </a>
+
+      <!-- Desktop quick links -->
+      <nav class="vbg-nav" aria-label="Studio sections">
+        <a href="profile.html">Profile Settings</a>
+        <a href="#submissions">My Submissions</a>
+        <a href="logout.html" class="vbg-nav-signout">Sign Out</a>
+      </nav>
+
+      <div class="vbg-header-right">
+
+        <!-- Verified badge -->
+        <span class="vbg-verified-badge" title="Your account holds a Verified Journalist / Blogger badge">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <path d="M12 2 4 5v6c0 5 3.4 9.2 8 11 4.6-1.8 8-6 8-11V5z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+          <span>Verified Blogger</span>
+        </span>
+
+        <!-- Profile chip -->
+        <a href="profile.html" class="vbg-user-chip" id="vbgUserChip" title="Open profile settings">
+          <span class="vbg-avatar" id="vbgHeaderAvatar" aria-hidden="true">
+            <span id="vbgHeaderInitials">V</span>
+            <span class="vbg-avatar-badge" aria-hidden="true"></span>
+          </span>
+          <span class="vbg-user-meta">
+            <span class="vbg-user-label">Signed in as</span>
+            <span class="vbg-user-name" id="vbgHeaderName">Verified Blogger</span>
+          </span>
+        </a>
+
+        <!-- Mobile hamburger -->
+        <button id="vbgMenuToggle"
+                class="vbg-hamburger"
+                type="button"
+                aria-label="Toggle navigation menu"
+                aria-expanded="false"
+                aria-controls="vbgDrawer">
+          <span class="vbg-hamburger-bar"></span>
+          <span class="vbg-hamburger-bar"></span>
+          <span class="vbg-hamburger-bar"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <nav id="vbgDrawer" class="vbg-drawer" aria-label="Studio sections (mobile)">
+      <ul class="vbg-drawer-list">
+        <li><a href="profile.html">Profile Settings</a></li>
+        <li><a href="#submissions">My Submissions</a></li>
+        <li><a href="logout.html" class="vbg-drawer-signout">Sign Out</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
+  <!-- ===================================================================
+       ACCESS RESTRICTED STATE
+  ==================================================================== -->
+  <main class="vbg-denied" id="vbgDenied" hidden>
+    <div class="vbg-denied-card">
+      <div class="vbg-denied-glow" aria-hidden="true"></div>
+
+      <span class="vbg-denied-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="10" rx="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          <path d="M12 15v2"/>
+        </svg>
+      </span>
+
+      <span class="vbg-denied-eyebrow">Access Restricted</span>
+
+      <h1 class="vbg-denied-title">Verified Journalist / Blogger badge required</h1>
+
+      <p class="vbg-denied-text">
+        You need a <strong>Verified Journalist / Blogger Badge</strong> to publish content on VUNVAULT.
+        This studio lets approved writers draft articles, attach media and submit posts into the
+        pre-publication moderation queue. Unverified accounts cannot open it.
+      </p>
+
+      <ul class="vbg-denied-list">
+        <li>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5"/>
+          </svg>
+          <span>Submit a verification request through the Contact page using the
+            <strong>Journalist / Blogger Profile Request</strong> category.</span>
+        </li>
+        <li>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5"/>
+          </svg>
+          <span>Our editorial team verifies your identity and publication history manually.</span>
+        </li>
+        <li>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5"/>
+          </svg>
+          <span>Once approved, this studio unlocks and your posts enter admin moderation before publishing.</span>
+        </li>
+      </ul>
+
+      <div class="vbg-denied-actions">
+        <a href="contact.html" class="vbg-btn vbg-btn--primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m22 7-8.99 5.727a2 2 0 0 1-2.01 0L2 7"/>
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+          </svg>
+          <span>Request Verification</span>
+        </a>
+        <a href="vun.html" class="vbg-btn vbg-btn--ghost">Back to Home</a>
+
+        <button type="button" class="vbg-btn vbg-btn--quiet" id="vbgDemoGrant">
+          Enable demo verification
+        </button>
+      </div>
+
+      <p class="vbg-demo-note">
+        Demo control — writes <code>isVerifiedBlogger = "true"</code> to this browser&rsquo;s localStorage so the
+        studio can be evaluated without a backend.
+      </p>
+    </div>
+  </main>
+
+
+  <!-- ===================================================================
+       CONTENT STUDIO
+  ==================================================================== -->
+  <main class="vbg-main" id="vbgStudio" hidden>
+    <div class="vbg-shell">
+
+      <!-- ------------------------------------------------- Page heading -->
+      <div class="vbg-page-head">
+        <div>
+          <span class="vbg-eyebrow">User Content Creation Studio</span>
+          <h1 class="vbg-page-title">Write &amp; submit an article</h1>
+          <p class="vbg-page-sub">
+            Draft your story, attach media and preview it exactly as readers will see it.
+            Publishing submits the article to the admin moderation queue — nothing goes live until
+            an editor approves it.
+          </p>
+        </div>
+
+        <!-- ------------------------------------------ Action bar -->
+        <div class="vbg-actionbar">
+          <button type="button" class="vbg-btn vbg-btn--ghost" id="vbgSaveDraft">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/>
+            </svg>
+            <span>Save Draft</span>
+          </button>
+
+          <button type="button" class="vbg-btn vbg-btn--dark" id="vbgPreviewBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <span>Preview Article</span>
+          </button>
+
+          <button type="button" class="vbg-btn vbg-btn--primary" id="vbgPublishBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m5 3 14 9-14 9V3z"/>
+            </svg>
+            <span>Publish Post</span>
+          </button>
+
+          <div class="vbg-actionbar-note">
+            <span class="vbg-save-dot" id="vbgSaveDot" aria-hidden="true"></span>
+            <span id="vbgSaveLabel">Working copy saved locally</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- =============================================================
+           EDITOR GRID
+      ============================================================== -->
+      <div class="vbg-editor-grid">
+
+        <!-- =========================================================
+             LEFT COLUMN — MAIN CONTENT WORKSPACE
+        ========================================================== -->
+        <div class="vbg-col">
+
+          <section class="vbg-card" aria-labelledby="vbgContentHeading">
+            <div class="vbg-card-head">
+              <div style="display:flex;gap:14px;align-items:flex-start;">
+                <span class="vbg-card-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v16"/>
+                    <path d="M20 19A2 2 0 0 0 22 17V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10"/>
+                    <path d="M4 19a2 2 0 0 0 2 2h12"/>
+                  </svg>
+                </span>
+                <div>
+                  <h2 class="vbg-card-title" id="vbgContentHeading">Article Content</h2>
+                  <p class="vbg-card-note">
+                    Write the full piece. Formatting uses lightweight markup that renders into clean HTML
+                    in the reader view.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="vbg-card-body">
+
+              <!-- Title -->
+              <div class="vbg-field">
+                <label class="vbg-label" for="post-title">
+                  <span>Post Title <span class="vbg-label-req" aria-hidden="true">*</span></span>
+                  <span class="vbg-label-hint" id="titleCount">0 / 120</span>
+                </label>
+                <input id="post-title"
+                       class="vbg-input vbg-input--title"
+                       type="text"
+                       maxlength="120"
+                       placeholder="Give your story a headline…"
+                       autocomplete="off"
+                       spellcheck="true">
+              </div>
+
+              <!-- Slug -->
+              <div class="vbg-field">
+                <label class="vbg-label" for="post-slug">
+                  <span>URL Slug</span>
+                  <span class="vbg-label-hint">Auto-generated from the title</span>
+                </label>
+                <div class="vbg-slug-wrap">
+                  <span class="vbg-slug-prefix" id="vbgSlugPrefix">/blog/</span>
+                  <input id="post-slug"
+                         class="vbg-input"
+                         type="text"
+                         placeholder="your-article-slug"
+                         autocomplete="off"
+                         spellcheck="false">
+                  <button type="button"
+                          class="vbg-slug-lock"
+                          id="vbgSlugLock"
+                          aria-pressed="false"
+                          title="Lock slug to stop auto-updates">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"
+                         aria-hidden="true">
+                      <rect x="3" y="11" width="18" height="10" rx="2"/>
+                      <path d="M7 11V7a5 5 0 0 1 9.9-1"/>
+                    </svg>
+                  </button>
+                </div>
+                <span class="vbg-hint" id="vbgSlugPreview">Public URL: /blog/your-article-slug</span>
+              </div>
+
+              <!-- Category -->
+              <div class="vbg-field">
+                <label class="vbg-label" for="post-category">
+                  <span>Category <span class="vbg-label-req" aria-hidden="true">*</span></span>
+                </label>
+                <select id="post-category" class="vbg-select">
+                  <option value="" selected disabled>Select a category…</option>
+                  <option value="News">News</option>
+                  <option value="Threat Intel">Threat Intel</option>
+                  <option value="Blog">Blog</option>
+                  <option value="Industry Updates">Industry Updates</option>
+                  <option value="Tutorials">Tutorials</option>
+                </select>
+              </div>
+
+              <!-- Excerpt -->
+              <div class="vbg-field">
+                <label class="vbg-label" for="post-excerpt">
+                  <span>Excerpt / Summary</span>
+                  <span class="vbg-label-hint" id="excerptCount">0 / 240</span>
+                </label>
+                <textarea id="post-excerpt"
+                          class="vbg-textarea"
+                          maxlength="240"
+                          rows="3"
+                          placeholder="One or two sentences used on article cards, search results and RSS feeds…"
+                          spellcheck="true"></textarea>
+              </div>
+
+              <!-- Body -->
+              <div class="vbg-field">
+                <label class="vbg-label" for="post-body">
+                  <span>Main Body <span class="vbg-label-req" aria-hidden="true">*</span></span>
+                  <span class="vbg-label-hint">Markdown-style formatting supported</span>
+                </label>
+
+                <div class="vbg-editor" id="vbgEditor">
+
+                  <div class="vbg-toolbar" role="toolbar" aria-label="Text formatting" aria-controls="post-body">
+                    <button type="button" class="vbg-tool" data-tool="bold" title="Bold (Ctrl/Cmd + B)" aria-label="Bold">B</button>
+                    <button type="button" class="vbg-tool" data-tool="italic" title="Italic (Ctrl/Cmd + I)" aria-label="Italic"><em>I</em></button>
+
+                    <span class="vbg-tool-divider" aria-hidden="true"></span>
+
+                    <button type="button" class="vbg-tool" data-tool="h2" title="Section heading" aria-label="Section heading">H2</button>
+                    <button type="button" class="vbg-tool" data-tool="h3" title="Sub-heading" aria-label="Sub-heading">H3</button>
+
+                    <span class="vbg-tool-divider" aria-hidden="true"></span>
+
+                    <button type="button" class="vbg-tool" data-tool="quote" title="Blockquote" aria-label="Blockquote">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M6 17h3l2-4V7H5v6h3z"/><path d="M14 17h3l2-4V7h-6v6h3z"/>
+                      </svg>
+                    </button>
+
+                    <button type="button" class="vbg-tool" data-tool="code" title="Code block" aria-label="Code block">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>
+                      </svg>
+                    </button>
+
+                    <button type="button" class="vbg-tool" data-tool="link" title="Insert link" aria-label="Insert link">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                      </svg>
+                    </button>
+
+                    <span class="vbg-tool-divider" aria-hidden="true"></span>
+
+                    <button type="button" class="vbg-tool" data-tool="ul" title="Bulleted list" aria-label="Bulleted list">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/>
+                        <path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/>
+                      </svg>
+                    </button>
+
+                    <button type="button" class="vbg-tool" data-tool="ol" title="Numbered list" aria-label="Numbered list">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M10 6h11"/><path d="M10 12h11"/><path d="M10 18h11"/>
+                        <path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-.5"/>
+                      </svg>
+                    </button>
+
+                    <button type="button" class="vbg-tool" data-tool="hr" title="Divider" aria-label="Divider">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 12h18"/>
+                      </svg>
+                    </button>
+
+                    <span class="vbg-tool-divider" aria-hidden="true"></span>
+
+                    <button type="button" class="vbg-tool" data-tool="clear" title="Clear formatting on selection" aria-label="Clear formatting">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 7V5h16v2"/><path d="m9 20 4-14"/><path d="M4 20h9"/>
+                      </svg>
+                    </button>
+                  </div>
+
+                  <textarea id="post-body"
+                            class="vbg-editor-area"
+                            spellcheck="true"
+                            placeholder="Start writing…
+
+## Use two hashes for a section heading
+
+> Use a chevron for a pull quote.
+
+- Dash for a bulleted list
+- Another point
+
+**Bold**, *italic*, `inline code` and [links](https://example.com) all work."></textarea>
+
+                  <div class="vbg-editor-foot">
+                    <div class="vbg-editor-stats">
+                      <span>Words <strong id="statWords">0</strong></span>
+                      <span>Characters <strong id="statChars">0</strong></span>
+                      <span>Read time <strong id="statRead">0 min</strong></span>
+                      <span id="statTarget">Target ≥ <strong>150</strong> words</span>
+                    </div>
+                    <span class="vbg-editor-markdown-note">Autosaved locally</span>
+                  </div>
+                </div>
+
+                <span class="vbg-hint">
+                  The moderation team reads the raw text and the rendered preview. Keep claims sourced.
+                </span>
+              </div>
+
+            </div>
+          </section>
+
+          <!-- ------------------------------------------- Submissions -->
+          <section class="vbg-card" id="submissions" aria-labelledby="vbgSubHeading">
+            <div class="vbg-card-head">
+              <div>
+                <h2 class="vbg-card-title" id="vbgSubHeading">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/>
+                    <path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>
+                  </svg>
+                  Your Submissions
+                </h2>
+                <p class="vbg-card-note">
+                  Drafts and posts you have submitted, with their current moderation status.
+                </p>
+              </div>
+              <span class="vbg-pill vbg-pill--info" id="vbgSubCount">0 items</span>
+            </div>
+
+            <div class="vbg-card-body">
+              <div class="vbg-sub-list" id="vbgSubList"></div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- =========================================================
+             RIGHT COLUMN — PUBLISHING OPTIONS
+        ========================================================== -->
+        <aside class="vbg-col" aria-label="Publishing options">
+
+          <!-- ------------------------------------- Featured image -->
+          <section class="vbg-card" aria-labelledby="vbgImageHeading">
+            <div class="vbg-card-head">
+              <div>
+                <h2 class="vbg-card-title" id="vbgImageHeading">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="9" cy="9" r="2"/>
+                    <path d="m21 15-4.35-4.35a2 2 0 0 0-2.83 0L4 21"/>
+                  </svg>
+                  Featured Image
+                </h2>
+                <p class="vbg-card-note">
+                  Upload from this device or paste a hosted image URL. The image is stored with the post.
+                </p>
+              </div>
+            </div>
+
+            <div class="vbg-card-body">
+
+              <!-- Dropzone -->
+              <div class="vbg-drop"
+                   id="vbgDropZone"
+                   role="button"
+                   tabindex="0"
+                   aria-label="Upload a featured image from your device">
+                <span class="vbg-drop-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>
+                  </svg>
+                </span>
+                <span class="vbg-drop-title">Drop an image here</span>
+                <span class="vbg-drop-text">or click to browse · JPG, PNG, WebP, GIF · max 5 MB</span>
+                <input type="file" id="vbgFileInput" accept="image/*" hidden>
+              </div>
+
+              <div class="vbg-divider-or" aria-hidden="true">or</div>
+
+              <div class="vbg-field" style="margin-top:0;">
+                <label class="vbg-label" for="post-cover-url">
+                  <span>Image URL</span>
+                </label>
+                <input id="post-cover-url"
+                       class="vbg-input"
+                       type="url"
+                       placeholder="https://cdn.example.com/cover.jpg"
+                       autocomplete="off"
+                       spellcheck="false">
+              </div>
+
+              <!-- Preview -->
+              <div class="vbg-img-preview" id="vbgImgPreview" hidden style="margin-top:16px;">
+                <img id="vbgImgEl" src="" alt="">
+                <button type="button" class="vbg-img-remove" id="vbgImgRemove" aria-label="Remove featured image" title="Remove image">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                  </svg>
+                </button>
+                <div class="vbg-img-meta">
+                  <span id="vbgImgMeta">—</span>
+                  <span id="vbgImgSource">—</span>
+                </div>
+              </div>
+
+              <!-- Alt text -->
+              <div class="vbg-field">
+                <label class="vbg-label" for="post-cover-alt">
+                  <span>Image Alt Text</span>
+                  <span class="vbg-label-hint">Accessibility</span>
+                </label>
+                <input id="post-cover-alt"
+                       class="vbg-input"
+                       type="text"
+                       maxlength="160"
+                       placeholder="Describe the image for screen readers…"
+                       autocomplete="off">
+              </div>
+
+            </div>
+          </section>
+
+          <!-- ------------------------------------- Tags -->
+          <section class="vbg-card" aria-labelledby="vbgTagsHeading">
+            <div class="vbg-card-head">
+              <div>
+                <h2 class="vbg-card-title" id="vbgTagsHeading">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/>
+                    <circle cx="7.5" cy="7.5" r="1"/>
+                  </svg>
+                  Hashtags / Tags
+                </h2>
+                <p class="vbg-card-note">
+                  Press <strong>Enter</strong> or <strong>comma</strong> to add a tag. Backspace removes the last one.
+                </p>
+              </div>
+              <span class="vbg-pill vbg-pill--muted" id="vbgTagCount">0 tags</span>
+            </div>
+
+            <div class="vbg-card-body">
+
+              <div class="vbg-tag-field" id="vbgTagField">
+                <span id="vbgTagChips" style="display:contents;"></span>
+                <input id="vbgTagInput"
+                       class="vbg-tag-entry"
+                       type="text"
+                       placeholder="Add a tag…"
+                       autocomplete="off"
+                       spellcheck="false"
+                       aria-label="Add a tag">
+              </div>
+
+              <div class="vbg-tag-suggest">
+                <span class="vbg-tag-suggest-label">Suggestions</span>
+                <button type="button" data-suggest="#security">#security</button>
+                <button type="button" data-suggest="#threatintel">#threatintel</button>
+                <button type="button" data-suggest="#fintech">#fintech</button>
+                <button type="button" data-suggest="#africa">#africa</button>
+                <button type="button" data-suggest="#compliance">#compliance</button>
+                <button type="button" data-suggest="#research">#research</button>
+              </div>
+
+              <span class="vbg-hint" style="display:block;margin-top:12px;">
+                Maximum 8 tags. Tags drive related-article feeds and topic pages.
+              </span>
+
+            </div>
+          </section>
+
+          <!-- ------------------------------------- Author -->
+          <section class="vbg-card" aria-labelledby="vbgAuthorHeading">
+            <div class="vbg-card-head">
+              <div>
+                <h2 class="vbg-card-title" id="vbgAuthorHeading">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  Author
+                </h2>
+              </div>
+            </div>
+
+            <div class="vbg-card-body">
+              <div class="vbg-author">
+                <span class="vbg-avatar vbg-avatar--lg" id="vbgAuthorAvatar" aria-hidden="true">
+                  <span id="vbgAuthorInitials">V</span>
+                  <span class="vbg-avatar-badge" aria-hidden="true"></span>
+                </span>
+
+                <div class="vbg-author-body">
+                  <h3 class="vbg-author-name" id="vbgAuthorName">Verified Blogger</h3>
+                  <span class="vbg-author-role" id="vbgAuthorRole">Journalist</span>
+                </div>
+              </div>
+
+              <p class="vbg-author-bio" id="vbgAuthorBio">
+                Verified VUNVAULT contributor. Your byline, avatar and role are attached to every post you submit.
+              </p>
+
+              <div class="vbg-author-badges">
+                <span class="vbg-pill vbg-pill--ok">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M20 6 9 17l-5-5"/>
+                  </svg>
+                  Verified
+                </span>
+                <span class="vbg-pill vbg-pill--info">Pre-publication review</span>
+              </div>
+
+              <a href="profile.html" class="vbg-btn vbg-btn--ghost vbg-btn--sm" style="width:100%;margin-top:18px;">
+                Edit profile &amp; byline
+              </a>
+            </div>
+          </section>
+
+          <!-- ------------------------------------- Readiness -->
+          <section class="vbg-card vbg-card--dark" aria-labelledby="vbgReadyHeading">
+            <div class="vbg-card-head">
+              <div>
+                <h2 class="vbg-card-title" id="vbgReadyHeading">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M9 12l2 2 4-4"/>
+                    <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.66 0 3.22.45 4.56 1.24"/>
+                  </svg>
+                  Publication Readiness
+                </h2>
+                <p class="vbg-card-note">
+                  Everything marked required must be complete before the post can be submitted.
+                </p>
+              </div>
+            </div>
+
+            <div class="vbg-card-body">
+              <ul class="vbg-checklist" id="vbgChecklist">
+                <li class="vbg-check-item" data-check="title">
+                  <span class="vbg-check-mark" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 6 9 17l-5-5"/>
+                    </svg>
+                  </span>
+                  <span>Title added</span>
+                  <span class="vbg-check-req">Required</span>
+                </li>
+
+                <li class="vbg-check-item" data-check="category">
+                  <span class="vbg-check-mark" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 6 9 17l-5-5"/>
+                    </svg>
+                  </span>
+                  <span>Category selected</span>
+                  <span class="vbg-check-req">Required</span>
+                </li>
+
+                <li class="vbg-check-item" data-check="body">
+                  <span class="vbg-check-mark" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 6 9 17l-5-5"/>
+                    </svg>
+                  </span>
+                  <span>Body ≥ 150 words</span>
+                  <span class="vbg-check-req">Required</span>
+                </li>
+
+                <li class="vbg-check-item" data-check="excerpt">
+                  <span class="vbg-check-mark" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 6 9 17l-5-5"/>
+                    </svg>
+                  </span>
+                  <span>Excerpt written</span>
+                </li>
+
+                <li class="vbg-check-item" data-check="image">
+                  <span class="vbg-check-mark" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 6 9 17l-5-5"/>
+                    </svg>
+                  </span>
+                  <span>Featured image attached</span>
+                </li>
+
+                <li class="vbg-check-item" data-check="tags">
+                  <span class="vbg-check-mark" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M20 6 9 17l-5-5"/>
+                    </svg>
+                  </span>
+                  <span>At least 2 tags</span>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+        </aside>
+      </div>
+    </div>
+  </main>
+
+
+  <!-- ===================================================================
+       FOOTER
+  ==================================================================== -->
+  <footer class="vbg-footer" id="vbgFooter" hidden>
+    <div class="vbg-shell">
+      <div class="vbg-footer-inner">
+        <div>&copy; 2026 VUNVAULT &middot; Content Studio &middot; Editorial decisions are logged and audited.</div>
+        <nav class="vbg-footer-links" aria-label="Studio footer">
+          <a href="vun.html">Home</a>
+          <a href="profile.html">Profile Settings</a>
+          <a href="content-moderation.html">Moderation Queue</a>
+          <a href="contact.html">Contact</a>
+          <a href="logout.html">Sign Out</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+
+<!-- ===================================================================
+     ARTICLE PREVIEW MODAL
+==================================================================== -->
+<div id="vbgPreviewModal"
+     class="vbg-modal"
+     hidden
+     aria-hidden="true"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="vbgModalTitle">
+
+  <div class="vbg-modal-backdrop" data-vbg-close></div>
+
+  <div class="vbg-modal-window" role="document">
+
+    <div class="vbg-modal-head">
+      <div style="min-width:0;">
+        <span class="vbg-modal-eyebrow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          Reader Preview
+        </span>
+        <h2 class="vbg-modal-title" id="vbgModalTitle">Untitled article</h2>
+        <p class="vbg-modal-sub" id="vbgModalSlug">/blog/</p>
+      </div>
+
+      <button type="button" class="vbg-modal-close" data-vbg-close aria-label="Close preview">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="vbg-modal-body" id="vbgModalBody">
+      <!-- injected -->
+    </div>
+
+    <div class="vbg-modal-foot">
+      <span class="vbg-modal-foot-note">
+        This is a local preview rendered from your device only. Nothing has been published or submitted yet.
+      </span>
+
+      <div class="vbg-modal-foot-actions">
+        <button type="button" class="vbg-btn vbg-btn--ghost" data-vbg-close>Close</button>
+        <button type="button" class="vbg-btn vbg-btn--primary" id="vbgModalPublish">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m5 3 14 9-14 9V3z"/>
+          </svg>
+          <span>Publish Post</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Toast stack -->
+<div class="vbg-toast-stack" id="vbgToastStack" aria-live="polite" aria-atomic="false"></div>
+
+
+<!-- ===================================================================
+     APPLICATION SCRIPT
+==================================================================== -->
+<script>
+(function () {
+  "use strict";
+
+  /* ==================================================================
+     0. CONSTANTS & TINY HELPERS
+     ================================================================== */
+  var POSTS_KEY        = "vunvault_posts";
+  var DRAFTS_KEY       = "vunvault_drafts";
+  var WORKING_KEY      = "vunvault_blogger_working";
+  var PROFILE_KEYS     = ["vunvault_profile", "vunvault_onboarding", "vunvault:profile", "vunvault_user", "vunvault_account"];
+  var APPROVED_KEY     = "vunvault_approved_users";
+  var MAX_TAGS         = 8;
+  var MIN_BODY_WORDS   = 150;
+  var MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+
+  function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+  function $$(sel, ctx) {
+    return Array.prototype.slice.call((ctx || document).querySelectorAll(sel));
+  }
+
+  function pad2(n) { return String(n).padStart(2, "0"); }
+
+  function escapeHtml(str) {
+    return String(str == null ? "" : str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function safeParse(raw) {
+    try { return JSON.parse(raw); } catch (err) { return null; }
+  }
+
+  function lsGet(key) {
+    try { return window.localStorage.getItem(key); } catch (err) { return null; }
+  }
+
+  function lsSet(key, value) {
+    try { window.localStorage.setItem(key, value); return true; } catch (err) { return false; }
+  }
+
+  function lsGetArray(key) {
+    var raw = lsGet(key);
+    if (!raw) return [];
+    var parsed = safeParse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  }
+
+  function initialsFromName(name) {
+    var parts = String(name || "").trim().split(/\s+/).filter(Boolean);
+    if (!parts.length) return "V";
+    if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
+  }
+
+  function slugify(value) {
+    return String(value || "")
+      .toLowerCase()
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/['"’‘“”]/g, "")
+      .replace(/[^a-z0-9\s-]/g, " ")
+      .trim()
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "")
+      .slice(0, 90);
+  }
+
+  function formatStamp(iso) {
+    var d = iso ? new Date(iso) : new Date();
+    if (isNaN(d.getTime())) d = new Date();
+    return pad2(d.getDate()) + " " +
+           d.toLocaleString("en-GB", { month: "short" }) + " " +
+           d.getFullYear() + " · " +
+           pad2(d.getUTCHours()) + ":" + pad2(d.getUTCMinutes()) + " UTC";
+  }
+
+  function wordCount(text) {
+    var t = String(text || "").trim();
+    if (!t) return 0;
+    return t.split(/\s+/).filter(Boolean).length;
+  }
+
+  function readTime(words) {
+    return Math.max(1, Math.round(words / 220));
+  }
+
+  /* Trailing-edge debounce. Used by the cover-URL field so that typing a
+     long URL does not re-render the preview on every keystroke. */
+  function debounce(fn, wait) {
+    var timer = null;
+    return function debounced() {
+      var context = this;
+      var args = arguments;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(function () {
+        fn.apply(context, args);
+      }, wait);
+    };
+  }
+
+  /* ==================================================================
+     1. IDENTITY & ACCESS CONTROL
+     ================================================================== */
+
+  /* Pull the richest available profile object from localStorage. */
+  function readProfile() {
+    var merged = {};
+
+    for (var i = 0; i < PROFILE_KEYS.length; i++) {
+      var raw = lsGet(PROFILE_KEYS[i]);
+      if (!raw) continue;
+      var obj = safeParse(raw);
+      if (obj && typeof obj === "object" && !Array.isArray(obj)) {
+        for (var k in obj) {
+          if (Object.prototype.hasOwnProperty.call(obj, k) && merged[k] === undefined) {
+            merged[k] = obj[k];
+          }
+        }
+      }
+    }
+
+    /* Standalone keys written by other parts of the app. */
+    var email = lsGet("userEmail");
+    if (email && !merged.email) merged.email = email;
+
+    var displayName = lsGet("vunvaultDisplayName");
+    if (displayName && !merged.fullName && !merged.name) merged.fullName = displayName;
+
+    return merged;
+  }
+
+  function normaliseRoleString(value) {
+    return String(value || "").toLowerCase().trim();
+  }
+
+  /* ------------------------------------------------------------------
+     Resolve an administrator-issued role grant for the current session.
+     Written by user-management.html on Approve; keyed by lowercase email.
+     ------------------------------------------------------------------ */
+  function readRoleGrant(profile) {
+    var email = normaliseRoleString(
+      (profile && (profile.email || profile.userEmail)) ||
+      lsGet("userEmail") ||
+      ""
+    );
+    if (!email) return null;
+
+    var map = safeParse(lsGet(APPROVED_KEY));
+    if (!map || typeof map !== "object" || Array.isArray(map)) return null;
+
+    var grant = map[email];
+    if (!grant || typeof grant !== "object") return null;
+    if (grant.status !== "approved") return null;
+    if (grant.role !== "blogger" && grant.role !== "journalist") return null;
+
+    return grant;
+  }
+
+  function isVerifiedBlogger(profile) {
+    /* 1. Explicit standalone flags */
+    if (lsGet("isVerifiedBlogger") === "true") return true;
+    if (lsGet("verifiedBlogger") === "true") return true;
+
+    var standaloneRole = normaliseRoleString(lsGet("userRole"));
+    if (standaloneRole === "blogger" || standaloneRole === "journalist") return true;
+
+    /* 2. Role grant issued by an administrator (user-management.html) */
+    if (readRoleGrant(profile)) return true;
+
+    if (!profile || typeof profile !== "object") return false;
+
+    /* 3. Boolean verification flags on the profile object */
+    var verifyKeys = ["isVerifiedBlogger", "verifiedBlogger", "isVerified", "verified", "bloggerVerified"];
+    for (var i = 0; i < verifyKeys.length; i++) {
+      var v = profile[verifyKeys[i]];
+      if (v === true || v === "true" || v === 1) return true;
+    }
+
+    /* 4. Role-shaped fields */
+    var roleFields = ["userRole", "accountType", "role", "accountRole", "contributorType", "career", "title"];
+    for (var j = 0; j < roleFields.length; j++) {
+      var text = normaliseRoleString(profile[roleFields[j]]);
+      if (/\b(blogger|journalist|editor|contributor|press|correspondent)\b/.test(text)) return true;
+    }
+
+    /* 5. Badge arrays */
+    var badges = profile.badges || profile.roles;
+    if (Array.isArray(badges)) {
+      for (var b = 0; b < badges.length; b++) {
+        if (/\b(blogger|journalist|verified)\b/i.test(String(badges[b]))) return true;
+      }
+    }
+
+    /* 6. Administrative accounts may author content */
+    var email = normaliseRoleString(profile.email || lsGet("userEmail"));
+    if (email && /@vunvault\.com$/.test(email)) return true;
+
+    return false;
+  }
+
+  var profile = readProfile();
+  var grant   = readRoleGrant(profile);
+  var verified = isVerifiedBlogger(profile);
+
+  /* -------------------------------------------------- derived identity */
+  var authorName = profile.fullName || profile.name || profile.displayName ||
+                   (grant && grant.name) ||
+                   (profile.email ? String(profile.email).split("@")[0] : "Verified Blogger");
+
+  var authorRole = profile.userRole || profile.accountType || profile.role ||
+                   profile.career ||
+                   (grant && grant.roleLabel) ||
+                   "Journalist";
+  /* Never show a raw internal string as the role */
+  if (/verified/i.test(authorRole) && authorRole.length > 24) authorRole = "Journalist";
+
+  var authorBio = profile.bio || profile.about ||
+    (grant
+      ? "Verified VUNVAULT contributor — Journalist / Blogger access granted by the editorial team."
+      : null) ||
+    "Verified VUNVAULT contributor. Your byline, avatar and role are attached to every post you submit.";
+
+  var authorAvatar = profile.avatar || profile.avatarUrl || profile.photo || null;
+  var authorInitials = profile.initials || initialsFromName(authorName);
+  var authorEmail = profile.email || lsGet("userEmail") || "";
+
+  /* ==================================================================
+     2. TOASTS
+     ================================================================== */
+  var toastStack = $("#vbgToastStack");
+
+  var TOAST_ICONS = {
+    ok:   '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+    warn: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
+    crit: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>',
+    info: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>'
+  };
+
+  function toast(kind, title, message) {
+    if (!toastStack) return;
+
+    var el = document.createElement("div");
+    el.className = "vbg-toast vbg-toast--" + (kind || "info");
+    el.innerHTML = (TOAST_ICONS[kind] || TOAST_ICONS.info) +
+      "<span><strong>" + escapeHtml(title) + "</strong>" +
+      escapeHtml(message || "") + "</span>";
+
+    toastStack.appendChild(el);
+
+    window.setTimeout(function () {
+      el.classList.add("is-leaving");
+      window.setTimeout(function () {
+        if (el.parentNode) el.parentNode.removeChild(el);
+      }, 300);
+    }, 4600);
+  }
+
+  /* ==================================================================
+     3. GATE THE PAGE
+     ================================================================== */
+  var headerEl = $("#vbgHeader");
+  var deniedEl = $("#vbgDenied");
+  var studioEl = $("#vbgStudio");
+  var footerEl = $("#vbgFooter");
+  var demoBtn  = $("#vbgDemoGrant");
+
+  if (!verified) {
+    if (deniedEl) deniedEl.hidden = false;
+
+    if (demoBtn) {
+      demoBtn.addEventListener("click", function () {
+        lsSet("isVerifiedBlogger", "true");
+        lsSet("userRole", "blogger");
+
+        /* Give the demo account a usable byline if none exists */
+        if (!profile.fullName && !profile.name) {
+          var demoProfile = {
+            version: 2,
+            savedAt: new Date().toISOString(),
+            fullName: "Amina Okoro",
+            career: "Journalist",
+            userRole: "blogger",
+            isVerifiedBlogger: true,
+            email: profile.email || "amina.okoro@press.example",
+            bio: "Investigative technology journalist covering East African cyber policy and digital rights."
+          };
+          lsSet("vunvault_profile", JSON.stringify(demoProfile));
+          lsSet("vunvault_onboarding", JSON.stringify(demoProfile));
+        }
+
+        toast("ok", "Demo verification granted", "Reloading the Content Studio…");
+        window.setTimeout(function () { window.location.reload(); }, 700);
+      });
+    }
+
+    /* Preloader still needs to run on the denied page */
+    bootPreloader();
+    return;
+  }
+
+  /* Verified — reveal the studio shell */
+  if (headerEl) headerEl.hidden = false;
+  if (studioEl) studioEl.hidden = false;
+  if (footerEl) footerEl.hidden = false;
+
+  /* ==================================================================
+     4. HEADER IDENTITY
+     ================================================================== */
+  function paintAvatar(container, initials, avatarSrc) {
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    if (avatarSrc) {
+      var img = document.createElement("img");
+      img.src = avatarSrc;
+      img.alt = "";
+      img.setAttribute("aria-hidden", "true");
+      img.onerror = function () {
+        container.innerHTML = "";
+        container.textContent = initials;
+      };
+      container.appendChild(img);
+    } else {
+      container.textContent = initials;
+    }
+
+    var badge = document.createElement("span");
+    badge.className = "vbg-avatar-badge";
+    badge.setAttribute("aria-hidden", "true");
+    container.appendChild(badge);
+  }
+
+  paintAvatar($("#vbgHeaderAvatar"), authorInitials, authorAvatar);
+  paintAvatar($("#vbgAuthorAvatar"), authorInitials, authorAvatar);
+
+  var headerNameEl = $("#vbgHeaderName");
+  if (headerNameEl) headerNameEl.textContent = authorName;
+
+  var userChip = $("#vbgUserChip");
+  if (userChip && authorEmail) userChip.setAttribute("title", authorEmail);
+
+  var authorNameEl = $("#vbgAuthorName");
+  if (authorNameEl) authorNameEl.textContent = authorName;
+
+  var authorRoleEl = $("#vbgAuthorRole");
+  if (authorRoleEl) authorRoleEl.textContent = authorRole;
+
+  var authorBioEl = $("#vbgAuthorBio");
+  if (authorBioEl) authorBioEl.textContent = authorBio;
+
+  /* ==================================================================
+     5. MOBILE DRAWER
+     ================================================================== */
+  (function initDrawer() {
+    var toggle = $("#vbgMenuToggle");
+    var drawer = $("#vbgDrawer");
+    if (!toggle || !drawer) return;
+
+    function setOpen(open) {
+      drawer.classList.toggle("is-open", open);
+      toggle.classList.toggle("is-active", open);
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      document.body.classList.toggle("nav-open", open);
+    }
+
+    toggle.addEventListener("click", function () {
+      setOpen(!drawer.classList.contains("is-open"));
+    });
+
+    drawer.addEventListener("click", function (event) {
+      if (event.target.closest("a")) setOpen(false);
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") setOpen(false);
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth >= 1080) setOpen(false);
+    });
+  })();
+
+  /* ==================================================================
+     6. FORM FIELD REFERENCES
+     ================================================================== */
+  var titleInput    = $("#post-title");
+  var slugInput     = $("#post-slug");
+  var slugPreview   = $("#vbgSlugPreview");
+  var slugPrefixEl  = $("#vbgSlugPrefix");
+  var slugLockBtn   = $("#vbgSlugLock");
+  var categoryInput = $("#post-category");
+  var excerptInput  = $("#post-excerpt");
+  var bodyInput     = $("#post-body");
+  var editorWrap    = $("#vbgEditor");
+
+  var titleCountEl   = $("#titleCount");
+  var excerptCountEl = $("#excerptCount");
+  var statWordsEl    = $("#statWords");
+  var statCharsEl    = $("#statChars");
+  var statReadEl     = $("#statRead");
+  var statTargetEl   = $("#statTarget");
+
+  var coverUrlInput  = $("#post-cover-url");
+  var coverAltInput  = $("#post-cover-alt");
+  var dropZone       = $("#vbgDropZone");
+  var fileInput      = $("#vbgFileInput");
+  var imgPreview     = $("#vbgImgPreview");
+  var imgEl          = $("#vbgImgEl");
+  var imgMetaEl      = $("#vbgImgMeta");
+  var imgSourceEl    = $("#vbgImgSource");
+  var imgRemoveBtn   = $("#vbgImgRemove");
+
+  var tagField       = $("#vbgTagField");
+  var tagChips       = $("#vbgTagChips");
+  var tagInput       = $("#vbgTagInput");
+  var tagCountEl     = $("#vbgTagCount");
+
+  var saveDot        = $("#vbgSaveDot");
+  var saveLabel      = $("#vbgSaveLabel");
+
+  /* ==================================================================
+     7. STATE
+     ================================================================== */
+  var state = {
+    slugLocked: false,
+    coverImage: "",      /* data URL or remote URL */
+    coverSource: "",     /* "upload" | "url" | "" */
+    coverBytes: 0,
+    tags: []
+  };
+
+  /* ==================================================================
+     8. SLUG
+     ================================================================== */
+  var SLUG_PREFIX_BY_CATEGORY = {
+    "News": "/news/",
+    "Threat Intel": "/advisories/",
+    "Blog": "/blog/",
+    "Industry Updates": "/news/",
+    "Tutorials": "/academy/"
+  };
+
+  function currentSlugPrefix() {
+    return SLUG_PREFIX_BY_CATEGORY[categoryInput.value] || "/blog/";
+  }
+
+  function syncSlugFromTitle() {
+    if (state.slugLocked) return;
+    if (!titleInput || !slugInput) return;
+
+    var generated = slugify(titleInput.value);
+    slugInput.value = generated;
+    updateSlugPreview();
+  }
+
+  function updateSlugPreview() {
+    var prefix = currentSlugPrefix();
+    if (slugPrefixEl) slugPrefixEl.textContent = prefix;
+
+    var slug = slugify(slugInput.value);
+    if (slugPreview) {
+      slugPreview.textContent = "Public URL: " + prefix + (slug || "your-article-slug");
+    }
+  }
+
+  if (titleInput) {
+    titleInput.addEventListener("input", function () {
+      syncSlugFromTitle();
+      updateCounters();
+      markDirty();
+      validateChecklist();
+    });
+  }
+
+  if (slugInput) {
+    slugInput.addEventListener("input", function () {
+      slugInput.value = slugify(slugInput.value);
+      updateSlugPreview();
+      markDirty();
+    });
+  }
+
+  if (slugLockBtn) {
+    slugLockBtn.addEventListener("click", function () {
+      state.slugLocked = !state.slugLocked;
+      slugLockBtn.classList.toggle("is-locked", state.slugLocked);
+      slugLockBtn.setAttribute("aria-pressed", state.slugLocked ? "true" : "false");
+      slugLockBtn.title = state.slugLocked
+        ? "Slug locked — click to resume auto-updates"
+        : "Lock slug to stop auto-updates";
+
+      if (!state.slugLocked) syncSlugFromTitle();
+
+      toast("info",
+            state.slugLocked ? "Slug locked" : "Slug unlocked",
+            state.slugLocked
+              ? "The URL will no longer follow the title."
+              : "The URL will now follow the title again.");
+    });
+  }
+
+  if (categoryInput) {
+    categoryInput.addEventListener("change", function () {
+      updateSlugPreview();
+      markDirty();
+      validateChecklist();
+    });
+  }
+
+  /* ==================================================================
+     9. COUNTERS
+     ================================================================== */
+  function updateCounters() {
+    if (titleInput && titleCountEl) {
+      titleCountEl.textContent = titleInput.value.length + " / 120";
+    }
+
+    if (excerptInput && excerptCountEl) {
+      excerptCountEl.textContent = excerptInput.value.length + " / 240";
+    }
+
+    if (bodyInput) {
+      var text  = bodyInput.value;
+      var words = wordCount(text);
+
+      if (statWordsEl) statWordsEl.textContent = String(words);
+      if (statCharsEl) statCharsEl.textContent = String(text.length);
+      if (statReadEl)  statReadEl.textContent  = readTime(words) + " min";
+
+      if (statTargetEl) {
+        if (words >= MIN_BODY_WORDS) {
+          statTargetEl.innerHTML = 'Target <strong class="is-ok">met</strong>';
+        } else {
+          statTargetEl.innerHTML = 'Target ≥ <strong>' + MIN_BODY_WORDS + '</strong> words';
+        }
+      }
+    }
+  }
+
+  /* ==================================================================
+     10. RICH TEXT TOOLBAR
+     ================================================================== */
+  function focusBody() {
+    if (!bodyInput) return;
+    bodyInput.focus();
+  }
+
+  function surroundSelection(before, after, placeholder) {
+    if (!bodyInput) return;
+
+    var start = bodyInput.selectionStart;
+    var end   = bodyInput.selectionEnd;
+    var value = bodyInput.value;
+    var selected = value.slice(start, end);
+
+    var inner = selected || placeholder || "";
+    var inserted = before + inner + after;
+
+    bodyInput.value = value.slice(0, start) + inserted + value.slice(end);
+
+    bodyInput.selectionStart = start + before.length;
+    bodyInput.selectionEnd   = start + before.length + inner.length;
+
+    focusBody();
+    updateCounters();
+    markDirty();
+    validateChecklist();
+  }
+
+  function prefixLines(prefix, ordered) {
+    if (!bodyInput) return;
+
+    var value = bodyInput.value;
+    var start = bodyInput.selectionStart;
+    var end   = bodyInput.selectionEnd;
+
+    var lineStart = value.lastIndexOf("\n", start - 1) + 1;
+    var lineEnd   = value.indexOf("\n", end);
+    if (lineEnd === -1) lineEnd = value.length;
+
+    var block = value.slice(lineStart, lineEnd);
+
+    var stripped = block.split("\n").map(function (line) {
+      return line.replace(/^(#{1,4}\s+|>\s?|[-*+]\s+|\d+[.)]\s+)/, "");
+    });
+
+    var rebuilt = stripped.map(function (line, index) {
+      if (ordered) return (index + 1) + ". " + line;
+      return prefix + line;
+    }).join("\n");
+
+    bodyInput.value = value.slice(0, lineStart) + rebuilt + value.slice(lineEnd);
+
+    bodyInput.selectionStart = lineStart;
+    bodyInput.selectionEnd   = lineStart + rebuilt.length;
+
+    focusBody();
+    updateCounters();
+    markDirty();
+    validateChecklist();
+  }
+
+  function insertDivider() {
+    if (!bodyInput) return;
+
+    var value = bodyInput.value;
+    var start = bodyInput.selectionStart;
+
+    var prefix = value.slice(0, start);
+    var suffix = value.slice(start);
+
+    var lead = (prefix && !/\n\n$/.test(prefix)) ? (/\n$/.test(prefix) ? "\n" : "\n\n") : "";
+    var tail = (suffix && !/^\n\n/.test(suffix)) ? (suffix.charAt(0) === "\n" ? "\n" : "\n\n") : "";
+
+    var inserted = lead + "---" + tail;
+
+    bodyInput.value = prefix + inserted + suffix;
+    bodyInput.selectionStart = bodyInput.selectionEnd = start + inserted.length;
+
+    focusBody();
+    updateCounters();
+    markDirty();
+    validateChecklist();
+  }
+
+  function clearFormatting() {
+    if (!bodyInput) return;
+
+    var start = bodyInput.selectionStart;
+    var end   = bodyInput.selectionEnd;
+    if (start === end) {
+      toast("info", "Nothing selected", "Highlight some text first, then clear its formatting.");
+      return;
+    }
+
+    var value = bodyInput.value;
+    var selected = value.slice(start, end);
+
+    var cleaned = selected
+      .replace(/\*\*([^*]+)\*\*/g, "$1")
+      .replace(/(^|[^*])\*([^*]+)\*/g, "$1$2")
+      .replace(/`([^`]+)`/g, "$1")
+      .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, "$1")
+      .replace(/^(#{1,4}\s+|>\s?|[-*+]\s+|\d+[.)]\s+)/gm, "");
+
+    bodyInput.value = value.slice(0, start) + cleaned + value.slice(end);
+    bodyInput.selectionStart = start;
+    bodyInput.selectionEnd   = start + cleaned.length;
+
+    focusBody();
+    updateCounters();
+    markDirty();
+  }
+
+  function applyTool(tool) {
+    switch (tool) {
+      case "bold":   surroundSelection("**", "**", "bold text"); break;
+      case "italic": surroundSelection("*", "*", "italic text"); break;
+      case "h2":     prefixLines("## ", false); break;
+      case "h3":     prefixLines("### ", false); break;
+      case "quote":  prefixLines("> ", false); break;
+      case "code":   surroundSelection("```\n", "\n```", "code block"); break;
+      case "ul":     prefixLines("- ", false); break;
+      case "ol":     prefixLines("", true); break;
+      case "hr":     insertDivider(); break;
+      case "link":   insertLink(); break;
+      case "clear":  clearFormatting(); break;
+      default: break;
+    }
+  }
+
+  function insertLink() {
+    if (!bodyInput) return;
+
+    var start = bodyInput.selectionStart;
+    var end   = bodyInput.selectionEnd;
+    var selected = bodyInput.value.slice(start, end);
+
+    var url = window.prompt("Link URL:", "https://");
+    if (url === null) return;
+
+    url = String(url).trim();
+    if (!url) return;
+
+    if (!/^https?:\/\//i.test(url) && !/^mailto:/i.test(url)) {
+      url = "https://" + url;
+    }
+
+    surroundSelection("[", "](" + url + ")", selected || "link text");
+  }
+
+  $$("[data-tool]", document).forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      applyTool(btn.getAttribute("data-tool"));
+    });
+  });
+
+  /* Keyboard shortcuts inside the editor */
+  if (bodyInput) {
+    bodyInput.addEventListener("keydown", function (event) {
+      var meta = event.ctrlKey || event.metaKey;
+      if (!meta) return;
+
+      var key = event.key.toLowerCase();
+
+      if (key === "b") { event.preventDefault(); applyTool("bold"); }
+      else if (key === "i") { event.preventDefault(); applyTool("italic"); }
+      else if (key === "k") { event.preventDefault(); applyTool("link"); }
+    });
+
+    bodyInput.addEventListener("input", function () {
+      updateCounters();
+      markDirty();
+      validateChecklist();
+    });
+  }
+
+  if (excerptInput) {
+    excerptInput.addEventListener("input", function () {
+      updateCounters();
+      markDirty();
+      validateChecklist();
+    });
+  }
+
+  /* ==================================================================
+     11. TAGS
+     ================================================================== */
+  function normaliseTag(raw) {
+    var t = String(raw || "").trim().toLowerCase();
+    t = t.replace(/^#+/, "");
+    t = t.replace(/[^a-z0-9\s-]/g, "");
+    t = t.replace(/\s+/g, "");
+    t = t.replace(/-+/g, "");
+    if (!t) return "";
+    return "#" + t;
+  }
+
+  function renderTags() {
+    if (!tagChips) return;
+
+    tagChips.innerHTML = "";
+
+    state.tags.forEach(function (tag) {
+      var chip = document.createElement("span");
+      chip.className = "vbg-chip";
+
+      var label = document.createElement("span");
+      label.textContent = tag;
+      chip.appendChild(label);
+
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "vbg-chip-x";
+      btn.setAttribute("aria-label", "Remove tag " + tag);
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>';
+      btn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        removeTag(tag);
+      });
+
+      chip.appendChild(btn);
+      tagChips.appendChild(chip);
+    });
+
+    if (tagCountEl) {
+      tagCountEl.textContent = state.tags.length + (state.tags.length === 1 ? " tag" : " tags");
+    }
+
+    validateChecklist();
+  }
+
+  function addTag(raw) {
+    var tag = normaliseTag(raw);
+    if (!tag) return;
+
+    if (state.tags.length >= MAX_TAGS) {
+      toast("warn", "Tag limit reached", "A maximum of " + MAX_TAGS + " tags can be attached.");
+      return;
+    }
+
+    if (state.tags.indexOf(tag) !== -1) {
+      toast("info", "Duplicate tag", tag + " is already attached to this post.");
+      return;
+    }
+
+    state.tags.push(tag);
+    renderTags();
+    markDirty();
+  }
+
+  function removeTag(tag) {
+    var index = state.tags.indexOf(tag);
+    if (index === -1) return;
+    state.tags.splice(index, 1);
+    renderTags();
+    markDirty();
+  }
+
+  if (tagInput) {
+    tagInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" || event.key === ",") {
+        event.preventDefault();
+        if (tagInput.value.trim()) {
+          addTag(tagInput.value);
+          tagInput.value = "";
+        }
+        return;
+      }
+
+      if (event.key === "Backspace" && !tagInput.value && state.tags.length) {
+        removeTag(state.tags[state.tags.length - 1]);
+      }
+    });
+
+    tagInput.addEventListener("blur", function () {
+      if (tagInput.value.trim()) {
+        addTag(tagInput.value);
+        tagInput.value = "";
+      }
+    });
+  }
+
+  if (tagField) {
+    tagField.addEventListener("click", function () {
+      if (tagInput) tagInput.focus();
+    });
+  }
+
+  $$("[data-suggest]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      addTag(btn.getAttribute("data-suggest"));
+      if (tagInput) tagInput.focus();
+    });
+  });
+
+  /* ==================================================================
+     12. FEATURED IMAGE
+     ================================================================== */
+  function showImagePreview(src, meta, source) {
+    if (!imgPreview || !imgEl) return;
+
+    imgEl.src = src;
+    imgEl.alt = coverAltInput ? coverAltInput.value : "";
+
+    imgPreview.hidden = false;
+
+    if (imgMetaEl) {
+      imgMetaEl.textContent = meta || "image";
+    }
+
+    if (imgSourceEl) {
+      imgSourceEl.textContent = source === "upload" ? "local upload" : (source === "url" ? "remote url" : "");
+    }
+  }
+
+  function clearImage(silent) {
+    state.coverImage = "";
+    state.coverSource = "";
+    state.coverBytes = 0;
+
+    if (imgPreview) imgPreview.hidden = true;
+    if (imgEl) imgEl.removeAttribute("src");
+    if (coverUrlInput) coverUrlInput.value = "";
+    if (fileInput) fileInput.value = "";
+
+    validateChecklist();
+
+    if (!silent) {
+      markDirty();
+      toast("info", "Featured image removed", "The post no longer has a cover image.");
+    }
+  }
+
+  function bytesToSize(bytes) {
+    if (!bytes) return "";
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+  }
+
+  /* Resize large images so they survive the localStorage quota. */
+  function processImageFile(file, done) {
+    var reader = new FileReader();
+
+    reader.onerror = function () {
+      done(new Error("read-error"));
+    };
+
+    reader.onload = function (event) {
+      var dataUrl = event.target.result;
+
+      /* Small files can pass through untouched. */
+      if (file.size <= 400 * 1024) {
+        done(null, dataUrl, file.size);
+        return;
+      }
+
+      var img = new Image();
+
+      img.onerror = function () {
+        /* Fall back to the original if decoding fails. */
+        done(null, dataUrl, file.size);
+      };
+
+      img.onload = function () {
+        var MAX_W = 1400;
+        var scale = Math.min(1, MAX_W / img.naturalWidth);
+
+        var w = Math.max(1, Math.round(img.naturalWidth * scale));
+        var h = Math.max(1, Math.round(img.naturalHeight * scale));
+
+        var canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+
+        var ctx = canvas.getContext("2d");
+        if (!ctx) {
+          done(null, dataUrl, file.size);
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0, w, h);
+
+        var isPng = file.type === "image/png";
+        var outType = isPng ? "image/png" : "image/jpeg";
+
+        var out;
+        try {
+          out = canvas.toDataURL(outType, 0.82);
+        } catch (err) {
+          done(null, dataUrl, file.size);
+          return;
+        }
+
+        var approxBytes = Math.round((out.length - out.indexOf(",") - 1) * 0.75);
+        done(null, out, approxBytes);
+      };
+
+      img.src = dataUrl;
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  function handleFile(file) {
+    if (!file) return;
+
+    if (!/^image\//.test(file.type)) {
+      toast("crit", "Unsupported file", "Please choose a JPG, PNG, WebP or GIF image.");
+      return;
+    }
+
+    if (file.size > MAX_UPLOAD_BYTES) {
+      toast("crit", "File too large",
+            "Images must be 5 MB or smaller. This one is " + bytesToSize(file.size) + ".");
+      return;
+    }
+
+    processImageFile(file, function (err, dataUrl, bytes) {
+      if (err || !dataUrl) {
+        toast("crit", "Upload failed", "The image could not be read. Try a different file.");
+        return;
+      }
+
+      /* Rough guard against blowing the 5 MB localStorage budget */
+      if (bytes > 2.6 * 1024 * 1024) {
+        toast("warn", "Large image",
+              "The processed image is " + bytesToSize(bytes) +
+              ". Very large covers may not persist across sessions.");
+      }
+
+      state.coverImage = dataUrl;
+      state.coverSource = "upload";
+      state.coverBytes = bytes || 0;
+
+      if (coverUrlInput) coverUrlInput.value = "";
+
+      showImagePreview(dataUrl, bytesToSize(bytes || 0), "upload");
+
+      markDirty();
+      validateChecklist();
+
+      toast("ok", "Image attached", file.name + " is now the featured image.");
+    });
+  }
+
+  if (dropZone && fileInput) {
+    dropZone.addEventListener("click", function (event) {
+      /* The <input type="file"> lives inside the drop zone. Its synthetic
+         click bubbles back up to this handler, so without this guard the
+         drop zone would recurse into itself until the stack overflows. */
+      if (event.target === fileInput) return;
+      fileInput.click();
+    });
+
+    dropZone.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        fileInput.click();
+      }
+    });
+
+    fileInput.addEventListener("change", function () {
+      if (fileInput.files && fileInput.files[0]) {
+        handleFile(fileInput.files[0]);
+      }
+    });
+
+    ["dragenter", "dragover"].forEach(function (type) {
+      dropZone.addEventListener(type, function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        dropZone.classList.add("is-dragover");
+      });
+    });
+
+    ["dragleave", "dragend"].forEach(function (type) {
+      dropZone.addEventListener(type, function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        dropZone.classList.remove("is-dragover");
+      });
+    });
+
+    dropZone.addEventListener("drop", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      dropZone.classList.remove("is-dragover");
+
+      var dt = event.dataTransfer;
+      if (dt && dt.files && dt.files.length) {
+        handleFile(dt.files[0]);
+      }
+    });
+  }
+
+  /* Prevent the browser from opening dropped files outside the zone */
+  ["dragover", "drop"].forEach(function (type) {
+    window.addEventListener(type, function (event) {
+      if (dropZone && dropZone.contains(event.target)) return;
+      event.preventDefault();
+    });
+  });
+
+  if (coverUrlInput) {
+    coverUrlInput.addEventListener("change", applyCoverUrl);
+    coverUrlInput.addEventListener("input", debounce(applyCoverUrl, 600));
+  }
+
+  function applyCoverUrl() {
+    var url = coverUrlInput ? coverUrlInput.value.trim() : "";
+
+    if (!url) {
+      if (state.coverSource === "url") clearImage(true);
+      return;
+    }
+
+    if (!/^https?:\/\//i.test(url) && !/^data:image\//i.test(url)) {
+      return;
+    }
+
+    state.coverImage = url;
+    state.coverSource = "url";
+    state.coverBytes = 0;
+
+    if (fileInput) fileInput.value = "";
+
+    showImagePreview(url, "remote image", "url");
+    markDirty();
+    validateChecklist();
+  }
+
+  if (imgRemoveBtn) {
+    imgRemoveBtn.addEventListener("click", function () { clearImage(false); });
+  }
+
+  if (coverAltInput) {
+    coverAltInput.addEventListener("input", function () {
+      if (imgEl) imgEl.alt = coverAltInput.value;
+      markDirty();
+    });
+  }
+
+  /* ==================================================================
+     13. READINESS CHECKLIST
+     ================================================================== */
+  function currentFormState() {
+    return {
+      title:    titleInput ? titleInput.value.trim() : "",
+      category: categoryInput ? categoryInput.value : "",
+      excerpt:  excerptInput ? excerptInput.value.trim() : "",
+      body:     bodyInput ? bodyInput.value.trim() : "",
+      words:    wordCount(bodyInput ? bodyInput.value : ""),
+      image:    !!state.coverImage,
+      tags:     state.tags.length
+    };
+  }
+
+  /* Cached once — this list never changes at runtime. */
+  var checklistItems = $$(".vbg-check-item", $("#vbgChecklist"));
+
+  function validateChecklist() {
+    var data = currentFormState();
+
+    var checks = {
+      title:    data.title.length >= 4,
+      category: !!data.category,
+      body:     data.words >= MIN_BODY_WORDS,
+      excerpt:  data.excerpt.length >= 30,
+      image:    data.image,
+      tags:     data.tags >= 2
+    };
+
+    checklistItems.forEach(function (item) {
+      var key = item.getAttribute("data-check");
+      item.classList.toggle("is-done", !!checks[key]);
+    });
+
+    return checks;
+  }
+
+  /* ==================================================================
+     14. DIRTY / AUTOSAVE
+     ================================================================== */
+  var autosaveTimer = null;
+
+  function markDirty() {
+    if (saveDot) {
+      saveDot.classList.remove("is-saved");
+      saveDot.classList.add("is-dirty");
+    }
+    if (saveLabel) saveLabel.textContent = "Unsaved changes";
+
+    window.clearTimeout(autosaveTimer);
+    autosaveTimer = window.setTimeout(function () {
+      persistWorkingCopy(true);
+    }, 1200);
+  }
+
+  function persistWorkingCopy(silent) {
+    var payload = {
+      version: 1,
+      savedAt: new Date().toISOString(),
+      title: titleInput ? titleInput.value : "",
+      slug: slugInput ? slugInput.value : "",
+      category: categoryInput ? categoryInput.value : "",
+      excerpt: excerptInput ? excerptInput.value : "",
+      content: bodyInput ? bodyInput.value : "",
+      coverImage: state.coverImage,
+      coverSource: state.coverSource,
+      coverAlt: coverAltInput ? coverAltInput.value : "",
+      tags: state.tags.slice(),
+      slugLocked: state.slugLocked
+    };
+
+    var ok = lsSet(WORKING_KEY, JSON.stringify(payload));
+
+    if (saveDot) {
+      saveDot.classList.remove("is-dirty");
+      saveDot.classList.add(ok ? "is-saved" : "is-dirty");
+    }
+
+    if (saveLabel) {
+      saveLabel.textContent = ok
+        ? "Working copy saved locally"
+        : "Local storage unavailable";
+    }
+
+    if (!silent && ok) {
+      toast("ok", "Draft saved", "Your working copy is stored on this device.");
+    }
+
+    return ok;
+  }
+
+  function restoreWorkingCopy() {
+    var raw = lsGet(WORKING_KEY);
+    if (!raw) return false;
+
+    var data = safeParse(raw);
+    if (!data || typeof data !== "object") return false;
+
+    if (titleInput && data.title) titleInput.value = data.title;
+    if (slugInput && data.slug) slugInput.value = data.slug;
+    if (categoryInput && data.category) categoryInput.value = data.category;
+    if (excerptInput && data.excerpt) excerptInput.value = data.excerpt;
+    if (bodyInput && data.content) bodyInput.value = data.content;
+    if (coverAltInput && data.coverAlt) coverAltInput.value = data.coverAlt;
+
+    if (data.slugLocked && slugLockBtn) {
+      state.slugLocked = true;
+      slugLockBtn.classList.add("is-locked");
+      slugLockBtn.setAttribute("aria-pressed", "true");
+    }
+
+    if (Array.isArray(data.tags)) {
+      state.tags = data.tags.filter(function (t) { return typeof t === "string"; }).slice(0, MAX_TAGS);
+    }
+
+    if (data.coverImage) {
+      state.coverImage = data.coverImage;
+      state.coverSource = data.coverSource || "upload";
+
+      if (data.coverSource === "url" && coverUrlInput) {
+        coverUrlInput.value = data.coverImage;
+      }
+
+      showImagePreview(
+        data.coverImage,
+        data.coverSource === "url" ? "remote image" : "restored",
+        data.coverSource
+      );
+    }
+
+    renderTags();
+    updateCounters();
+    updateSlugPreview();
+    validateChecklist();
+
+    if (saveDot) saveDot.classList.add("is-saved");
+    if (saveLabel) saveLabel.textContent = "Restored saved working copy";
+
+    return true;
+  }
+
+  /* ==================================================================
+     15. MARKDOWN → HTML RENDERER
+     ================================================================== */
+  function inlineFormat(text) {
+    return text
+      .replace(/`([^`]+)`/g, "<code>$1</code>")
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/(^|[^*])\*([^*]+)\*/g, "$1<em>$2</em>")
+      .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,
+               '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  }
+
+  function renderMarkdown(source) {
+    var escaped = escapeHtml(source || "");
+
+    /* Extract fenced code blocks first so their contents stay untouched. */
+    var codeBlocks = [];
+    escaped = escaped.replace(/```([\s\S]*?)```/g, function (match, code) {
+      var cleaned = code.replace(/^\n+/, "").replace(/\n+$/, "");
+      codeBlocks.push('<pre><code>' + cleaned + "</code></pre>");
+      return "\u0000CODEBLOCK" + (codeBlocks.length - 1) + "\u0000";
+    });
+
+    var lines = escaped.split(/\r?\n/);
+    var out = [];
+    var paragraph = [];
+    var listType = null;
+
+    function flushParagraph() {
+      if (paragraph.length) {
+        out.push("<p>" + inlineFormat(paragraph.join(" ")) + "</p>");
+        paragraph = [];
+      }
+    }
+
+    function closeList() {
+      if (listType) {
+        out.push("</" + listType + ">");
+        listType = null;
+      }
+    }
+
+    lines.forEach(function (rawLine) {
+      var line = rawLine.trim();
+
+      /* Blank line */
+      if (!line) {
+        flushParagraph();
+        closeList();
+        return;
+      }
+
+      /* Fenced code placeholder */
+      var blockMatch = line.match(/^\u0000CODEBLOCK(\d+)\u0000$/);
+      if (blockMatch) {
+        flushParagraph();
+        closeList();
+        out.push(codeBlocks[Number(blockMatch[1])] || "");
+        return;
+      }
+
+      /* Headings — offset by one level so the body never emits a second H1
+         (the article title already owns the H1 slot). */
+      var heading = line.match(/^(#{1,4})\s+(.*)$/);
+      if (heading) {
+        flushParagraph();
+        closeList();
+        var level = Math.min(heading[1].length + 1, 6);
+        out.push("<h" + level + ">" + inlineFormat(heading[2]) + "</h" + level + ">");
+        return;
+      }
+
+      /* Horizontal rule */
+      if (/^(\*{3,}|-{3,}|_{3,})$/.test(line)) {
+        flushParagraph();
+        closeList();
+        out.push("<hr>");
+        return;
+      }
+
+      /* Blockquote */
+      if (/^>\s?/.test(line)) {
+        flushParagraph();
+        closeList();
+        out.push("<blockquote>" + inlineFormat(line.replace(/^>\s?/, "")) + "</blockquote>");
+        return;
+      }
+
+      /* Unordered list */
+      if (/^[-*+]\s+/.test(line)) {
+        flushParagraph();
+        if (listType !== "ul") {
+          closeList();
+          out.push("<ul>");
+          listType = "ul";
+        }
+        out.push("<li>" + inlineFormat(line.replace(/^[-*+]\s+/, "")) + "</li>");
+        return;
+      }
+
+      /* Ordered list */
+      if (/^\d+[.)]\s+/.test(line)) {
+        flushParagraph();
+        if (listType !== "ol") {
+          closeList();
+          out.push("<ol>");
+          listType = "ol";
+        }
+        out.push("<li>" + inlineFormat(line.replace(/^\d+[.)]\s+/, "")) + "</li>");
+        return;
+      }
+
+      /* Plain paragraph text */
+      closeList();
+      paragraph.push(line);
+    });
+
+    flushParagraph();
+    closeList();
+
+    if (!out.length) {
+      out.push('<p style="color:#9CA3AF;font-style:italic;">Nothing written yet — the article body will appear here.</p>');
+    }
+
+    return out.join("\n");
+  }
+
+  /* ==================================================================
+     16. PREVIEW MODAL
+     ================================================================== */
+  var modal        = $("#vbgPreviewModal");
+  var modalBody    = $("#vbgModalBody");
+  var modalTitle   = $("#vbgModalTitle");
+  var modalSlug    = $("#vbgModalSlug");
+  var modalPublish = $("#vbgModalPublish");
+  var lastFocused  = null;
+
+  function buildPreviewHtml() {
+    var data = currentFormState();
+
+    var title = data.title || "Untitled article";
+    var slug = currentSlugPrefix() + (slugify(slugInput ? slugInput.value : "") || "your-article-slug");
+
+    var avatarHtml = authorAvatar
+      ? '<span class="vbg-avatar"><img src="' + escapeHtml(authorAvatar) + '" alt=""></span>'
+      : '<span class="vbg-avatar">' + escapeHtml(authorInitials) + "</span>";
+
+    var html = "";
+
+    if (state.coverImage) {
+      html += '<img class="vbg-article-cover" src="' + escapeHtml(state.coverImage) + '" alt="' +
+              escapeHtml(coverAltInput ? coverAltInput.value : "") + '">';
+    }
+
+    html += '<div class="vbg-article-inner">';
+
+    html += '<div class="vbg-article-meta">';
+    html += '<span class="vbg-article-cat">' + escapeHtml(data.category || "Uncategorised") + "</span>";
+    html += '<span class="vbg-article-author">' + avatarHtml +
+            "<span>" + escapeHtml(authorName) + " · " + escapeHtml(authorRole) + "</span></span>";
+    html += '<span class="vbg-article-author"><span>' + escapeHtml(formatStamp(new Date().toISOString())) + "</span></span>";
+    html += "</div>";
+
+    html += "<h1>" + escapeHtml(title) + "</h1>";
+
+    if (data.excerpt) {
+      html += '<p class="vbg-article-excerpt">' + escapeHtml(data.excerpt) + "</p>";
+    }
+
+    html += '<article class="vbg-article">' + renderMarkdown(data.body) + "</article>";
+
+    if (state.tags.length) {
+      html += '<div class="vbg-article-tags">';
+      state.tags.forEach(function (tag) {
+        html += "<span>" + escapeHtml(tag) + "</span>";
+      });
+      html += "</div>";
+    }
+
+    html += "</div>";
+
+    return { html: html, title: title, slug: slug };
+  }
+
+  function openPreview() {
+    if (!modal) return;
+
+    var data = currentFormState();
+
+    if (!data.title && !data.body) {
+      toast("warn", "Nothing to preview", "Write a title or some body content first.");
+      return;
+    }
+
+    var built = buildPreviewHtml();
+
+    if (modalBody) modalBody.innerHTML = built.html;
+    if (modalTitle) modalTitle.textContent = built.title;
+    if (modalSlug) modalSlug.textContent = built.slug;
+
+    lastFocused = document.activeElement;
+
+    modal.hidden = false;
+    modal.setAttribute("aria-hidden", "false");
+
+    void modal.offsetWidth;
+    modal.classList.add("is-open");
+    document.body.classList.add("nav-open");
+
+    window.setTimeout(function () {
+      var closeBtn = $(".vbg-modal-close", modal);
+      if (closeBtn) closeBtn.focus();
+    }, 140);
+  }
+
+  function closePreview() {
+    if (!modal || !modal.classList.contains("is-open")) return;
+
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+
+    /* Only unlock body scroll if the mobile drawer is not still open —
+       both surfaces share the .nav-open class. */
+    var drawerEl = document.getElementById("vbgDrawer");
+    if (!(drawerEl && drawerEl.classList.contains("is-open"))) {
+      document.body.classList.remove("nav-open");
+    }
+
+    window.setTimeout(function () {
+      modal.hidden = true;
+      if (lastFocused && typeof lastFocused.focus === "function") {
+        lastFocused.focus();
+      }
+    }, 240);
+  }
+
+  /* Wire the "Preview Article" toolbar button — it was previously inert. */
+  var previewBtn = $("#vbgPreviewBtn");
+  if (previewBtn) previewBtn.addEventListener("click", openPreview);
+
+  $$("[data-vbg-close]").forEach(function (el) {
+    el.addEventListener("click", closePreview);
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key !== "Escape") return;
+    if (modal && modal.classList.contains("is-open")) {
+      event.preventDefault();
+      closePreview();
+    }
+  });
+
+  /* Focus trap inside the modal */
+  if (modal) {
+    modal.addEventListener("keydown", function (event) {
+      if (event.key !== "Tab") return;
+
+      var focusables = $$(
+        'button:not([disabled]), input, select, textarea, a[href]',
+        modal
+      ).filter(function (el) { return el.offsetParent !== null; });
+
+      if (!focusables.length) return;
+
+      var first = focusables[0];
+      var last  = focusables[focusables.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+  }
+
+  /* ==================================================================
+     17. POST ASSEMBLY & STORAGE
+     ================================================================== */
+  function buildPostObject() {
+    var data = currentFormState();
+
+    var slug = slugify(slugInput ? slugInput.value : "") || slugify(data.title);
+
+    return {
+      id: "post_" + Date.now(),
+      title: data.title,
+      slug: slug,
+      category: data.category,
+      excerpt: data.excerpt,
+      content: data.body,
+      contentHtml: renderMarkdown(data.body),
+      coverImage: state.coverImage || "",
+      coverAlt: coverAltInput ? coverAltInput.value.trim() : "",
+      tags: state.tags.slice(),
+      author: {
+        name: authorName,
+        role: authorRole,
+        avatar: authorAvatar || "",
+        initials: authorInitials,
+        email: authorEmail,
+        verified: true
+      },
+      status: "pending_moderation",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      wordCount: data.words,
+      readTime: readTime(data.words),
+      slugPrefix: currentSlugPrefix(),
+      source: "blogger-studio"
+    };
+  }
+
+  function persistPost(post) {
+    var posts = lsGetArray(POSTS_KEY);
+    posts.push(post);
+
+    try {
+      window.localStorage.setItem(POSTS_KEY, JSON.stringify(posts));
+      return true;
+    } catch (err) {
+      /* Quota exceeded — retry without the heaviest payload */
+      try {
+        var trimmed = posts.map(function (p, index) {
+          if (index === posts.length - 1) {
+            var clone = {};
+            for (var k in p) {
+              if (Object.prototype.hasOwnProperty.call(p, k)) clone[k] = p[k];
+            }
+            clone.coverImage = "";
+            return clone;
+          }
+          return p;
+        });
+        window.localStorage.setItem(POSTS_KEY, JSON.stringify(trimmed));
+        toast("warn", "Cover image dropped",
+              "Local storage was full, so the post was saved without the featured image.");
+        return true;
+      } catch (err2) {
+        return false;
+      }
+    }
+  }
+
+  function resetForm() {
+    if (titleInput) titleInput.value = "";
+    if (slugInput) slugInput.value = "";
+    if (categoryInput) categoryInput.value = "";
+    if (excerptInput) excerptInput.value = "";
+    if (bodyInput) bodyInput.value = "";
+    if (coverAltInput) coverAltInput.value = "";
+
+    state.slugLocked = false;
+    if (slugLockBtn) {
+      slugLockBtn.classList.remove("is-locked");
+      slugLockBtn.setAttribute("aria-pressed", "false");
+    }
+
+    state.tags = [];
+    renderTags();
+
+    state.coverImage = "";
+    state.coverSource = "";
+    state.coverBytes = 0;
+    if (imgPreview) imgPreview.hidden = true;
+    if (imgEl) imgEl.removeAttribute("src");
+    if (coverUrlInput) coverUrlInput.value = "";
+    if (fileInput) fileInput.value = "";
+
+    try { window.localStorage.removeItem(WORKING_KEY); } catch (err) { /* noop */ }
+
+    updateCounters();
+    updateSlugPreview();
+    validateChecklist();
+
+    if (saveDot) {
+      saveDot.classList.remove("is-dirty", "is-saved");
+    }
+    if (saveLabel) saveLabel.textContent = "New blank draft";
+  }
+
+  /* ==================================================================
+     18. VALIDATION
+     ================================================================== */
+  function clearInvalid() {
+    [titleInput, categoryInput, bodyInput, excerptInput, coverUrlInput].forEach(function (el) {
+      if (el && el.classList) el.classList.remove("is-invalid");
+    });
+    if (editorWrap) editorWrap.classList.remove("is-invalid");
+  }
+
+  function validateForPublish() {
+    clearInvalid();
+
+    var problems = [];
+    var firstInvalid = null;
+
+    if (!titleInput || titleInput.value.trim().length < 4) {
+      if (titleInput) { titleInput.classList.add("is-invalid"); firstInvalid = firstInvalid || titleInput; }
+      problems.push("a title of at least 4 characters");
+    }
+
+    if (!categoryInput || !categoryInput.value) {
+      if (categoryInput) { categoryInput.classList.add("is-invalid"); firstInvalid = firstInvalid || categoryInput; }
+      problems.push("a category");
+    }
+
+    if (!bodyInput || wordCount(bodyInput.value) < 20) {
+      if (editorWrap) editorWrap.classList.add("is-invalid");
+      firstInvalid = firstInvalid || bodyInput;
+      problems.push("article body content");
+    }
+
+    if (problems.length) {
+      toast("crit", "Cannot publish yet",
+            "Add " + problems.join(", ") + " before submitting.");
+
+      if (firstInvalid && typeof firstInvalid.focus === "function") {
+        firstInvalid.focus({ preventScroll: false });
+        if (firstInvalid.scrollIntoView) {
+          firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+
+      return false;
+    }
+
+    return true;
+  }
+
+  /* ==================================================================
+     19. PUBLISH FLOW
+     ================================================================== */
+  var publishBtn = $("#vbgPublishBtn");
+  var publishModalBtn = modalPublish;
+
+  function publishPost() {
+    if (!validateForPublish()) return;
+
+    var data = currentFormState();
+
+    /* Soft warning for a short body — never blocking */
+    if (data.words < MIN_BODY_WORDS) {
+      toast("warn", "Short article",
+            "The body is " + data.words + " words. Editors usually expect at least " + MIN_BODY_WORDS + ".");
+    }
+
+    if (publishBtn) publishBtn.disabled = true;
+    if (publishModalBtn) publishModalBtn.disabled = true;
+
+    window.setTimeout(function () {
+      var post = buildPostObject();
+      var ok = persistPost(post);
+
+      if (publishBtn) publishBtn.disabled = false;
+      if (publishModalBtn) publishModalBtn.disabled = false;
+
+      if (!ok) {
+        toast("crit", "Storage unavailable",
+              "Your post could not be saved locally. Check your browser storage settings and try again.");
+        return;
+      }
+
+      closePreview();
+      resetForm();
+      renderSubmissions();
+
+      toast("ok", "Post submitted successfully!",
+            "Sent to the admin moderation queue as " + post.id + ".");
+
+      var subSection = $("#submissions");
+      if (subSection && subSection.scrollIntoView) {
+        window.setTimeout(function () {
+          subSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 320);
+      }
+    }, 420);
+  }
+
+  if (publishBtn) publishBtn.addEventListener("click", publishPost);
+  if (publishModalBtn) publishModalBtn.addEventListener("click", publishPost);
+
+  /* ==================================================================
+     20. SAVE DRAFT
+     ================================================================== */
+  var saveDraftBtn = $("#vbgSaveDraft");
+
+  if (saveDraftBtn) {
+    saveDraftBtn.addEventListener("click", function () {
+      var data = currentFormState();
+
+      if (!data.title && !data.body) {
+        toast("warn", "Nothing to save", "Write a title or some body content first.");
+        return;
+      }
+
+      saveDraftBtn.disabled = true;
+
+      window.setTimeout(function () {
+        var drafts = lsGetArray(DRAFTS_KEY);
+
+        var draftId = "draft_" + Date.now();
+        var slug = slugify(slugInput ? slugInput.value : "") || slugify(data.title);
+
+        var draft = {
+          id: draftId,
+          title: data.title || "Untitled draft",
+          slug: slug,
+          category: data.category,
+          excerpt: data.excerpt,
+          content: data.body,
+          coverImage: state.coverImage || "",
+          coverAlt: coverAltInput ? coverAltInput.value.trim() : "",
+          tags: state.tags.slice(),
+          author: {
+            name: authorName,
+            role: authorRole,
+            avatar: authorAvatar || "",
+            initials: authorInitials,
+            email: authorEmail,
+            verified: true
+          },
+          status: "draft",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          wordCount: data.words,
+          readTime: readTime(data.words),
+          slugPrefix: currentSlugPrefix(),
+          source: "blogger-studio"
+        };
+
+        drafts.push(draft);
+
+        var ok;
+        try {
+          window.localStorage.setItem(DRAFTS_KEY, JSON.stringify(drafts));
+          ok = true;
+        } catch (err) {
+          ok = false;
+        }
+
+        saveDraftBtn.disabled = false;
+
+        if (!ok) {
+          toast("crit", "Could not save draft",
+                "Local storage is full or unavailable. Try removing the featured image.");
+          return;
+        }
+
+        persistWorkingCopy(true);
+        renderSubmissions();
+
+        toast("ok", "Draft saved",
+              "\u201C" + draft.title + "\u201D is stored on this device. It has not been submitted for review.");
+      }, 320);
+    });
+  }
+
+  /* ==================================================================
+     21. SUBMISSIONS LIST
+     ================================================================== */
+  var subListEl = $("#vbgSubList");
+  var subCountEl = $("#vbgSubCount");
+
+  function postsByThisAuthor(list) {
+    return list.filter(function (item) {
+      if (!item || typeof item !== "object") return false;
+
+      var itemEmail = item.author && item.author.email ? String(item.author.email).toLowerCase() : "";
+      var itemName  = item.author && item.author.name ? String(item.author.name).toLowerCase() : "";
+
+      if (authorEmail && itemEmail && itemEmail === authorEmail.toLowerCase()) return true;
+      if (authorName && itemName && itemName === authorName.toLowerCase()) return true;
+
+      /* Locally created posts with no identity still belong to this device */
+      return item.source === "blogger-studio";
+    });
+  }
+
+  var STATUS_LABELS = {
+  pending_moderation: "Pending Moderation",
+  draft:              "Draft",
+  approved:           "Approved",
+  rejected:           "Rejected",
+  published:          "Published",
+  changes_requested:  "Changes Requested"     // ← add
+};
+  function renderSubmissions() {
+    if (!subListEl) return;
+
+    var posts = postsByThisAuthor(lsGetArray(POSTS_KEY));
+    var drafts = postsByThisAuthor(lsGetArray(DRAFTS_KEY));
+
+    var combined = posts.concat(drafts).sort(function (a, b) {
+      var aTime = new Date(a.updatedAt || a.createdAt || 0).getTime();
+      var bTime = new Date(b.updatedAt || b.createdAt || 0).getTime();
+      return bTime - aTime;
+    });
+
+    if (subCountEl) {
+      subCountEl.textContent = combined.length + (combined.length === 1 ? " item" : " items");
+    }
+
+    if (!combined.length) {
+      subListEl.innerHTML =
+        '<div class="vbg-empty">' +
+          '<span class="vbg-empty-icon" aria-hidden="true">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
+              '<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V9"/>' +
+              '<path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>' +
+            "</svg>" +
+          "</span>" +
+          '<span class="vbg-empty-title">No submissions yet</span>' +
+          '<span class="vbg-empty-text">Drafts and published posts you create will appear here with their moderation status.</span>' +
+        "</div>";
+      return;
+    }
+
+    var html = "";
+
+    combined.forEach(function (item) {
+      var status = item.status || "draft";
+      var statusLabel = STATUS_LABELS[status] || status;
+
+      var thumb = item.coverImage
+        ? '<img src="' + escapeHtml(item.coverImage) + '" alt="">'
+        : '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16"/><path d="M20 19A2 2 0 0 0 22 17V5a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10"/><path d="M4 19a2 2 0 0 0 2 2h12"/></svg>';
+
+      var tags = Array.isArray(item.tags) && item.tags.length
+        ? item.tags.slice(0, 3).join(" ")
+        : "no tags";
+
+      html +=
+        '<article class="vbg-sub" data-sub-id="' + escapeHtml(item.id) + '">' +
+          '<span class="vbg-sub-thumb">' + thumb + "</span>" +
+
+          '<div class="vbg-sub-body">' +
+            '<span class="vbg-sub-title">' + escapeHtml(item.title || "Untitled") + "</span>" +
+            '<div class="vbg-sub-meta">' +
+              '<span class="vbg-status vbg-status--' + escapeHtml(status) + '">' + escapeHtml(statusLabel) + "</span>" +
+              "<span>" + escapeHtml(item.category || "Uncategorised") + "</span>" +
+              "<span>" + (item.wordCount || 0) + " words</span>" +
+              "<span>" + escapeHtml(tags) + "</span>" +
+              "<span>" + escapeHtml(formatStamp(item.updatedAt || item.createdAt)) + "</span>" +
+            "</div>" +
+          "</div>" +
+
+          '<div class="vbg-sub-actions">' +
+            '<button type="button" class="vbg-icon-btn" data-sub-action="load" data-sub-id="' + escapeHtml(item.id) + '" title="Load into editor" aria-label="Load into editor">' +
+              '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+                '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>' +
+              "</svg>" +
+            "</button>" +
+          "</div>" +
+        "</article>";
+    });
+
+    subListEl.innerHTML = html;
+  }
+
+  /* Load a stored item back into the editor */
+  if (subListEl) {
+    subListEl.addEventListener("click", function (event) {
+      var btn = event.target.closest("[data-sub-action]");
+      if (!btn) return;
+
+      var id = btn.getAttribute("data-sub-id");
+      var action = btn.getAttribute("data-sub-action");
+
+      if (action !== "load" || !id) return;
+
+      var pool = lsGetArray(POSTS_KEY).concat(lsGetArray(DRAFTS_KEY));
+      var item = null;
+
+      for (var i = 0; i < pool.length; i++) {
+        if (pool[i] && pool[i].id === id) { item = pool[i]; break; }
+      }
+
+      if (!item) {
+        toast("crit", "Not found", "That item is no longer available in local storage.");
+        return;
+      }
+
+      if (titleInput) titleInput.value = item.title || "";
+      if (slugInput) slugInput.value = item.slug || "";
+      if (categoryInput && item.category) categoryInput.value = item.category;
+      if (excerptInput) excerptInput.value = item.excerpt || "";
+      if (bodyInput) bodyInput.value = item.content || "";
+      if (coverAltInput) coverAltInput.value = item.coverAlt || "";
+
+      state.tags = Array.isArray(item.tags) ? item.tags.slice(0, MAX_TAGS) : [];
+      renderTags();
+
+      state.coverImage = item.coverImage || "";
+      state.coverSource = item.coverImage ? (item.source === "blogger-studio" ? "upload" : "url") : "";
+
+      if (state.coverImage) {
+        if (/^https?:\/\//i.test(state.coverImage) && coverUrlInput) {
+          coverUrlInput.value = state.coverImage;
+        }
+        showImagePreview(state.coverImage, "restored", state.coverSource);
+      } else {
+        if (imgPreview) imgPreview.hidden = true;
+      }
+
+      updateCounters();
+      updateSlugPreview();
+      validateChecklist();
+      markDirty();
+
+      toast("ok", "Loaded into editor",
+            "\u201C" + (item.title || "Untitled") + "\u201D is ready to edit.");
+
+      if (titleInput && titleInput.scrollIntoView) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+  }
+
+  /* ==================================================================
+     22. CLEAR INVALID STATE WHILE TYPING
+     ================================================================== */
+  [titleInput, categoryInput, excerptInput, coverUrlInput].forEach(function (el) {
+    if (!el) return;
+    el.addEventListener("input", function () {
+      el.classList.remove("is-invalid");
+    });
+    el.addEventListener("change", function () {
+      el.classList.remove("is-invalid");
+    });
+  });
+
+  if (bodyInput) {
+    bodyInput.addEventListener("input", function () {
+      if (editorWrap) editorWrap.classList.remove("is-invalid");
+    });
+  }
+
+  /* ==================================================================
+     23. PRELOADER
+     ================================================================== */
+  function bootPreloader() {
+    var preloader = document.getElementById("preloader");
+    if (!preloader) return;
+
+    var dismissed = false;
+
+    function dismiss() {
+      if (dismissed) return;
+      dismissed = true;
+
+      preloader.classList.add("is-hidden");
+
+      window.setTimeout(function () {
+        if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
+      }, 700);
+    }
+
+    window.setTimeout(dismiss, 4000);
+  }
+
+  bootPreloader();
+
+  /* ==================================================================
+     24. INITIALISE
+     ================================================================== */
+  (function init() {
+    restoreWorkingCopy();
+
+    renderTags();
+    updateCounters();
+    updateSlugPreview();
+    validateChecklist();
+    renderSubmissions();
+
+    if (saveDot && !saveDot.classList.contains("is-saved")) {
+      if (saveLabel) saveLabel.textContent = "New blank draft";
+    }
+  })();
+
+  /* Expose a tiny debug surface for manual QA without polluting globals */
+  window.VunVaultStudio = {
+    state: state,
+    publish: publishPost,
+    saveDraft: function () { if (saveDraftBtn) saveDraftBtn.click(); },
+    preview: openPreview,
+    storageKeys: {
+      posts: POSTS_KEY,
+      drafts: DRAFTS_KEY,
+      working: WORKING_KEY
+    }
+  };
+
+})();
+</script>
+
+</body>
+</html>

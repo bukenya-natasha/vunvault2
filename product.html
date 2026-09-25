@@ -1,0 +1,1970 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VUNVAULT Products — penetration testing tools, automation scripts and free security resources for SACCOs, fintechs and enterprises.">
+    <link rel="stylesheet" href="vun1.css">
+    <title>Products &amp; Tools — VUNVAULT</title>
+
+    <!-- ==================================================================
+         AUTH-AWARE NAVIGATION — profile pill
+         ================================================================== -->
+    <style>
+      #navLoginLink[hidden],
+      #navProfileLink[hidden],
+      #mobileLoginItem[hidden],
+      #mobileProfileItem[hidden] {
+        display: none !important;
+      }
+
+      .nav-profile {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 12px 4px 4px;
+        border-radius: 9999px;
+        border: 1px solid rgba(59, 153, 252, 0.28);
+        background: rgba(59, 153, 252, 0.10);
+        color: #1E7BE0;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+        transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                    border-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                    color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                    transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .nav-profile:hover,
+      .nav-profile:focus-visible {
+        background: rgba(59, 153, 252, 0.18);
+        border-color: #3B99FC;
+        color: #0A0D12;
+        transform: translateY(-1px);
+        outline: none;
+      }
+
+      .nav-profile-avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #3B99FC, #1E7BE0);
+        color: #ffffff;
+        font-size: 11px;
+        font-weight: 800;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .nav-profile-label {
+        max-width: 110px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* -------- admin accent (@vunvault.com) -------- */
+      .nav-profile--admin {
+        border-color: rgba(245, 158, 11, 0.45);
+        background: rgba(245, 158, 11, 0.12);
+        color: #b45309;
+      }
+
+      .nav-profile--admin:hover,
+      .nav-profile--admin:focus-visible {
+        background: rgba(245, 158, 11, 0.20);
+        border-color: #f59e0b;
+        color: #78350f;
+      }
+
+      .nav-profile--admin .nav-profile-avatar {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .nav-profile { transition: none; }
+      }
+    </style>
+
+    <!-- ==================================================================
+         PRODUCTS PAGE — component layer
+         Built entirely on the vun1.css design tokens so the marketplace
+         reads as a native extension of the VUNVAULT design system.
+         ================================================================== -->
+    <style>
+      /* ---------- secondary hero CTA ---------- */
+      .btn-outline {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 16px 36px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: var(--ink);
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-radius: var(--r-full);
+        box-shadow: 0 10px 26px -22px rgba(10, 13, 18, 0.6);
+        transition: transform 0.25s var(--ease), border-color 0.25s var(--ease),
+                    color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+      }
+
+      .btn-outline:hover {
+        transform: translateY(-2px);
+        border-color: var(--brand);
+        color: var(--brand-strong);
+        box-shadow: 0 18px 38px -22px var(--brand-glow);
+      }
+
+      .btn-outline:active { transform: translateY(0) scale(0.98); }
+
+      /* ---------- hero stat strip ---------- */
+      .vv-stat-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        max-width: 56rem;
+        margin: 3rem auto 0;
+        padding: 22px 24px;
+        border-radius: var(--r-xl);
+        background: rgba(255, 255, 255, 0.76);
+        backdrop-filter: blur(14px) saturate(1.4);
+        -webkit-backdrop-filter: blur(14px) saturate(1.4);
+        border: 1px solid rgba(59, 153, 252, 0.14);
+        box-shadow: 0 8px 32px rgba(10, 13, 18, 0.06);
+      }
+
+      .vv-stat {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        text-align: center;
+      }
+
+      .vv-stat-label {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+
+      .vv-stat-value {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 1.35rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: var(--brand-strong);
+      }
+
+      /* ---------- marketplace grid ---------- */
+      .vv-prod-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+        align-items: stretch;
+      }
+
+      @media (max-width: 1024px) {
+        .vv-prod-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+
+      @media (max-width: 680px) {
+        .vv-prod-grid { grid-template-columns: 1fr; gap: 16px; }
+      }
+
+      /* ---------- product card ---------- */
+      .vv-prod-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border-radius: 20px;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        transition: transform 0.28s var(--ease), border-color 0.28s var(--ease),
+                    box-shadow 0.28s var(--ease);
+      }
+
+      .vv-prod-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--brand), transparent);
+        opacity: 0;
+        transition: opacity 0.28s var(--ease);
+      }
+
+      .vv-prod-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--brand-line);
+        box-shadow: 0 28px 56px -36px rgba(10, 13, 18, 0.5);
+      }
+
+      .vv-prod-card:hover::before { opacity: 1; }
+
+      .vv-prod-card--free { background: rgba(255, 255, 255, 0.9); }
+
+      .vv-prod-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 22px 22px 0;
+      }
+
+      .vv-prod-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        color: var(--brand-strong);
+        background: linear-gradient(150deg, rgba(59, 153, 252, 0.14), rgba(59, 153, 252, 0.05));
+        border: 1px solid var(--brand-line);
+        transition: color 0.28s var(--ease), background 0.28s var(--ease),
+                    transform 0.28s var(--ease);
+      }
+
+      .vv-prod-card:hover .vv-prod-icon {
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        transform: scale(1.05);
+      }
+
+      .vv-prod-badge {
+        flex: 0 0 auto;
+        padding: 5px 11px;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--brand-strong);
+        background: var(--brand-tint);
+        border: 1px solid var(--brand-line);
+        border-radius: var(--r-full);
+        white-space: nowrap;
+      }
+
+      .vv-prod-badge--free {
+        color: #047857;
+        background: rgba(16, 185, 129, 0.1);
+        border-color: rgba(16, 185, 129, 0.35);
+      }
+
+      .vv-prod-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        padding: 16px 22px 22px;
+      }
+
+      .vv-prod-title {
+        font-size: 1.05rem;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        line-height: 1.35;
+        color: var(--ink);
+        transition: color 0.25s var(--ease);
+      }
+
+      .vv-prod-card:hover .vv-prod-title { color: var(--brand-strong); }
+
+      .vv-prod-desc {
+        margin-top: 9px;
+        font-size: 0.78rem;
+        line-height: 1.7;
+        color: var(--ink-muted);
+      }
+
+      .vv-prod-features {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 16px;
+      }
+
+      .vv-prod-features li {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 0.75rem;
+        line-height: 1.55;
+        color: var(--ink-soft);
+      }
+
+      .vv-prod-features svg {
+        flex: 0 0 auto;
+        margin-top: 3px;
+        color: var(--brand);
+      }
+
+      .vv-prod-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 16px;
+      }
+
+      .vv-prod-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: auto;
+        padding-top: 18px;
+        border-top: 1px solid var(--line-soft);
+      }
+
+      .vv-prod-price {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        color: var(--ink);
+      }
+
+      .vv-prod-price span {
+        font-family: inherit;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0;
+        color: var(--ink-muted);
+        margin-left: 4px;
+      }
+
+      .vv-prod-size {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 10.5px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: var(--ink-faint);
+      }
+
+      .vv-prod-buy,
+      .vv-prod-dl {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 20px;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        border-radius: var(--r-full);
+        white-space: nowrap;
+        text-decoration: none;
+        transition: transform 0.22s var(--ease), filter 0.22s var(--ease),
+                    background-color 0.22s var(--ease), color 0.22s var(--ease),
+                    border-color 0.22s var(--ease);
+      }
+
+      .vv-prod-buy {
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        border: 1px solid rgba(59, 153, 252, 0.5);
+      }
+
+      .vv-prod-buy:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.07);
+      }
+
+      .vv-prod-buy:active { transform: translateY(0) scale(0.98); }
+
+      .vv-prod-dl {
+        color: var(--brand-strong);
+        background: var(--brand-tint);
+        border: 1px solid var(--brand-line);
+      }
+
+      .vv-prod-dl:hover {
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        border-color: transparent;
+        transform: translateY(-1px);
+      }
+
+      .vv-prod-dl:active { transform: translateY(0) scale(0.98); }
+
+      /* ---------- section eyebrow ---------- */
+      .vv-sec-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 30px;
+      }
+
+      /* ---------- terminal ---------- */
+      .vv-term-screen { height: 320px; }
+
+      .vv-term-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      @media (max-width: 640px) {
+        .vv-term-screen { height: 240px; font-size: 11px; }
+        .vv-stat-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+
+      @media (max-width: 420px) {
+        .vv-stat-strip { grid-template-columns: 1fr; }
+      }
+
+      /* ---------- toast ---------- */
+      .vv-toast {
+        position: fixed;
+        left: 50%;
+        bottom: 28px;
+        z-index: 300;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 12px 22px;
+        border-radius: var(--r-full);
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #ffffff;
+        background: rgba(10, 13, 18, 0.96);
+        border: 1px solid rgba(59, 153, 252, 0.35);
+        box-shadow: 0 22px 46px -20px rgba(0, 0, 0, 0.8);
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-50%, 18px);
+        transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+      }
+
+      .vv-toast.is-on {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      .vv-toast-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--brand);
+        box-shadow: 0 0 10px var(--brand-glow);
+      }
+
+      /* ---------- dark footer ---------- */
+      .vv-footer {
+        margin-top: 0;
+        color: #c3ccd8;
+        background:
+          radial-gradient(90% 70% at 85% 0%, rgba(59, 153, 252, 0.14), transparent 62%),
+          linear-gradient(165deg, #0a0d12 0%, #05070a 100%);
+        border-top: 1px solid rgba(59, 153, 252, 0.18);
+      }
+
+      .vv-footer .vv-footer-brandname {
+        font-weight: 800;
+        font-size: 1.45rem;
+        letter-spacing: 0.14em;
+        color: #ffffff;
+      }
+
+      .vv-footer h4 {
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #ffffff;
+      }
+
+      .vv-footer ul a,
+      .vv-footer ul button {
+        color: #9aa8ba;
+        font-size: 0.82rem;
+        text-align: left;
+        transition: color var(--dur) var(--ease), padding-left var(--dur) var(--ease);
+      }
+
+      .vv-footer ul a:hover,
+      .vv-footer ul button:hover {
+        color: var(--brand-soft);
+        padding-left: 4px;
+      }
+
+      .vv-footer-logo {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.35rem;
+        height: 2.35rem;
+        border-radius: 12px;
+        background: linear-gradient(145deg, #10151d, #000000);
+        border: 1px solid rgba(59, 153, 252, 0.35);
+        box-shadow: 0 0 0 1px rgba(59, 153, 252, 0.08),
+                    0 6px 18px -10px rgba(59, 153, 252, 0.45);
+      }
+
+      .vv-footer-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        color: #8ef0c1;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.32);
+        border-radius: var(--r-full);
+      }
+
+      .vv-footer-status span {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--ok);
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+      }
+
+      .vv-footer-bottom {
+        margin-top: 3.5rem;
+        padding-top: 1.75rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        font-size: 0.72rem;
+        color: #7d8b9e;
+      }
+
+      .vv-footer-bottom a,
+      .vv-footer-bottom button {
+        color: #9aa8ba;
+        transition: color var(--dur) var(--ease);
+      }
+
+      .vv-footer-bottom a:hover,
+      .vv-footer-bottom button:hover { color: var(--brand-soft); }
+    </style>
+  </head>
+  <body>
+
+<!-- ===================================================================
+     PAGE PRELOADER — 3D orbital brand mark + 4-second progress sweep
+==================================================================== -->
+<div id="preloader" class="preloader" role="status" aria-live="polite" aria-label="Loading VUNVAULT">
+  <div class="preloader-inner">
+
+    <div class="preloader-mark">
+      <div class="preloader-stage" aria-hidden="true">
+        <span class="preloader-ring preloader-ring--1"></span>
+        <span class="preloader-ring preloader-ring--2"></span>
+        <span class="preloader-ring preloader-ring--3"></span>
+        <span class="preloader-halo"></span>
+      </div>
+
+      <img src="logo.svg" alt="VUNVAULT Logo" class="preloader-logo">
+    </div>
+
+    <div class="preloader-wordmark">VUNVAULT</div>
+
+    <div class="preloader-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-label="Page loading progress">
+      <span class="preloader-progress-fill"></span>
+    </div>
+
+    <span class="preloader-caption">Establishing secure channel</span>
+  </div>
+</div>
+
+    <div class="min-h-screen bg-[#fcfbf9] text-neutral-900 flex flex-col font-sans selection:bg-neutral-900 selection:text-white relative">
+
+      <!-- =================================================================
+           HEADER
+      ================================================================== -->
+      <header class="sticky top-0 z-50 bg-[#fcfbf9]/95 backdrop-blur-md border-b border-neutral-200/80 transition-all duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+
+          <a href="vun.html" class="flex items-center gap-3 group shrink-0" aria-label="VUNVAULT home">
+            <span class="w-9 h-9 rounded-xl bg-black flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+              <img src="logo.svg" alt="VUNVAULT" class="w-6 h-6 object-contain">
+            </span>
+            <span class="font-extrabold text-xl md:text-2xl tracking-wider text-neutral-900 group-hover:opacity-80 transition-opacity">VUNVAULT</span>
+          </a>
+
+          <!-- Desktop navigation -->
+          <nav class="hidden md:flex items-center gap-2 md:gap-4 lg:gap-6 min-w-0 overflow-x-auto no-scrollbar py-1"
+               aria-label="Primary">
+            <a href="about.html"              class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">About Us</a>
+            <a href="services.html"           class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Services</a>
+            <a href="course-foundations.html" class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Academy</a>
+            <a href="blog.html"               class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Blog</a>
+            <a href="products.html"           class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-900 font-bold bg-neutral-200/60" aria-current="page">Products</a>
+            <a href="contact.html"            class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Contact</a>
+            <a href="login.html" id="navLoginLink"
+               class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Login</a>
+
+            <!-- User profile — revealed by the auth-aware navigation script -->
+            <a href="profile.html" id="navProfileLink" class="nav-profile" hidden>
+              <span class="nav-profile-avatar" id="navProfileAvatar" aria-hidden="true">U</span>
+              <span class="nav-profile-label" id="navProfileLabel">Profile</span>
+            </a>
+          </nav>
+
+          <!-- Mobile hamburger -->
+          <button id="mobile-menu-toggle"
+                  class="hamburger"
+                  type="button"
+                  aria-label="Toggle navigation menu"
+                  aria-expanded="false"
+                  aria-controls="mobile-menu">
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+          </button>
+        </div>
+
+        <!-- Mobile drawer -->
+        <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile">
+          <ul class="mobile-menu-list">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="course-foundations.html">Academy</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li id="mobileLoginItem"><a href="login.html" class="mobile-menu-login">Login</a></li>
+            <li id="mobileProfileItem" hidden>
+              <a href="profile.html" id="mobileProfileLink" class="mobile-menu-login">Profile</a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <main class="flex-1 space-y-2">
+
+        <!-- =============================================================
+             HERO
+        ============================================================== -->
+        <section class="relative pt-12 pb-14 md:pt-20 md:pb-20 overflow-hidden">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="text-center max-w-4xl mx-auto space-y-6">
+              <span class="hero-eyebrow">Tools · Automation · Documentation</span>
+              <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold text-neutral-900 tracking-tight leading-[1.1]">
+                Security Tooling Built For Operators
+              </h1>
+              <p class="text-lg sm:text-xl text-neutral-500 font-normal max-w-2xl mx-auto leading-relaxed">
+                Battle-tested penetration testing utilities, automation scripts and technical documentation —
+                built by the team that maps Africa&rsquo;s attack surfaces every day.
+              </p>
+              <div class="flex flex-wrap items-center justify-center gap-3 pt-4">
+                <a href="#catalog" class="btn-get-started">Explore Catalog</a>
+                <a href="#free-tools" class="btn-outline">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                       fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                       stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>
+                  </svg>
+                  <span>Free Tools</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- stat strip -->
+            <div class="vv-stat-strip">
+              <div class="vv-stat">
+                <span class="vv-stat-label">Tools Shipped</span>
+                <span class="vv-stat-value">24</span>
+              </div>
+              <div class="vv-stat">
+                <span class="vv-stat-label">Free Resources</span>
+                <span class="vv-stat-value">12</span>
+              </div>
+              <div class="vv-stat">
+                <span class="vv-stat-label">Active Operators</span>
+                <span class="vv-stat-value">3,180</span>
+              </div>
+              <div class="vv-stat">
+                <span class="vv-stat-label">Mean Patch Time</span>
+                <span class="vv-stat-value">1.2s</span>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- =============================================================
+             PAID PRODUCTS
+        ============================================================== -->
+        <span id="catalog" class="anchor-offset" aria-hidden="true"></span>
+        <section id="paid-products" class="py-14 md:py-20 bg-[#fcfbf9] border-t border-neutral-200/80">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="vv-sec-head">
+              <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                  <span class="h-[2px] w-6 bg-cyan-600 rounded-full"></span>
+                  <span class="text-xs font-bold uppercase tracking-[0.2em] text-cyan-700">Premium Products</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-bold text-neutral-900 tracking-tight">
+                  Licensed tooling for professional engagements
+                </h2>
+                <p class="text-neutral-500 text-sm md:text-base max-w-2xl leading-relaxed">
+                  Commercial licences include encrypted delivery, twelve months of updates and a named
+                  support contact. Purchase routes directly to our secure checkout.
+                </p>
+              </div>
+              <span class="vv-prod-badge">6 Products</span>
+            </div>
+
+            <div class="vv-prod-grid">
+
+              <!-- ---------- 1. ReconVault Pro ---------- -->
+              <article class="vv-prod-card">
+                <div class="vv-prod-head">
+                  <div class="vv-prod-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="M19.07 4.93A10 10 0 0 0 6.99 3.34"/><path d="M4 6h.01"/>
+                      <path d="M2.29 9.62a10 10 0 1 0 19.02-1.27"/><path d="M16.24 7.76a6 6 0 1 0-8.01 8.91"/>
+                      <path d="M12 18h.01"/><path d="M17.99 11.66a6 6 0 0 1-2.22 4.7"/>
+                      <circle cx="12" cy="12" r="2"/><path d="m13.41 10.59 5.66-5.66"/>
+                    </svg>
+                  </div>
+                  <span class="vv-prod-badge">Recon</span>
+                </div>
+                <div class="vv-prod-body">
+                  <h3 class="vv-prod-title">ReconVault Pro</h3>
+                  <p class="vv-prod-desc">
+                    Continuous attack-surface enumeration engine with subdomain discovery, port fingerprinting
+                    and CVE correlation in a single CLI.
+                  </p>
+                  <ul class="vv-prod-features">
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>CT-log &amp; DNS brute subdomain enumeration</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>Live CVE cross-reference &amp; risk scoring</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>JSON / SARIF export for CI pipelines</span>
+                    </li>
+                  </ul>
+                  <div class="vv-prod-foot">
+                    <div class="vv-prod-price">$49<span>/ license</span></div>
+                    <a class="vv-prod-buy" href="payment.html?product=ReconVault%20Pro&amp;price=49">
+                      <span>Buy Now</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- ---------- 2. VulnScope API ---------- -->
+              <article class="vv-prod-card">
+                <div class="vv-prod-head">
+                  <div class="vv-prod-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/>
+                      <path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/>
+                      <path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/>
+                      <path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/>
+                      <path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/>
+                      <path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/>
+                      <path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/>
+                    </svg>
+                  </div>
+                  <span class="vv-prod-badge">Scanning</span>
+                </div>
+                <div class="vv-prod-body">
+                  <h3 class="vv-prod-title">VulnScope API</h3>
+                  <p class="vv-prod-desc">
+                    Headless vulnerability scanner exposed as a REST API — drop authenticated scans straight
+                    into your CI/CD or SOC automation.
+                  </p>
+                  <ul class="vv-prod-features">
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>OWASP Top 10 + API abuse detection</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>Authenticated &amp; unauthenticated scan modes</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>Webhook alerts &amp; scheduled runs</span>
+                    </li>
+                  </ul>
+                  <div class="vv-prod-foot">
+                    <div class="vv-prod-price">$129<span>/ year</span></div>
+                    <a class="vv-prod-buy" href="payment.html?product=VulnScope%20API&amp;price=129">
+                      <span>Buy Now</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- ---------- 3. PhishGuard Kit ---------- -->
+              <article class="vv-prod-card">
+                <div class="vv-prod-head">
+                  <div class="vv-prod-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+                      <path d="m14.5 9.5-5 5"/><path d="m9.5 9.5 5 5"/>
+                    </svg>
+                  </div>
+                  <span class="vv-prod-badge">Human Risk</span>
+                </div>
+                <div class="vv-prod-body">
+                  <h3 class="vv-prod-title">PhishGuard Kit</h3>
+                  <p class="vv-prod-desc">
+                    Authorised phishing-simulation framework with landing-page templates, campaign tracking
+                    and staff-awareness scoring.
+                  </p>
+                  <ul class="vv-prod-features">
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>40+ compliance-safe email templates</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>Per-department risk scoring dashboard</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>Automated awareness training follow-up</span>
+                    </li>
+                  </ul>
+                  <div class="vv-prod-foot">
+                    <div class="vv-prod-price">$79<span>/ license</span></div>
+                    <a class="vv-prod-buy" href="payment.html?product=PhishGuard%20Kit&amp;price=79">
+                      <span>Buy Now</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- ---------- 4. LogHound SIEM Pack ---------- -->
+              <article class="vv-prod-card">
+                <div class="vv-prod-head">
+                  <div class="vv-prod-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                  </div>
+                  <span class="vv-prod-badge">Detection</span>
+                </div>
+                <div class="vv-prod-body">
+                  <h3 class="vv-prod-title">LogHound SIEM Pack</h3>
+                  <p class="vv-prod-desc">
+                    412 production-tested detection rules mapped to MITRE ATT&amp;CK, packaged for Splunk,
+                    Elastic and Wazuh.
+                  </p>
+                  <ul class="vv-prod-features">
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>412 rules across 14 ATT&amp;CK tactics</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>False-positive tuning notes per rule</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>Purple-team validation playbooks</span>
+                    </li>
+                  </ul>
+                  <div class="vv-prod-foot">
+                    <div class="vv-prod-price">$199<span>/ pack</span></div>
+                    <a class="vv-prod-buy" href="payment.html?product=LogHound%20SIEM%20Pack&amp;price=199">
+                      <span>Buy Now</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- ---------- 5. PayloadForge ---------- -->
+              <article class="vv-prod-card">
+                <div class="vv-prod-head">
+                  <div class="vv-prod-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>
+                    </svg>
+                  </div>
+                  <span class="vv-prod-badge">Exploit Dev</span>
+                </div>
+                <div class="vv-prod-body">
+                  <h3 class="vv-prod-title">PayloadForge</h3>
+                  <p class="vv-prod-desc">
+                    Encoder, obfuscator and payload staging console for authorised red-team engagements and
+                    detection-engineering validation.
+                  </p>
+                  <ul class="vv-prod-features">
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>Multi-stage encoding chains</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>AV / EDR evasion scoring</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>Signed engagement audit log</span>
+                    </li>
+                  </ul>
+                  <div class="vv-prod-foot">
+                    <div class="vv-prod-price">$99<span>/ license</span></div>
+                    <a class="vv-prod-buy" href="payment.html?product=PayloadForge&amp;price=99">
+                      <span>Buy Now</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+              <!-- ---------- 6. ComplianceMapper ---------- -->
+              <article class="vv-prod-card">
+                <div class="vv-prod-head">
+                  <div class="vv-prod-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                      <rect x="8" y="2" width="8" height="4" rx="1"/>
+                      <path d="m9 14 2 2 4-4"/>
+                    </svg>
+                  </div>
+                  <span class="vv-prod-badge">GRC</span>
+                </div>
+                <div class="vv-prod-body">
+                  <h3 class="vv-prod-title">ComplianceMapper</h3>
+                  <p class="vv-prod-desc">
+                    Map scan findings to Central Bank, ISO 27001 and Data Protection requirements, then export
+                    a board-ready evidence pack.
+                  </p>
+                  <ul class="vv-prod-features">
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>CBK / ISO 27001 / GDPR control mapping</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>Evidence pack &amp; audit trail export</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                      <span>Gap analysis with remediation owners</span>
+                    </li>
+                  </ul>
+                  <div class="vv-prod-foot">
+                    <div class="vv-prod-price">$149<span>/ year</span></div>
+                    <a class="vv-prod-buy" href="payment.html?product=ComplianceMapper&amp;price=149">
+                      <span>Buy Now</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </a>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================
+             FREE RESOURCES
+        ============================================================== -->
+        <span id="free-tools" class="anchor-offset" aria-hidden="true"></span>
+        <section id="free-resources" class="py-14 md:py-20 bg-[#fcfbf9] border-t border-neutral-200/80">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="vv-sec-head">
+              <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                  <span class="h-[2px] w-6 bg-emerald-500 rounded-full"></span>
+                  <span class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Free Resources</span>
+                </div>
+                <h2 class="text-3xl sm:text-4xl font-bold text-neutral-900 tracking-tight">
+                  Open tooling, no licence required
+                </h2>
+                <p class="text-neutral-500 text-sm md:text-base max-w-2xl leading-relaxed">
+                  Community resources published under permissive licences. Click download and the file is
+                  fetched straight from the source — no checkout, no account, no telemetry.
+                </p>
+              </div>
+              <span class="vv-prod-badge vv-prod-badge--free">6 Resources</span>
+            </div>
+
+            <div class="vv-prod-grid">
+
+              <!-- ---------- 1. CVE Tracker CLI ---------- -->
+              <article class="vv-prod-card vv-prod-card--free">
+                <div class="vv-prod-head">
+                  <div class="vv-prod-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="m4 17 6-6-6-6"/><path d="M12 19h8"/>
+                    </svg>
+                  </div>
+                  <span class="vv-prod-badge vv-prod-badge--free">Free</span>
+                </div>
+                <div class="vv-prod-body">
+                  <h3 class="vv-prod-title">CVE Tracker CLI</h3>
+                  <p class="vv-prod-desc">
+                    Terminal utility that pulls the NVD feed, filters by vendor and ecosystem, and prints a
+                    prioritised patch queue for your estate.
+                  </p>
+                  <div class="vv-prod-tags">
+                    <span class="vv-skill">CLI</span>
+                    <span class="vv-skill">Python</span>
+                    <span class="vv-skill">NVD</span>
+                  </div>
+                  <div class="vv-prod-foot">
+                    <span class="vv-prod-size">2.4 MB · .zip</span>
+                    <button type="button" class="vv-prod-dl" data-download="cve-tracker">
+                      <span>Download</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </article>
+
+              <!-- ---------- 2. Nmap Cheatsheet ---------- -->
+              <article class="vv-prod-card vv-prod-card--free">
+                <div class="vv-prod-head">
+                  <div class="vv-prod-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/>
+                      <path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M9 13h6"/><path d="M9 17h4"/>
+                    </svg>
+                  </div>
+                  <span class="vv-prod-badge vv-prod-badge--free">Free</span>
+                </div>
+                <div class="vv-prod-body">
+                  <h3 class="vv-prod-title">Nmap Operator Cheatsheet</h3>
+                  <p class="vv-prod-desc">
+                    A twelve-page PDF of the scan flags, timing templates and evasion switches our assessors
+                    actually reach for during engagements.
+                  </p>
+                  <div class="vv-prod-tags">
+                    <span class="vv-skill">PDF</span>
+                    <span class="vv-skill">Recon</span>
+                    <span class="vv-skill">Reference</span>
+                  </div>
+                  <div class="vv-prod-foot">
+                    <span class="vv-prod-size">1.1 MB · .pdf</span>
+                    <button type="button" class="vv-prod-dl" data-download="nmap-cheatsheet">
+                      <span>Download</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </article>
+
+              <!-- ---------- 3. Hardening Baselines ---------- -->
+              <article class="vv-prod-card vv-prod-card--free">
+                <div class="vv-prod-head">
+                  <div class="vv-prod-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+                      <path d="m9 12 2 2 4-4"/>
+                    </svg>
+                  </div>
+                  <span class="vv-prod-badge vv-prod-badge--free">Free</span>
+                </div>
+                <div class="vv-prod-body">
+                  <h3 class="vv-prod-title">Linux Hardening Baselines</h3>
+                  <p class="vv-prod-desc">
+                    Idempotent shell scripts that apply CIS-aligned baselines to Ubuntu, Debian and RHEL
+                    hosts, with a dry-run mode and rollback manifest.
+                  </p>
+                  <div class="vv-prod-tags">
+                    <span class="vv-skill">Bash</span>
+                    <span class="vv-skill">CIS</span>
+                    <span class="vv-skill">Linux</span>
+                  </div>
+                  <div class="vv-prod-foot">
+                    <span class="vv-prod-size">380 KB · .tar.gz</span>
+                    <button type="button" class="vv-prod-dl" data-download="hardening-baselines">
+                      <span>Download</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </article>
+
+              <!-- ---------- 4. Threat Intel Feed ---------- -->
+              <article class="vv-prod-card vv-prod-card--free">
+                <div class="vv-prod-head">
+                  <div class="vv-prod-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/>
+                      <circle cx="5" cy="19" r="1"/>
+                    </svg>
+                  </div>
+                  <span class="vv-prod-badge vv-prod-badge--free">Free</span>
+                </div>
+                <div class="vv-prod-body">
+                  <h3 class="vv-prod-title">Threat Intel Feed</h3>
+                  <p class="vv-prod-desc">
+                    Machine-readable JSON feed of weaponised CVEs, active exploitation status and vendor
+                    advisory links — refreshed every fifteen minutes.
+                  </p>
+                  <div class="vv-prod-tags">
+                    <span class="vv-skill">JSON</span>
+                    <span class="vv-skill">API</span>
+                    <span class="vv-skill">Live</span>
+                  </div>
+                  <div class="vv-prod-foot">
+                    <span class="vv-prod-size">External host · .json</span>
+                    <button type="button" class="vv-prod-dl" data-download="threat-feed">
+                      <span>Download</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </article>
+
+              <!-- ---------- 5. SACCO Compliance Checklist ---------- -->
+              <article class="vv-prod-card vv-prod-card--free">
+                <div class="vv-prod-head">
+                  <div class="vv-prod-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/>
+                      <path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/>
+                    </svg>
+                  </div>
+                  <span class="vv-prod-badge vv-prod-badge--free">Free</span>
+                </div>
+                <div class="vv-prod-body">
+                  <h3 class="vv-prod-title">SACCO Compliance Checklist</h3>
+                  <p class="vv-prod-desc">
+                    A printable readiness checklist mapping Central Bank of Kenya and Data Protection Act
+                    obligations to concrete technical controls.
+                  </p>
+                  <div class="vv-prod-tags">
+                    <span class="vv-skill">PDF</span>
+                    <span class="vv-skill">CBK</span>
+                    <span class="vv-skill">Fintech</span>
+                  </div>
+                  <div class="vv-prod-foot">
+                    <span class="vv-prod-size">860 KB · .pdf</span>
+                    <button type="button" class="vv-prod-dl" data-download="sacco-checklist">
+                      <span>Download</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </article>
+
+              <!-- ---------- 6. Zero-Day Watch ---------- -->
+              <article class="vv-prod-card vv-prod-card--free">
+                <div class="vv-prod-head">
+                  <div class="vv-prod-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                    </svg>
+                  </div>
+                  <span class="vv-prod-badge vv-prod-badge--free">Free</span>
+                </div>
+                <div class="vv-prod-body">
+                  <h3 class="vv-prod-title">Zero-Day Watch (RSS)</h3>
+                  <p class="vv-prod-desc">
+                    Subscribe in any feed reader to receive VUNVAULT&rsquo;s zero-day bulletin the moment a
+                    critical vulnerability becomes weaponised in the wild.
+                  </p>
+                  <div class="vv-prod-tags">
+                    <span class="vv-skill">RSS</span>
+                    <span class="vv-skill">XML</span>
+                    <span class="vv-skill">Alerts</span>
+                  </div>
+                  <div class="vv-prod-foot">
+                    <span class="vv-prod-size">External host · .xml</span>
+                    <button type="button" class="vv-prod-dl" data-download="zero-day-watch">
+                      <span>Download</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </article>
+
+            </div>
+
+            <p class="text-center text-xs text-neutral-500 mt-8">
+              Free resources are provided as-is for authorised testing only. Never scan systems you do not own
+              or have written permission to assess.
+            </p>
+          </div>
+        </section>
+
+        <!-- =============================================================
+             INTERACTIVE TERMINAL PREVIEW
+        ============================================================== -->
+        <section id="terminal" class="py-14 md:py-20 bg-[#fcfbf9] border-t border-neutral-200/80">
+          <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+
+            <div class="space-y-3 max-w-3xl">
+              <div class="flex items-center gap-2">
+                <span class="h-[2px] w-6 bg-cyan-600 rounded-full"></span>
+                <span class="text-xs font-bold uppercase tracking-[0.2em] text-cyan-700">Live Console</span>
+              </div>
+              <h2 class="text-3xl sm:text-4xl font-bold text-neutral-900 tracking-tight">
+                Try the toolbox before you download it
+              </h2>
+              <p class="text-neutral-500 text-sm md:text-base leading-relaxed">
+                This is the same shell our operators use. Browse the catalogue, preview a scan or pull a free
+                resource — right here in the browser.
+              </p>
+            </div>
+
+            <!-- dark console -->
+            <div class="rounded-2xl bg-neutral-900/95 text-neutral-100 p-4 sm:p-5 border border-neutral-800 shadow-2xl overflow-hidden font-sans">
+
+              <!-- console header -->
+              <div class="flex flex-wrap items-center justify-between gap-3 pb-3.5 border-b border-neutral-800 text-xs">
+                <div class="flex items-center gap-3">
+                  <span class="flex items-center gap-1.5" aria-hidden="true">
+                    <span class="w-2.5 h-2.5 rounded-full" style="background:#ff5f57"></span>
+                    <span class="w-2.5 h-2.5 rounded-full" style="background:#febc2e"></span>
+                    <span class="w-2.5 h-2.5 rounded-full" style="background:#28c840"></span>
+                  </span>
+                  <span class="font-extrabold tracking-wider text-white">VUNVAULT</span>
+                  <span class="text-neutral-600 hidden sm:inline">|</span>
+                  <span class="text-neutral-300 font-semibold uppercase tracking-wider hidden sm:inline">Toolbox Shell</span>
+                </div>
+                <div class="flex items-center gap-2.5">
+                  <span class="vv-scan-status" data-state="idle" id="vv-term-status">
+                    <span class="vv-scan-status-dot" aria-hidden="true"></span>
+                    <span id="vv-term-status-text">READY</span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- screen -->
+              <div class="vv-scan-screen vv-term-screen mt-4"
+                   id="vv-term-screen"
+                   role="log"
+                   aria-live="polite"
+                   aria-label="Interactive toolbox console output"></div>
+
+              <!-- input -->
+              <form class="vv-term-form" id="vv-term-form" novalidate>
+                <label class="sr-only" for="vv-term-input">Enter a command</label>
+                <div class="vv-scan-input-wrap">
+                  <span class="vv-scan-prompt" aria-hidden="true">$</span>
+                  <input id="vv-term-input"
+                         class="vv-scan-input"
+                         type="text"
+                         name="command"
+                         placeholder="help"
+                         autocomplete="off"
+                         spellcheck="false">
+                </div>
+                <button type="submit" class="vv-scan-execute">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                       fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                       stroke-linejoin="round" aria-hidden="true">
+                    <path d="m5 3 14 9-14 9V3z"/>
+                  </svg>
+                  <span>Run</span>
+                </button>
+                <button type="button" class="vv-scan-reset" id="vv-term-clear">Clear</button>
+              </form>
+
+              <!-- chips -->
+              <div class="vv-scan-chips mt-3.5">
+                <span class="vv-scan-chips-label">Try:</span>
+                <button type="button" class="vv-chip" data-vv-term-cmd="help">help</button>
+                <button type="button" class="vv-chip" data-vv-term-cmd="products">products</button>
+                <button type="button" class="vv-chip" data-vv-term-cmd="free">free</button>
+                <button type="button" class="vv-chip" data-vv-term-cmd="scan example.com">scan example.com</button>
+                <button type="button" class="vv-chip" data-vv-term-cmd="download cve-tracker">download cve-tracker</button>
+              </div>
+
+              <p class="pt-4 mt-4 border-t border-neutral-800 text-[10px] text-neutral-500 leading-relaxed">
+                Simulated environment for demonstration. Purchases route to
+                <code class="text-cyan-400 font-mono">payment.html</code>; free downloads are fetched directly from source.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================
+             BOTTOM CTA
+        ============================================================== -->
+        <section class="py-14 md:py-20 bg-[#fcfbf9] border-t border-neutral-200/80">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="vv-scan-cta">
+              <div class="vv-scan-cta-glow" aria-hidden="true"></div>
+
+              <div class="vv-scan-cta-body">
+                <span class="vv-scan-cta-eyebrow">Need something bespoke?</span>
+                <h2 class="vv-scan-cta-title">
+                  We build custom tooling — <span>Talk to an engineer</span>
+                </h2>
+                <p class="vv-scan-cta-text">
+                  Internal scanners, CI security gates, SIEM content or a private red-team arsenal.
+                  Tell us the workflow and we will scope the build.
+                </p>
+
+                <div class="vv-scan-cta-actions">
+                  <a href="contact.html" class="vv-scan-cta-btn">
+                    <span>Start a Conversation</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                    </svg>
+                  </a>
+                  <span class="vv-scan-cta-note">Nairobi-based · Serving clients worldwide</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- =================================================================
+           FOOTER
+      ================================================================== -->
+      <footer class="vv-footer">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12">
+
+            <div class="md:col-span-4 space-y-4">
+              <a href="vun.html" class="flex items-center gap-3" aria-label="VUNVAULT home">
+                <span class="vv-footer-logo">
+                  <img src="logo.svg" alt="VUNVAULT" class="w-6 h-6 object-contain">
+                </span>
+                <span class="vv-footer-brandname">VUNVAULT</span>
+              </a>
+              <p class="text-sm max-w-sm leading-relaxed" style="color:#9aa8ba;">
+                Africa-rooted, worldwide penetration testing, vulnerability assessments and cybersecurity education.
+              </p>
+              <div class="pt-2">
+                <span class="vv-footer-status">
+                  <span aria-hidden="true"></span>
+                  System Operational
+                </span>
+              </div>
+            </div>
+
+            <div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8">
+              <div class="space-y-3.5">
+                <h4>Resources</h4>
+                <ul class="space-y-2">
+                  <li><a href="news.html">News</a></li>
+                  <li><a href="blog.html">Blog</a></li>
+                  <li><a href="products.html#free-tools">Free Tools</a></li>
+                  <li><a href="products.html#terminal">Live Console</a></li>
+                </ul>
+              </div>
+              <div class="space-y-3.5">
+                <h4>Company</h4>
+                <ul class="space-y-2">
+                  <li><a href="about.html">About Us</a></li>
+                  <li><a href="services.html">Services</a></li>
+                  <li><a href="contact.html">Contact</a></li>
+                  <li><a href="news.html">Press</a></li>
+                </ul>
+              </div>
+              <div class="space-y-3.5">
+                <h4>Solutions</h4>
+                <ul class="space-y-2">
+                  <li><a href="services.html">Small Business</a></li>
+                  <li><a href="services.html">SACCO &amp; Fintech</a></li>
+                  <li><a href="services.html">Enterprise</a></li>
+                  <li><a href="course-foundations.html">Security Training</a></li>
+                </ul>
+              </div>
+              <div class="space-y-3.5">
+                <h4>Products</h4>
+                <ul class="space-y-2">
+                  <li><a href="products.html#paid-products">Premium Catalog</a></li>
+                  <li><a href="products.html#free-resources">Free Resources</a></li>
+                  <li><a href="payment.html">Checkout</a></li>
+                  <li><a href="profile.html">My Account</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="vv-footer-bottom">
+            <div>© 2026 VUNVAULT. All rights reserved.</div>
+            <div class="flex items-center gap-6">
+              <a href="vun.html">Top</a>
+              <a href="services.html">Services</a>
+              <a href="course-foundations.html">Academy</a>
+              <a href="contact.html">Contact</a>
+              <button type="button" class="p-1.5 rounded-full hover:bg-neutral-800 transition-colors" title="Scroll to Top" aria-label="Scroll to top" id="vv-scroll-top">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      <!-- Floating AI security agent -->
+      <div class="fixed bottom-6 right-6 z-50">
+        <button type="button" class="w-14 h-14 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl hover:shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer relative group" aria-label="Open AI Security Agent">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               class="w-6 h-6 fill-current" aria-hidden="true">
+            <path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-white animate-pulse"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- toast host -->
+    <div class="vv-toast" id="vv-toast" role="status" aria-live="polite">
+      <span class="vv-toast-dot" aria-hidden="true"></span>
+      <span id="vv-toast-text">Done</span>
+    </div>
+
+    <!-- ===================================================================
+         INLINE WIRING — preloader dismissal + mobile navigation drawer
+    ==================================================================== -->
+    <script>
+      (function () {
+        "use strict";
+
+        /* ---------------- Preloader ---------------- */
+        var preloader = document.getElementById("preloader");
+
+        if (preloader) {
+          var dismissed = false;
+
+          var dismiss = function () {
+            if (dismissed) return;
+            dismissed = true;
+            preloader.classList.add("is-hidden");
+
+            /* notify any downstream controller that the page is ready */
+            document.dispatchEvent(new CustomEvent("vunvault:preloader-done"));
+
+            window.setTimeout(function () {
+              if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
+            }, 700);
+          };
+
+          /* Progress sweep is a fixed 4s animation — dismiss in lockstep */
+          window.setTimeout(dismiss, 4000);
+        }
+
+        /* ---------------- Mobile navigation drawer ---------------- */
+        var toggle = document.getElementById("mobile-menu-toggle");
+        var menu = document.getElementById("mobile-menu");
+
+        if (toggle && menu) {
+          var setOpen = function (open) {
+            menu.classList.toggle("is-open", open);
+            toggle.classList.toggle("is-active", open);
+            toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            document.body.classList.toggle("nav-open", open);
+          };
+
+          toggle.addEventListener("click", function () {
+            setOpen(!menu.classList.contains("is-open"));
+          });
+
+          menu.addEventListener("click", function (event) {
+            var link = event.target.closest("a");
+            if (link) setOpen(false);
+          });
+
+          document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") setOpen(false);
+          });
+
+          window.addEventListener("resize", function () {
+            if (window.innerWidth >= 768) setOpen(false);
+          });
+        }
+
+        /* ---------------- Scroll to top ---------------- */
+        var toTop = document.getElementById("vv-scroll-top");
+        if (toTop) {
+          toTop.addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+        }
+      })();
+    </script>
+
+    <!-- ===================================================================
+         AUTH-AWARE NAVIGATION
+         Reads the identity persisted by login.html and swaps the "Login"
+         link for a "Profile" button. @vunvault.com accounts route to
+         admin.html, everyone else to profile.html.
+    ==================================================================== -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        "use strict";
+
+        var STORAGE_KEY  = "userEmail";
+        var ADMIN_DOMAIN = "@vunvault.com";
+
+        var desktopLogin   = document.getElementById("navLoginLink");
+        var desktopProfile = document.getElementById("navProfileLink");
+        var mobileLogin    = document.getElementById("mobileLoginItem");
+        var mobileProfile  = document.getElementById("mobileProfileItem");
+        var avatarEl       = document.getElementById("navProfileAvatar");
+        var labelEl        = document.getElementById("navProfileLabel");
+
+        /* ------------------------------------------------ read identity */
+        var userEmail = null;
+        try {
+          userEmail = window.localStorage.getItem(STORAGE_KEY);
+        } catch (err) {
+          userEmail = null;   /* storage blocked (private mode / no cookies) */
+        }
+        userEmail = (userEmail || "").trim();
+
+        /* ------------------------------------------------ guest state */
+        if (!userEmail) {
+          if (desktopLogin)   desktopLogin.hidden   = false;
+          if (mobileLogin)    mobileLogin.hidden    = false;
+          if (desktopProfile) desktopProfile.hidden = true;
+          if (mobileProfile)  mobileProfile.hidden  = true;
+          return;
+        }
+
+        /* ------------------------------------------------ signed-in state */
+        var lowered = userEmail.toLowerCase();
+        var isAdmin = lowered.slice(-ADMIN_DOMAIN.length) === ADMIN_DOMAIN;
+        var target  = isAdmin ? "admin.html" : "profile.html";
+
+        if (desktopProfile) {
+          desktopProfile.setAttribute("href", target);
+          desktopProfile.setAttribute("title", userEmail);
+          desktopProfile.classList.toggle("nav-profile--admin", isAdmin);
+          desktopProfile.hidden = false;
+        }
+
+        if (mobileProfile) {
+          var mobileLink = document.getElementById("mobileProfileLink");
+          if (mobileLink) {
+            mobileLink.setAttribute("href", target);
+            mobileLink.setAttribute("title", userEmail);
+          }
+          mobileProfile.hidden = false;
+        }
+
+        /* ------------------------------------------------ personalise */
+        var localPart = userEmail.split("@")[0] || "Profile";
+        if (avatarEl) avatarEl.textContent = localPart.charAt(0).toUpperCase();
+        if (labelEl)  labelEl.textContent  = localPart;
+
+        /* ------------------------------------------------ hide guest link */
+        if (desktopLogin) desktopLogin.hidden = true;
+        if (mobileLogin)  mobileLogin.hidden  = true;
+      });
+    </script>
+
+    <!-- ===================================================================
+         PRODUCTS PAGE CONTROLLER
+         · download trigger engine
+         · toast notifications
+         · interactive toolbox terminal
+    ==================================================================== -->
+    <script>
+      (function () {
+        "use strict";
+
+        /* ==============================================================
+           CATALOGUE DATA
+           ============================================================== */
+
+        /* Paid products — the `buy` command builds the payment.html URL */
+        var PAID = {
+          reconvault:       { name: "ReconVault Pro",       price: 49  },
+          vulnscope:        { name: "VulnScope API",        price: 129 },
+          phishguard:       { name: "PhishGuard Kit",       price: 79  },
+          loghound:         { name: "LogHound SIEM Pack",   price: 199 },
+          payloadforge:     { name: "PayloadForge",         price: 99  },
+          compliancemapper: { name: "ComplianceMapper",     price: 149 }
+        };
+
+        /* Free resources — `file` may be a local path or an external URL */
+        var FREE = {
+          "cve-tracker":         { name: "CVE Tracker CLI",             file: "downloads/vv-cve-tracker-cli-v1.4.0.zip" },
+          "nmap-cheatsheet":     { name: "Nmap Operator Cheatsheet",    file: "downloads/vunvault-nmap-cheatsheet.pdf" },
+          "hardening-baselines": { name: "Linux Hardening Baselines",   file: "downloads/vv-hardening-baselines.tar.gz" },
+          "threat-feed":         { name: "Threat Intel Feed (JSON)",    file: "https://feeds.vunvault.com/threat-intel.json" },
+          "sacco-checklist":     { name: "SACCO Compliance Checklist",  file: "downloads/vv-sacco-compliance-checklist.pdf" },
+          "zero-day-watch":      { name: "Zero-Day Watch (RSS)",        file: "https://feeds.vunvault.com/zero-day-watch.xml" }
+        };
+
+        /* ==============================================================
+           TOAST
+           ============================================================== */
+        var toastEl = document.getElementById("vv-toast");
+        var toastText = document.getElementById("vv-toast-text");
+        var toastTimer = null;
+
+        function toast(message) {
+          if (!toastEl || !toastText) return;
+          toastText.textContent = message;
+          toastEl.classList.add("is-on");
+          if (toastTimer) window.clearTimeout(toastTimer);
+          toastTimer = window.setTimeout(function () {
+            toastEl.classList.remove("is-on");
+          }, 2600);
+        }
+
+        /* ==============================================================
+           DOWNLOAD ENGINE
+           Creates a temporary anchor and clicks it. Local files use the
+           `download` attribute; external hosts open in a new tab because
+           cross-origin `download` is ignored by browsers.
+           ============================================================== */
+        function triggerDownload(key) {
+          var item = FREE[key];
+          if (!item) return false;
+
+          var isExternal = /^https?:\/\//i.test(item.file);
+          var a = document.createElement("a");
+
+          a.href = item.file;
+          a.rel = "noopener";
+
+          if (isExternal) {
+            a.target = "_blank";
+          } else {
+            /* derive a friendly filename from the path */
+            a.setAttribute("download", item.file.split("/").pop());
+          }
+
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+
+          return true;
+        }
+
+        function triggerPurchase(key) {
+          var item = PAID[key];
+          if (!item) return false;
+
+          var url = "payment.html?product=" +
+                    encodeURIComponent(item.name) +
+                    "&price=" + encodeURIComponent(item.price);
+
+          window.location.href = url;
+          return true;
+        }
+
+        /* ==============================================================
+           WIRE THE FREE-RESOURCE BUTTONS
+           ============================================================== */
+        document.querySelectorAll("[data-download]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var key = btn.getAttribute("data-download");
+            var item = FREE[key];
+
+            if (!item || !triggerDownload(key)) {
+              toast("Resource unavailable — please retry.");
+              return;
+            }
+
+            toast("Downloading " + item.name + " …");
+
+            /* mirror the action into the console if it is on screen */
+            if (window.VVTerminal && window.VVTerminal.print) {
+              window.VVTerminal.print("ok", "[+] download started → " + item.file);
+            }
+          });
+        });
+
+        /* ==============================================================
+           INTERACTIVE TOOLBOX TERMINAL
+           ============================================================== */
+        (function terminal() {
+          var screenEl = document.getElementById("vv-term-screen");
+          var formEl   = document.getElementById("vv-term-form");
+          var inputEl  = document.getElementById("vv-term-input");
+          var clearBtn = document.getElementById("vv-term-clear");
+          var statusEl = document.getElementById("vv-term-status");
+          var statusTx = document.getElementById("vv-term-status-text");
+
+          if (!screenEl || !formEl || !inputEl) return;
+
+          var busy = false;
+
+          /* ---------------- helpers ---------------- */
+          function pad(n) { return String(n).padStart(2, "0"); }
+
+          function stamp() {
+            var d = new Date();
+            return pad(d.getHours()) + ":" + pad(d.getMinutes()) + ":" + pad(d.getSeconds());
+          }
+
+          function print(kind, msg) {
+            var line = document.createElement("div");
+            line.className = "vv-line vv-line--" + kind;
+
+            var ts = document.createElement("span");
+            ts.className = "vv-line-ts";
+            ts.textContent = "[" + stamp() + "]";
+
+            var m = document.createElement("span");
+            m.className = "vv-line-msg";
+            m.textContent = msg;
+
+            line.appendChild(ts);
+            line.appendChild(m);
+            screenEl.appendChild(line);
+            screenEl.scrollTop = screenEl.scrollHeight;
+          }
+
+          function setStatus(state, text) {
+            if (statusEl) statusEl.setAttribute("data-state", state);
+            if (statusTx) statusTx.textContent = text;
+          }
+
+          /* ---------------- command definitions ---------------- */
+          var COMMANDS = {
+
+            help: function () {
+              print("sys",   "VUNVAULT toolbox shell — available commands");
+              print("muted", "  help                 show this message");
+              print("muted", "  products             list premium products");
+              print("muted", "  free                 list free resources");
+              print("muted", "  buy <id>             open payment.html for a product");
+              print("muted", "  download <id>        fetch a free resource");
+              print("muted", "  scan <target>        run a simulated reconnaissance pass");
+              print("muted", "  about                about this toolbox");
+              print("muted", "  clear                clear the screen");
+            },
+
+            products: function () {
+              print("info", "[*] Premium catalog — " + Object.keys(PAID).length + " products");
+              Object.keys(PAID).forEach(function (id) {
+                var p = PAID[id];
+                print("muted", "  " + id.padEnd(18, " ") + p.name.padEnd(24, " ") + "$" + p.price);
+              });
+              print("ok", "[+] run `buy <id>` to open secure checkout");
+            },
+
+            free: function () {
+              print("info", "[*] Free resources — " + Object.keys(FREE).length + " downloads");
+              Object.keys(FREE).forEach(function (id) {
+                print("muted", "  " + id.padEnd(22, " ") + FREE[id].name);
+              });
+              print("ok", "[+] run `download <id>` to fetch a file");
+            },
+
+            buy: function (arg) {
+              if (!arg) { print("warn", "[!] usage: buy <product-id>  (try `products`)"); return; }
+              var id = arg.toLowerCase();
+              if (!PAID[id]) { print("crit", "[!] unknown product id: " + arg); return; }
+              print("info", "[*] redirecting to payment.html for " + PAID[id].name + " …");
+              window.setTimeout(function () { triggerPurchase(id); }, 420);
+            },
+
+            download: function (arg) {
+              if (!arg) { print("warn", "[!] usage: download <resource-id>  (try `free`)"); return; }
+              var id = arg.toLowerCase();
+              if (!FREE[id]) { print("crit", "[!] unknown resource id: " + arg); return; }
+              print("ok", "[+] fetching " + FREE[id].name);
+              print("muted", "    source → " + FREE[id].file);
+              triggerDownload(id);
+            },
+
+            scan: function (arg) {
+              if (!arg) { print("warn", "[!] usage: scan <domain|ip>"); return; }
+              if (busy) { print("warn", "[!] a scan is already running"); return; }
+
+              busy = true;
+              setStatus("scanning", "SCANNING");
+
+              var steps = [
+                ["sys",   "vunvault-recon v2.4.0 — target " + arg],
+                ["info",  "[*] resolving DNS records …"],
+                ["ok",    "[+] A record → 203.0.113.42"],
+                ["info",  "[*] enumerating subdomains via CT logs …"],
+                ["ok",    "[+] 14 subdomains discovered"],
+                ["info",  "[*] probing TCP ports 1-1024 …"],
+                ["warn",  "[!] 22/tcp open — SSH (OpenSSH 8.2p1)"],
+                ["ok",    "[+] 443/tcp open — TLS 1.3, HSTS enabled"],
+                ["info",  "[*] cross-referencing CVEs …"],
+                ["crit",  "[CRITICAL] CVE-2026-9122 — RCE in API ingress (CVSS 9.8)"],
+                ["warn",  "[HIGH]     CVE-2026-4401 — directory traversal (CVSS 7.5)"],
+                ["ok",    "[+] reconnaissance complete — 2 findings"]
+              ];
+
+              var i = 0;
+              var timer = window.setInterval(function () {
+                if (i >= steps.length) {
+                  window.clearInterval(timer);
+                  busy = false;
+                  setStatus("done", "COMPLETE");
+                  window.setTimeout(function () { setStatus("idle", "READY"); }, 2600);
+                  return;
+                }
+                print(steps[i][0], steps[i][1]);
+                i++;
+              }, 320);
+            },
+
+            about: function () {
+              print("sys", "VUNVAULT Toolbox — build 2.4.0 (Nairobi, Kenya)");
+              print("muted", "Penetration testing tooling, automation scripts and");
+              print("muted", "technical documentation for defenders and offensive engineers.");
+            },
+
+            clear: function () {
+              screenEl.innerHTML = "";
+            }
+          };
+
+          /* ---------------- dispatcher ---------------- */
+          function run(raw) {
+            var text = (raw || "").trim();
+            if (!text) return;
+
+            print("muted", "$ " + text);
+
+            var parts = text.split(/\s+/);
+            var cmd = parts.shift().toLowerCase();
+            var arg = parts.join(" ");
+
+            if (Object.prototype.hasOwnProperty.call(COMMANDS, cmd)) {
+              COMMANDS[cmd](arg);
+            } else {
+              print("crit", "[!] command not found: " + cmd);
+              print("muted", "    type `help` for the command list");
+            }
+          }
+
+          /* ---------------- events ---------------- */
+          formEl.addEventListener("submit", function (e) {
+            e.preventDefault();
+            var value = inputEl.value;
+            inputEl.value = "";
+            run(value);
+            inputEl.focus();
+          });
+
+          if (clearBtn) {
+            clearBtn.addEventListener("click", function () {
+              screenEl.innerHTML = "";
+              inputEl.focus();
+            });
+          }
+
+          document.querySelectorAll("[data-vv-term-cmd]").forEach(function (chip) {
+            chip.addEventListener("click", function () {
+              var cmd = chip.getAttribute("data-vv-term-cmd");
+              run(cmd);
+              inputEl.focus();
+            });
+          });
+
+          screenEl.addEventListener("click", function () { inputEl.focus(); });
+
+          /* ---------------- boot banner ---------------- */
+          print("sys",   "vunvault-toolbox v2.4.0 — interactive shell");
+          print("muted", "type \"help\" to list available commands");
+
+          /* expose a tiny API so other handlers can log into the console */
+          window.VVTerminal = { print: print, run: run };
+        })();
+      })();
+    </script>
+  </body>
+</html>
