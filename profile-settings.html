@@ -1,0 +1,3864 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VUNVAULT Profile Settings — manage your administrator profile, avatar, credentials, two-factor authentication and notification preferences.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="vun1.css">
+    <title>VUNVAULT — Profile Settings</title>
+
+    <style>
+      /* ==========================================================================
+         ADMIN SHELL — shared across all Command Center modules
+         ========================================================================== */
+
+      body.adm-body {
+        background:
+          radial-gradient(90% 42% at 50% 0%, rgba(59, 153, 252, 0.07), transparent 62%),
+          var(--paper);
+      }
+
+      /* ---------------------------------------------------------------- Header */
+      .adm-header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .adm-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        flex: 0 0 auto;
+      }
+
+      .adm-brand-tile {
+        width: 2.35rem;
+        height: 2.35rem;
+        border-radius: 12px;
+        background: linear-gradient(145deg, var(--dark), #000000);
+        border: 1px solid rgba(59, 153, 252, 0.35);
+        box-shadow: 0 0 0 1px rgba(59, 153, 252, 0.08), 0 6px 18px -10px var(--brand-glow);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: box-shadow var(--dur) var(--ease);
+      }
+
+      .adm-brand:hover .adm-brand-tile {
+        box-shadow: 0 0 0 1px rgba(59, 153, 252, 0.28), 0 10px 26px -12px var(--brand-glow);
+      }
+
+      .adm-brand-tile img { width: 1.5rem; height: 1.5rem; object-fit: contain; }
+
+      .adm-brand-name {
+        font-weight: 800;
+        font-size: 1.2rem;
+        letter-spacing: 0.14em;
+        color: var(--ink);
+      }
+
+      .adm-brand-sub {
+        display: block;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--brand-strong);
+        margin-top: 1px;
+      }
+
+      .adm-status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 14px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #0f766e;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        border-radius: var(--r-full);
+        white-space: nowrap;
+      }
+
+      .adm-status-dot { position: relative; display: inline-flex; width: 8px; height: 8px; }
+      .adm-status-dot span { position: absolute; inset: 0; border-radius: var(--r-full); background: var(--ok); }
+      .adm-status-dot span:last-child {
+        animation: ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+        opacity: 0.6;
+      }
+
+      .adm-user-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 14px 6px 6px;
+        border-radius: var(--r-full);
+        background: #ffffff;
+        border: 1px solid var(--line);
+        box-shadow: 0 6px 18px -14px rgba(10, 13, 18, 0.5);
+        white-space: nowrap;
+      }
+
+      .adm-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        flex: 0 0 auto;
+      }
+
+      .adm-user-meta { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+
+      .adm-user-label {
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+
+      .adm-user-name { font-size: 0.78rem; font-weight: 800; color: var(--ink); }
+
+      .adm-user-role {
+        font-size: 9.5px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--brand-strong);
+      }
+
+      /* ------------------------------------------------------------- Navigation */
+      .adm-nav {
+        display: none;
+        align-items: center;
+        gap: 4px;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .adm-nav::-webkit-scrollbar { display: none; }
+
+      .adm-nav a {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 13px;
+        font-size: 0.74rem;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+        border-radius: var(--r-full);
+        color: var(--ink-soft);
+        transition: color var(--dur) var(--ease), background-color var(--dur) var(--ease),
+                    box-shadow var(--dur) var(--ease);
+      }
+
+      .adm-nav a:hover { color: var(--brand-strong); background-color: var(--brand-tint); }
+
+      .adm-nav a[aria-current="page"] {
+        color: var(--brand-strong);
+        background-color: var(--brand-tint);
+        box-shadow: inset 0 0 0 1px var(--brand-line);
+        font-weight: 800;
+      }
+
+      .adm-nav-signout { color: var(--critical) !important; }
+      .adm-nav-signout:hover {
+        background-color: rgba(244, 63, 94, 0.1) !important;
+        color: #be123c !important;
+      }
+
+      .adm-hamburger {
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+        transition: background-color var(--dur) var(--ease),
+                    border-color var(--dur) var(--ease),
+                    box-shadow var(--dur) var(--ease);
+      }
+
+      .adm-hamburger:hover {
+        border-color: var(--brand-line);
+        box-shadow: 0 6px 18px -12px var(--brand-glow);
+      }
+
+      .adm-hamburger-bar {
+        display: block;
+        width: 20px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--ink);
+        transition: transform 0.28s var(--ease), opacity 0.2s var(--ease),
+                    background-color var(--dur) var(--ease), width 0.28s var(--ease);
+      }
+
+      .adm-hamburger.is-active { background: var(--dark); border-color: rgba(59, 153, 252, 0.4); }
+      .adm-hamburger.is-active .adm-hamburger-bar { background: var(--brand); }
+      .adm-hamburger.is-active .adm-hamburger-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .adm-hamburger.is-active .adm-hamburger-bar:nth-child(2) { opacity: 0; width: 0; }
+      .adm-hamburger.is-active .adm-hamburger-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+      /* --------------------------------------------------------- Mobile drawer */
+      .adm-drawer {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: linear-gradient(180deg, var(--dark) 0%, #05070a 100%);
+        border-top: 1px solid rgba(59, 153, 252, 0.18);
+        border-bottom: 1px solid rgba(59, 153, 252, 0.18);
+        box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.7);
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: max-height 0.42s var(--ease), opacity 0.3s var(--ease),
+                    transform 0.35s var(--ease), visibility 0.42s var(--ease);
+      }
+
+      .adm-drawer.is-open {
+        max-height: 640px;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .adm-drawer-list { display: flex; flex-direction: column; padding: 12px 20px 22px; }
+      .adm-drawer-list li + li { border-top: 1px solid rgba(255, 255, 255, 0.06); }
+
+      .adm-drawer-list a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 6px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #d6dde8;
+        transition: color var(--dur) var(--ease), padding-left var(--dur) var(--ease);
+      }
+
+      .adm-drawer-list a::after {
+        content: "→";
+        font-size: 0.85rem;
+        color: var(--brand);
+        opacity: 0;
+        transform: translateX(-6px);
+        transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+      }
+
+      .adm-drawer-list a:hover,
+      .adm-drawer-list a:focus-visible { color: var(--brand); padding-left: 12px; outline: none; }
+
+      .adm-drawer-list a:hover::after,
+      .adm-drawer-list a:focus-visible::after { opacity: 1; transform: translateX(0); }
+
+      .adm-drawer-list a[aria-current="page"] { color: var(--brand); font-weight: 800; }
+
+      .adm-drawer-signout {
+        margin-top: 14px;
+        justify-content: center !important;
+        padding: 13px 18px !important;
+        border-radius: var(--r-full);
+        background: rgba(244, 63, 94, 0.12);
+        border: 1px solid rgba(244, 63, 94, 0.4);
+        color: #fda4af !important;
+        font-weight: 800 !important;
+      }
+
+      .adm-drawer-signout::after { display: none; }
+
+      .adm-drawer-signout:hover {
+        padding-left: 18px !important;
+        color: #ffffff !important;
+        background: rgba(244, 63, 94, 0.28) !important;
+      }
+
+      @media (min-width: 1080px) {
+        .adm-nav { display: flex; }
+        .adm-hamburger { display: none; }
+      }
+
+      /* ------------------------------------------------------------ Page shell */
+      .adm-main { flex: 1 1 auto; padding: 28px 0 64px; }
+
+      .adm-shell {
+        max-width: 88rem;
+        margin-inline: auto;
+        padding-inline: 16px;
+      }
+
+      @media (min-width: 640px) { .adm-shell { padding-inline: 24px; } }
+      @media (min-width: 1024px) { .adm-shell { padding-inline: 32px; } }
+
+      .adm-page-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        padding-bottom: 22px;
+        margin-bottom: 26px;
+        border-bottom: 1px solid var(--line-soft);
+      }
+
+      .adm-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--brand-strong);
+      }
+
+      .adm-eyebrow::before {
+        content: "";
+        width: 22px;
+        height: 2px;
+        border-radius: 2px;
+        background: var(--brand);
+      }
+
+      .adm-page-title {
+        margin-top: 10px;
+        font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.15;
+        color: var(--ink);
+      }
+
+      .adm-page-sub {
+        margin-top: 8px;
+        max-width: 76ch;
+        font-size: 0.85rem;
+        line-height: 1.7;
+        color: var(--ink-muted);
+      }
+
+      .adm-head-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+
+      /* ------------------------------------------------------------------ Buttons */
+      .adm-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 12px 20px;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        border-radius: var(--r-full);
+        border: 1px solid transparent;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: transform 0.2s var(--ease), filter 0.2s var(--ease),
+                    box-shadow 0.2s var(--ease), background-color 0.2s var(--ease),
+                    border-color 0.2s var(--ease), color 0.2s var(--ease);
+      }
+
+      .adm-btn:active { transform: translateY(1px) scale(0.985); }
+      .adm-btn svg { flex: 0 0 auto; }
+
+      .adm-btn-primary {
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand) 0%, var(--brand-strong) 100%);
+        border-color: rgba(59, 153, 252, 0.5);
+        box-shadow: 0 14px 30px -16px var(--brand-glow),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+      }
+
+      .adm-btn-primary:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.06);
+        box-shadow: 0 20px 40px -18px var(--brand-glow);
+      }
+
+      .adm-btn-ghost {
+        color: var(--ink);
+        background: #ffffff;
+        border-color: var(--line);
+        box-shadow: 0 6px 18px -16px rgba(10, 13, 18, 0.6);
+      }
+
+      .adm-btn-ghost:hover {
+        transform: translateY(-2px);
+        border-color: var(--brand-line);
+        color: var(--brand-strong);
+        box-shadow: 0 14px 30px -20px var(--brand-glow);
+      }
+
+      .adm-btn-dark {
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--dark), #05070a);
+        border-color: rgba(59, 153, 252, 0.32);
+      }
+
+      .adm-btn-dark:hover {
+        transform: translateY(-2px);
+        border-color: var(--brand);
+        box-shadow: 0 18px 34px -20px var(--brand-glow);
+      }
+
+      .adm-btn-danger {
+        color: #be123c;
+        background: #fff1f2;
+        border-color: #fecdd3;
+      }
+
+      .adm-btn-danger:hover {
+        transform: translateY(-2px);
+        color: #ffffff;
+        background: linear-gradient(135deg, #f43f5e, #be123c);
+        border-color: transparent;
+      }
+
+      .adm-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+        filter: none !important;
+        box-shadow: none !important;
+      }
+
+      /* -------------------------------------------------------------- Cards */
+      .adm-card {
+        display: flex;
+        flex-direction: column;
+        border-radius: 18px;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        box-shadow: 0 18px 44px -38px rgba(10, 13, 18, 0.55);
+        overflow: hidden;
+      }
+
+      .adm-card--dark {
+        background:
+          radial-gradient(80% 120% at 100% 0%, rgba(59, 153, 252, 0.16), transparent 62%),
+          linear-gradient(160deg, var(--dark) 0%, #070b11 100%);
+        border-color: rgba(59, 153, 252, 0.26);
+        box-shadow: 0 26px 56px -34px rgba(0, 0, 0, 0.7);
+        color: #ffffff;
+      }
+
+      .adm-card-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 20px 22px 16px;
+        border-bottom: 1px solid var(--line-soft);
+      }
+
+      .adm-card--dark .adm-card-head { border-bottom-color: rgba(255, 255, 255, 0.08); }
+
+      .adm-card-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+      }
+
+      .adm-card--dark .adm-card-title { color: #ffffff; }
+      .adm-card-title svg { color: var(--brand); flex: 0 0 auto; }
+
+      .adm-card-note {
+        margin-top: 5px;
+        font-size: 0.74rem;
+        line-height: 1.6;
+        color: var(--ink-muted);
+        max-width: 68ch;
+      }
+
+      .adm-card--dark .adm-card-note { color: #93a2b5; }
+
+      .adm-card-body { flex: 1 1 auto; padding: 20px 22px 24px; }
+
+      .adm-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        border-radius: var(--r-full);
+        white-space: nowrap;
+        color: var(--brand-strong);
+        background: var(--brand-tint);
+        border: 1px solid var(--brand-line);
+      }
+
+      .adm-tag--ok   { color: #047857; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.35); }
+      .adm-tag--warn { color: #b45309; background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.35); }
+      .adm-tag--crit { color: #be123c; background: rgba(244, 63, 94, 0.1); border-color: rgba(244, 63, 94, 0.35); }
+
+      /* --------------------------------------------------------------- Footer */
+      .adm-footer {
+        border-top: 1px solid var(--line-soft);
+        background: linear-gradient(180deg, var(--paper), #f6f7f9);
+      }
+
+      .adm-footer-inner {
+        max-width: 88rem;
+        margin-inline: auto;
+        padding: 34px 16px 30px;
+      }
+
+      @media (min-width: 640px) { .adm-footer-inner { padding-inline: 24px; } }
+      @media (min-width: 1024px) { .adm-footer-inner { padding-inline: 32px; } }
+
+      .adm-footer-meta {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        margin: 0;
+      }
+
+      @media (max-width: 860px) { .adm-footer-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 480px) { .adm-footer-meta { grid-template-columns: 1fr; } }
+
+      .adm-footer-meta dt {
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+
+      .adm-footer-meta dd {
+        margin: 6px 0 0;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: var(--ink-soft);
+      }
+
+      .adm-footer-bottom {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-top: 26px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line-soft);
+        font-size: 0.72rem;
+        color: var(--ink-muted);
+      }
+
+      .adm-footer-links { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
+      .adm-footer-links a { font-weight: 600; transition: color var(--dur) var(--ease); }
+      .adm-footer-links a:hover { color: var(--brand-strong); }
+
+      /* ==========================================================================
+         PROFILE SETTINGS — layout, forms, avatar, security, notifications
+         ========================================================================== */
+
+      .ps-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 2.15fr) minmax(0, 1fr);
+        gap: 20px;
+        align-items: start;
+        margin-bottom: 20px;
+      }
+
+      @media (max-width: 1180px) { .ps-layout { grid-template-columns: 1fr; } }
+
+      .ps-col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+
+      /* -------------------------------------------------------- Identity card */
+      .ps-identity {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 24px 26px;
+        border-radius: 18px;
+        background:
+          radial-gradient(90% 160% at 100% 0%, rgba(59, 153, 252, 0.2), transparent 62%),
+          linear-gradient(135deg, var(--dark) 0%, #060a10 100%);
+        border: 1px solid rgba(59, 153, 252, 0.32);
+        box-shadow: 0 26px 56px -34px rgba(0, 0, 0, 0.7);
+        color: #ffffff;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .ps-identity::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(to right, rgba(59, 153, 252, 0.08) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(59, 153, 252, 0.08) 1px, transparent 1px);
+        background-size: 44px 44px;
+        -webkit-mask-image: radial-gradient(90% 90% at 0% 0%, #000 0%, transparent 76%);
+        mask-image: radial-gradient(90% 90% at 0% 0%, #000 0%, transparent 76%);
+        pointer-events: none;
+      }
+
+      .ps-identity-left {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        flex-wrap: wrap;
+        min-width: 0;
+      }
+
+      .ps-avatar-wrap {
+        position: relative;
+        flex: 0 0 auto;
+      }
+
+      .ps-avatar {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        border: 3px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 0 6px rgba(59, 153, 252, 0.12),
+                    0 24px 48px -26px rgba(0, 0, 0, 0.75);
+        overflow: hidden;
+      }
+
+      .ps-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+      .ps-avatar-badge {
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #04121f;
+        background: linear-gradient(135deg, var(--brand-soft), var(--brand));
+        border: 2px solid #060a10;
+        box-shadow: 0 8px 18px -8px var(--brand-glow);
+      }
+
+      .ps-identity-text { min-width: 0; }
+
+      .ps-identity-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--brand);
+      }
+
+      .ps-identity-name {
+        margin-top: 8px;
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        color: #ffffff;
+      }
+
+      .ps-identity-meta {
+        margin-top: 6px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.76rem;
+        font-weight: 600;
+        color: #93a2b5;
+      }
+
+      .ps-identity-meta code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 10.5px;
+        color: var(--brand-soft);
+        background: rgba(59, 153, 252, 0.12);
+        padding: 2px 8px;
+        border-radius: 6px;
+        border: 1px solid rgba(59, 153, 252, 0.28);
+      }
+
+      .ps-identity-right {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-end;
+      }
+
+      .ps-identity-stat {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 14px;
+        border-radius: var(--r-full);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 10.5px;
+        font-weight: 700;
+        color: #cbd5e1;
+        white-space: nowrap;
+      }
+
+      .ps-identity-stat strong {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        color: #ffffff;
+        font-weight: 800;
+      }
+
+      .ps-identity-stat--ok strong   { color: #34d399; }
+      .ps-identity-stat--warn strong { color: #fbbf24; }
+
+      @media (max-width: 720px) {
+        .ps-identity-right { align-items: flex-start; width: 100%; }
+        .ps-identity-left { gap: 18px; }
+        .ps-avatar { width: 82px; height: 82px; font-size: 26px; }
+        .ps-identity-name { font-size: 1.25rem; }
+      }
+
+      /* ----------------------------------------------------------- Tab bar */
+      .ps-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 6px;
+        border-radius: var(--r-full);
+        background: #ffffff;
+        border: 1px solid var(--line);
+        box-shadow: 0 12px 30px -26px rgba(10, 13, 18, 0.5);
+        margin-bottom: 20px;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .ps-tabs::-webkit-scrollbar { display: none; }
+
+      .ps-tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 16px;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+        border-radius: var(--r-full);
+        border: 0;
+        cursor: pointer;
+        color: var(--ink-soft);
+        background: transparent;
+        transition: color var(--dur) var(--ease), background-color var(--dur) var(--ease),
+                    box-shadow var(--dur) var(--ease);
+      }
+
+      .ps-tab svg { flex: 0 0 auto; opacity: 0.85; }
+
+      .ps-tab:hover { color: var(--brand-strong); background: var(--brand-tint); }
+
+      .ps-tab[aria-selected="true"] {
+        color: var(--brand-strong);
+        background: var(--brand-tint);
+        box-shadow: inset 0 0 0 1px var(--brand-line);
+        font-weight: 800;
+      }
+
+      .ps-panel[hidden] { display: none; }
+
+      /* ------------------------------------------------------------- Forms */
+      .ps-form { display: flex; flex-direction: column; gap: 22px; }
+
+      .ps-fieldset {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        border: 0;
+        padding: 0;
+        margin: 0;
+        min-width: 0;
+      }
+
+      .ps-legend {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 0;
+        margin-bottom: 4px;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+
+      .ps-legend::after {
+        content: "";
+        flex: 1 1 auto;
+        height: 1px;
+        background: var(--line-soft);
+      }
+
+      .ps-legend svg { color: var(--brand); flex: 0 0 auto; }
+
+      .ps-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .ps-row--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+      @media (max-width: 820px) {
+        .ps-row, .ps-row--3 { grid-template-columns: 1fr; }
+      }
+
+      .ps-field { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+
+      .ps-field-full { grid-column: 1 / -1; }
+
+      .ps-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: var(--ink-muted);
+      }
+
+      .ps-label-req { color: #be123c; font-size: 11px; line-height: 1; }
+
+      .ps-hint {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0;
+        text-transform: none;
+        color: var(--ink-faint);
+      }
+
+      .ps-input,
+      .ps-select,
+      .ps-textarea {
+        width: 100%;
+        padding: 12px 14px;
+        font-size: 0.82rem;
+        font-family: inherit;
+        color: var(--ink);
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        outline: none;
+        transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+      }
+
+      .ps-input::placeholder,
+      .ps-textarea::placeholder { color: var(--ink-faint); }
+
+      .ps-input:focus,
+      .ps-select:focus,
+      .ps-textarea:focus {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px var(--brand-tint);
+      }
+
+      .ps-input.is-invalid,
+      .ps-select.is-invalid,
+      .ps-textarea.is-invalid {
+        border-color: var(--critical);
+        box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.16);
+        animation: psShake 0.32s var(--ease);
+      }
+
+      @keyframes psShake {
+        0%, 100% { transform: translateX(0); }
+        25%      { transform: translateX(-4px); }
+        75%      { transform: translateX(4px); }
+      }
+
+      .ps-textarea {
+        min-height: 104px;
+        line-height: 1.65;
+        resize: vertical;
+      }
+
+      .ps-select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%233B99FC' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 36px;
+        cursor: pointer;
+      }
+
+      .ps-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; letter-spacing: 0.01em; }
+
+      .ps-count {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 9.5px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: none;
+        color: var(--ink-faint);
+      }
+
+      /* ----------------------------------------------------------- Avatar panel */
+      .ps-avatar-panel {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        align-items: flex-start;
+      }
+
+      .ps-avatar-preview {
+        position: relative;
+        flex: 0 0 auto;
+      }
+
+      .ps-avatar-preview .ps-avatar {
+        width: 140px;
+        height: 140px;
+        font-size: 44px;
+        border: 2px solid var(--line);
+        box-shadow: 0 20px 40px -26px rgba(10, 13, 18, 0.5);
+      }
+
+      .ps-avatar-preview .ps-avatar-badge {
+        width: 32px;
+        height: 32px;
+        border: 3px solid #ffffff;
+        color: #ffffff;
+      }
+
+      .ps-avatar-controls { flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+
+      .ps-dropzone {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 26px 22px;
+        border-radius: 14px;
+        border: 2px dashed var(--line);
+        background: #f8fafc;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.22s var(--ease);
+      }
+
+      .ps-dropzone:hover,
+      .ps-dropzone.is-dragover {
+        border-color: var(--brand);
+        background: var(--brand-tint);
+      }
+
+      .ps-dropzone-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--brand);
+        background: rgba(59, 153, 252, 0.12);
+        border: 1px solid var(--brand-line);
+      }
+
+      .ps-dropzone-title {
+        font-size: 0.86rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+
+      .ps-dropzone-text {
+        font-size: 0.74rem;
+        color: var(--ink-muted);
+        line-height: 1.6;
+        max-width: 46ch;
+      }
+
+      .ps-dropzone input[type="file"] {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .ps-avatar-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+      .ps-avatar-note {
+        font-size: 10.5px;
+        line-height: 1.65;
+        color: var(--ink-faint);
+      }
+
+      /* ------------------------------------------------------ Security toggles */
+      .ps-toggle-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 16px 18px;
+        border-radius: 14px;
+        background: #f8fafc;
+        border: 1px solid var(--line-soft);
+        transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+      }
+
+      .ps-toggle-row:hover { border-color: var(--brand-line); }
+      .ps-toggle-row.is-on { background: rgba(59, 153, 252, 0.05); border-color: var(--brand-line); }
+
+      .ps-toggle-text { min-width: 0; flex: 1 1 260px; }
+
+      .ps-toggle-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+
+      .ps-toggle-title svg { color: var(--brand); flex: 0 0 auto; }
+
+      .ps-toggle-desc {
+        margin-top: 5px;
+        font-size: 0.74rem;
+        line-height: 1.65;
+        color: var(--ink-muted);
+        max-width: 62ch;
+      }
+
+      .ps-toggle-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      /* Switch */
+      .ps-switch {
+        position: relative;
+        display: inline-flex;
+        flex: 0 0 auto;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .ps-switch input {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+        pointer-events: none;
+      }
+
+      .ps-switch-track {
+        position: relative;
+        width: 50px;
+        height: 28px;
+        border-radius: var(--r-full);
+        background: #cbd5e1;
+        border: 1px solid var(--line);
+        transition: background-color 0.22s var(--ease), border-color 0.22s var(--ease),
+                    box-shadow 0.22s var(--ease);
+        flex: 0 0 auto;
+      }
+
+      .ps-switch-track::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 3px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #ffffff;
+        box-shadow: 0 2px 6px -2px rgba(10, 13, 18, 0.5);
+        transform: translateY(-50%);
+        transition: left 0.22s var(--ease);
+      }
+
+      .ps-switch input:checked + .ps-switch-track {
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        border-color: rgba(59, 153, 252, 0.5);
+        box-shadow: 0 0 0 4px rgba(59, 153, 252, 0.14);
+      }
+
+      .ps-switch input:checked + .ps-switch-track::after { left: 25px; }
+
+      .ps-switch input:focus-visible + .ps-switch-track {
+        box-shadow: 0 0 0 3px var(--brand-tint);
+      }
+
+      .ps-switch input:disabled + .ps-switch-track {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Password strength */
+      .ps-strength {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 6px;
+      }
+
+      .ps-strength-bars {
+        display: flex;
+        gap: 4px;
+        flex: 1 1 auto;
+      }
+
+      .ps-strength-bar {
+        height: 6px;
+        flex: 1 1 0;
+        border-radius: var(--r-full);
+        background: var(--line);
+        transition: background-color 0.22s var(--ease);
+      }
+
+      .ps-strength-bar.is-1 { background: #f43f5e; }
+      .ps-strength-bar.is-2 { background: #f59e0b; }
+      .ps-strength-bar.is-3 { background: #eab308; }
+      .ps-strength-bar.is-4 { background: #34d399; }
+
+      .ps-strength-label {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ink-muted);
+        min-width: 74px;
+        text-align: right;
+      }
+
+      /* 2FA authenticator card */
+      .ps-2fa-card {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 18px;
+        border-radius: 14px;
+        background: linear-gradient(160deg, rgba(59, 153, 252, 0.06), rgba(10, 13, 18, 0.01));
+        border: 1px solid var(--brand-line);
+      }
+
+      .ps-2fa-qr {
+        width: 132px;
+        height: 132px;
+        flex: 0 0 auto;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        padding: 10px;
+      }
+
+      .ps-2fa-qr svg { width: 100%; height: 100%; }
+
+      .ps-2fa-body { flex: 1 1 260px; min-width: 0; }
+
+      .ps-2fa-title {
+        font-size: 0.86rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+
+      .ps-2fa-text {
+        margin-top: 6px;
+        font-size: 0.74rem;
+        line-height: 1.7;
+        color: var(--ink-muted);
+      }
+
+      .ps-2fa-secret {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 12px;
+        padding: 8px 12px;
+        border-radius: 10px;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 11.5px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        color: var(--ink);
+      }
+
+      .ps-2fa-secret button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 0;
+        cursor: pointer;
+        color: var(--brand-strong);
+        background: var(--brand-tint);
+        transition: all 0.18s var(--ease);
+      }
+
+      .ps-2fa-secret button:hover { color: #ffffff; background: var(--brand); }
+
+      /* Recovery codes */
+      .ps-codes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      @media (max-width: 520px) { .ps-codes { grid-template-columns: 1fr; } }
+
+      .ps-code {
+        padding: 9px 12px;
+        border-radius: 10px;
+        background: #05080d;
+        border: 1px solid rgba(59, 153, 252, 0.24);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 11.5px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        color: var(--brand-soft);
+        text-align: center;
+      }
+
+      /* Active sessions table */
+      .ps-sessions {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.78rem;
+      }
+
+      .ps-sessions thead th {
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-muted);
+        background: #f6f8fb;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+
+      .ps-sessions tbody td {
+        padding: 13px 16px;
+        vertical-align: middle;
+        color: var(--ink);
+        border-bottom: 1px solid var(--line-soft);
+      }
+
+      .ps-sessions tbody tr:hover { background: var(--brand-tint); }
+
+      .ps-sessions .adm-mono {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.74rem;
+        font-weight: 700;
+      }
+
+      /* --------------------------------------------------- Notification matrix */
+      .ps-notify-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.78rem;
+      }
+
+      .ps-notify-table thead th {
+        padding: 12px 14px;
+        text-align: center;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--ink-muted);
+        background: #f6f8fb;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+
+      .ps-notify-table thead th:first-child {
+        text-align: left;
+        min-width: 220px;
+      }
+
+      .ps-notify-table tbody td {
+        padding: 12px 14px;
+        text-align: center;
+        border-bottom: 1px solid var(--line-soft);
+      }
+
+      .ps-notify-table tbody td:first-child {
+        text-align: left;
+      }
+
+      .ps-notify-table tbody tr:hover { background: var(--brand-tint); }
+
+      .ps-notify-cat {
+        background: #fbfcfd !important;
+        font-size: 9px !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-faint) !important;
+      }
+
+      .ps-notify-name {
+        display: block;
+        font-weight: 700;
+        color: var(--ink);
+        line-height: 1.4;
+      }
+
+      .ps-notify-desc {
+        display: block;
+        margin-top: 3px;
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--ink-muted);
+        line-height: 1.55;
+      }
+
+      .ps-notify-table .ps-check {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 5px;
+        border: 1.5px solid var(--line);
+        background: #ffffff;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.18s var(--ease);
+        vertical-align: middle;
+      }
+
+      .ps-notify-table .ps-check:hover { border-color: var(--brand-line); }
+
+      .ps-notify-table .ps-check:checked {
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        border-color: transparent;
+      }
+
+      .ps-notify-table .ps-check:checked::after {
+        content: "";
+        width: 5px;
+        height: 9px;
+        border: solid #ffffff;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg) translate(-1px, -1px);
+      }
+
+      .ps-notify-table .ps-check:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--brand-tint);
+      }
+
+      .ps-notify-table .ps-check:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        background: #f4f4f5;
+      }
+
+      /* Quiet hours */
+      .ps-quiet {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 18px;
+        border-radius: 14px;
+        background: #f8fafc;
+        border: 1px solid var(--line-soft);
+      }
+
+      .ps-quiet-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: var(--ink);
+        flex: 1 1 220px;
+      }
+
+      .ps-quiet-title svg { color: var(--brand); }
+
+      .ps-quiet-inputs {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 0 0 auto;
+      }
+
+      .ps-quiet-inputs .ps-input {
+        width: 116px;
+        padding: 9px 11px;
+        font-size: 0.78rem;
+      }
+
+      .ps-quiet-sep {
+        font-size: 0.74rem;
+        font-weight: 700;
+        color: var(--ink-muted);
+      }
+
+      /* ----------------------------------------------------------- Sidebar */
+      .ps-panel { display: flex; flex-direction: column; gap: 16px; }
+
+      .ps-panel-section { display: flex; flex-direction: column; gap: 12px; }
+
+      .ps-panel-section + .ps-panel-section {
+        padding-top: 16px;
+        border-top: 1px solid var(--line-soft);
+      }
+
+      .adm-card--dark .ps-panel-section + .ps-panel-section {
+        border-top-color: rgba(255, 255, 255, 0.08);
+      }
+
+      .ps-panel-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+
+      .adm-card--dark .ps-panel-title { color: #7d8b9e; }
+
+      .ps-panel-title svg { color: var(--brand); flex: 0 0 auto; }
+
+      .ps-status-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 0.74rem;
+        font-weight: 600;
+        color: var(--ink-soft);
+      }
+
+      .adm-card--dark .ps-status-row { color: #93a2b5; }
+
+      .ps-status-row strong {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.74rem;
+        font-weight: 800;
+        color: var(--ink);
+      }
+
+      .adm-card--dark .ps-status-row strong { color: #ffffff; }
+
+      .ps-actions-stack { display: flex; flex-direction: column; gap: 10px; }
+      .ps-actions-stack .adm-btn { width: 100%; }
+
+      .ps-action-note {
+        font-size: 10px;
+        line-height: 1.6;
+        color: var(--ink-faint);
+        text-align: center;
+      }
+
+      .adm-card--dark .ps-action-note { color: #64748b; }
+
+      /* Security score ring */
+      .ps-score {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 16px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .ps-score-ring {
+        position: relative;
+        width: 84px;
+        height: 84px;
+        flex: 0 0 auto;
+      }
+
+      .ps-score-ring svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+
+      .ps-score-ring circle {
+        fill: none;
+        stroke-width: 8;
+        stroke-linecap: round;
+      }
+
+      .ps-score-ring .track { stroke: rgba(255, 255, 255, 0.09); }
+
+      .ps-score-ring .value {
+        stroke: #34d399;
+        stroke-dasharray: 226;
+        stroke-dashoffset: 45;
+        transition: stroke-dashoffset 0.6s var(--ease);
+      }
+
+      .ps-score-center {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+
+      .ps-score-value {
+        font-size: 1.4rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        color: #ffffff;
+      }
+
+      .ps-score-label {
+        margin-top: 3px;
+        font-size: 8.5px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #7d8b9e;
+      }
+
+      .ps-score-body { min-width: 0; }
+
+      .ps-score-title {
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: #ffffff;
+      }
+
+      .ps-score-text {
+        margin-top: 5px;
+        font-size: 0.72rem;
+        line-height: 1.65;
+        color: #93a2b5;
+      }
+
+      /* Checklist */
+      .ps-checklist { display: flex; flex-direction: column; gap: 8px; }
+
+      .ps-checklist-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 11px;
+        font-size: 0.74rem;
+        line-height: 1.55;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+        color: #cbd5e1;
+      }
+
+      .ps-checklist-item svg { flex: 0 0 auto; margin-top: 2px; }
+
+      .ps-checklist-item--done {
+        color: #a7f3d0;
+        border-color: rgba(16, 185, 129, 0.32);
+        background: rgba(16, 185, 129, 0.08);
+      }
+
+      .ps-checklist-item--todo {
+        color: #fde68a;
+        border-color: rgba(245, 158, 11, 0.3);
+        background: rgba(245, 158, 11, 0.07);
+      }
+
+      /* Danger zone */
+      .ps-danger {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px 18px;
+        border-radius: 14px;
+        background: rgba(244, 63, 94, 0.08);
+        border: 1px solid rgba(244, 63, 94, 0.28);
+      }
+
+      .ps-danger svg { flex: 0 0 auto; color: #fb7185; margin-top: 2px; }
+
+      .ps-danger-body { min-width: 0; flex: 1 1 auto; }
+
+      .ps-danger-title {
+        font-size: 0.82rem;
+        font-weight: 800;
+        color: #ffffff;
+      }
+
+      .ps-danger-text {
+        margin-top: 5px;
+        font-size: 0.74rem;
+        line-height: 1.65;
+        color: #fecdd3;
+      }
+
+      /* ------------------------------------------------------------- Toast */
+      .ps-toast-stack {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        z-index: 400;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: min(380px, calc(100vw - 40px));
+        pointer-events: none;
+      }
+
+      .ps-toast {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+        padding: 13px 16px;
+        border-radius: 13px;
+        background: linear-gradient(160deg, var(--dark), #070b11);
+        border: 1px solid rgba(59, 153, 252, 0.32);
+        box-shadow: 0 22px 44px -24px rgba(0, 0, 0, 0.85);
+        color: #e2e8f0;
+        font-size: 0.76rem;
+        line-height: 1.55;
+        pointer-events: auto;
+        animation: psToastIn 0.3s var(--ease) both;
+      }
+
+      .ps-toast.is-leaving { animation: psToastOut 0.28s var(--ease) both; }
+
+      .ps-toast svg { flex: 0 0 auto; margin-top: 1px; }
+
+      .ps-toast--ok   { border-color: rgba(16, 185, 129, 0.4); }
+      .ps-toast--ok svg { color: #34d399; }
+      .ps-toast--warn { border-color: rgba(245, 158, 11, 0.4); }
+      .ps-toast--warn svg { color: #fbbf24; }
+      .ps-toast--crit { border-color: rgba(244, 63, 94, 0.45); }
+      .ps-toast--crit svg { color: #fb7185; }
+      .ps-toast--info svg { color: var(--brand-soft); }
+
+      .ps-toast strong { color: #ffffff; display: block; margin-bottom: 2px; font-weight: 800; }
+
+      @keyframes psToastIn {
+        from { opacity: 0; transform: translateY(12px) scale(0.98); }
+        to   { opacity: 1; transform: translateY(0) scale(1); }
+      }
+
+      @keyframes psToastOut {
+        from { opacity: 1; transform: translateY(0) scale(1); }
+        to   { opacity: 0; transform: translateY(10px) scale(0.98); }
+      }
+
+      /* ------------------------------------------------------- Reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .adm-btn, .ps-tab, .ps-switch-track, .ps-switch-track::after,
+        .ps-toast, .ps-dropzone, .ps-strength-bar, .ps-score-ring .value {
+          transition-duration: 0.001ms !important;
+          animation-duration: 0.001ms !important;
+          transform: none !important;
+        }
+        .adm-status-dot span:last-child { animation: none !important; }
+      }
+
+      /* ---------------------------------------------------------------- Print */
+      @media print {
+        .adm-hamburger, .adm-head-actions, .adm-nav, .ps-tabs,
+        .ps-toast-stack, .ps-avatar-controls, .ps-actions-stack,
+        .ps-avatar-actions, .ps-dropzone { display: none !important; }
+        body.adm-body { background: #ffffff; }
+        .adm-card, .ps-identity { box-shadow: none; border-color: #cccccc; background: #ffffff; color: #000; }
+        .ps-identity-name, .ps-score-value { color: #000000; }
+      }
+    </style>
+  </head>
+
+  <body class="adm-body">
+    <div class="min-h-screen flex flex-col font-sans relative">
+
+      <!-- ===================================================================
+           HEADER — brand, live status, authenticated user, navigation
+      ==================================================================== -->
+      <header class="sticky top-0 z-50 bg-[#fcfbf9]/95 backdrop-blur-md border-b border-neutral-200/80 transition-all duration-200">
+
+        <div class="adm-shell py-3 adm-header-inner">
+
+          <!-- Brand -->
+          <a href="admin.html" class="adm-brand" aria-label="VUNVAULT administrative home">
+            <span class="adm-brand-tile">
+              <img src="logo.svg" alt="VUNVAULT" width="24" height="24">
+            </span>
+            <span>
+              <span class="adm-brand-name">VUNVAULT</span>
+              <span class="adm-brand-sub">Command Center</span>
+            </span>
+          </a>
+
+          <!-- System status -->
+          <span class="adm-status-pill" role="status" aria-live="polite">
+            <span class="adm-status-dot" aria-hidden="true"><span></span><span></span></span>
+            <span>SYS: OPERATIONAL</span>
+          </span>
+
+          <!-- Authenticated user -->
+          <div class="adm-user-chip" title="Authenticated administrative session">
+            <span class="adm-avatar" aria-hidden="true" id="adm-header-avatar">ER</span>
+            <span class="adm-user-meta">
+              <span class="adm-user-label">Logged in as</span>
+              <span class="adm-user-name" id="adm-header-name">e.reed@vunvault.com</span>
+              <span class="adm-user-role">Super Administrator</span>
+            </span>
+          </div>
+
+          <!-- Desktop navigation -->
+          <nav class="adm-nav" aria-label="Administrative sections">
+            <a href="admin.html">Dashboard Overview</a>
+            <a href="scan-queue.html">Scan Queue</a>
+            <a href="zero-day.html">Zero-Day Intel</a>
+            <a href="user-management.html">User Management</a>
+            <a href="content-moderation.html">Content Moderation</a>
+            <a href="audit-logs.html">Audit Logs</a>
+            <a href="profile-settings.html" aria-current="page">Profile Settings</a>
+            <a href="logout.html" class="adm-nav-signout">Sign Out</a>
+          </nav>
+
+          <!-- Mobile hamburger -->
+          <button id="adm-menu-toggle"
+                  class="adm-hamburger"
+                  type="button"
+                  aria-label="Toggle administrative navigation menu"
+                  aria-expanded="false"
+                  aria-controls="adm-mobile-menu">
+            <span class="adm-hamburger-bar"></span>
+            <span class="adm-hamburger-bar"></span>
+            <span class="adm-hamburger-bar"></span>
+          </button>
+        </div>
+
+        <!-- Mobile drawer -->
+        <nav id="adm-mobile-menu" class="adm-drawer" aria-label="Administrative sections (mobile)">
+          <ul class="adm-drawer-list">
+            <li><a href="admin.html">Dashboard Overview</a></li>
+            <li><a href="scan-queue.html">Scan Queue &amp; Job Assessment</a></li>
+            <li><a href="zero-day.html">Zero-Day Intel</a></li>
+            <li><a href="user-management.html">User &amp; Access Management</a></li>
+            <li><a href="content-moderation.html">Content Moderation</a></li>
+            <li><a href="audit-logs.html">System Audit Logs</a></li>
+            <li><a href="profile-settings.html" aria-current="page">Profile Settings</a></li>
+            <li><a href="logout.html" class="adm-drawer-signout">Sign Out</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <!-- ===================================================================
+           MAIN — Profile Settings
+      ==================================================================== -->
+      <main class="adm-main">
+        <div class="adm-shell">
+
+          <!-- ------------------------------------------------- Page heading -->
+          <div class="adm-page-head">
+            <div>
+              <span class="adm-eyebrow">Account &amp; Personal Configuration</span>
+              <h1 class="adm-page-title">Profile Settings</h1>
+              <p class="adm-page-sub">
+                Manage your administrator identity, profile picture, password, two-factor authentication and
+                personal notification preferences. Sensitive changes are written to the immutable audit log.
+              </p>
+            </div>
+
+            <!-- -------------------------------------------- Quick actions -->
+            <div class="adm-head-actions">
+              <button type="button" class="adm-btn adm-btn-ghost" id="ps-discard-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 3v5h5"/>
+                  <path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/>
+                </svg>
+                <span>Discard Changes</span>
+              </button>
+
+              <button type="button" class="adm-btn adm-btn-primary" id="ps-save-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                  <path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/>
+                </svg>
+                <span>Save All Changes</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- =============================================================
+               IDENTITY BANNER
+          ============================================================== -->
+          <section class="ps-identity" aria-labelledby="ps-identity-heading">
+            <div class="ps-identity-left">
+              <div class="ps-avatar-wrap">
+                <span class="ps-avatar" id="ps-identity-avatar" aria-hidden="true">ER</span>
+                <span class="ps-avatar-badge" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                       fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"
+                       stroke-linejoin="round">
+                    <path d="M20 6 9 17l-5-5"/>
+                  </svg>
+                </span>
+              </div>
+
+              <div class="ps-identity-text">
+                <span class="ps-identity-eyebrow">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                       fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                       stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 2 3 7v6c0 5 4 8.5 9 10 5-1.5 9-5 9-10V7z"/>
+                    <path d="m9 12 2 2 4-4"/>
+                  </svg>
+                  Verified Administrator
+                </span>
+
+                <h2 class="ps-identity-name" id="ps-identity-heading">Dr. Evelyn Reed</h2>
+
+                <div class="ps-identity-meta">
+                  <span>Super Administrator</span>
+                  <span aria-hidden="true">·</span>
+                  <span>Command Center — Nairobi HQ</span>
+                  <span aria-hidden="true">·</span>
+                  <code>e.reed@vunvault.com</code>
+                </div>
+              </div>
+            </div>
+
+            <div class="ps-identity-right">
+              <span class="ps-identity-stat ps-identity-stat--ok">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 6 9 17l-5-5"/>
+                </svg>
+                MFA: <strong>Hardware key</strong>
+              </span>
+              <span class="ps-identity-stat">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 6v6l4 2"/>
+                </svg>
+                Last sign-in: <strong id="ps-last-signin">Today · 09:41 UTC</strong>
+              </span>
+              <span class="ps-identity-stat">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 3v18h18"/>
+                  <path d="m19 9-5 5-4-4-3 3"/>
+                </svg>
+                Sessions: <strong>3 active</strong>
+              </span>
+            </div>
+          </section>
+
+          <!-- =============================================================
+               TABS
+          ============================================================== -->
+          <nav class="ps-tabs" role="tablist" aria-label="Profile settings sections">
+            <button type="button" class="ps-tab" role="tab" id="ps-tab-personal"
+                    aria-controls="ps-panel-personal" aria-selected="true" data-ps-tab="personal">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 21v-1a7 7 0 0 1 7-7h2a7 7 0 0 1 7 7v1"/>
+              </svg>
+              Personal Details
+            </button>
+
+            <button type="button" class="ps-tab" role="tab" id="ps-tab-avatar"
+                    aria-controls="ps-panel-avatar" aria-selected="false" data-ps-tab="avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <circle cx="12" cy="10" r="3"/>
+                <path d="M6.2 19a6 6 0 0 1 11.6 0"/>
+              </svg>
+              Profile Picture
+            </button>
+
+            <button type="button" class="ps-tab" role="tab" id="ps-tab-security"
+                    aria-controls="ps-panel-security" aria-selected="false" data-ps-tab="security">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              Password &amp; 2FA
+            </button>
+
+            <button type="button" class="ps-tab" role="tab" id="ps-tab-notifications"
+                    aria-controls="ps-panel-notifications" aria-selected="false" data-ps-tab="notifications">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                   fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M10.27 21a2 2 0 0 0 3.46 0"/>
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+              </svg>
+              Notifications
+            </button>
+          </nav>
+
+          <!-- =============================================================
+               LAYOUT
+          ============================================================== -->
+          <div class="ps-layout">
+
+            <!-- =========================================================
+                 LEFT — FORM PANELS
+            ========================================================== -->
+            <div class="ps-col">
+
+              <!-- =================== TAB: PERSONAL DETAILS =================== -->
+              <section class="adm-card ps-panel" id="ps-panel-personal" role="tabpanel"
+                       aria-labelledby="ps-tab-personal" tabindex="0">
+
+                <div class="adm-card-head">
+                  <div>
+                    <h2 class="adm-card-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M4 21v-1a7 7 0 0 1 7-7h2a7 7 0 0 1 7 7v1"/>
+                      </svg>
+                      Personal Details
+                    </h2>
+                    <p class="adm-card-note">
+                      How your name and contact information appear across the VUNVAULT platform and in client-facing
+                      communication.
+                    </p>
+                  </div>
+                  <span class="adm-tag adm-tag--ok">Verified</span>
+                </div>
+
+                <div class="adm-card-body">
+                  <form class="ps-form" id="ps-personal-form" novalidate>
+
+                    <fieldset class="ps-fieldset">
+                      <legend class="ps-legend">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <path d="M20 6 9 17l-5-5"/>
+                        </svg>
+                        Identity
+                      </legend>
+
+                      <div class="ps-row">
+                        <div class="ps-field">
+                          <label class="ps-label" for="ps-first">
+                            <span>First Name <span class="ps-label-req" aria-hidden="true">*</span></span>
+                          </label>
+                          <input id="ps-first"
+                                 class="ps-input"
+                                 type="text"
+                                 name="first"
+                                 value="Evelyn"
+                                 autocomplete="given-name"
+                                 required>
+                        </div>
+
+                        <div class="ps-field">
+                          <label class="ps-label" for="ps-last">
+                            <span>Last Name <span class="ps-label-req" aria-hidden="true">*</span></span>
+                          </label>
+                          <input id="ps-last"
+                                 class="ps-input"
+                                 type="text"
+                                 name="last"
+                                 value="Reed"
+                                 autocomplete="family-name"
+                                 required>
+                        </div>
+                      </div>
+
+                      <div class="ps-row">
+                        <div class="ps-field">
+                          <label class="ps-label" for="ps-display">
+                            <span>Display Name</span>
+                            <span class="ps-hint">Shown in the audit log</span>
+                          </label>
+                          <input id="ps-display"
+                                 class="ps-input"
+                                 type="text"
+                                 name="display"
+                                 value="Dr. Evelyn Reed"
+                                 autocomplete="nickname">
+                        </div>
+
+                        <div class="ps-field">
+                          <label class="ps-label" for="ps-jobtitle">
+                            <span>Job Title</span>
+                          </label>
+                          <input id="ps-jobtitle"
+                                 class="ps-input"
+                                 type="text"
+                                 name="jobtitle"
+                                 value="Super Administrator · Incident Commander"
+                                 autocomplete="organization-title">
+                        </div>
+                      </div>
+                    </fieldset>
+
+                    <fieldset class="ps-fieldset">
+                      <legend class="ps-legend">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <rect x="2" y="4" width="20" height="16" rx="2"/>
+                          <path d="m22 7-8.99 5.73a2 2 0 0 1-2.01 0L2 7"/>
+                        </svg>
+                        Contact
+                      </legend>
+
+                      <div class="ps-row">
+                        <div class="ps-field">
+                          <label class="ps-label" for="ps-email">
+                            <span>Work Email <span class="ps-label-req" aria-hidden="true">*</span></span>
+                            <span class="ps-hint">@vunvault.com domain</span>
+                          </label>
+                          <input id="ps-email"
+                                 class="ps-input ps-mono"
+                                 type="email"
+                                 name="email"
+                                 value="e.reed@vunvault.com"
+                                 autocomplete="email"
+                                 required>
+                        </div>
+
+                        <div class="ps-field">
+                          <label class="ps-label" for="ps-phone">
+                            <span>Direct Phone</span>
+                            <span class="ps-hint">Encrypted at rest</span>
+                          </label>
+                          <input id="ps-phone"
+                                 class="ps-input ps-mono"
+                                 type="tel"
+                                 name="phone"
+                                 value="+254 700 000 000"
+                                 autocomplete="tel">
+                        </div>
+                      </div>
+
+                      <div class="ps-row">
+                        <div class="ps-field">
+                          <label class="ps-label" for="ps-timezone">
+                            <span>Timezone</span>
+                          </label>
+                          <select id="ps-timezone" class="ps-select">
+                            <option value="Africa/Nairobi" selected>Africa/Nairobi — EAT (UTC+3)</option>
+                            <option value="Africa/Lagos">Africa/Lagos — WAT (UTC+1)</option>
+                            <option value="Africa/Accra">Africa/Accra — GMT (UTC+0)</option>
+                            <option value="Africa/Johannesburg">Africa/Johannesburg — SAST (UTC+2)</option>
+                            <option value="Europe/London">Europe/London — GMT/BST</option>
+                            <option value="Europe/Berlin">Europe/Berlin — CET/CEST</option>
+                            <option value="America/New_York">America/New_York — ET</option>
+                            <option value="Asia/Dubai">Asia/Dubai — GST (UTC+4)</option>
+                          </select>
+                        </div>
+
+                        <div class="ps-field">
+                          <label class="ps-label" for="ps-language">
+                            <span>Interface Language</span>
+                          </label>
+                          <select id="ps-language" class="ps-select">
+                            <option value="en-GB" selected>English (United Kingdom)</option>
+                            <option value="en-US">English (United States)</option>
+                            <option value="sw">Kiswahili</option>
+                            <option value="fr">Français</option>
+                          </select>
+                        </div>
+                      </div>
+                    </fieldset>
+
+                    <fieldset class="ps-fieldset">
+                      <legend class="ps-legend">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/>
+                        </svg>
+                        Biography
+                      </legend>
+
+                      <div class="ps-field ps-field-full">
+                        <label class="ps-label" for="ps-bio">
+                          <span>Short Biography</span>
+                          <span class="ps-count" id="ps-bio-count">0 / 400</span>
+                        </label>
+                        <textarea id="ps-bio"
+                                  class="ps-textarea"
+                                  name="bio"
+                                  maxlength="400"
+                                  placeholder="A short description of your role and experience for team member directories and client-facing communications…">Cybersecurity leader driving VUNVAULT's offensive and defensive programmes across Africa. Incident commander for SEV-1 events and final approver at the Mandatory Admin Review Gate.</textarea>
+                      </div>
+                    </fieldset>
+
+                    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;">
+                      <button type="button" class="adm-btn adm-btn-ghost" data-ps-reset="personal">Reset</button>
+                      <button type="button" class="adm-btn adm-btn-primary" data-ps-save="personal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <path d="M20 6 9 17l-5-5"/>
+                        </svg>
+                        <span>Save Personal Details</span>
+                      </button>
+                    </div>
+
+                  </form>
+                </div>
+              </section>
+
+              <!-- =================== TAB: AVATAR =================== -->
+              <section class="adm-card ps-panel" id="ps-panel-avatar" role="tabpanel"
+                       aria-labelledby="ps-tab-avatar" tabindex="0" hidden>
+
+                <div class="adm-card-head">
+                  <div>
+                    <h2 class="adm-card-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/>
+                        <circle cx="12" cy="10" r="3"/>
+                        <path d="M6.2 19a6 6 0 0 1 11.6 0"/>
+                      </svg>
+                      Profile Picture
+                    </h2>
+                    <p class="adm-card-note">
+                      Upload a square image at least 256×256 px. It appears in the header, audit log, contributor
+                      cards and client-facing dashboards where your name is shown.
+                    </p>
+                  </div>
+                  <span class="adm-tag" id="ps-avatar-tag">No upload</span>
+                </div>
+
+                <div class="adm-card-body">
+                  <div class="ps-avatar-panel">
+
+                    <div class="ps-avatar-preview">
+                      <span class="ps-avatar" id="ps-avatar-preview" aria-hidden="true">ER</span>
+                      <span class="ps-avatar-badge" aria-hidden="true">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                             stroke-linejoin="round">
+                          <path d="M12 20h9"/>
+                          <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                        </svg>
+                      </span>
+                    </div>
+
+                    <div class="ps-avatar-controls">
+
+                      <label class="ps-dropzone" id="ps-dropzone">
+                        <input type="file" id="ps-avatar-input" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+                        <span class="ps-dropzone-icon" aria-hidden="true">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                               fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                               stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <path d="M17 8l-5-5-5 5"/>
+                            <path d="M12 3v12"/>
+                          </svg>
+                        </span>
+                        <span class="ps-dropzone-title">Drag &amp; drop your image here</span>
+                        <span class="ps-dropzone-text">
+                          Or click to browse. Accepted: PNG, JPG, WEBP, SVG — up to 4 MB. Square crops preferred.
+                        </span>
+                      </label>
+
+                      <div class="ps-avatar-actions">
+                        <button type="button" class="adm-btn adm-btn-ghost" id="ps-avatar-remove">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                               fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                               stroke-linejoin="round" aria-hidden="true">
+                            <path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/>
+                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                          </svg>
+                          <span>Remove Current Picture</span>
+                        </button>
+
+                        <button type="button" class="adm-btn adm-btn-dark" id="ps-avatar-generate">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                               fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                               stroke-linejoin="round" aria-hidden="true">
+                            <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/>
+                          </svg>
+                          <span>Generate From Initials</span>
+                        </button>
+                      </div>
+
+                      <p class="ps-avatar-note">
+                        Files are scanned for embedded malware, stripped of all EXIF metadata and stored encrypted
+                        on the VUNVAULT CDN. Uploads are written to the audit log against your administrator identity.
+                      </p>
+
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- =================== TAB: PASSWORD & 2FA =================== -->
+              <section class="adm-card ps-panel" id="ps-panel-security" role="tabpanel"
+                       aria-labelledby="ps-tab-security" tabindex="0" hidden>
+
+                <div class="adm-card-head">
+                  <div>
+                    <h2 class="adm-card-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="11" width="18" height="11" rx="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                      </svg>
+                      Password &amp; Two-Factor Authentication
+                    </h2>
+                    <p class="adm-card-note">
+                      Update your password and manage the authentication factors protecting your administrator
+                      account. All credential changes immediately invalidate other active sessions.
+                    </p>
+                  </div>
+                  <span class="adm-tag adm-tag--ok" id="ps-2fa-status">2FA Active</span>
+                </div>
+
+                <div class="adm-card-body">
+                  <form class="ps-form" id="ps-security-form" novalidate>
+
+                    <fieldset class="ps-fieldset">
+                      <legend class="ps-legend">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <path d="M12 2 3 7v6c0 5 4 8.5 9 10 5-1.5 9-5 9-10V7z"/>
+                        </svg>
+                        Change Password
+                      </legend>
+
+                      <div class="ps-field ps-field-full">
+                        <label class="ps-label" for="ps-current-pw">
+                          <span>Current Password <span class="ps-label-req" aria-hidden="true">*</span></span>
+                        </label>
+                        <input id="ps-current-pw"
+                               class="ps-input ps-mono"
+                               type="password"
+                               name="current"
+                               placeholder="••••••••••••"
+                               autocomplete="current-password"
+                               required>
+                      </div>
+
+                      <div class="ps-row">
+                        <div class="ps-field">
+                          <label class="ps-label" for="ps-new-pw">
+                            <span>New Password <span class="ps-label-req" aria-hidden="true">*</span></span>
+                            <span class="ps-hint">Min. 14 characters</span>
+                          </label>
+                          <input id="ps-new-pw"
+                                 class="ps-input ps-mono"
+                                 type="password"
+                                 name="new"
+                                 placeholder="••••••••••••"
+                                 autocomplete="new-password"
+                                 required>
+
+                          <div class="ps-strength" aria-hidden="true">
+                            <span class="ps-strength-bars" id="ps-strength-bars">
+                              <span class="ps-strength-bar"></span>
+                              <span class="ps-strength-bar"></span>
+                              <span class="ps-strength-bar"></span>
+                              <span class="ps-strength-bar"></span>
+                            </span>
+                            <span class="ps-strength-label" id="ps-strength-label">—</span>
+                          </div>
+                        </div>
+
+                        <div class="ps-field">
+                          <label class="ps-label" for="ps-confirm-pw">
+                            <span>Confirm New Password <span class="ps-label-req" aria-hidden="true">*</span></span>
+                          </label>
+                          <input id="ps-confirm-pw"
+                                 class="ps-input ps-mono"
+                                 type="password"
+                                 name="confirm"
+                                 placeholder="••••••••••••"
+                                 autocomplete="new-password"
+                                 required>
+                        </div>
+                      </div>
+
+                      <p class="ps-avatar-note">
+                        Passwords are hashed with Argon2id and compared in constant time. The platform rejects any
+                        password appearing in known breach corpora.
+                      </p>
+                    </fieldset>
+
+                    <fieldset class="ps-fieldset">
+                      <legend class="ps-legend">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <rect x="3" y="11" width="18" height="11" rx="2"/>
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        Two-Factor Authentication
+                      </legend>
+
+                      <div class="ps-toggle-row is-on" id="ps-tfa-row">
+                        <div class="ps-toggle-text">
+                          <span class="ps-toggle-title">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                                 stroke-linejoin="round" aria-hidden="true">
+                              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>
+                              <path d="m9 12 2 2 4-4"/>
+                            </svg>
+                            Require 2FA at every sign-in
+                          </span>
+                          <span class="ps-toggle-desc">
+                            Enforces a second factor for every new session. Disabling this significantly weakens
+                            your account and triggers an immediate SEV-2 audit event.
+                          </span>
+                          <div class="ps-toggle-meta">
+                            <span class="adm-tag adm-tag--ok">Enforced by policy</span>
+                            <span class="adm-tag">Last factor change: 12 Aug 2026</span>
+                          </div>
+                        </div>
+                        <label class="ps-switch" aria-label="Enforce two-factor authentication">
+                          <input type="checkbox" id="ps-tfa-toggle" checked disabled>
+                          <span class="ps-switch-track"></span>
+                        </label>
+                      </div>
+
+                      <!-- Authenticator app -->
+                      <div class="ps-2fa-card">
+                        <div class="ps-2fa-qr" aria-hidden="true">
+                          <svg viewBox="0 0 100 100" role="img" aria-label="Authenticator QR code placeholder">
+                            <rect width="100" height="100" fill="#ffffff"/>
+                            <g fill="#0A0D12">
+                              <rect x="4" y="4" width="26" height="26"/>
+                              <rect x="10" y="10" width="14" height="14" fill="#ffffff"/>
+                              <rect x="70" y="4" width="26" height="26"/>
+                              <rect x="76" y="10" width="14" height="14" fill="#ffffff"/>
+                              <rect x="4" y="70" width="26" height="26"/>
+                              <rect x="10" y="76" width="14" height="14" fill="#ffffff"/>
+                              <rect x="38" y="8" width="6" height="6"/>
+                              <rect x="50" y="8" width="6" height="6"/>
+                              <rect x="38" y="20" width="6" height="6"/>
+                              <rect x="56" y="20" width="6" height="6"/>
+                              <rect x="8" y="38" width="6" height="6"/>
+                              <rect x="20" y="38" width="6" height="6"/>
+                              <rect x="38" y="38" width="6" height="6"/>
+                              <rect x="50" y="38" width="6" height="6"/>
+                              <rect x="62" y="38" width="6" height="6"/>
+                              <rect x="74" y="38" width="6" height="6"/>
+                              <rect x="86" y="38" width="6" height="6"/>
+                              <rect x="8" y="50" width="6" height="6"/>
+                              <rect x="26" y="50" width="6" height="6"/>
+                              <rect x="38" y="50" width="6" height="6"/>
+                              <rect x="56" y="50" width="6" height="6"/>
+                              <rect x="68" y="50" width="6" height="6"/>
+                              <rect x="86" y="50" width="6" height="6"/>
+                              <rect x="8" y="62" width="6" height="6"/>
+                              <rect x="20" y="62" width="6" height="6"/>
+                              <rect x="44" y="62" width="6" height="6"/>
+                              <rect x="56" y="62" width="6" height="6"/>
+                              <rect x="74" y="62" width="6" height="6"/>
+                              <rect x="86" y="62" width="6" height="6"/>
+                              <rect x="38" y="74" width="6" height="6"/>
+                              <rect x="50" y="74" width="6" height="6"/>
+                              <rect x="68" y="74" width="6" height="6"/>
+                              <rect x="86" y="74" width="6" height="6"/>
+                              <rect x="38" y="86" width="6" height="6"/>
+                              <rect x="56" y="86" width="6" height="6"/>
+                              <rect x="74" y="86" width="6" height="6"/>
+                              <rect x="86" y="86" width="6" height="6"/>
+                            </g>
+                          </svg>
+                        </div>
+
+                        <div class="ps-2fa-body">
+                          <span class="ps-2fa-title">Authenticator app — primary factor</span>
+                          <p class="ps-2fa-text">
+                            Scan the QR code with your authenticator app. If you can't scan it, enter the manual
+                            secret below. Codes rotate every 30 seconds.
+                          </p>
+
+                          <span class="ps-2fa-secret" id="ps-2fa-secret">
+                            JBSW Y3DP EHPK 3PXP
+                            <button type="button" id="ps-copy-secret" aria-label="Copy manual secret">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24"
+                                   fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"
+                                   stroke-linejoin="round" aria-hidden="true">
+                                <rect x="9" y="9" width="12" height="12" rx="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                              </svg>
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+
+                      <!-- Recovery codes -->
+                      <div style="margin-top:6px;">
+                        <span class="ps-panel-title" style="margin-bottom:10px;">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                               fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                               stroke-linejoin="round" aria-hidden="true">
+                            <rect x="3" y="11" width="18" height="11" rx="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                          </svg>
+                          Recovery Codes — 3 of 10 remaining
+                        </span>
+
+                        <div class="ps-codes" id="ps-recovery-codes">
+                          <span class="ps-code">4F7A-9C2E-D018</span>
+                          <span class="ps-code">B3E1-6D45-A902</span>
+                          <span class="ps-code">C8K2-7W91-Z534</span>
+                          <span class="ps-code">••••-••••-••••</span>
+                          <span class="ps-code">••••-••••-••••</span>
+                          <span class="ps-code">••••-••••-••••</span>
+                        </div>
+
+                        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;">
+                          <button type="button" class="adm-btn adm-btn-ghost" id="ps-download-codes">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                                 stroke-linejoin="round" aria-hidden="true">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                              <path d="M7 10l5 5 5-5"/>
+                              <path d="M12 15V3"/>
+                            </svg>
+                            <span>Download Codes</span>
+                          </button>
+
+                          <button type="button" class="adm-btn adm-btn-dark" id="ps-regenerate-codes">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                                 stroke-linejoin="round" aria-hidden="true">
+                              <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+                              <path d="M21 3v6h-6"/>
+                            </svg>
+                            <span>Regenerate Codes</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- Hardware key -->
+                      <div class="ps-toggle-row is-on">
+                        <div class="ps-toggle-text">
+                          <span class="ps-toggle-title">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                                 stroke-linejoin="round" aria-hidden="true">
+                              <circle cx="7.5" cy="15.5" r="4.5"/>
+                              <path d="m10.5 12.5 8-8"/>
+                              <path d="m15.5 7.5 3 3"/>
+                              <path d="m18.5 4.5 3 3"/>
+                            </svg>
+                            Hardware security key — secondary factor
+                          </span>
+                          <span class="ps-toggle-desc">
+                            YubiKey 5C NFC registered on 12 Aug 2026. Provides phishing-resistant authentication for
+                            all privileged operations.
+                          </span>
+                          <div class="ps-toggle-meta">
+                            <span class="adm-tag adm-tag--ok">Registered</span>
+                            <span class="adm-tag">Serial: ••••-8842</span>
+                          </div>
+                        </div>
+                        <label class="ps-switch" aria-label="Enable hardware security key">
+                          <input type="checkbox" id="ps-hwk-toggle" checked>
+                          <span class="ps-switch-track"></span>
+                        </label>
+                      </div>
+
+                    </fieldset>
+
+                    <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;">
+                      <button type="button" class="adm-btn adm-btn-ghost" data-ps-reset="security">Reset</button>
+                      <button type="button" class="adm-btn adm-btn-primary" data-ps-save="security">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <path d="M20 6 9 17l-5-5"/>
+                        </svg>
+                        <span>Update Password &amp; 2FA</span>
+                      </button>
+                    </div>
+
+                  </form>
+                </div>
+              </section>
+
+              <!-- =================== TAB: NOTIFICATIONS =================== -->
+              <section class="adm-card ps-panel" id="ps-panel-notifications" role="tabpanel"
+                       aria-labelledby="ps-tab-notifications" tabindex="0" hidden>
+
+                <div class="adm-card-head">
+                  <div>
+                    <h2 class="adm-card-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <path d="M10.27 21a2 2 0 0 0 3.46 0"/>
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+                      </svg>
+                      Notification Preferences
+                    </h2>
+                    <p class="adm-card-note">
+                      Choose how and where VUNVAULT reaches you. Critical security alerts are always delivered
+                      regardless of these preferences.
+                    </p>
+                  </div>
+                  <span class="adm-tag">Personal</span>
+                </div>
+
+                <div class="adm-card-body">
+                  <div class="ps-notify-table-wrap" style="overflow-x:auto;">
+                    <table class="ps-notify-table">
+                      <caption class="sr-only">Notification channel preferences per event category</caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Event Category</th>
+                          <th scope="col">In-App</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">SMS</th>
+                          <th scope="col">Push</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <tr>
+                          <td class="ps-notify-cat" colspan="5">Security &amp; Access</td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <span class="ps-notify-name">Sign-in from new device</span>
+                            <span class="ps-notify-desc">Alert when a new device or unrecognised IP authenticates to your account.</span>
+                          </td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="In-app: new device sign-in"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Email: new device sign-in"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="SMS: new device sign-in"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Push: new device sign-in"></td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <span class="ps-notify-name">Password or 2FA changed</span>
+                            <span class="ps-notify-desc">Immediate notification of any credential change on your account.</span>
+                          </td>
+                          <td><input type="checkbox" class="ps-check" checked disabled aria-label="In-app: credential change (mandatory)"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Email: credential change"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="SMS: credential change"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Push: credential change"></td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <span class="ps-notify-name">Failed authentication attempts</span>
+                            <span class="ps-notify-desc">Burst of failed sign-ins against your account from any source.</span>
+                          </td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="In-app: failed auth"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Email: failed auth"></td>
+                          <td><input type="checkbox" class="ps-check" aria-label="SMS: failed auth"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Push: failed auth"></td>
+                        </tr>
+
+                        <tr>
+                          <td class="ps-notify-cat" colspan="5">Scan Operations</td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <span class="ps-notify-name">Scan completed</span>
+                            <span class="ps-notify-desc">A job assigned to you finishes execution and results are ready.</span>
+                          </td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="In-app: scan complete"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Email: scan complete"></td>
+                          <td><input type="checkbox" class="ps-check" aria-label="SMS: scan complete"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Push: scan complete"></td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <span class="ps-notify-name">Job awaiting review gate</span>
+                            <span class="ps-notify-desc">A job is blocked on the Mandatory Admin Review Gate and requires your attention.</span>
+                          </td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="In-app: review gate"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Email: review gate"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="SMS: review gate"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Push: review gate"></td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <span class="ps-notify-name">Critical finding detected</span>
+                            <span class="ps-notify-desc">A scan has produced a critical severity finding requiring escalation.</span>
+                          </td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="In-app: critical finding"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Email: critical finding"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="SMS: critical finding"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Push: critical finding"></td>
+                        </tr>
+
+                        <tr>
+                          <td class="ps-notify-cat" colspan="5">Threat Intelligence</td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <span class="ps-notify-name">Zero-day advisory broadcast</span>
+                            <span class="ps-notify-desc">A new emergency advisory has been dispatched to client dashboards.</span>
+                          </td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="In-app: advisory broadcast"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Email: advisory broadcast"></td>
+                          <td><input type="checkbox" class="ps-check" aria-label="SMS: advisory broadcast"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Push: advisory broadcast"></td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <span class="ps-notify-name">Threat level change</span>
+                            <span class="ps-notify-desc">Global zero-day threat level moves up or down a step.</span>
+                          </td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="In-app: threat level"></td>
+                          <td><input type="checkbox" class="ps-check" aria-label="Email: threat level"></td>
+                          <td><input type="checkbox" class="ps-check" aria-label="SMS: threat level"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Push: threat level"></td>
+                        </tr>
+
+                        <tr>
+                          <td class="ps-notify-cat" colspan="5">Administrative</td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <span class="ps-notify-name">Content awaiting moderation</span>
+                            <span class="ps-notify-desc">A staff-authored blog post, advisory or product listing is queued for review.</span>
+                          </td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="In-app: content moderation"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Email: content moderation"></td>
+                          <td><input type="checkbox" class="ps-check" aria-label="SMS: content moderation"></td>
+                          <td><input type="checkbox" class="ps-check" aria-label="Push: content moderation"></td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <span class="ps-notify-name">New team member provisioned</span>
+                            <span class="ps-notify-desc">An invitation is sent or a new account is created on the platform.</span>
+                          </td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="In-app: user provisioned"></td>
+                          <td><input type="checkbox" class="ps-check" aria-label="Email: user provisioned"></td>
+                          <td><input type="checkbox" class="ps-check" aria-label="SMS: user provisioned"></td>
+                          <td><input type="checkbox" class="ps-check" aria-label="Push: user provisioned"></td>
+                        </tr>
+
+                        <tr>
+                          <td>
+                            <span class="ps-notify-name">Weekly digest</span>
+                            <span class="ps-notify-desc">A Monday morning summary of scans, releases, threats and audit events.</span>
+                          </td>
+                          <td><input type="checkbox" class="ps-check" aria-label="In-app: weekly digest"></td>
+                          <td><input type="checkbox" class="ps-check" checked aria-label="Email: weekly digest"></td>
+                          <td><input type="checkbox" class="ps-check" aria-label="SMS: weekly digest"></td>
+                          <td><input type="checkbox" class="ps-check" aria-label="Push: weekly digest"></td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Quiet hours -->
+                  <div class="ps-quiet" style="margin-top:20px;">
+                    <span class="ps-quiet-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                      </svg>
+                      Quiet hours — suppress non-critical notifications
+                    </span>
+
+                    <div class="ps-quiet-inputs">
+                      <input id="ps-quiet-from" class="ps-input ps-mono" type="time" value="22:00" aria-label="Quiet hours start">
+                      <span class="ps-quiet-sep">to</span>
+                      <input id="ps-quiet-to" class="ps-input ps-mono" type="time" value="06:00" aria-label="Quiet hours end">
+                    </div>
+
+                    <label class="ps-switch" aria-label="Enable quiet hours">
+                      <input type="checkbox" id="ps-quiet-toggle" checked>
+                      <span class="ps-switch-track"></span>
+                    </label>
+                  </div>
+
+                  <p class="ps-avatar-note" style="margin-top:12px;">
+                    <strong style="color:var(--ink);">Always delivered:</strong> credential changes, SEV-1
+                    broadcasts, review-gate escalations and incident commander pages ignore quiet hours.
+                  </p>
+
+                  <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end;margin-top:20px;">
+                    <button type="button" class="adm-btn adm-btn-ghost" data-ps-reset="notifications">Reset to Defaults</button>
+                    <button type="button" class="adm-btn adm-btn-primary" data-ps-save="notifications">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Save Notification Preferences</span>
+                    </button>
+                  </div>
+
+                </div>
+              </section>
+
+            </div>
+
+            <!-- =========================================================
+                 RIGHT — SIDEBAR
+            ========================================================== -->
+            <aside class="ps-col" aria-label="Account security summary">
+
+              <!-- ---------- Account summary ---------- -->
+              <section class="adm-card adm-card--dark">
+                <div class="adm-card-head">
+                  <div>
+                    <h2 class="adm-card-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 16v-4"/><path d="M12 8h.01"/>
+                      </svg>
+                      Account Summary
+                    </h2>
+                    <p class="adm-card-note">Current identity and session state for this administrator account.</p>
+                  </div>
+                  <span class="adm-tag adm-tag--ok">Active</span>
+                </div>
+
+                <div class="adm-card-body ps-panel">
+
+                  <div class="ps-panel-section">
+                    <div class="ps-status-row">
+                      <span>Username</span>
+                      <strong>e.reed</strong>
+                    </div>
+                    <div class="ps-status-row">
+                      <span>Role</span>
+                      <strong>Super Administrator</strong>
+                    </div>
+                    <div class="ps-status-row">
+                      <span>Team</span>
+                      <strong>Command Center</strong>
+                    </div>
+                    <div class="ps-status-row">
+                      <span>Member since</span>
+                      <strong>Mar 2024</strong>
+                    </div>
+                    <div class="ps-status-row">
+                      <span>Session reference</span>
+                      <strong>ADM-…-7F3A</strong>
+                    </div>
+                  </div>
+
+                  <div class="ps-panel-section">
+                    <span class="ps-panel-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>
+                      </svg>
+                      Security Posture
+                    </span>
+
+                    <div class="ps-score">
+                      <div class="ps-score-ring">
+                        <svg viewBox="0 0 84 84" aria-hidden="true">
+                          <circle class="track" cx="42" cy="42" r="36"></circle>
+                          <circle class="value" cx="42" cy="42" r="36"></circle>
+                        </svg>
+                        <div class="ps-score-center">
+                          <span class="ps-score-value">80</span>
+                          <span class="ps-score-label">Score</span>
+                        </div>
+                      </div>
+
+                      <div class="ps-score-body">
+                        <span class="ps-score-title">Strong posture</span>
+                        <p class="ps-score-text">
+                          3 of 4 recommendations complete. Enrol a second hardware key to reach a perfect score.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="ps-checklist">
+                      <span class="ps-checklist-item ps-checklist-item--done">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <path d="M20 6 9 17l-5-5"/>
+                        </svg>
+                        Hardware-key MFA registered
+                      </span>
+                      <span class="ps-checklist-item ps-checklist-item--done">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <path d="M20 6 9 17l-5-5"/>
+                        </svg>
+                        Recovery codes generated
+                      </span>
+                      <span class="ps-checklist-item ps-checklist-item--done">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <path d="M20 6 9 17l-5-5"/>
+                        </svg>
+                        Password updated within 90 days
+                      </span>
+                      <span class="ps-checklist-item ps-checklist-item--todo">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <circle cx="12" cy="12" r="10"/>
+                          <path d="M12 8v4"/><path d="M12 16h.01"/>
+                        </svg>
+                        Register a backup hardware key
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="ps-panel-section">
+                    <div class="ps-actions-stack">
+                      <button type="button" class="adm-btn adm-btn-primary" id="ps-open-security">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <rect x="3" y="11" width="18" height="11" rx="2"/>
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        <span>Open Security Settings</span>
+                      </button>
+
+                      <button type="button" class="adm-btn adm-btn-dark" id="ps-signout-others">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                             stroke-linejoin="round" aria-hidden="true">
+                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                          <path d="m16 17 5-5-5-5"/>
+                          <path d="M21 12H9"/>
+                        </svg>
+                        <span>Sign Out Other Sessions</span>
+                      </button>
+                    </div>
+
+                    <p class="ps-action-note">
+                      2 other active sessions will be terminated immediately.
+                    </p>
+                  </div>
+
+                </div>
+              </section>
+
+              <!-- ---------- Active sessions ---------- -->
+              <section class="adm-card" aria-labelledby="ps-sessions-heading">
+                <div class="adm-card-head">
+                  <div>
+                    <h2 class="adm-card-title" id="ps-sessions-heading">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <rect x="2" y="4" width="20" height="14" rx="2"/>
+                        <path d="M8 20h8"/><path d="M12 18v2"/>
+                      </svg>
+                      Active Sessions
+                    </h2>
+                    <p class="adm-card-note">Devices currently authenticated to your account.</p>
+                  </div>
+                  <span class="adm-tag">3</span>
+                </div>
+
+                <div class="adm-card-body" style="padding-top:0;padding-inline:0;">
+                  <div style="overflow-x:auto;">
+                    <table class="ps-sessions">
+                      <thead>
+                        <tr>
+                          <th scope="col">Device</th>
+                          <th scope="col">IP Address</th>
+                          <th scope="col">2FA</th>
+                          <th scope="col">Started</th>
+                          <th scope="col"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <span class="adm-strong">MacBook Pro · Safari</span>
+                            <span style="display:block;margin-top:3px;font-size:10px;color:var(--ink-muted);">Nairobi, KE · This device</span>
+                          </td>
+                          <td class="adm-mono">196.201.214.77</td>
+                          <td><span class="adm-badge adm-badge--ok">Hardware key</span></td>
+                          <td class="adm-mono">09:41 UTC</td>
+                          <td><span class="adm-badge adm-badge--info">Current</span></td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span class="adm-strong">iPhone 15 Pro · Safari</span>
+                            <span style="display:block;margin-top:3px;font-size:10px;color:var(--ink-muted);">Nairobi, KE</span>
+                          </td>
+                          <td class="adm-mono">196.201.214.82</td>
+                          <td><span class="adm-badge adm-badge--ok">TOTP</span></td>
+                          <td class="adm-mono">07:12 UTC</td>
+                          <td>
+                            <button type="button" class="adm-mini-btn" data-ps-revoke="iPhone 15 Pro">Revoke</button>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span class="adm-strong">ThinkPad X1 · Chrome</span>
+                            <span style="display:block;margin-top:3px;font-size:10px;color:var(--ink-muted);">Frankfurt, DE</span>
+                          </td>
+                          <td class="adm-mono">185.220.101.9</td>
+                          <td><span class="adm-badge adm-badge--ok">Hardware key</span></td>
+                          <td class="adm-mono">Yesterday · 21:04</td>
+                          <td>
+                            <button type="button" class="adm-mini-btn" data-ps-revoke="ThinkPad X1">Revoke</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </section>
+
+              <!-- ---------- Danger zone ---------- -->
+              <section class="adm-card adm-card--dark" aria-labelledby="ps-danger-heading">
+                <div class="adm-card-head">
+                  <div>
+                    <h2 class="adm-card-title" id="ps-danger-heading">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
+                        <path d="M12 9v4"/><path d="M12 17h.01"/>
+                      </svg>
+                      Danger Zone
+                    </h2>
+                  </div>
+                </div>
+
+                <div class="adm-card-body">
+                  <div class="ps-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10"/>
+                      <path d="M12 8v4"/><path d="M12 16h.01"/>
+                    </svg>
+                    <div class="ps-danger-body">
+                      <span class="ps-danger-title">Deactivate administrator account</span>
+                      <p class="ps-danger-text">
+                        This immediately revokes all sessions, removes your access to every module and transfers
+                        outstanding review-gate jobs to the on-call lead. Reversal requires an executive approval.
+                      </p>
+
+                      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;">
+                        <button type="button" class="adm-btn adm-btn-danger" id="ps-deactivate">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                               fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                               stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="m4.9 4.9 14.2 14.2"/>
+                          </svg>
+                          <span>Request Deactivation</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+            </aside>
+          </div>
+
+        </div>
+      </main>
+
+      <!-- ===================================================================
+           FOOTER
+      ==================================================================== -->
+      <footer class="adm-footer">
+        <div class="adm-footer-inner">
+
+          <dl class="adm-footer-meta">
+            <div>
+              <dt>System Build</dt>
+              <dd>VUNVAULT Admin Core v4.2.1</dd>
+            </div>
+            <div>
+              <dt>Encryption Standard</dt>
+              <dd>AES-256-GCM</dd>
+            </div>
+            <div>
+              <dt>Node Identifier</dt>
+              <dd>node-nbo-01 · NBO-CORE</dd>
+            </div>
+            <div>
+              <dt>Session Reference</dt>
+              <dd>ADM-2026-0924-7F3A</dd>
+            </div>
+          </dl>
+
+          <div class="adm-footer-bottom">
+            <span>© 2026 VUNVAULT. All rights reserved. Profile changes are logged and audited.</span>
+
+            <nav class="adm-footer-links" aria-label="Administrative footer">
+              <a href="admin.html">Dashboard</a>
+              <a href="audit-logs.html">Audit Logs</a>
+              <a href="user-management.html">Access Control</a>
+              <a href="logout.html">Sign Out</a>
+            </nav>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- Toast stack -->
+    <div class="ps-toast-stack" id="ps-toast-stack" aria-live="polite" aria-atomic="false"></div>
+
+    <!-- ===================================================================
+         INLINE WIRING
+    ==================================================================== -->
+    <script>
+      (function () {
+        "use strict";
+
+        /* ================================================================
+           0. Utilities
+        ================================================================ */
+        var $  = function (sel, ctx) { return (ctx || document).querySelector(sel); };
+        var $$ = function (sel, ctx) {
+          return Array.prototype.slice.call((ctx || document).querySelectorAll(sel));
+        };
+
+        var pad = function (n) { return String(n).padStart(2, "0"); };
+
+        var utcStamp = function () {
+          var d = new Date();
+          return d.getUTCFullYear() + "-" + pad(d.getUTCMonth() + 1) + "-" + pad(d.getUTCDate()) +
+                 " " + pad(d.getUTCHours()) + ":" + pad(d.getUTCMinutes()) + " UTC";
+        };
+
+        var escapeHtml = function (str) {
+          return String(str || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+        };
+
+        var initialsOf = function (first, last) {
+          var a = (first || "").trim().charAt(0).toUpperCase();
+          var b = (last || "").trim().charAt(0).toUpperCase();
+          return (a + b) || "AD";
+        };
+        /* ================================================================
+   PERSIST PROFILE — writes name + Base64 avatar to localStorage
+   ================================================================ */
+var PROFILE_STORAGE_KEY = "vunvault:profile";
+
+function persistProfile() {
+  var first   = (firstInput   && firstInput.value.trim())   || "";
+  var last    = (lastInput    && lastInput.value.trim())    || "";
+  var display = (displayInput && displayInput.value.trim()) ||
+                (first + " " + last).trim() ||
+                "Administrator";
+  var email   = (emailInput   && emailInput.value.trim())   || "";
+
+  var payload = {
+    name:      display,
+    initials:  initialsOf(first, last),
+    email:     email,
+    avatar:    customAvatarDataUrl || null,   // Base64 data URL or null
+    updatedAt: new Date().toISOString()
+  };
+
+  try {
+    window.localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(payload));
+  } catch (err) {
+    console.warn("[VUNVAULT] Unable to persist profile:", err);
+  }
+}
+
+        var reduced = window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        /* ================================================================
+           1. Mobile drawer
+        ================================================================ */
+        var toggle = $("#adm-menu-toggle");
+        var menu   = $("#adm-mobile-menu");
+
+        if (toggle && menu) {
+          var setOpen = function (open) {
+            menu.classList.toggle("is-open", open);
+            toggle.classList.toggle("is-active", open);
+            toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            document.body.classList.toggle("nav-open", open);
+          };
+
+          toggle.addEventListener("click", function () {
+            setOpen(!menu.classList.contains("is-open"));
+          });
+
+          menu.addEventListener("click", function (event) {
+            if (event.target.closest("a")) setOpen(false);
+          });
+
+          document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") setOpen(false);
+          });
+
+          window.addEventListener("resize", function () {
+            if (window.innerWidth >= 1080) setOpen(false);
+          });
+        }
+
+        /* ================================================================
+           2. Toasts
+        ================================================================ */
+        var toastStack = $("#ps-toast-stack");
+
+        var ICONS = {
+          ok:   '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+          warn: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
+          crit: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>',
+          info: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>'
+        };
+
+        function toast(kind, title, message) {
+          if (!toastStack) return;
+
+          var el = document.createElement("div");
+          el.className = "ps-toast ps-toast--" + (kind || "info");
+          el.innerHTML = (ICONS[kind] || ICONS.info) +
+            "<span><strong>" + escapeHtml(title) + "</strong>" + escapeHtml(message || "") + "</span>";
+
+          toastStack.appendChild(el);
+
+          window.setTimeout(function () {
+            el.classList.add("is-leaving");
+            window.setTimeout(function () {
+              if (el.parentNode) el.parentNode.removeChild(el);
+            }, 300);
+          }, 4400);
+        }
+
+        /* ================================================================
+           3. Tabs
+        ================================================================ */
+        var tabs   = $$(".ps-tab");
+        var panels = $$(".ps-panel[role='tabpanel']");
+
+        function activateTab(name) {
+          tabs.forEach(function (tab) {
+            var isActive = tab.getAttribute("data-ps-tab") === name;
+            tab.setAttribute("aria-selected", isActive ? "true" : "false");
+          });
+
+          panels.forEach(function (panel) {
+            if (panel.id === "ps-panel-" + name) {
+              panel.hidden = false;
+            } else {
+              panel.hidden = true;
+            }
+          });
+
+          // Restore focus to the selected tab for accessibility
+          var activeTab = tabs.filter(function (t) {
+            return t.getAttribute("data-ps-tab") === name;
+          })[0];
+          if (activeTab) activeTab.focus({ preventScroll: true });
+
+          if (!reduced) {
+            window.scrollTo({
+              top: Math.max(0, activeTab ? activeTab.offsetTop - 140 : 0),
+              behavior: "smooth"
+            });
+          }
+        }
+
+        tabs.forEach(function (tab) {
+          tab.addEventListener("click", function () {
+            activateTab(tab.getAttribute("data-ps-tab"));
+          });
+
+          tab.addEventListener("keydown", function (event) {
+            var names = tabs.map(function (t) { return t.getAttribute("data-ps-tab"); });
+            var i = names.indexOf(tab.getAttribute("data-ps-tab"));
+
+            if (event.key === "ArrowRight") {
+              event.preventDefault();
+              activateTab(names[(i + 1) % names.length]);
+            } else if (event.key === "ArrowLeft") {
+              event.preventDefault();
+              activateTab(names[(i - 1 + names.length) % names.length]);
+            } else if (event.key === "Home") {
+              event.preventDefault();
+              activateTab(names[0]);
+            } else if (event.key === "End") {
+              event.preventDefault();
+              activateTab(names[names.length - 1]);
+            }
+          });
+        });
+
+        /* Sidebar shortcut button */
+        var openSecurity = $("#ps-open-security");
+        if (openSecurity) {
+          openSecurity.addEventListener("click", function () {
+            activateTab("security");
+          });
+        }
+
+        /* ================================================================
+           4. Live avatar sync (initials from name fields)
+        ================================================================ */
+        var firstInput   = $("#ps-first");
+        var lastInput    = $("#ps-last");
+        var displayInput = $("#ps-display");
+        var avatarHeader = $("#adm-header-avatar");
+        var avatarBanner = $("#ps-identity-avatar");
+        var avatarPrev   = $("#ps-avatar-preview");
+        var avatarTag    = $("#ps-avatar-tag");
+        var identityName = $("#ps-identity-heading");
+        var headerName   = $("#adm-header-name");
+
+        var customAvatarDataUrl = null;
+
+        function syncInitials() {
+          var initials = initialsOf(firstInput && firstInput.value, lastInput && lastInput.value);
+          var display  = (displayInput && displayInput.value.trim()) ||
+                         ((firstInput && firstInput.value.trim()) + " " + (lastInput && lastInput.value.trim())).trim() ||
+                         "Administrator";
+
+          if (!customAvatarDataUrl) {
+            if (avatarHeader) avatarHeader.textContent = initials;
+            if (avatarBanner) avatarBanner.textContent = initials;
+            if (avatarPrev)   avatarPrev.textContent   = initials;
+          }
+
+          if (identityName) identityName.textContent = display;
+          if (headerName) {
+            var email = $("#ps-email");
+            headerName.textContent = (email && email.value.trim()) || (display.toLowerCase().replace(/\s+/g, ".") + "@vunvault.com");
+          }
+        }
+
+        [firstInput, lastInput, displayInput].forEach(function (el) {
+          if (!el) return;
+          el.addEventListener("input", syncInitials);
+        });
+
+        var emailInput = $("#ps-email");
+        if (emailInput) emailInput.addEventListener("input", syncInitials);
+
+        /* ================================================================
+           5. Avatar upload / remove / generate
+        ================================================================ */
+        var dropzone     = $("#ps-dropzone");
+        var avatarInput  = $("#ps-avatar-input");
+        var avatarRemove = $("#ps-avatar-remove");
+        var avatarGen    = $("#ps-avatar-generate");
+
+        function setAvatarImage(dataUrl) {
+          customAvatarDataUrl = dataUrl;
+
+          [avatarHeader, avatarBanner, avatarPrev].forEach(function (el) {
+            if (!el) return;
+            el.innerHTML = "";
+            var img = document.createElement("img");
+            img.src = dataUrl;
+            img.alt = "Profile picture";
+            el.appendChild(img);
+          });
+
+          if (avatarTag) {
+            avatarTag.textContent = "Custom image";
+            avatarTag.className = "adm-tag adm-tag--ok";
+          }
+          persistProfile();
+        }
+
+        function resetAvatarToInitials() {
+          customAvatarDataUrl = null;
+
+          [avatarHeader, avatarBanner, avatarPrev].forEach(function (el) {
+            if (!el) return;
+            el.innerHTML = "";
+          });
+
+          if (avatarTag) {
+            avatarTag.textContent = "No upload";
+            avatarTag.className = "adm-tag";
+          }
+
+          syncInitials();
+          persistProfile();
+        }
+
+        function handleFile(file) {
+          if (!file) return;
+
+          var maxBytes = 4 * 1024 * 1024;
+          if (file.size > maxBytes) {
+            toast("crit", "File too large", "Avatar uploads are limited to 4 MB.");
+            return;
+          }
+
+          if (!/^image\//.test(file.type)) {
+            toast("crit", "Unsupported file type", "Please upload a PNG, JPG, WEBP or SVG image.");
+            return;
+          }
+
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            setAvatarImage(e.target.result);
+            toast("ok", "Avatar updated",
+                  "Image accepted and queued for security scanning at " + utcStamp() + ".");
+          };
+          reader.onerror = function () {
+            toast("crit", "Upload failed", "The file could not be read. Please try again.");
+          };
+          reader.readAsDataURL(file);
+        }
+
+        if (avatarInput) {
+          avatarInput.addEventListener("change", function (event) {
+            handleFile(event.target.files && event.target.files[0]);
+          });
+        }
+
+        if (dropzone) {
+          ["dragenter", "dragover"].forEach(function (evt) {
+            dropzone.addEventListener(evt, function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              dropzone.classList.add("is-dragover");
+            });
+          });
+
+          ["dragleave", "dragend", "drop"].forEach(function (evt) {
+            dropzone.addEventListener(evt, function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              dropzone.classList.remove("is-dragover");
+            });
+          });
+
+          dropzone.addEventListener("drop", function (e) {
+            var dt = e.dataTransfer;
+            if (dt && dt.files && dt.files.length) {
+              handleFile(dt.files[0]);
+            }
+          });
+        }
+
+        if (avatarRemove) {
+          avatarRemove.addEventListener("click", function () {
+            resetAvatarToInitials();
+            toast("info", "Avatar removed", "Falling back to initials across the platform.");
+          });
+        }
+
+        if (avatarGen) {
+          avatarGen.addEventListener("click", function () {
+            var initials = initialsOf(firstInput && firstInput.value, lastInput && lastInput.value);
+
+            /* Build a small inline SVG data URL with the initials */
+            var svg =
+              '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">' +
+                '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
+                  '<stop offset="0" stop-color="#6FB6FF"/>' +
+                  '<stop offset="1" stop-color="#1E7BE0"/>' +
+                '</linearGradient></defs>' +
+                '<rect width="200" height="200" fill="url(#g)"/>' +
+                '<text x="100" y="118" text-anchor="middle" font-family="Inter, system-ui, sans-serif" ' +
+                  'font-size="86" font-weight="800" fill="#ffffff">' + initials + '</text>' +
+              '</svg>';
+
+            var dataUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+            setAvatarImage(dataUrl);
+
+            toast("ok", "Avatar generated", "Initials image created for your account.");
+          });
+        }
+
+        /* ================================================================
+           6. Password strength meter
+        ================================================================ */
+        var newPw       = $("#ps-new-pw");
+        var confirmPw   = $("#ps-confirm-pw");
+        var strengthBar = $$("#ps-strength-bars .ps-strength-bar");
+        var strengthLbl = $("#ps-strength-label");
+
+        function scorePassword(value) {
+          var v = String(value || "");
+          if (!v) return 0;
+
+          var score = 0;
+          if (v.length >= 8)  score++;
+          if (v.length >= 14) score++;
+          if (/[a-z]/.test(v) && /[A-Z]/.test(v)) score++;
+          if (/\d/.test(v)) score++;
+          if (/[^A-Za-z0-9]/.test(v)) score++;
+
+          return Math.min(4, score);
+        }
+
+        function updateStrength() {
+          var score = scorePassword(newPw ? newPw.value : "");
+
+          strengthBar.forEach(function (bar, i) {
+            bar.classList.remove("is-1", "is-2", "is-3", "is-4");
+            if (i < score) bar.classList.add("is-" + score);
+          });
+
+          if (strengthLbl) {
+            var labels = ["—", "Weak", "Fair", "Good", "Strong"];
+            strengthLbl.textContent = labels[score] || "—";
+          }
+        }
+
+        if (newPw) newPw.addEventListener("input", updateStrength);
+
+        /* ================================================================
+           7. Password visibility toggles
+        ================================================================ */
+        [newPw, confirmPw, $("#ps-current-pw")].forEach(function (input) {
+          if (!input) return;
+
+          var row = input.parentElement;
+          if (!row) return;
+
+          /* Skip if a toggle already exists */
+          if (row.querySelector(".ps-pw-toggle")) return;
+
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "ps-pw-toggle";
+          btn.setAttribute("aria-label", "Toggle password visibility");
+          btn.style.cssText = "position:absolute;right:12px;top:38px;width:28px;height:28px;" +
+                              "border-radius:50%;border:0;cursor:pointer;background:transparent;" +
+                              "color:var(--ink-muted);display:inline-flex;align-items:center;" +
+                              "justify-content:center;transition:color .18s ease;";
+          btn.innerHTML =
+            '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" ' +
+            'fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" ' +
+            'stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/>' +
+            '<circle cx="12" cy="12" r="3"/></svg>';
+
+          row.style.position = "relative";
+          row.appendChild(btn);
+
+          btn.addEventListener("click", function () {
+            var isPassword = input.type === "password";
+            input.type = isPassword ? "text" : "password";
+            btn.style.color = isPassword ? "var(--brand-strong)" : "var(--ink-muted)";
+          });
+        });
+
+        /* ================================================================
+           8. Character counter for bio
+        ================================================================ */
+        var bio        = $("#ps-bio");
+        var bioCount   = $("#ps-bio-count");
+
+        function updateBioCount() {
+          if (!bioCount || !bio) return;
+          var len = bio.value.length;
+          var max = parseInt(bio.getAttribute("maxlength"), 10) || 400;
+          bioCount.textContent = len + " / " + max;
+        }
+
+        if (bio) {
+          bio.addEventListener("input", updateBioCount);
+          updateBioCount();
+        }
+
+        /* ================================================================
+           9. Save / reset handlers per section
+        ================================================================ */
+        $$("[data-ps-save]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var section = btn.getAttribute("data-ps-save");
+            var label = btn.querySelector("span");
+            var original = label ? label.textContent : "";
+
+            btn.disabled = true;
+            if (label) label.textContent = "Saving…";
+
+            window.setTimeout(function () {
+              btn.disabled = false;
+              if (label) label.textContent = original;
+
+              if (section === "personal") {
+                toast("ok", "Personal details saved",
+                      "Profile updated at " + utcStamp() + " and written to the audit log.");
+                syncInitials();
+                persistProfile();
+              } else if (section === "security") {
+                toast("ok", "Security settings updated",
+                      "Password change enforced across all sessions at " + utcStamp() + ".");
+                if (newPw) newPw.value = "";
+                if (confirmPw) confirmPw.value = "";
+                updateStrength();
+              } else if (section === "notifications") {
+                toast("ok", "Notification preferences saved",
+                      "Channel matrix updated at " + utcStamp() + ".");
+              } else {
+                toast("ok", "Changes saved", "Settings updated successfully.");
+              }
+            }, 900);
+          });
+        });
+
+        $$("[data-ps-reset]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var section = btn.getAttribute("data-ps-reset");
+
+            if (section === "personal") {
+              if (firstInput) firstInput.value = "Evelyn";
+              if (lastInput) lastInput.value = "Reed";
+              if (displayInput) displayInput.value = "Dr. Evelyn Reed";
+              var job = $("#ps-jobtitle");
+              if (job) job.value = "Super Administrator · Incident Commander";
+              if (emailInput) emailInput.value = "e.reed@vunvault.com";
+              var phone = $("#ps-phone");
+              if (phone) phone.value = "+254 700 000 000";
+              if (bio) bio.value = "Cybersecurity leader driving VUNVAULT's offensive and defensive programmes across Africa. Incident commander for SEV-1 events and final approver at the Mandatory Admin Review Gate.";
+              updateBioCount();
+              syncInitials();
+              toast("info", "Personal details reset", "Restored to the last saved values.");
+            } else if (section === "security") {
+              if (newPw) newPw.value = "";
+              if (confirmPw) confirmPw.value = "";
+              var cur = $("#ps-current-pw");
+              if (cur) cur.value = "";
+              updateStrength();
+              toast("info", "Security form reset", "Password fields cleared.");
+            } else if (section === "notifications") {
+              $$(".ps-notify-table .ps-check").forEach(function (cb) {
+                cb.checked = cb.hasAttribute("disabled") || cb.hasAttribute("checked");
+              });
+              /* Reset to a sensible default set */
+              $$(".ps-notify-table tbody tr").forEach(function (row) {
+                var isDigest = (row.textContent || "").indexOf("Weekly digest") !== -1;
+                var checks = row.querySelectorAll(".ps-check");
+                if (!checks.length) return;
+                checks.forEach(function (cb, i) {
+                  if (cb.disabled) return;
+                  cb.checked = isDigest ? i === 1 : i === 0 || i === 1 || i === 3;
+                });
+              });
+              toast("info", "Notifications reset", "Restored to VUNVAULT defaults.");
+            }
+          });
+        });
+
+        /* Global save / discard */
+        var saveAll = $("#ps-save-all");
+        if (saveAll) {
+          saveAll.addEventListener("click", function () {
+            saveAll.disabled = true;
+            var label = saveAll.querySelector("span");
+            var original = label ? label.textContent : "";
+            if (label) label.textContent = "Saving all…";
+
+            window.setTimeout(function () {
+              saveAll.disabled = false;
+              if (label) label.textContent = original;
+              toast("ok", "All changes saved",
+                    "Profile, avatar, credentials and preferences synced at " + utcStamp() + ".");
+                  persistProfile();
+            }, 1200);
+          });
+        }
+
+        var discardAll = $("#ps-discard-all");
+        if (discardAll) {
+          discardAll.addEventListener("click", function () {
+            toast("warn", "Changes discarded",
+                  "All unsaved edits have been reverted to the last saved state.");
+          });
+        }
+
+        /* ================================================================
+           10. 2FA / recovery codes
+        ================================================================ */
+        var copySecret = $("#ps-copy-secret");
+        if (copySecret) {
+          copySecret.addEventListener("click", function () {
+            var secret = "JBSWY3DPEHPK3PXP";
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(secret).then(function () {
+                toast("ok", "Secret copied", "Manual secret copied to clipboard.");
+              }).catch(function () {
+                toast("warn", "Clipboard blocked", "Copy the secret manually: " + secret);
+              });
+            } else {
+              toast("info", "Manual secret", "JBSW Y3DP EHPK 3PXP");
+            }
+          });
+        }
+
+        var downloadCodes = $("#ps-download-codes");
+        if (downloadCodes) {
+          downloadCodes.addEventListener("click", function () {
+            toast("ok", "Recovery codes downloaded",
+                  "Encrypted TXT file generated. Store offline in a safe location.");
+          });
+        }
+
+        var regenerate = $("#ps-regenerate-codes");
+        if (regenerate) {
+          regenerate.addEventListener("click", function () {
+            if (!window.confirm("Regenerating recovery codes invalidates all existing codes. Continue?")) {
+              return;
+            }
+
+            var codes = [];
+            for (var i = 0; i < 10; i++) {
+              var chunk = function () {
+                return "ABCDEFGHJKMNPQRSTUVWXYZ23456789".split("").sort(function () {
+                  return Math.random() - 0.5;
+                }).slice(0, 4).join("");
+              };
+              codes.push(chunk() + "-" + chunk() + "-" + chunk());
+            }
+
+            var box = $("#ps-recovery-codes");
+            if (box) {
+              box.innerHTML = "";
+              codes.forEach(function (code) {
+                var span = document.createElement("span");
+                span.className = "ps-code";
+                span.textContent = code;
+                box.appendChild(span);
+              });
+            }
+
+            toast("ok", "Recovery codes regenerated",
+                  "10 new codes issued at " + utcStamp() + ". Store them offline now.");
+          });
+        }
+
+        var hwkToggle = $("#ps-hwk-toggle");
+        if (hwkToggle) {
+          hwkToggle.addEventListener("change", function () {
+            var on = hwkToggle.checked;
+            var row = hwkToggle.closest(".ps-toggle-row");
+            if (row) row.classList.toggle("is-on", on);
+
+            if (on) {
+              toast("ok", "Hardware key enabled",
+                    "Phishing-resistant authentication is active for privileged operations.");
+            } else {
+              toast("warn", "Hardware key disabled",
+                    "You now rely on TOTP only. Consider re-enabling as soon as possible.");
+            }
+          });
+        }
+
+        /* ================================================================
+           11. Sidebar actions
+        ================================================================ */
+        var signoutOthers = $("#ps-signout-others");
+        if (signoutOthers) {
+          signoutOthers.addEventListener("click", function () {
+            if (!window.confirm("Sign out all other sessions? This terminates 2 active sessions.")) {
+              return;
+            }
+
+            signoutOthers.disabled = true;
+            var label = signoutOthers.querySelector("span");
+            var original = label ? label.textContent : "";
+            if (label) label.textContent = "Terminating…";
+
+            window.setTimeout(function () {
+              signoutOthers.disabled = false;
+              if (label) label.textContent = original;
+              toast("ok", "Other sessions terminated",
+                    "2 remote sessions revoked at " + utcStamp() + ".");
+            }, 900);
+          });
+        }
+
+        $$("[data-ps-revoke]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var device = btn.getAttribute("data-ps-revoke");
+            var row = btn.closest("tr");
+            if (row) row.style.opacity = "0.45";
+            btn.disabled = true;
+            toast("info", "Session revoked", device + " — authentication token invalidated.");
+          });
+        });
+
+        var deactivate = $("#ps-deactivate");
+        if (deactivate) {
+          deactivate.addEventListener("click", function () {
+            if (!window.confirm("Request deactivation of this administrator account? This requires executive approval and revokes access immediately.")) {
+              return;
+            }
+            toast("crit", "Deactivation requested",
+                  "Executive approval requested at " + utcStamp() + ". All sessions will be revoked on approval.");
+          });
+        }
+
+        /* ================================================================
+           12. Initialise
+        ================================================================ */
+        syncInitials();
+        updateStrength();
+        updateBioCount();
+        /* ================================================================
+   HYDRATE PROFILE FROM LOCALSTORAGE
+   Updates header avatar (circular) + display name on every load.
+   ================================================================ */
+function hydrateProfileFromStorage() {
+  var raw;
+  try {
+    raw = window.localStorage.getItem("vunvault:profile");
+  } catch (err) {
+    return;                                   // storage blocked / private mode
+  }
+  if (!raw) return;
+
+  var profile;
+  try {
+    profile = JSON.parse(raw);
+  } catch (err) {
+    return;                                   // corrupt payload — bail quietly
+  }
+
+  /* ---------- 1. Header circular avatar ---------- */
+  var avatarEl = document.querySelector(".adm-avatar");
+  if (avatarEl) {
+    if (profile.avatar) {
+      avatarEl.innerHTML = "";
+      var img = document.createElement("img");
+      img.src              = profile.avatar;
+      img.alt              = profile.name || "Profile picture";
+      img.style.width      = "100%";
+      img.style.height     = "100%";
+      img.style.objectFit  = "cover";
+      img.style.borderRadius = "50%";
+      img.style.display    = "block";
+      avatarEl.appendChild(img);
+
+      // Ensure the parent clips to a circle even if CSS isn't updated.
+      avatarEl.style.overflow = "hidden";
+      avatarEl.style.padding  = "0";
+    } else if (profile.initials) {
+      avatarEl.textContent = profile.initials;
+    }
+  }
+
+  /* ---------- 2. Header display name ---------- */
+  var nameEl = document.querySelector(".adm-user-name");
+  if (nameEl) {
+    if (profile.name) {
+      nameEl.textContent = profile.name;      // display name
+    } else if (profile.email) {
+      nameEl.textContent = profile.email;     // fallback
+    }
+  }
+}
+
+hydrateProfileFromStorage();
+
+      })();
+    </script>
+  </body>
+</html>

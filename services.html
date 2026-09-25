@@ -1,358 +1,1982 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Services &amp; Pricing — VUNVAULT</title>
-<meta name="description" content="VUNVAULT services and pricing. High-quality penetration testing and cybersecurity audits for African businesses and organizations.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    /* VUNVAULT New Brand Palette */
-    --void: #fcfbf9;
-    --panel: #ffffff;
-    --panel-raised: #f7f6f3;
-    --line: #e2e8f0;
-    --line-soft: #f1f5f9;
-    --bone: #0f172a;
-    --bone-dim: #64748b;
-    --ink: #0f172a;
-    --sub: #64748b;
-    --accent: #0f172a;
-    --accent-blue: #0284c7;
-    --amber: #d97706;
-    --amber-dim: #b45309;
-    --cyan: #0284c7;
-    --red: #dc2626;
-    --green: #059669;
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VUNVAULT Services — manual penetration testing, attack surface reconnaissance, WAF verification, cloud & mobile security, and free OSINT tooling for African and global teams.">
+    <link rel="stylesheet" href="vun1.css">
+    <title>Services — VUNVAULT | Penetration Testing &amp; Vulnerability Assessments</title>
 
-    /* Course & Layout Tokens */
-    --black: #0f172a;
-    --dark: #0f172a;
-    --mid: #475569;
-    --light: #64748b;
-    --rule: #e2e8f0;
-    --rule-soft: #f1f5f9;
-    --paper: #fcfbf9;
-    --paper-warm: #f7f6f3;
-    --hi: #f1f5f9;
+    <style>
+      /* ==================================================================
+         AUTH-AWARE NAVIGATION — profile pill (mirrors vun1.html)
+         ================================================================== */
+      #navLoginLink[hidden],
+      #navProfileLink[hidden],
+      #mobileLoginItem[hidden],
+      #mobileProfileItem[hidden] { display: none !important; }
 
-    --font-display: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-mono: 'IBM Plex Mono', monospace;
-    --container: 1200px;
-    --s1:8px;--s2:16px;--s3:24px;--s4:32px;--s5:48px;--s6:64px;--s7:96px;--s8:128px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:#fcfbf9;color:#0f172a;
-    color:var(--bone);
-    font-family:var(--font-body);
-    line-height:1.6;
-    overflow-x:hidden;
-  }
-  img,canvas,svg{display:block;max-width:100%;}
-  a{color:inherit;text-decoration:none;}
-  ul{list-style:none;}
-  .container{max-width:var(--container);margin:0 auto;padding:0 var(--s4);}
-  section{position:relative;}
-  h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;letter-spacing:0.01em;line-height:1.05;text-transform:uppercase;}
-  .eyebrow{
-    font-family:var(--font-mono);
-    font-size:0.75rem;
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-    color:var(--amber);
-    display:flex;align-items:center;gap:10px;
-    margin-bottom:var(--s2);
-  }
-  .eyebrow::before{content:"";width:18px;height:1px;background:var(--amber);display:inline-block;}
-  .btn{
-    display:inline-flex;align-items:center;gap:10px;
-    font-family:var(--font-mono);
-    font-size:0.85rem;
-    letter-spacing:0.05em;
-    text-transform:uppercase;
-    padding:14px 28px;
-    border-radius:2px;
-    cursor:pointer;
-    border:1px solid transparent;
-    transition:transform .15s ease, background .2s ease, border-color .2s ease, color .2s ease;
-  }
-  .btn:hover{transform:translateY(-2px);}
-  .btn-primary{background:var(--amber);color:var(--void);font-weight:600;}
-  .btn-primary:hover{background:#64748b;}
-  .btn-outline{border-color:var(--line);color:var(--bone);background:transparent;}
-  .btn-outline:hover{border-color:var(--amber);color:var(--amber);}
+      .nav-profile {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 12px 4px 4px;
+        border-radius: 9999px;
+        border: 1px solid rgba(59, 153, 252, 0.28);
+        background: rgba(59, 153, 252, 0.10);
+        color: #1E7BE0;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+        transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                    border-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                    color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                    transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .nav-profile:hover,
+      .nav-profile:focus-visible {
+        background: rgba(59, 153, 252, 0.18);
+        border-color: #3B99FC;
+        color: #0A0D12;
+        transform: translateY(-1px);
+        outline: none;
+      }
+      .nav-profile-avatar {
+        display: inline-flex; align-items: center; justify-content: center;
+        flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%;
+        background: linear-gradient(135deg, #3B99FC, #1E7BE0);
+        color: #ffffff; font-size: 11px; font-weight: 800; line-height: 1;
+        text-transform: uppercase;
+      }
+      .nav-profile-label {
+        max-width: 110px; overflow: hidden;
+        text-overflow: ellipsis; white-space: nowrap;
+      }
+      .nav-profile--admin {
+        border-color: rgba(245, 158, 11, 0.45);
+        background: rgba(245, 158, 11, 0.12);
+        color: #b45309;
+      }
+      .nav-profile--admin:hover,
+      .nav-profile--admin:focus-visible {
+        background: rgba(245, 158, 11, 0.20);
+        border-color: #f59e0b;
+        color: #78350f;
+      }
+      .nav-profile--admin .nav-profile-avatar {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+      }
 
-  /* NAV */
-  header{
-    position:fixed;top:0;left:0;right:0;z-index:100;
-    background:rgba(252, 251, 249, 0.92);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--line-soft);
-  }
-  nav{
-    max-width:var(--container);margin:0 auto;padding:18px var(--s4);
-    display:flex;align-items:center;justify-content:space-between;
-  }
-  .logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.04em;text-transform:uppercase;}
-  .logo svg{width:26px;height:26px;}
-  .logo span{color:var(--amber);}
-  .nav-links{display:flex;align-items:center;gap:var(--s5);}
-  .nav-links a{
-    font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.06em;text-transform:uppercase;
-    color:var(--bone-dim);transition:color .2s ease;
-  }
-  .nav-links a:hover{color:var(--amber);}
-  .nav-cta{display:flex;align-items:center;gap:var(--s3);}
-  .nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
-  .nav-toggle span{width:22px;height:2px;background:var(--bone);display:block;}
+      /* ==================================================================
+         HEADER CTA
+         ================================================================== */
+      .vv-header-cta {
+        display: none;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        border: 1px solid rgba(59, 153, 252, 0.5);
+        border-radius: 9999px;
+        box-shadow: 0 12px 28px -16px var(--brand-glow);
+        transition: transform 0.25s var(--ease), filter 0.25s var(--ease),
+                    box-shadow 0.25s var(--ease);
+      }
+      @media (min-width: 1000px) { .vv-header-cta { display: inline-flex; } }
+      .vv-header-cta:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.07);
+        box-shadow: 0 18px 38px -18px var(--brand-glow);
+      }
+      .vv-header-cta:active { transform: translateY(0) scale(0.98); }
 
-  /* PAGE HERO */
-  .page-hero{padding:calc(90px + var(--s6)) 0 var(--s6);border-bottom:1px solid var(--line-soft); background: var(--panel);}
-  .page-hero h1{font-size:clamp(2.2rem,4.5vw,3.4rem);margin-bottom:var(--s3);color: var(--bone);}
-  .page-hero p{color:var(--bone-dim);font-size:1.05rem;max-width:560px;}
+      /* ==================================================================
+         PAGE HERO
+         ================================================================== */
+      .vv-svc-hero {
+        position: relative;
+        overflow: hidden;
+        padding: 3.5rem 0 2.5rem;
+        background:
+          radial-gradient(90% 80% at 50% -10%, rgba(59, 153, 252, 0.10), transparent 62%),
+          var(--paper);
+      }
+      .vv-svc-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(to right, rgba(59, 153, 252, 0.07) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(59, 153, 252, 0.07) 1px, transparent 1px);
+        background-size: 54px 54px;
+        -webkit-mask-image: radial-gradient(70% 60% at 50% 0%, #000 0%, transparent 76%);
+        mask-image: radial-gradient(70% 60% at 50% 0%, #000 0%, transparent 76%);
+        pointer-events: none;
+      }
+      .vv-svc-hero > * { position: relative; z-index: 1; }
 
-  /* SERVICES / PRICING */
-  .services-section{padding:var(--s7) 0;background:var(--void);}
-  .pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3);}
-  .price-card{
-    background:var(--panel-raised);border:1px solid var(--line);border-radius:4px;
-    padding:var(--s4);display:flex;flex-direction:column;
-    transition:border-color .2s ease, transform .2s ease;
-  }
-  .price-card:hover{border-color:var(--amber-dim);transform:translateY(-4px);}
-  .price-card.featured{border-color:var(--amber);position:relative;}
-  .price-card.featured::before{
-    content:"Most booked";position:absolute;top:-12px;left:var(--s4);
-    background:var(--amber);color:var(--void);font-family:var(--font-mono);font-size:0.65rem;
-    letter-spacing:0.06em;text-transform:uppercase;padding:4px 10px;border-radius:2px;font-weight:700;
-  }
-  .price-card h3{font-size:1.25rem;margin-bottom:6px;color: var(--bone);}
-  .price-card .tagline{color:var(--bone-dim);font-size:0.85rem;margin-bottom:var(--s4);min-height:40px;}
-  .price-card .price{font-family:var(--font-mono);font-size:1.6rem;color:var(--cyan);margin-bottom:4px;}
-  .price-card .price-note{font-family:var(--font-mono);font-size:0.7rem;color:var(--bone-dim);margin-bottom:var(--s4);text-transform:uppercase;letter-spacing:0.04em;}
-  .price-card ul{flex:1;display:flex;flex-direction:column;gap:10px;margin-bottom:var(--s4);}
-  .price-card li{font-size:0.85rem;color:var(--bone-dim);padding-left:18px;position:relative;}
-  .price-card li::before{content:"›";position:absolute;left:0;color:var(--amber);}
-  .price-disclaimer{margin-top:var(--s4);font-size:0.8rem;color:var(--bone-dim);font-family:var(--font-mono);text-align: center;}
+      /* ==================================================================
+         INTERACTIVE CLI — FREE OSINT TOOLS
+         ================================================================== */
+      .vv-cli-section {
+        padding: 3.5rem 0;
+        background: var(--paper);
+        border-top: 1px solid var(--line-soft);
+      }
 
-  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
-  .reveal.in{opacity:1;transform:translateY(0);}
+      .vv-cli-shell {
+        border-radius: 20px;
+        overflow: hidden;
+        background: #0b0f16;
+        border: 1px solid rgba(59, 153, 252, 0.28);
+        box-shadow:
+          0 40px 90px -50px rgba(0, 0, 0, 0.85),
+          0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+      }
 
-  /* FOOTER */
-  footer{padding:var(--s7) 0 var(--s5);border-top:1px solid var(--line-soft); background-color: var(--panel);}
-  .footer-top{display:grid;grid-template-columns:1.3fr repeat(4,1fr);gap:var(--s5);padding-bottom:var(--s6);margin-bottom:var(--s5);border-bottom:1px solid var(--line-soft);}
-  .footer-brand .logo{margin-bottom:var(--s2);}
-  .footer-brand p{color:var(--bone-dim);font-size:0.85rem;max-width:240px;}
-  .footer-col h4{font-family:var(--font-mono);font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--bone);margin-bottom:var(--s3);}
-  .footer-col ul{display:flex;flex-direction:column;gap:11px;}
-  .footer-col a{font-family:var(--font-mono);font-size:0.82rem;color:var(--bone-dim);transition:color .2s ease;}
-  .footer-col a:hover{color:var(--amber);}
-  .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--s3);}
-  .footer-row p{font-family:var(--font-mono);font-size:0.75rem;color:var(--bone-dim);}
-  .footer-links{display:flex;gap:var(--s4);}
-  .footer-links a{font-family:var(--font-mono);font-size:0.75rem;color:var(--bone-dim);}
-  .footer-links a:hover{color:var(--amber);}
+      .vv-cli-titlebar {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 14px;
+        padding: 11px 14px;
+        background: linear-gradient(180deg, #151b25, #10151d);
+        border-bottom: 1px solid rgba(59, 153, 252, 0.18);
+      }
+      .vv-cli-dots { display: flex; align-items: center; gap: 8px; }
+      .vv-cli-dot {
+        width: 11px; height: 11px; border-radius: 50%;
+        border: 1px solid rgba(0, 0, 0, 0.25);
+      }
+      .vv-cli-dot--r { background: #ff5f57; }
+      .vv-cli-dot--y { background: #febc2e; }
+      .vv-cli-dot--g { background: #28c840; }
 
-  @media (max-width:980px){
-    .nav-links{display:none;}
-    .nav-toggle{display:flex;}
-    .pricing-grid{grid-template-columns:repeat(2,1fr);}
-  }
-  @media (max-width:560px){
-    .pricing-grid{grid-template-columns:1fr;}
-  }
-</style>
-</head>
-<body>
+      .vv-cli-title {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 11.5px;
+        letter-spacing: 0.02em;
+        color: #8d9aab;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
 
-<header style="position:sticky;top:0;z-index:200;background:rgba(252,251,249,0.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid #e2e8f0;">
-  <div style="max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
-    <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-      <div style="width:32px;height:32px;border-radius:10px;background:#0f172a;display:flex;align-items:center;justify-content:center;color:#fff;">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z"/></svg>
-      </div>
-      <span style="font-weight:800;font-size:1.3rem;letter-spacing:0.06em;color:#0f172a;text-transform:uppercase;">VUNVAULT</span>
-    </a>
-    <nav style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-      <a href="services.html" style="font-size:0.88rem;font-weight:600;color:#0f172a;text-decoration:none;padding:5px 12px;border-radius:9999px;background:rgba(15,23,42,0.06);">Services</a>
-      <a href="index.html#scanner" style="font-size:0.88rem;font-weight:600;color:#475569;text-decoration:none;padding:5px 12px;border-radius:9999px;">Scanner</a>
-      <a href="course-foundations.html" style="font-size:0.88rem;font-weight:600;color:#475569;text-decoration:none;padding:5px 12px;border-radius:9999px;">Academy</a>
-      <a href="news.html" style="font-size:0.88rem;font-weight:600;color:#475569;text-decoration:none;padding:5px 12px;border-radius:9999px;">News</a>
-      <a href="index.html#contact" style="font-size:0.88rem;font-weight:600;color:#475569;text-decoration:none;padding:5px 12px;border-radius:9999px;">Contact</a>
-    </nav>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <a href="index.html" style="background:#0f172a;color:#fff;font-size:0.85rem;font-weight:500;padding:8px 18px;border-radius:9999px;text-decoration:none;">Get Started</a>
-    </div>
-  </div>
-</header>
+      .vv-cli-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 5px 12px;
+        border-radius: 9999px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        border: 1px solid transparent;
+        white-space: nowrap;
+      }
+      .vv-cli-status-dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: currentColor;
+      }
+      .vv-cli-status[data-state="idle"] {
+        color: #94a3b8;
+        background: rgba(148, 163, 184, 0.1);
+        border-color: rgba(148, 163, 184, 0.3);
+      }
+      .vv-cli-status[data-state="running"] {
+        color: #7dd3fc;
+        background: rgba(59, 153, 252, 0.12);
+        border-color: rgba(59, 153, 252, 0.42);
+      }
+      .vv-cli-status[data-state="running"] .vv-cli-status-dot {
+        animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      .vv-cli-status[data-state="done"] {
+        color: #34d399;
+        background: rgba(16, 185, 129, 0.12);
+        border-color: rgba(16, 185, 129, 0.42);
+      }
 
-<section class="page-hero">
-  <div class="container">
-    <div class="eyebrow">Services &amp; Pricing</div>
-    <h1>Built for businesses across Africa — and beyond</h1>
-    <p>Four tiers, transparent USD pricing, no hidden scoping calls. Every engagement ends with a retest.</p>
-  </div>
-</section>
+      .vv-cli-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 14px 18px 0;
+      }
+      .vv-cli-tab {
+        padding: 9px 16px;
+        font-size: 11.5px;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        color: #8d9aab;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 9999px;
+        transition: color 0.2s var(--ease), border-color 0.2s var(--ease),
+                    background-color 0.2s var(--ease);
+      }
+      .vv-cli-tab:hover {
+        color: #e2e8f0;
+        border-color: rgba(59, 153, 252, 0.4);
+        background: rgba(59, 153, 252, 0.1);
+      }
+      .vv-cli-tab.is-active {
+        color: #04121f;
+        background: linear-gradient(135deg, var(--brand-soft), var(--brand));
+        border-color: transparent;
+        box-shadow: 0 10px 24px -14px var(--brand-glow);
+      }
 
-<section class="services-section" id="services">
-  <div class="container">
-    <div class="pricing-grid" id="pricing">
-      <div class="price-card reveal">
-        <h3>Starter Scan</h3>
-        <div class="tagline">Automated vulnerability scan for a single website or landing page.</div>
-        <div class="price">From $100 USD</div>
-        <div class="price-note">One-time</div>
-        <ul>
-          <li>Automated OWASP Top 10 scan</li>
-          <li>SSL/TLS &amp; header review</li>
-          <li>Plain-English summary report</li>
-          <li>48-hour turnaround</li>
-        </ul>
-        <a href="index.html#contact" class="btn btn-outline">Get Started</a>
-      </div>
-      <div class="price-card featured reveal">
-        <h3>SME Shield</h3>
-        <div class="tagline">Manual + automated testing for a live business web app.</div>
-        <div class="price">From $300 USD</div>
-        <div class="price-note">Per engagement</div>
-        <ul>
-          <li>Manual web app penetration test</li>
-          <li>Authentication &amp; access-control review</li>
-          <li>Technical + executive report</li>
-          <li>One free retest included</li>
-        </ul>
-        <a href="index.html#contact" class="btn btn-primary">Get Started</a>
-      </div>
-      <div class="price-card reveal">
-        <h3>SACCO &amp; Fintech Pro</h3>
-        <div class="tagline">Full-scope pentest with compliance mapping for regulated platforms.</div>
-        <div class="price">From $1,500 USD</div>
-        <div class="price-note">Per engagement</div>
-        <ul>
-          <li>Web, API &amp; infrastructure testing</li>
-          <li>Local data-protection &amp; compliance mapping</li>
-          <li>Board-ready compliance report</li>
-          <li>Two free retests included</li>
-        </ul>
-        <a href="index.html#contact" class="btn btn-outline">Get Started</a>
-      </div>
-      <div class="price-card reveal">
-        <h3>Enterprise Retainer</h3>
-        <div class="tagline">Continuous testing and monitoring for growing platforms.</div>
-        <div class="price">Custom Quote</div>
-        <div class="price-note">Quarterly</div>
-        <ul>
-          <li>Quarterly penetration tests</li>
-          <li>Dedicated security analyst</li>
-          <li>Priority response SLA</li>
-          <li>Staff security training included</li>
-        </ul>
-        <a href="index.html#contact" class="btn btn-outline">Talk to Us</a>
-      </div>
-    </div>
-    
-    <div style="margin-top: var(--s5);">
-      <p class="price-disclaimer">Prices shown are starting estimates. Final scope and quote are confirmed after a short discovery call.</p>
-      <p class="price-disclaimer" style="margin-top:8px;">We accept payment by <strong>Card</strong>, <strong>PayPal</strong>, <strong>Stripe</strong>, and <strong>M-Pesa</strong> (Kenya).</p>
-    </div>
+      .vv-cli-body {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding: 18px;
+      }
 
-    <div style="text-align: center; margin-top: var(--s6);">
-      <a href="index.html#contact" class="btn btn-primary">Book a Consultation Call</a>
-    </div>
-  </div>
-</section>
+      .vv-cli-hint {
+        font-size: 11.5px;
+        line-height: 1.65;
+        color: #7d8b9e;
+      }
 
-<footer style="background:#fcfbf9;border-top:1px solid #e2e8f0;padding:64px 32px 32px;color:#64748b;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px;border-bottom:1px solid #e2e8f0;">
-    <div>
-      <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:16px;">
-        <div style="width:32px;height:32px;border-radius:10px;background:#0f172a;display:flex;align-items:center;justify-content:center;color:#fff;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L21 6.5V12C21 17 17.5 20.7 12 22C6.5 20.7 3 17 3 12V6.5L12 2Z"/></svg>
+      .vv-cli-form { display: flex; flex-wrap: wrap; gap: 10px; }
+      .vv-cli-input-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex: 1 1 260px;
+        min-width: 0;
+      }
+      .vv-cli-prompt {
+        position: absolute;
+        left: 14px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--brand);
+        pointer-events: none;
+      }
+      .vv-cli-input {
+        width: 100%;
+        padding: 13px 14px 13px 34px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 13px;
+        color: #e2e8f0;
+        background: #070b11;
+        border: 1px solid rgba(59, 153, 252, 0.24);
+        border-radius: 10px;
+        outline: none;
+        transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+      }
+      .vv-cli-input::placeholder { color: #55637a; }
+      .vv-cli-input:focus,
+      .vv-cli-input:focus-visible {
+        border-color: var(--brand);
+        box-shadow: 0 0 0 3px rgba(59, 153, 252, 0.18);
+      }
+      .vv-cli-input.is-invalid {
+        border-color: var(--critical);
+        box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.18);
+        animation: vvCliShake 0.32s var(--ease);
+      }
+      @keyframes vvCliShake {
+        0%, 100% { transform: translateX(0); }
+        25%      { transform: translateX(-4px); }
+        75%      { transform: translateX(4px); }
+      }
+
+      .vv-cli-execute {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 13px 22px;
+        font-size: 12.5px;
+        font-weight: 800;
+        color: #04121f;
+        background: linear-gradient(135deg, var(--brand-soft), var(--brand));
+        border-radius: 10px;
+        transition: transform 0.2s var(--ease), filter 0.2s var(--ease),
+                    opacity 0.2s var(--ease);
+      }
+      .vv-cli-execute:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.06); }
+      .vv-cli-execute:disabled { opacity: 0.55; cursor: not-allowed; }
+
+      .vv-cli-clear {
+        flex: 0 0 auto;
+        padding: 13px 18px;
+        font-size: 12.5px;
+        font-weight: 700;
+        color: #93a2b5;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        transition: color 0.2s var(--ease), border-color 0.2s var(--ease),
+                    background-color 0.2s var(--ease);
+      }
+      .vv-cli-clear:hover {
+        color: #e2e8f0;
+        border-color: rgba(59, 153, 252, 0.4);
+        background: rgba(59, 153, 252, 0.1);
+      }
+
+      .vv-cli-chips {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+      }
+      .vv-cli-chips-label {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #55637a;
+      }
+      .vv-cli-chip {
+        padding: 6px 12px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 11px;
+        color: #8d9aab;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 9999px;
+        transition: color 0.2s var(--ease), border-color 0.2s var(--ease),
+                    background-color 0.2s var(--ease);
+      }
+      .vv-cli-chip:hover {
+        color: var(--brand-soft);
+        border-color: rgba(59, 153, 252, 0.45);
+        background: rgba(59, 153, 252, 0.1);
+      }
+
+      .vv-cli-screen {
+        height: 300px;
+        overflow-y: auto;
+        padding: 16px 18px;
+        border-radius: 12px;
+        background:
+          radial-gradient(120% 100% at 0% 0%, rgba(59, 153, 252, 0.07), transparent 60%),
+          #05080d;
+        border: 1px solid rgba(59, 153, 252, 0.16);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 12px;
+        line-height: 1.85;
+        scroll-behavior: smooth;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(59, 153, 252, 0.35) transparent;
+      }
+      .vv-cli-screen::-webkit-scrollbar { width: 8px; }
+      .vv-cli-screen::-webkit-scrollbar-track { background: transparent; }
+      .vv-cli-screen::-webkit-scrollbar-thumb {
+        background: rgba(59, 153, 252, 0.28);
+        border-radius: 9999px;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+      }
+      .vv-cli-screen::-webkit-scrollbar-thumb:hover {
+        background: rgba(59, 153, 252, 0.6);
+        background-clip: padding-box;
+      }
+
+      .vv-cli-meter {
+        height: 3px;
+        width: 100%;
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.07);
+        overflow: hidden;
+      }
+      .vv-cli-meter > span {
+        display: block;
+        height: 100%;
+        width: 0;
+        border-radius: 9999px;
+        background: linear-gradient(90deg, var(--brand-strong), var(--brand-soft));
+        transition: width 0.3s var(--ease);
+      }
+
+      .vv-cli-footnote {
+        font-size: 10.5px;
+        line-height: 1.65;
+        color: #55637a;
+      }
+
+      /* ==================================================================
+         CORE SECURITY SERVICES GRID
+         ================================================================== */
+      .vv-svc-section {
+        padding: 3.5rem 0;
+        background: var(--paper);
+        border-top: 1px solid var(--line-soft);
+      }
+      .vv-svc-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+      }
+      .vv-svc-card {
+        display: flex;
+        flex-direction: column;
+        padding: 26px 24px 24px;
+        border-radius: 20px;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        transition: transform 0.28s var(--ease), border-color 0.28s var(--ease),
+                    box-shadow 0.28s var(--ease);
+      }
+      .vv-svc-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--brand-line);
+        box-shadow: 0 28px 56px -36px rgba(10, 13, 18, 0.5);
+      }
+      .vv-svc-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        color: var(--brand-strong);
+        background: var(--brand-tint);
+        border: 1px solid var(--brand-line);
+        margin-bottom: 18px;
+      }
+      .vv-svc-title {
+        font-size: 1.02rem;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        line-height: 1.4;
+        color: var(--ink);
+      }
+      .vv-svc-text {
+        margin-top: 9px;
+        font-size: 0.78rem;
+        line-height: 1.72;
+        color: var(--ink-muted);
+      }
+      .vv-svc-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line-soft);
+      }
+
+      @media (max-width: 980px) { .vv-svc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 640px) { .vv-svc-grid { grid-template-columns: 1fr; gap: 16px; } }
+
+      /* ==================================================================
+         PRICING — FOUR TIERS
+         ================================================================== */
+      .vv-price-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        align-items: stretch;
+      }
+      @media (max-width: 1240px) {
+        .vv-price-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (max-width: 700px) {
+        .vv-price-grid { grid-template-columns: 1fr; gap: 14px; }
+      }
+
+      .vv-plan-scope {
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line-soft);
+      }
+      .vv-plan--featured .vv-plan-scope { border-top-color: rgba(255, 255, 255, 0.1); }
+
+      .vv-plan-scope-label {
+        display: block;
+        margin-bottom: 12px;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+      .vv-plan--featured .vv-plan-scope-label { color: #7d8b9e; }
+
+      .vv-plan-list--tight { margin-top: 0; padding-top: 0; border-top: 0; }
+
+      .vv-plan-meta {
+        margin-top: 18px;
+        padding-top: 14px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        line-height: 1.6;
+        letter-spacing: 0.02em;
+        color: var(--ink-faint);
+        border-top: 1px dashed var(--line);
+      }
+      .vv-plan--featured .vv-plan-meta {
+        color: #7d8b9e;
+        border-top-color: rgba(255, 255, 255, 0.12);
+      }
+
+      .vv-price-note {
+        margin-top: 22px;
+        font-size: 0.72rem;
+        line-height: 1.7;
+        color: var(--ink-faint);
+        text-align: center;
+      }
+
+      /* ==================================================================
+         SHARED SECTION HEADING HELPERS
+         ================================================================== */
+      .vv-kicker {
+        display: inline-block;
+        padding: 6px 15px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--brand-strong);
+        background: var(--brand-tint);
+        border: 1px solid var(--brand-line);
+        border-radius: 9999px;
+      }
+      .vv-section-title {
+        font-size: clamp(1.6rem, 3.4vw, 2.5rem);
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.15;
+        color: var(--ink);
+      }
+      .vv-section-lede {
+        font-size: 0.95rem;
+        line-height: 1.75;
+        color: var(--ink-muted);
+      }
+
+      @media (max-width: 768px) {
+        .vv-cli-screen { height: 240px; font-size: 11px; }
+        .vv-cli-title { display: none; }
+        .vv-cli-titlebar { grid-template-columns: auto 1fr; }
+        .vv-cli-status { justify-self: end; }
+        .vv-cli-execute,
+        .vv-cli-clear { flex: 1 1 auto; justify-content: center; }
+        .vv-cli-body { padding: 14px; gap: 12px; }
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- ===================================================================
+         PAGE PRELOADER — 3D orbital brand mark
+    ==================================================================== -->
+    <div id="preloader" class="preloader" role="status" aria-live="polite" aria-label="Loading VUNVAULT">
+      <div class="preloader-inner">
+        <div class="preloader-mark">
+          <div class="preloader-stage" aria-hidden="true">
+            <span class="preloader-ring preloader-ring--1"></span>
+            <span class="preloader-ring preloader-ring--2"></span>
+            <span class="preloader-ring preloader-ring--3"></span>
+            <span class="preloader-halo"></span>
+          </div>
+          <img src="logo.svg" alt="VUNVAULT Logo" class="preloader-logo">
         </div>
-        <span style="font-weight:800;font-size:1.3rem;letter-spacing:0.06em;color:#0f172a;text-transform:uppercase;">VUNVAULT</span>
-      </a>
-      <p style="font-size:0.88rem;line-height:1.6;color:#64748b;max-width:320px;">Africa-rooted, worldwide penetration testing, vulnerability assessments and cybersecurity education.</p>
-    </div>
-    <div>
-      <h4 style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#0f172a;margin-bottom:16px;">Resources</h4>
-      <ul style="list-style:none;padding:0;margin:0;font-size:0.88rem;display:flex;flex-direction:column;gap:10px;">
-        <li><a href="news.html" style="color:#64748b;text-decoration:none;">News</a></li>
-        <li><a href="blog.html" style="color:#64748b;text-decoration:none;">Blog</a></li>
-        <li><a href="index.html#scanner" style="color:#64748b;text-decoration:none;">Breach Watch</a></li>
-        <li><a href="blog.html" style="color:#64748b;text-decoration:none;">Templates</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4 style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#0f172a;margin-bottom:16px;">Company</h4>
-      <ul style="list-style:none;padding:0;margin:0;font-size:0.88rem;display:flex;flex-direction:column;gap:10px;">
-        <li><a href="index.html#about" style="color:#64748b;text-decoration:none;">About Us</a></li>
-        <li><a href="index.html#careers" style="color:#64748b;text-decoration:none;">Careers</a></li>
-        <li><a href="index.html#contact" style="color:#64748b;text-decoration:none;">Contact</a></li>
-        <li><a href="news.html" style="color:#64748b;text-decoration:none;">Press</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4 style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#0f172a;margin-bottom:16px;">Solutions</h4>
-      <ul style="list-style:none;padding:0;margin:0;font-size:0.88rem;display:flex;flex-direction:column;gap:10px;">
-        <li><a href="services.html" style="color:#64748b;text-decoration:none;">Small Business</a></li>
-        <li><a href="services.html" style="color:#64748b;text-decoration:none;">SACCO & Fintech</a></li>
-        <li><a href="services.html" style="color:#64748b;text-decoration:none;">Enterprise</a></li>
-        <li><a href="course-foundations.html" style="color:#64748b;text-decoration:none;">Security Training</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4 style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#0f172a;margin-bottom:16px;">Tools</h4>
-      <ul style="list-style:none;padding:0;margin:0;font-size:0.88rem;display:flex;flex-direction:column;gap:10px;">
-        <li><a href="index.html#scanner" style="color:#64748b;text-decoration:none;">Free Security Scan</a></li>
-        <li><a href="services.html" style="color:#64748b;text-decoration:none;">Pricing & Plans</a></li>
-        <li><a href="index.html#contact" style="color:#64748b;text-decoration:none;">Request a Report</a></li>
-      </ul>
-    </div>
-  </div>
-  <div style="max-width:1200px;margin:24px auto 0;display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;color:#64748b;">
-    <p>© 2026 VUNVAULT. All rights reserved.</p>
-    <div style="display:flex;gap:20px;">
-      <a href="#" style="color:#64748b;text-decoration:none;">Top</a>
-      <a href="services.html" style="color:#64748b;text-decoration:none;">Services</a>
-      <a href="course-foundations.html" style="color:#64748b;text-decoration:none;">Academy</a>
-      <a href="index.html#contact" style="color:#64748b;text-decoration:none;">Contact</a>
-    </div>
-  </div>
-</footer>
 
-<script>
-/* ===== MOBILE NAV ===== */
-document.getElementById('navToggle').addEventListener('click', function(){
-  var links = document.querySelector('.nav-links');
-  links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
-  links.style.flexDirection = 'column';
-  links.style.position = 'absolute';
-  links.style.top = '64px';
-  links.style.right = '24px';
-  links.style.background = 'var(--panel)';
-  links.style.border = '1px solid var(--line)';
-  links.style.padding = '16px 24px';
-  links.style.gap = '16px';
-});
+        <div class="preloader-wordmark">VUNVAULT</div>
 
-/* ===== SCROLL REVEAL ===== */
-var revealEls = document.querySelectorAll('.reveal');
-if ('IntersectionObserver' in window){
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){
-      if (en.isIntersecting){ en.target.classList.add('in'); }
-    });
-  }, {threshold:0.15});
-  revealEls.forEach(function(el){ io.observe(el); });
-} else {
-  revealEls.forEach(function(el){ el.classList.add('in'); });
-}
-</script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2397f8acd4451a3',t:'MTc4NTQ2ODM1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a25ddbd75955de16',t:'MTc4NTg0OTYxOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a26c1d3c4dc66450',t:'MTc4NTk5OTA5OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+        <div class="preloader-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+             aria-valuenow="100" aria-label="Page loading progress">
+          <span class="preloader-progress-fill"></span>
+        </div>
+
+        <span class="preloader-caption">Establishing secure channel</span>
+      </div>
+    </div>
+
+    <div class="min-h-screen bg-[#fcfbf9] text-neutral-900 flex flex-col font-sans selection:bg-neutral-900 selection:text-white relative">
+
+      <!-- =================================================================
+           HEADER
+      ================================================================== -->
+      <header class="sticky top-0 z-50 bg-[#fcfbf9]/95 backdrop-blur-md border-b border-neutral-200/80 transition-all duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+
+          <a href="index.html" class="flex items-center gap-3 group shrink-0" aria-label="VUNVAULT home">
+            <span class="w-9 h-9 rounded-xl bg-black flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+              <img src="logo.svg" alt="VUNVAULT" class="w-6 h-6 object-contain">
+            </span>
+            <span class="font-extrabold text-xl md:text-2xl tracking-wider text-neutral-900 group-hover:opacity-80 transition-opacity">VUNVAULT</span>
+          </a>
+
+          <!-- Desktop navigation -->
+          <nav class="hidden md:flex items-center gap-2 md:gap-3 lg:gap-5 min-w-0 overflow-x-auto no-scrollbar py-1"
+               aria-label="Primary">
+            <a href="index.html" class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Home</a>
+            <a href="services.html" aria-current="page" class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-900 font-bold bg-neutral-200/60">Services</a>
+            <a href="product.html" class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Products</a>
+            <a href="about.html" class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">About</a>
+            <a href="contact.html" class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Contact</a>
+
+            <a href="login.html" id="navLoginLink"
+               class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Login</a>
+
+            <a href="profile.html" id="navProfileLink" class="nav-profile" hidden>
+              <span class="nav-profile-avatar" id="navProfileAvatar" aria-hidden="true">U</span>
+              <span class="nav-profile-label" id="navProfileLabel">Profile</span>
+            </a>
+          </nav>
+
+          <div class="flex items-center gap-2 shrink-0">
+            <a href="contact.html" class="vv-header-cta">
+              <span>Request Assessment</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+              </svg>
+            </a>
+
+            <button id="mobile-menu-toggle"
+                    class="hamburger"
+                    type="button"
+                    aria-label="Toggle navigation menu"
+                    aria-expanded="false"
+                    aria-controls="mobile-menu">
+              <span class="hamburger-bar"></span>
+              <span class="hamburger-bar"></span>
+              <span class="hamburger-bar"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile drawer -->
+        <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile">
+          <ul class="mobile-menu-list">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="product.html">Products</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li id="mobileLoginItem"><a href="login.html" class="mobile-menu-login">Login</a></li>
+            <li id="mobileProfileItem" hidden>
+              <a href="profile.html" id="mobileProfileLink" class="mobile-menu-login">Profile</a>
+            </li>
+            <li><a href="contact.html" class="mobile-menu-login">Request Assessment</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <main class="flex-1">
+
+        <!-- =============================================================
+             HERO
+        ============================================================== -->
+        <section class="vv-svc-hero">
+          <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+            <span class="vv-kicker">Enterprise Security Solutions</span>
+
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-neutral-900 tracking-tight leading-[1.1]">
+              Application penetration testing, surface reconnaissance and proactive threat mitigation.
+            </h1>
+
+            <p class="vv-section-lede max-w-3xl mx-auto">
+              VUNVAULT combines manual, human-led penetration testing with continuous automated attack-surface
+              reconnaissance. Every engagement is delivered under a mutual NDA, mapped to the compliance frameworks
+              your regulator actually audits against, and handed back with remediation steps your engineers can ship.
+            </p>
+
+            <div class="flex flex-wrap items-center justify-center gap-3 pt-3">
+              <a href="contact.html" class="btn-get-started">Request Assessment</a>
+              <a href="#free-tools"
+                 class="inline-flex items-center gap-2 px-6 py-4 text-sm font-bold text-neutral-900 bg-white border border-neutral-200 rounded-full hover:border-neutral-400 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m5 3 14 9-14 9V3z"/>
+                </svg>
+                <span>Try the free OSINT tools</span>
+              </a>
+            </div>
+
+            <div class="pt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-[11px] font-bold uppercase tracking-[0.16em] text-neutral-400">
+              <span>NDA-backed</span>
+              <span class="w-1 h-1 rounded-full bg-neutral-300"></span>
+              <span>OWASP-aligned</span>
+              <span class="w-1 h-1 rounded-full bg-neutral-300"></span>
+              <span>Central Bank ready</span>
+              <span class="w-1 h-1 rounded-full bg-neutral-300"></span>
+              <span>Africa-rooted · Worldwide</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================
+             INTERACTIVE FREE SECURITY TOOLS — CLI TERMINAL
+        ============================================================== -->
+        <section id="free-tools" class="vv-cli-section">
+          <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+              <span class="vv-kicker">Free Security Tools</span>
+              <h2 class="vv-section-title">Run OSINT reconnaissance from your browser</h2>
+              <p class="vv-section-lede">
+                Three free lookups powered by the same enumeration engine behind our paid assessments.
+                No account, no commitment, nothing stored.
+              </p>
+            </div>
+
+            <div class="vv-cli-shell">
+
+              <!-- title bar -->
+              <div class="vv-cli-titlebar">
+                <div class="vv-cli-dots" aria-hidden="true">
+                  <span class="vv-cli-dot vv-cli-dot--r"></span>
+                  <span class="vv-cli-dot vv-cli-dot--y"></span>
+                  <span class="vv-cli-dot vv-cli-dot--g"></span>
+                </div>
+
+                <div class="vv-cli-title">vunvault-cli v2.4.0 — osint --interactive</div>
+
+                <div class="vv-cli-status" data-cli-status data-state="idle">
+                  <span class="vv-cli-status-dot" aria-hidden="true"></span>
+                  <span data-cli-status-text>IDLE</span>
+                </div>
+              </div>
+
+              <!-- tool tabs -->
+              <div class="vv-cli-tabs" role="tablist" aria-label="Free OSINT tools">
+                <button type="button" class="vv-cli-tab is-active" role="tab" aria-selected="true"
+                        data-cli-tool="ip">1 · IP / Reverse Lookup</button>
+                <button type="button" class="vv-cli-tab" role="tab" aria-selected="false"
+                        data-cli-tool="dns">2 · DNS Record Tracer</button>
+                <button type="button" class="vv-cli-tab" role="tab" aria-selected="false"
+                        data-cli-tool="imei">3 · IMEI / Device Registry</button>
+              </div>
+
+              <div class="vv-cli-body">
+
+                <p class="vv-cli-hint" data-cli-hint>
+                  Resolves reverse DNS, WHOIS ownership and geolocation for a domain or IPv4 address.
+                </p>
+
+                <form class="vv-cli-form" data-cli-form novalidate>
+                  <label class="sr-only" for="vv-cli-target">Target value for the selected tool</label>
+
+                  <div class="vv-cli-input-wrap">
+                    <span class="vv-cli-prompt" aria-hidden="true">$</span>
+                    <input id="vv-cli-target"
+                           class="vv-cli-input"
+                           data-cli-input
+                           type="text"
+                           name="target"
+                           placeholder="example.com   or   203.0.113.42"
+                           autocomplete="off"
+                           spellcheck="false">
+                  </div>
+
+                  <button type="submit" class="vv-cli-execute" data-cli-execute>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                         stroke-linejoin="round" aria-hidden="true">
+                      <path d="m5 3 14 9-14 9V3z"/>
+                    </svg>
+                    <span>Execute Scan</span>
+                  </button>
+
+                  <button type="button" class="vv-cli-clear" data-cli-clear>Clear</button>
+                </form>
+
+                <div class="vv-cli-chips">
+                  <span class="vv-cli-chips-label">Try:</span>
+                  <span data-cli-chips style="display:contents"></span>
+                </div>
+
+                <div class="vv-cli-screen"
+                     data-cli-screen
+                     role="log"
+                     aria-live="polite"
+                     aria-label="Terminal output"></div>
+
+                <div class="vv-cli-meter" role="progressbar" aria-label="Lookup progress"
+                     aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                  <span data-cli-meter></span>
+                </div>
+
+                <p class="vv-cli-footnote">
+                  Simulated reconnaissance for demonstration purposes. Never query systems, addresses or device
+                  identifiers you do not own or have written authorisation to investigate.
+                </p>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================
+             CORE SECURITY SERVICES
+        ============================================================== -->
+        <section id="core-services" class="vv-svc-section">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+              <span class="vv-kicker">Core Security Services</span>
+              <h2 class="vv-section-title">Everything we test, and why it matters</h2>
+              <p class="vv-section-lede">
+                Each engagement is scoped, executed and reported by a named lead analyst — never a fully automated
+                scan dressed up as an assessment.
+              </p>
+            </div>
+
+            <div class="vv-svc-grid">
+
+              <!-- 1 -->
+              <article class="vv-svc-card">
+                <span class="vv-svc-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="3"/>
+                    <path d="M8 9h8"/><path d="M8 13h5"/><path d="M8 17h3"/>
+                  </svg>
+                </span>
+                <h3 class="vv-svc-title">Web Application Penetration Testing</h3>
+                <p class="vv-svc-text">
+                  Manual testing across the OWASP Top 10 — injection, authentication and session flaws, broken
+                  access control, SSRF and insecure deserialisation — plus targeted parameter fuzzing and
+                  business-logic abuse that scanners never reach.
+                </p>
+                <div class="vv-svc-tags">
+                  <span class="vv-skill">OWASP Top 10</span>
+                  <span class="vv-skill">Parameter Fuzzing</span>
+                  <span class="vv-skill">Broken Access Control</span>
+                </div>
+              </article>
+
+              <!-- 2 -->
+              <article class="vv-svc-card">
+                <span class="vv-svc-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="9"/><path d="M3 12h18"/>
+                    <path d="M12 3a15 15 0 0 1 0 18"/><path d="M12 3a15 15 0 0 0 0 18"/>
+                  </svg>
+                </span>
+                <h3 class="vv-svc-title">Attack Surface Reconnaissance</h3>
+                <p class="vv-svc-text">
+                  Subdomain enumeration, certificate-transparency mining, SSL/TLS certificate tracing and service
+                  fingerprinting — surfacing the shadow IT, forgotten staging hosts and unmanaged APIs that
+                  quietly widen your perimeter.
+                </p>
+                <div class="vv-svc-tags">
+                  <span class="vv-skill">Subdomain Enumeration</span>
+                  <span class="vv-skill">CT Logs</span>
+                  <span class="vv-skill">Shadow IT</span>
+                </div>
+              </article>
+
+              <!-- 3 -->
+              <article class="vv-svc-card">
+                <span class="vv-svc-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3 5 6v5c0 4.4 3 7.8 7 9 4-1.2 7-4.6 7-9V6z"/>
+                    <path d="m9.5 12 1.8 1.8 3.4-3.6"/>
+                  </svg>
+                </span>
+                <h3 class="vv-svc-title">WAF &amp; Defense Verification</h3>
+                <p class="vv-svc-text">
+                  We attack your defences the way an adversary would: rule-evasion encoding, rate-limit and
+                  anti-automation validation, payload stress testing and bypass chains that prove whether your
+                  WAF, CDN or bot-management layer actually blocks what it claims to.
+                </p>
+                <div class="vv-svc-tags">
+                  <span class="vv-skill">Rule Evasion</span>
+                  <span class="vv-skill">Rate Limiting</span>
+                  <span class="vv-skill">Payload Stress</span>
+                </div>
+              </article>
+
+              <!-- 4 -->
+              <article class="vv-svc-card">
+                <span class="vv-svc-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="2" width="6" height="6" rx="1"/>
+                    <rect x="2" y="16" width="6" height="6" rx="1"/>
+                    <rect x="16" y="16" width="6" height="6" rx="1"/>
+                    <path d="M12 8v4"/><path d="M5 16v-2a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v2"/>
+                  </svg>
+                </span>
+                <h3 class="vv-svc-title">IT &amp; Network Troubleshooting</h3>
+                <p class="vv-svc-text">
+                  When something is broken and nobody can explain why: DNS diagnostics, record-consistency
+                  audits, connectivity tracing, MTU and routing faults, firewall rule review and
+                  misconfiguration hunting across hybrid estates.
+                </p>
+                <div class="vv-svc-tags">
+                  <span class="vv-skill">DNS Diagnostics</span>
+                  <span class="vv-skill">Connectivity</span>
+                  <span class="vv-skill">Firewall Checks</span>
+                </div>
+              </article>
+
+              <!-- 5 -->
+              <article class="vv-svc-card">
+                <span class="vv-svc-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97A6 6 0 0 0 6.2 9.2 4.4 4.4 0 0 0 6.5 19z"/>
+                    <path d="M12 12v6"/><path d="m9.5 15.5 2.5-2.5 2.5 2.5"/>
+                  </svg>
+                </span>
+                <h3 class="vv-svc-title">Cloud &amp; Mobile Security</h3>
+                <p class="vv-svc-text">
+                  API gateway configuration reviews, cloud IAM and storage exposure checks, mobile application
+                  testing (Android &amp; iOS) and dedicated M-Pesa / fintech integration audits covering
+                  callback validation, replay protection and settlement integrity.
+                </p>
+                <div class="vv-svc-tags">
+                  <span class="vv-skill">API Gateway</span>
+                  <span class="vv-skill">M-Pesa / Fintech</span>
+                  <span class="vv-skill">Mobile App Tests</span>
+                </div>
+              </article>
+
+              <!-- 6 — supporting / cross-cutting -->
+              <article class="vv-svc-card">
+                <span class="vv-svc-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h4"/>
+                  </svg>
+                </span>
+                <h3 class="vv-svc-title">Compliance &amp; Reporting</h3>
+                <p class="vv-svc-text">
+                  Executive briefing decks for the board, developer-ready technical remediation guides for the
+                  engineering team, and audit evidence packs mapped to GDPR, ISO 27001, ODPC and Central Bank
+                  supervisory requirements.
+                </p>
+                <div class="vv-svc-tags">
+                  <span class="vv-skill">Executive Briefing</span>
+                  <span class="vv-skill">Remediation Guide</span>
+                  <span class="vv-skill">Audit Evidence</span>
+                </div>
+              </article>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================
+             PRICING — FOUR DETAILED TIERS
+        ============================================================== -->
+        <section id="pricing" class="py-14 md:py-20 bg-[#fcfbf9] border-t border-neutral-200/80">
+          <span id="services-plans" class="anchor-offset" aria-hidden="true"></span>
+
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+              <span class="vv-kicker">Plans &amp; Pricing</span>
+              <h2 class="vv-section-title">Transparent scope. Transparent pricing.</h2>
+              <p class="vv-section-lede">
+                Every tier below lists exactly what is tested, what you receive and how long it takes.
+                No hidden line items, no vague "from" pricing.
+              </p>
+            </div>
+
+            <div class="vv-price-grid">
+
+              <!-- ============================================================
+                   TIER 1 — STARTER SECURITY AUDIT — $249
+              ============================================================= -->
+              <article class="vv-plan">
+                <header class="vv-plan-head">
+                  <h3 class="vv-plan-name">Starter Security Audit</h3>
+                  <span class="vv-plan-tag">Entry</span>
+                </header>
+
+                <div class="vv-plan-price">
+                  <span class="vv-plan-amount">$249</span>
+                  <span class="vv-plan-period">/ scan</span>
+                </div>
+
+                <p class="vv-plan-desc">
+                  For a single web application, micro-site or lightweight API endpoint that needs a fast,
+                  honest read on its exposure.
+                </p>
+
+                <div class="vv-plan-scope">
+                  <span class="vv-plan-scope-label">Scope &amp; deliverables</span>
+                  <ul class="vv-plan-list vv-plan-list--tight">
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Automated vulnerability scan covering the OWASP Top 10</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Up to 20 endpoints / parameter routes analysed</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Standard SSL/TLS and HTTP header misconfiguration checks</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Automated PDF report with risk severity ratings (Critical → Low)</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Remediation checklist with 7-day email support</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>3-day turnaround time</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <p class="vv-plan-meta">
+                  Not included: manual exploitation, business-logic testing, re-tests.
+                </p>
+
+                <a href="contact.html" class="vv-plan-cta">
+                  <span>Start with Starter</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                  </svg>
+                </a>
+              </article>
+
+              <!-- ============================================================
+                   TIER 2 — ADVANCED VULNERABILITY ASSESSMENT — $299 (featured)
+              ============================================================= -->
+              <article class="vv-plan vv-plan--featured">
+                <header class="vv-plan-head">
+                  <h3 class="vv-plan-name">Advanced Vulnerability Assessment</h3>
+                  <span class="vv-plan-tag">Most Popular</span>
+                </header>
+
+                <div class="vv-plan-price">
+                  <span class="vv-plan-amount">$299</span>
+                  <span class="vv-plan-period">/ scan</span>
+                </div>
+
+                <p class="vv-plan-desc">
+                  For growing SaaS platforms, e-commerce storefronts and active Web APIs where automated
+                  scanning alone leaves real risk on the table.
+                </p>
+
+                <div class="vv-plan-scope">
+                  <span class="vv-plan-scope-label">Everything in Starter ($249), plus</span>
+                  <ul class="vv-plan-list vv-plan-list--tight">
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Manual parameter discovery and basic business-logic flaw testing</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Up to 50 endpoints / API routes analysed</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>WAF behaviour analysis &amp; rate-limiting validation</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Proof-of-Concept (PoC) exploit code for every confirmed vulnerability</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>1 free re-test verification within 30 days</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>5-day turnaround with dedicated analyst communication</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <p class="vv-plan-meta">
+                  Best value for teams that need evidence, not just a severity list.
+                </p>
+
+                <a href="contact.html" class="vv-plan-cta">
+                  <span>Choose Advanced</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                  </svg>
+                </a>
+              </article>
+
+              <!-- ============================================================
+                   TIER 3 — FULL-SCOPE PENETRATION TEST — $1,499
+              ============================================================= -->
+              <article class="vv-plan">
+                <header class="vv-plan-head">
+                  <h3 class="vv-plan-name">Full-Scope Pen Test &amp; Compliance Ready</h3>
+                  <span class="vv-plan-tag">Regulated</span>
+                </header>
+
+                <div class="vv-plan-price">
+                  <span class="vv-plan-amount">$1,499</span>
+                  <span class="vv-plan-period">/ project</span>
+                </div>
+
+                <p class="vv-plan-desc">
+                  For enterprise applications, fintech and M-Pesa integrations, and SACCO platforms that need
+                  regulatory sign-off before go-live.
+                </p>
+
+                <div class="vv-plan-scope">
+                  <span class="vv-plan-scope-label">Scope &amp; deliverables</span>
+                  <ul class="vv-plan-list vv-plan-list--tight">
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Deep black-box &amp; gray-box manual penetration testing</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Unlimited endpoint coverage within the defined target domain</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Authentication bypass, privilege escalation and session-handling testing</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Executive briefing PDF + developer-focused technical remediation guide</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Full NDA, GDPR and Central Bank / regulatory compliance documentation</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>2 free re-tests within 60 days</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <p class="vv-plan-meta">
+                  Includes scoping call, rules-of-engagement document and named lead analyst.
+                </p>
+
+                <a href="contact.html" class="vv-plan-cta">
+                  <span>Scope a Pen Test</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                  </svg>
+                </a>
+              </article>
+
+              <!-- ============================================================
+                   TIER 4 — ENTERPRISE RETAINER — CUSTOM
+              ============================================================= -->
+              <article class="vv-plan">
+                <header class="vv-plan-head">
+                  <h3 class="vv-plan-name">Enterprise Security Retainer</h3>
+                  <span class="vv-plan-tag">Custom</span>
+                </header>
+
+                <div class="vv-plan-price">
+                  <span class="vv-plan-amount">Custom</span>
+                  <span class="vv-plan-period">/ annual</span>
+                </div>
+
+                <p class="vv-plan-desc">
+                  For multi-domain infrastructure that needs continuous threat monitoring rather than a
+                  point-in-time report.
+                </p>
+
+                <div class="vv-plan-scope">
+                  <span class="vv-plan-scope-label">Scope &amp; deliverables</span>
+                  <ul class="vv-plan-list vv-plan-list--tight">
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Continuous 24/7 attack-surface monitoring &amp; alerting</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Quarterly penetration tests across all in-scope domains</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Custom API and integration security audits</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Dedicated security architect embedded with your team</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Incident-response escalation with defined SLA guarantees</span>
+                    </li>
+                    <li>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                           stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M20 6 9 17l-5-5"/>
+                      </svg>
+                      <span>Board-ready quarterly risk reporting</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <p class="vv-plan-meta">
+                  Pricing is derived from asset count, domain footprint and required response SLA.
+                </p>
+
+                <a href="contact.html" class="vv-plan-cta">
+                  <span>Talk to an Architect</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                  </svg>
+                </a>
+              </article>
+
+            </div>
+
+            <p class="vv-price-note">
+              All tiers include encrypted report delivery, a named engagement lead and a rules-of-engagement
+              document signed under mutual NDA. Prices exclude applicable taxes. Re-test windows are measured
+              from the date the final report is delivered.
+            </p>
+          </div>
+        </section>
+
+        <!-- =============================================================
+             ACADEMY / UPSKILLING BANNER
+        ============================================================== -->
+        <section id="academy" class="pb-14 md:pb-20">
+          <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="academy-banner">
+              <div>
+                <div class="academy-banner-eyebrow">VUNVAULT Academy</div>
+                <h2 class="academy-banner-title">Upskill your in-house engineering team</h2>
+                <p class="academy-banner-text">
+                  We train the people who build and defend your systems. Hands-on modules on secure coding
+                  practice, real-world attack vectors, and the same automated CLI tooling our analysts use in
+                  live engagements — delivered on-site in Nairobi or remotely for distributed teams.
+                </p>
+              </div>
+
+              <a href="course-foundations.html" class="academy-banner-cta">
+                <span>Explore Training Tracks</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================
+             CTA — REQUEST ASSESSMENT
+        ============================================================== -->
+        <section id="request-assessment" class="py-14 md:py-20 border-t border-neutral-200/80 bg-[#fcfbf9]">
+          <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-3xl p-8 sm:p-12 text-center space-y-5 border border-neutral-200/90">
+              <span class="vv-kicker">Next step</span>
+              <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-neutral-900 tracking-tight">
+                Request an assessment under mutual NDA
+              </h2>
+              <p class="text-neutral-500 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+                Send us your target scope, compliance deadline and preferred timeline. We reply with a written
+                scope, rules-of-engagement draft and a fixed quote — usually within one business day.
+              </p>
+
+              <div class="flex flex-wrap items-center justify-center gap-3 pt-3">
+                <a href="mailto:info@vunvault.com?subject=Assessment%20Request%20%E2%80%94%20VUNVAULT"
+                   class="btn-get-started">Email info@vunvault.com</a>
+                <a href="https://wa.me/254705998032" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-2 px-6 py-4 text-sm font-bold text-neutral-900 bg-white border border-neutral-200 rounded-full hover:border-neutral-400 transition-colors">
+                  WhatsApp +254 705 998 032
+                </a>
+              </div>
+
+              <p class="pt-2 text-[11px] font-bold uppercase tracking-[0.16em] text-neutral-400">
+                NDA on request · Scope before invoice · No data retained
+              </p>
+            </div>
+          </div>
+        </section>
+
+
+      <!-- =================================================================
+           FOOTER
+      ================================================================== -->
+      <footer class="border-t border-neutral-200/80 bg-[#fcfbf9] text-neutral-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12">
+
+            <div class="md:col-span-4 space-y-4">
+              <a href="index.html" class="flex items-center gap-3" aria-label="VUNVAULT home">
+                <span class="w-9 h-9 rounded-xl bg-black flex items-center justify-center shrink-0 shadow-xs">
+                  <img src="logo.svg" alt="VUNVAULT" class="w-6 h-6 object-contain">
+                </span>
+                <span class="font-extrabold text-2xl tracking-wider text-neutral-900">VUNVAULT</span>
+              </a>
+              <p class="text-neutral-500 text-sm max-w-sm leading-relaxed">
+                Africa-rooted, worldwide penetration testing, vulnerability assessments and cybersecurity education.
+              </p>
+              <div class="pt-2 flex items-center gap-3">
+                <span class="inline-flex items-center gap-1.5 text-xs text-neutral-600 bg-neutral-200/60 px-3 py-1 rounded-full font-medium">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>System Operational
+                </span>
+              </div>
+            </div>
+
+            <div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8">
+              <div class="space-y-3.5">
+                <h4 class="text-xs font-bold text-neutral-900 tracking-wider uppercase">Resources</h4>
+                <ul class="space-y-2 text-sm text-neutral-500">
+                  <li><a href="blog.html" class="hover:text-neutral-900 transition-colors">Blog</a></li>
+                  <li><a href="zeroday.html" class="hover:text-neutral-900 transition-colors">Zero-Day Portal</a></li>
+                  <li><a href="services.html" class="hover:text-neutral-900 transition-colors">Free OSINT Tools</a></li>
+                  <li><a href="course-foundations.html" class="hover:text-neutral-900 transition-colors">Academy</a></li>
+                </ul>
+              </div>
+              <div class="space-y-3.5">
+                <h4 class="text-xs font-bold text-neutral-900 tracking-wider uppercase">Company</h4>
+                <ul class="space-y-2 text-sm text-neutral-500">
+                  <li><a href="about.html" class="hover:text-neutral-900 transition-colors">About Us</a></li>
+                  <li><a href="contact.html" class="hover:text-neutral-900 transition-colors">Contact</a></li>
+                  <li><a href="services.html" class="hover:text-neutral-900 transition-colors">Services</a></li>
+                  <li><a href="index.html#press-media" class="hover:text-neutral-900 transition-colors">Press</a></li>
+                </ul>
+              </div>
+              <div class="space-y-3.5">
+                <h4 class="text-xs font-bold text-neutral-900 tracking-wider uppercase">Solutions</h4>
+                <ul class="space-y-2 text-sm text-neutral-500">
+                  <li><a href="services.html#pricing" class="hover:text-neutral-900 transition-colors">Starter Audit</a></li>
+                  <li><a href="services.html#pricing" class="hover:text-neutral-900 transition-colors">Advanced VA</a></li>
+                  <li><a href="services.html#pricing" class="hover:text-neutral-900 transition-colors">Full-Scope Pen Test</a></li>
+                  <li><a href="services.html#pricing" class="hover:text-neutral-900 transition-colors">Enterprise Retainer</a></li>
+                </ul>
+              </div>
+              <div class="space-y-3.5">
+                <h4 class="text-xs font-bold text-neutral-900 tracking-wider uppercase">Legal</h4>
+                <ul class="space-y-2 text-sm text-neutral-500">
+                  <li><a href="privacy.html" class="hover:text-neutral-900 transition-colors">Privacy Policy</a></li>
+                  <li><a href="terms.html" class="hover:text-neutral-900 transition-colors">Terms of Service</a></li>
+                  <li><a href="nda.html" class="hover:text-neutral-900 transition-colors">NDA Policy</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-16 pt-8 border-t border-neutral-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
+            <div>© 2026 VUNVAULT. All rights reserved.</div>
+            <div class="flex items-center gap-6">
+              <a href="index.html" class="hover:text-neutral-900 transition-colors">Top</a>
+              <a href="services.html" class="hover:text-neutral-900 transition-colors">Services</a>
+              <a href="course-foundations.html" class="hover:text-neutral-900 transition-colors">Academy</a>
+              <a href="contact.html" class="hover:text-neutral-900 transition-colors">Contact</a>
+              <button type="button"
+                      data-vv-top
+                      class="p-1.5 rounded-full hover:bg-neutral-200/60 text-neutral-600 transition-colors cursor-pointer ml-2"
+                      title="Scroll to Top" aria-label="Scroll to top">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="lucide lucide-arrow-up w-4 h-4" aria-hidden="true">
+                  <path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      <!-- Floating AI security agent -->
+      <div class="fixed bottom-6 right-6 z-50">
+        <button type="button"
+                class="w-14 h-14 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl hover:shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer relative group"
+                aria-label="Open AI Security Agent">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               class="lucide lucide-message-square w-6 h-6 fill-current" aria-hidden="true">
+            <path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-white animate-pulse"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ===================================================================
+         SCRIPTS
+    ==================================================================== -->
+
+    <!-- ---------- Preloader + mobile navigation drawer ---------- -->
+    <script>
+      (function () {
+        "use strict";
+
+        /* ---------------- Preloader ---------------- */
+        var preloader = document.getElementById("preloader");
+        if (preloader) {
+          var dismissed = false;
+          var dismiss = function () {
+            if (dismissed) return;
+            dismissed = true;
+            preloader.classList.add("is-hidden");
+
+            document.dispatchEvent(new CustomEvent("vunvault:preloader-done"));
+
+            window.setTimeout(function () {
+              if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
+            }, 700);
+          };
+          /* The progress sweep is a fixed 4s animation — dismiss in lockstep */
+          window.setTimeout(dismiss, 4000);
+          /* Safety net for reduced-motion / stalled loads */
+          window.setTimeout(dismiss, 6000);
+        }
+
+        /* ---------------- Mobile navigation drawer ---------------- */
+        var toggle = document.getElementById("mobile-menu-toggle");
+        var menu = document.getElementById("mobile-menu");
+
+        if (toggle && menu) {
+          var setOpen = function (open) {
+            menu.classList.toggle("is-open", open);
+            toggle.classList.toggle("is-active", open);
+            toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            document.body.classList.toggle("nav-open", open);
+          };
+
+          toggle.addEventListener("click", function () {
+            setOpen(!menu.classList.contains("is-open"));
+          });
+
+          menu.addEventListener("click", function (event) {
+            if (event.target.closest("a")) setOpen(false);
+          });
+
+          document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") setOpen(false);
+          });
+
+          window.addEventListener("resize", function () {
+            if (window.innerWidth >= 768) setOpen(false);
+          });
+        }
+
+        /* ---------------- Scroll to top ---------------- */
+        var topBtn = document.querySelector("[data-vv-top]");
+        if (topBtn) {
+          topBtn.addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+        }
+      })();
+    </script>
+
+    <!-- ---------- Auth-aware navigation ---------- -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        "use strict";
+
+        var STORAGE_KEY  = "userEmail";
+        var ADMIN_DOMAIN = "@vunvault.com";
+
+        var desktopLogin   = document.getElementById("navLoginLink");
+        var desktopProfile = document.getElementById("navProfileLink");
+        var mobileLogin    = document.getElementById("mobileLoginItem");
+        var mobileProfile  = document.getElementById("mobileProfileItem");
+        var avatarEl       = document.getElementById("navProfileAvatar");
+        var labelEl        = document.getElementById("navProfileLabel");
+
+        /* ------------------------------------------------ read identity */
+        var userEmail = null;
+        try {
+          userEmail = window.localStorage.getItem(STORAGE_KEY);
+        } catch (err) {
+          userEmail = null;   /* storage blocked (private mode / no cookies) */
+        }
+        userEmail = (userEmail || "").trim();
+
+        /* ------------------------------------------------ guest state */
+        if (!userEmail) {
+          if (desktopLogin)   desktopLogin.hidden   = false;
+          if (mobileLogin)    mobileLogin.hidden    = false;
+          if (desktopProfile) desktopProfile.hidden = true;
+          if (mobileProfile)  mobileProfile.hidden  = true;
+          return;
+        }
+
+        /* ------------------------------------------------ signed-in state */
+        var lowered = userEmail.toLowerCase();
+        var isAdmin = lowered.slice(-ADMIN_DOMAIN.length) === ADMIN_DOMAIN;
+        var target  = isAdmin ? "admin.html" : "profile.html";
+
+        if (desktopProfile) {
+          desktopProfile.setAttribute("href", target);
+          desktopProfile.setAttribute("title", userEmail);
+          desktopProfile.classList.toggle("nav-profile--admin", isAdmin);
+          desktopProfile.hidden = false;
+        }
+
+        if (mobileProfile) {
+          var mobileLink = document.getElementById("mobileProfileLink");
+          if (mobileLink) {
+            mobileLink.setAttribute("href", target);
+            mobileLink.setAttribute("title", userEmail);
+          }
+          mobileProfile.hidden = false;
+        }
+
+        /* ------------------------------------------------ personalise */
+        var localPart = userEmail.split("@")[0] || "Profile";
+        if (avatarEl) avatarEl.textContent = localPart.charAt(0).toUpperCase();
+        if (labelEl)  labelEl.textContent  = localPart;
+
+        /* ------------------------------------------------ hide guest link */
+        if (desktopLogin) desktopLogin.hidden = true;
+        if (mobileLogin)  mobileLogin.hidden  = true;
+      });
+    </script>
+
+    <!-- ---------- Free OSINT CLI terminal ---------- -->
+    <script>
+      (function () {
+        "use strict";
+
+        var shell = document.querySelector(".vv-cli-shell");
+        if (!shell) return;
+
+        var tabs       = Array.prototype.slice.call(document.querySelectorAll("[data-cli-tool]"));
+        var form       = shell.querySelector("[data-cli-form]");
+        var input      = shell.querySelector("[data-cli-input]");
+        var executeBtn = shell.querySelector("[data-cli-execute]");
+        var clearBtn   = shell.querySelector("[data-cli-clear]");
+        var screen     = shell.querySelector("[data-cli-screen]");
+        var meter      = shell.querySelector("[data-cli-meter]");
+        var meterWrap  = shell.querySelector(".vv-cli-meter");
+        var status     = shell.querySelector("[data-cli-status]");
+        var statusText = shell.querySelector("[data-cli-status-text]");
+        var hintEl     = shell.querySelector("[data-cli-hint]");
+        var chipsHost  = shell.querySelector("[data-cli-chips]");
+
+        var timer       = null;
+        var activeTool  = "ip";
+
+        /* ------------------------------------------------------------
+           Small deterministic hash so simulated output varies by target
+           ------------------------------------------------------------ */
+        function hash(str) {
+          var h = 2166136261;
+          for (var i = 0; i < str.length; i++) {
+            h ^= str.charCodeAt(i);
+            h = (h * 16777619) >>> 0;
+          }
+          return h;
+        }
+
+        function octet(seed, shift) {
+          return (seed >>> shift) % 254 + 1;
+        }
+
+        /* ------------------------------------------------------------
+           Luhn checksum — used by the IMEI tool
+           ------------------------------------------------------------ */
+        function luhnValid(digits) {
+          var sum = 0, alt = false;
+          for (var i = digits.length - 1; i >= 0; i--) {
+            var n = parseInt(digits.charAt(i), 10);
+            if (alt) { n *= 2; if (n > 9) n -= 9; }
+            sum += n;
+            alt = !alt;
+          }
+          return sum % 10 === 0;
+        }
+
+        /* ------------------------------------------------------------
+           Tool definitions
+           ------------------------------------------------------------ */
+        var TOOLS = {
+
+          /* ---------------- 1. IP / Reverse lookup ---------------- */
+          ip: {
+            placeholder: "example.com   or   203.0.113.42",
+            hint: "Resolves reverse DNS, WHOIS ownership and geolocation for a domain or IPv4 address.",
+            chips: ["example.com", "203.0.113.42", "api.vunvault.com"],
+            validate: function (v) {
+              return /^(?:(?:\d{1,3}\.){3}\d{1,3}|(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,})$/.test(v);
+            },
+            invalid: "Enter a valid domain (example.com) or IPv4 address.",
+            build: function (t) {
+              var h  = hash(t);
+              var ip = octet(h, 8) + "." + octet(h, 16) + "." + octet(h, 4) + "." + (h % 200 + 12);
+              var ptr = "host-" + (h % 900 + 100) + ".edge-" + (h % 40 + 1) + ".net";
+              var asn = "AS" + (30000 + (h % 20000));
+              var cities = ["Nairobi, Kenya", "Lagos, Nigeria", "Accra, Ghana", "Cape Town, South Africa", "Frankfurt, Germany"];
+              var isps   = ["Safaricom Business", "Liquid Intelligent Technologies", "MTN Business", "Jamii Telecom", "Amazon AWS"];
+
+              return [
+                { kind: "sys",   msg: "vunvault-cli v2.4.0 — module: osint.reverse" },
+                { kind: "muted", msg: "$ vvscan reverse --target " + t },
+                { kind: "info",  msg: "[*] QUERYING REGISTRY: reverse DNS (PTR) ..." },
+                { kind: "ok",    msg: "[+] SUCCESS — PTR record resolved" },
+                { kind: "muted", msg: "    ptr  → " + ptr },
+                { kind: "info",  msg: "[*] QUERYING REGISTRY: WHOIS ..." },
+                { kind: "ok",    msg: "[+] SUCCESS — allocation block found" },
+                { kind: "muted", msg: "    net  → " + ip + "/24" },
+                { kind: "muted", msg: "    org  → Example Holdings Ltd · Country: KE" },
+                { kind: "info",  msg: "[*] QUERYING REGISTRY: geolocation + ASN ..." },
+                { kind: "ok",    msg: "[+] SUCCESS — " + cities[h % cities.length] },
+                { kind: "muted", msg: "    asn  → " + asn + " · ISP: " + isps[h % isps.length] },
+                { kind: "info",  msg: "[*] Cross-referencing 42 threat-intelligence blocklists ..." },
+                { kind: "ok",    msg: "[+] 0 / 42 feeds returned a hit" },
+                { kind: "sys",   msg: "RESULT: " + t + " resolves cleanly — no blacklist entries, no abuse reports." }
+              ];
+            }
+          },
+
+          /* ---------------- 2. DNS record tracer ---------------- */
+          dns: {
+            placeholder: "example.com",
+            hint: "Checks A, AAAA, MX, TXT and NS records against global registries and flags policy weaknesses.",
+            chips: ["example.com", "vunvault.com", "mail.example.com"],
+            validate: function (v) {
+              return /^(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/.test(v);
+            },
+            invalid: "Enter a valid hostname (example.com).",
+            build: function (t) {
+              var h  = hash(t);
+              var a  = octet(h, 8) + "." + octet(h, 16) + "." + octet(h, 4) + "." + (h % 200 + 12);
+              var ns = (h % 2 === 0) ? "ns1" : "dns1";
+              var mx = 10 + (h % 10);
+
+              return [
+                { kind: "sys",   msg: "vunvault-cli v2.4.0 — module: osint.dns" },
+                { kind: "muted", msg: "$ vvscan dns --host " + t + " --types A,AAAA,MX,TXT,NS" },
+                { kind: "info",  msg: "[*] Locating authoritative nameservers ..." },
+                { kind: "ok",    msg: "[+] SOA answered by " + ns + ".registrar.net" },
+                { kind: "info",  msg: "[*] QUERYING REGISTRY: A record ..." },
+                { kind: "ok",    msg: "[+] A      → " + a + "   (TTL 300)" },
+                { kind: "info",  msg: "[*] QUERYING REGISTRY: AAAA record ..." },
+                { kind: "ok",    msg: "[+] AAAA   → 2001:db8::" + (h % 9000 + 1000).toString(16) + "   (TTL 300)" },
+                { kind: "info",  msg: "[*] QUERYING REGISTRY: MX records ..." },
+                { kind: "ok",    msg: "[+] MX     → " + mx + " mail." + t + "   (TTL 3600)" },
+                { kind: "info",  msg: "[*] QUERYING REGISTRY: TXT / SPF / DMARC ..." },
+                { kind: "ok",    msg: "[+] TXT    → v=spf1 include:_spf." + t + " ~all" },
+                { kind: "warn",  msg: "[!] SPF uses ~all (soft fail) — spoofed mail is marked, not rejected" },
+                { kind: "warn",  msg: "[!] No DMARC record found at _dmarc." + t },
+                { kind: "info",  msg: "[*] QUERYING REGISTRY: NS delegation ..." },
+                { kind: "ok",    msg: "[+] NS     → ns1.registrar.net / ns2.registrar.net" },
+                { kind: "info",  msg: "[*] Verifying DNSSEC chain ..." },
+                { kind: "warn",  msg: "[!] DNSSEC not enabled — delegation is unsigned" },
+                { kind: "ok",    msg: "[+] 5 / 5 record types resolved · 2 policy weaknesses flagged" },
+                { kind: "sys",   msg: "RESULT: " + t + " is reachable. Tighten SPF to -all and publish DMARC." }
+              ];
+            }
+          },
+
+          /* ---------------- 3. IMEI / device register lookup ---------------- */
+          imei: {
+            placeholder: "15-digit IMEI, e.g. 356741082341987",
+            hint: "Validates the IMEI checksum, identifies the reporting body and checks device authorization and blacklist status.",
+            chips: ["356741082341987", "490154203237518"],
+            validate: function (v) {
+              return /^\d{15}$/.test(v);
+            },
+            invalid: "Enter a 15-digit IMEI (digits only, no spaces or dashes).",
+            build: function (t) {
+              var h        = hash(t);
+              var tac      = t.slice(0, 8);
+              var serial   = t.slice(8);
+              var checksum = t.charAt(14);
+              var valid    = luhnValid(t);
+              var vendors  = ["Unknown handset vendor", "Generic OEM (Shenzhen)", "Rebranded reference device"];
+              var models   = ["Smartphone · dual-SIM", "Feature phone · single-SIM", "Cellular module / IoT"];
+
+              var out = [
+                { kind: "sys",   msg: "vunvault-cli v2.4.0 — module: osint.imei" },
+                { kind: "muted", msg: "$ vvscan imei --number " + t },
+                { kind: "info",  msg: "[*] Validating IMEI structure (Luhn / ISO 7812) ..." },
+                { kind: "muted", msg: "    tac    → " + tac + "   (Type Allocation Code)" },
+                { kind: "muted", msg: "    serial → " + serial + "   (Serial Number)" },
+                { kind: "muted", msg: "    check  → " + checksum + "   (Check Digit)" }
+              ];
+
+              if (valid) {
+                out.push({ kind: "ok", msg: "[+] SUCCESS — Luhn checksum verified" });
+              } else {
+                out.push({ kind: "warn", msg: "[!] Luhn checksum FAILED — the number may be mistyped or altered" });
+              }
+
+              out.push(
+                { kind: "info",  msg: "[*] QUERYING REGISTRY: GSMA TAC database ..." },
+                { kind: "ok",    msg: "[+] Reporting body recognised" },
+                { kind: "muted", msg: "    body   → BABT (United Kingdom)" },
+                { kind: "muted", msg: "    vendor → " + vendors[h % vendors.length] },
+                { kind: "muted", msg: "    model  → " + models[h % models.length] },
+                { kind: "info",  msg: "[*] QUERYING REGISTRY: authorized device list ..." },
+                { kind: "warn",  msg: "[!] IMEI not present in the GSMA authorized device registry" },
+                { kind: "info",  msg: "[*] QUERYING REGISTRY: blacklist status (3 registries) ..." },
+                { kind: "ok",    msg: "[+] CLEAN — no stolen / blocked / lost hits" },
+                { kind: "muted", msg: "    CEIR   → not listed" },
+                { kind: "muted", msg: "    operator → not listed" },
+                { kind: "muted", msg: "    insurer → not listed" },
+                { kind: "sys",   msg: valid
+                    ? "RESULT: device identifier is structurally valid and not blacklisted. Registry match: unconfirmed."
+                    : "RESULT: checksum invalid — do not rely on this identifier. Re-read the label and retry." }
+              );
+
+              return out;
+            }
+          }
+        };
+
+        /* ------------------------------------------------------------
+           Rendering helpers
+           ------------------------------------------------------------ */
+        function setStatus(state, text) {
+          if (status) status.setAttribute("data-state", state);
+          if (statusText) statusText.textContent = text;
+        }
+
+        function setProgress(pct) {
+          if (meter) meter.style.width = pct + "%";
+          if (meterWrap) meterWrap.setAttribute("aria-valuenow", String(pct));
+        }
+
+        function logLine(kind, msg) {
+          if (!screen) return;
+          var ts = new Date().toISOString().substr(11, 8);
+
+          var line = document.createElement("div");
+          line.className = "vv-line vv-line--" + kind;
+
+          var tsEl = document.createElement("span");
+          tsEl.className = "vv-line-ts";
+          tsEl.textContent = "[" + ts + "]";
+
+          var msgEl = document.createElement("span");
+          msgEl.className = "vv-line-msg";
+          msgEl.textContent = msg;
+
+          line.appendChild(tsEl);
+          line.appendChild(msgEl);
+          screen.appendChild(line);
+          screen.scrollTop = screen.scrollHeight;
+        }
+
+        function renderChips(toolKey) {
+          if (!chipsHost) return;
+          chipsHost.innerHTML = "";
+          TOOLS[toolKey].chips.forEach(function (value) {
+            var chip = document.createElement("button");
+            chip.type = "button";
+            chip.className = "vv-cli-chip";
+            chip.textContent = value;
+            chip.addEventListener("click", function () {
+              input.value = value;
+              input.classList.remove("is-invalid");
+              input.focus();
+            });
+            chipsHost.appendChild(chip);
+          });
+        }
+
+        /* ------------------------------------------------------------
+           Tool switching
+           ------------------------------------------------------------ */
+        function selectTool(key) {
+          if (!TOOLS[key]) return;
+          activeTool = key;
+
+          tabs.forEach(function (tab) {
+            var on = tab.getAttribute("data-cli-tool") === key;
+            tab.classList.toggle("is-active", on);
+            tab.setAttribute("aria-selected", on ? "true" : "false");
+          });
+
+          var tool = TOOLS[key];
+          input.value = "";
+          input.placeholder = tool.placeholder;
+          input.classList.remove("is-invalid");
+          if (hintEl) hintEl.textContent = tool.hint;
+
+          renderChips(key);
+          resetTerminal();
+          input.focus();
+        }
+
+        /* ------------------------------------------------------------
+           Scan runner
+           ------------------------------------------------------------ */
+        function stopScan() {
+          if (timer) { window.clearInterval(timer); timer = null; }
+        }
+
+        function resetTerminal() {
+          stopScan();
+          if (screen) screen.innerHTML = "";
+          setProgress(0);
+          setStatus("idle", "IDLE");
+          if (executeBtn) executeBtn.disabled = false;
+        }
+
+        function runScan(toolKey, target) {
+          stopScan();
+
+          var steps = TOOLS[toolKey].build(target);
+          var i = 0;
+          var total = steps.length;
+
+          if (screen) screen.innerHTML = "";
+          setProgress(0);
+          setStatus("running", "RUNNING");
+          if (executeBtn) executeBtn.disabled = true;
+
+          timer = window.setInterval(function () {
+            if (i >= total) {
+              stopScan();
+              setProgress(100);
+              setStatus("done", "COMPLETE");
+              if (executeBtn) executeBtn.disabled = false;
+              return;
+            }
+            logLine(steps[i].kind, steps[i].msg);
+            i++;
+            setProgress(Math.round((i / total) * 100));
+          }, 230);
+        }
+
+        /* ------------------------------------------------------------
+           Wiring
+           ------------------------------------------------------------ */
+        tabs.forEach(function (tab) {
+          tab.addEventListener("click", function () {
+            selectTool(tab.getAttribute("data-cli-tool"));
+          });
+        });
+
+        if (form) {
+          form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            var tool = TOOLS[activeTool];
+            var value = (input && input.value || "").trim();
+
+            if (!value || !tool.validate(value)) {
+              if (input) input.classList.add("is-invalid");
+              logLine("crit", "[!] " + tool.invalid);
+              return;
+            }
+
+            if (input) input.classList.remove("is-invalid");
+            runScan(activeTool, value);
+          });
+        }
+
+        if (clearBtn) {
+          clearBtn.addEventListener("click", function () {
+            resetTerminal();
+            if (input) {
+              input.value = "";
+              input.classList.remove("is-invalid");
+              input.focus();
+            }
+          });
+        }
+
+        if (input) {
+          input.addEventListener("input", function () {
+            input.classList.remove("is-invalid");
+          });
+        }
+
+        /* ------------------------------------------------------------
+           Boot
+           ------------------------------------------------------------ */
+        selectTool("ip");
+        setStatus("idle", "IDLE");
+
+        logLine("sys", "vunvault-cli v2.4.0 — free OSINT toolkit");
+        logLine("muted", "Select a tool above, enter a target and press Execute Scan.");
+      })();
+    </script>
+
+  </body>
 </html>

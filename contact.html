@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact VUNVAULT — request a penetration test, report a vulnerability, apply for a Journalist / Blogger profile, or submit a confidential whistleblower tip.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="vun1.css">
+    <title>Contact — VUNVAULT</title>
+
+    <!-- ==================================================================
+         AUTH-AWARE NAVIGATION — profile pill
+         Revealed/hidden by the localStorage-driven script at the end of
+         the document. Admin accounts get an amber accent.
+         ================================================================== -->
+    <style>
+      #navLoginLink[hidden],
+      #navProfileLink[hidden],
+      #mobileLoginItem[hidden],
+      #mobileProfileItem[hidden] {
+        display: none !important;
+      }
+
+      .nav-profile {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 12px 4px 4px;
+        border-radius: 9999px;
+        border: 1px solid rgba(59, 153, 252, 0.28);
+        background: rgba(59, 153, 252, 0.10);
+        color: #1E7BE0;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+        transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                    border-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                    color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                    transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .nav-profile:hover,
+      .nav-profile:focus-visible {
+        background: rgba(59, 153, 252, 0.18);
+        border-color: #3B99FC;
+        color: #0A0D12;
+        transform: translateY(-1px);
+        outline: none;
+      }
+
+      .nav-profile-avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #3B99FC, #1E7BE0);
+        color: #ffffff;
+        font-size: 11px;
+        font-weight: 800;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .nav-profile-label {
+        max-width: 110px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* -------- admin accent (@vunvault.com) -------- */
+      .nav-profile--admin {
+        border-color: rgba(245, 158, 11, 0.45);
+        background: rgba(245, 158, 11, 0.12);
+        color: #b45309;
+      }
+
+      .nav-profile--admin:hover,
+      .nav-profile--admin:focus-visible {
+        background: rgba(245, 158, 11, 0.20);
+        border-color: #f59e0b;
+        color: #78350f;
+      }
+
+      .nav-profile--admin .nav-profile-avatar {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .nav-profile { transition: none; }
+      }
+    </style>
+
+    <!-- ==================================================================
+         CONTACT PAGE — layout & component refinements
+         Only what is not already covered by vun1.css lives here.
+         ================================================================== -->
+    <style>
+      /* ---------- two-column contact layout ---------- */
+      .vv-contact-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+        gap: 26px;
+        align-items: start;
+      }
+
+      @media (max-width: 980px) {
+        .vv-contact-grid { grid-template-columns: 1fr; gap: 20px; }
+      }
+
+      /* ---------- form internals ---------- */
+      .vv-form-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      @media (max-width: 640px) {
+        .vv-form-row { grid-template-columns: 1fr; }
+      }
+
+      .vv-field {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        min-width: 0;
+      }
+
+      .vv-field--full { grid-column: 1 / -1; }
+
+      textarea.zero-day-input {
+        min-height: 156px;
+        resize: vertical;
+        font-family: inherit;
+        line-height: 1.65;
+      }
+
+      select.zero-day-select {
+        font-family: inherit;
+      }
+
+      /* ---------- helper note ---------- */
+      .vv-form-note {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 4px;
+        padding: 12px 14px;
+        border-radius: var(--r-md);
+        background: var(--brand-tint);
+        border: 1px solid var(--brand-line);
+        font-size: 0.72rem;
+        line-height: 1.65;
+        color: var(--ink-soft);
+      }
+
+      .vv-form-note svg {
+        flex: 0 0 auto;
+        margin-top: 2px;
+        color: var(--brand-strong);
+      }
+
+      /* ---------- consent checkbox ---------- */
+      .vv-check {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 0.72rem;
+        line-height: 1.6;
+        color: var(--ink-muted);
+        cursor: pointer;
+      }
+
+      .vv-check input {
+        flex: 0 0 auto;
+        width: 16px;
+        height: 16px;
+        margin-top: 2px;
+        accent-color: var(--brand);
+        cursor: pointer;
+      }
+
+      /* ---------- submit row ---------- */
+      .vv-form-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px;
+        margin-top: 4px;
+      }
+
+      .btn-get-started.vv-submit {
+        padding: 14px 34px;
+        font-size: 0.86rem;
+        border: 0;
+      }
+
+      .btn-get-started.vv-submit[disabled] {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        filter: none;
+      }
+
+      /* ---------- inline status region ---------- */
+      .vv-status {
+        display: none;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 14px 16px;
+        border-radius: var(--r-md);
+        font-size: 0.76rem;
+        line-height: 1.65;
+        border: 1px solid transparent;
+      }
+
+      .vv-status.is-visible { display: flex; }
+
+      .vv-status--ok {
+        color: #065f46;
+        background: #ecfdf5;
+        border-color: #a7f3d0;
+      }
+
+      .vv-status--err {
+        color: #9f1239;
+        background: #fff1f2;
+        border-color: #fecdd3;
+      }
+
+      .vv-status svg { flex: 0 0 auto; margin-top: 2px; }
+
+      /* ---------- side channel cards ---------- */
+      .vv-channel {
+        display: flex;
+        align-items: flex-start;
+        gap: 18px;
+        padding: 22px 22px;
+        border-radius: var(--r-xl);
+        transition: transform 0.25s var(--ease), border-color 0.25s var(--ease),
+                    box-shadow 0.25s var(--ease);
+      }
+
+      a.vv-channel:hover,
+      a.vv-channel:focus-visible {
+        transform: translateY(-3px);
+        border-color: var(--brand-line);
+        box-shadow: 0 22px 46px -34px rgba(10, 13, 18, 0.45);
+        outline: none;
+      }
+
+      .vv-channel-icon {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        color: #ffffff;
+        background: linear-gradient(135deg, var(--brand), var(--brand-strong));
+        box-shadow: 0 12px 26px -16px var(--brand-glow);
+      }
+
+      .vv-channel-icon--dark {
+        background: linear-gradient(135deg, var(--dark), #05070a);
+        border: 1px solid rgba(59, 153, 252, 0.35);
+        color: var(--brand-soft);
+      }
+
+      .vv-channel-label {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--ink-faint);
+      }
+
+      .vv-channel-value {
+        margin-top: 5px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--ink);
+        word-break: break-word;
+        transition: color 0.25s var(--ease);
+      }
+
+      a.vv-channel:hover .vv-channel-value { color: var(--brand-strong); }
+
+      .vv-channel-text {
+        margin-top: 8px;
+        font-size: 0.76rem;
+        line-height: 1.7;
+        color: var(--ink-muted);
+      }
+
+      /* ---------- PGP key block ---------- */
+      .vv-pgp {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 14px;
+        padding: 12px 14px;
+        border-radius: var(--r-md);
+        background: var(--dark);
+        border: 1px solid rgba(59, 153, 252, 0.28);
+      }
+
+      .vv-pgp code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        color: var(--brand-soft);
+        word-break: break-all;
+      }
+
+      .vv-pgp-dl {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 14px;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #04121f;
+        background: linear-gradient(135deg, var(--brand-soft), var(--brand));
+        border-radius: var(--r-full);
+        white-space: nowrap;
+        transition: filter 0.22s var(--ease), transform 0.22s var(--ease);
+      }
+
+      .vv-pgp-dl:hover {
+        filter: brightness(1.07);
+        transform: translateY(-1px);
+      }
+
+      /* ---------- workflow list ---------- */
+      .vv-flow {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        margin-top: 6px;
+      }
+
+      .vv-flow li {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 13px 0;
+        border-bottom: 1px dashed var(--line);
+        font-size: 0.78rem;
+        line-height: 1.65;
+        color: var(--ink-soft);
+      }
+
+      .vv-flow li:last-child { border-bottom: 0; }
+
+      .vv-flow-step {
+        flex: 0 0 auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.72rem;
+        font-weight: 800;
+        color: var(--brand-strong);
+        padding-top: 2px;
+      }
+
+      /* ---------- dark footer ---------- */
+      .vv-footer-dark {
+        margin-top: 0;
+        background:
+          radial-gradient(80% 130% at 100% 0%, rgba(59, 153, 252, 0.16), transparent 62%),
+          linear-gradient(160deg, var(--dark) 0%, #05070a 100%);
+        border-top: 1px solid rgba(59, 153, 252, 0.22);
+        color: #9aa8ba;
+      }
+
+      .vv-footer-dark a:hover,
+      .vv-footer-dark button:hover {
+        color: var(--brand-soft) !important;
+      }
+
+      .vv-footer-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+      }
+
+      .vv-footer-brand .vv-mark {
+        width: 2.35rem;
+        height: 2.35rem;
+        border-radius: 12px;
+        background: linear-gradient(145deg, var(--dark), #000000);
+        border: 1px solid rgba(59, 153, 252, 0.35);
+        box-shadow: 0 6px 18px -10px var(--brand-glow);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .vv-footer-brand .vv-mark img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+
+      .vv-footer-brand span {
+        font-weight: 800;
+        font-size: 1.25rem;
+        letter-spacing: 0.14em;
+        color: #ffffff;
+      }
+
+      .vv-footer-heading {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #ffffff;
+      }
+
+      .vv-ops-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        border-radius: var(--r-full);
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: #8ef0c1;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.35);
+      }
+
+      .vv-ops-pill .vv-ops-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--ok);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+        animation: vvOpsPulse 2s ease-out infinite;
+      }
+
+      @keyframes vvOpsPulse {
+        0%   { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55); }
+        70%  { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .vv-ops-pill .vv-ops-dot { animation: none; }
+      }
+    </style>
+  </head>
+  <body>
+
+<!-- ===================================================================
+     PAGE PRELOADER — 3D orbital brand mark + 4-second progress sweep
+==================================================================== -->
+<div id="preloader" class="preloader" role="status" aria-live="polite" aria-label="Loading VUNVAULT">
+  <div class="preloader-inner">
+
+    <!-- 3D orbital stage: three rings rotating on independent axes -->
+    <div class="preloader-mark">
+      <div class="preloader-stage" aria-hidden="true">
+        <span class="preloader-ring preloader-ring--1"></span>
+        <span class="preloader-ring preloader-ring--2"></span>
+        <span class="preloader-ring preloader-ring--3"></span>
+        <span class="preloader-halo"></span>
+      </div>
+
+      <img src="logo.svg" alt="VUNVAULT Logo" class="preloader-logo">
+    </div>
+
+    <div class="preloader-wordmark">VUNVAULT</div>
+
+    <div class="preloader-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-label="Page loading progress">
+      <span class="preloader-progress-fill"></span>
+    </div>
+
+    <span class="preloader-caption">Establishing secure channel</span>
+  </div>
+</div>
+
+    <div class="min-h-screen bg-[#fcfbf9] text-neutral-900 flex flex-col font-sans selection:bg-neutral-900 selection:text-white relative">
+
+      <!-- =================================================================
+           HEADER
+      ================================================================== -->
+      <header class="sticky top-0 z-50 bg-[#fcfbf9]/95 backdrop-blur-md border-b border-neutral-200/80 transition-all duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+
+          <a href="vun.html" class="flex items-center gap-3 group shrink-0" aria-label="VUNVAULT home">
+            <span class="w-9 h-9 rounded-xl bg-black flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+              <img src="logo.svg" alt="VUNVAULT" class="w-6 h-6 object-contain">
+            </span>
+            <span class="font-extrabold text-xl md:text-2xl tracking-wider text-neutral-900 group-hover:opacity-80 transition-opacity">VUNVAULT</span>
+          </a>
+
+          <!-- Desktop navigation: hidden < 768px, flex ≥ 768px -->
+          <nav class="hidden md:flex items-center gap-2 md:gap-4 lg:gap-6 min-w-0 overflow-x-auto no-scrollbar py-1"
+               aria-label="Primary">
+            <a href="about.html"               class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">About Us</a>
+            <a href="services.html"            class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Services</a>
+            <a href="course-foundations.html"  class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Academy</a>
+            <a href="blog.html"                class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Blog</a>
+            <a href="product.html"             class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Products</a>
+            <a href="contact.html"             class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-900 font-bold bg-neutral-200/60" aria-current="page">Contact</a>
+            <a href="login.html" id="navLoginLink"
+               class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Login</a>
+
+            <!-- User profile — revealed by the auth-aware navigation script -->
+            <a href="profile.html" id="navProfileLink" class="nav-profile" hidden>
+              <span class="nav-profile-avatar" id="navProfileAvatar" aria-hidden="true">U</span>
+              <span class="nav-profile-label" id="navProfileLabel">Profile</span>
+            </a>
+          </nav>
+
+          <!-- Mobile hamburger — .hamburger already hides itself above 768px -->
+          <button id="mobile-menu-toggle"
+                  class="hamburger"
+                  type="button"
+                  aria-label="Toggle navigation menu"
+                  aria-expanded="false"
+                  aria-controls="mobile-menu">
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+          </button>
+        </div>
+
+        <!-- Mobile drawer -->
+        <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile">
+          <ul class="mobile-menu-list">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="course-foundations.html">Academy</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="product.html">Products</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li id="mobileLoginItem"><a href="login.html" class="mobile-menu-login">Login</a></li>
+            <li id="mobileProfileItem" hidden>
+              <a href="profile.html" id="mobileProfileLink" class="mobile-menu-login">Profile</a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <main class="flex-1">
+
+        <!-- =============================================================
+             HERO
+        ============================================================== -->
+        <section class="relative pt-12 pb-10 md:pt-20 md:pb-14 overflow-hidden">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-6">
+              <span class="hero-eyebrow">Contact · Press · Disclosure</span>
+              <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-neutral-900 tracking-tight leading-[1.1]">
+                Let&rsquo;s secure your perimeter
+              </h1>
+              <p class="text-lg sm:text-xl text-neutral-500 font-normal max-w-2xl mx-auto leading-relaxed">
+                Request a penetration test, report a vulnerability, apply for a Journalist&nbsp;/&nbsp;Blogger
+                profile, or submit a confidential whistleblower tip — all from one place.
+              </p>
+
+              <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+                <a href="#contact-form" class="btn-get-started">Start a Request</a>
+                <a href="#direct-channels"
+                   class="inline-flex items-center gap-2 px-6 py-4 rounded-full text-sm font-bold text-neutral-900 bg-white border border-neutral-200 hover:border-neutral-900 transition-colors">
+                  <span>Direct channels</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================
+             MAIN CONTACT GRID
+        ============================================================== -->
+        <section id="contact" class="py-10 md:py-14 bg-[#fcfbf9] border-t border-neutral-200/80">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="vv-contact-grid">
+
+              <!-- =========================================================
+                   COLUMN 1 — CONTACT & REQUEST FORM
+              ========================================================== -->
+              <div class="glass-card rounded-3xl p-6 sm:p-8 border border-neutral-200/90 shadow-sm">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="h-[2px] w-6 bg-cyan-600 rounded-full"></span>
+                  <span class="text-xs font-bold uppercase tracking-[0.2em] text-cyan-700">Secure Request Form</span>
+                </div>
+
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
+                  Tell us what you need
+                </h2>
+                <p class="mt-3 text-sm text-neutral-500 leading-relaxed max-w-xl">
+                  Every submission is encrypted in transit and routed to the correct team. Journalist and
+                  blogger requests go through manual verification before any publishing rights are granted.
+                </p>
+
+                <form id="contact-form" class="mt-7 space-y-5" novalidate>
+
+                  <div class="vv-form-row">
+                    <div class="vv-field">
+                      <label class="zero-day-label" for="cf-name">Full Name <span aria-hidden="true">*</span></label>
+                      <input class="zero-day-input" id="cf-name" name="name" type="text"
+                             autocomplete="name" placeholder="Jane Wanjiru" required>
+                    </div>
+
+                    <div class="vv-field">
+                      <label class="zero-day-label" for="cf-email">Business Email <span aria-hidden="true">*</span></label>
+                      <input class="zero-day-input" id="cf-email" name="email" type="email"
+                             autocomplete="email" placeholder="jane@company.co.ke" required>
+                    </div>
+
+                    <div class="vv-field">
+                      <label class="zero-day-label" for="cf-org">Organization</label>
+                      <input class="zero-day-input" id="cf-org" name="organization" type="text"
+                             autocomplete="organization" placeholder="Company, SACCO or newsroom">
+                    </div>
+
+                    <div class="vv-field">
+                      <label class="zero-day-label" for="cf-category">Inquiry Category <span aria-hidden="true">*</span></label>
+                      <select class="zero-day-select" id="cf-category" name="category" required>
+                        <option value="" selected disabled>Select a category…</option>
+                        <option value="pentest">Penetration Testing Request</option>
+                        <option value="vuln-report">Vulnerability / Bug Report</option>
+                        <option value="journalist">Journalist / Blogger Profile Request</option>
+                        <option value="whistleblower">Whistleblower Tip</option>
+                        <option value="support">General Support</option>
+                      </select>
+                    </div>
+
+                    <div class="vv-field vv-field--full">
+                      <label class="zero-day-label" for="cf-subject">Subject</label>
+                      <input class="zero-day-input" id="cf-subject" name="subject" type="text"
+                             placeholder="Short summary of your request">
+                    </div>
+
+                    <div class="vv-field vv-field--full">
+                      <label class="zero-day-label" for="cf-message">Message Details <span aria-hidden="true">*</span></label>
+                      <textarea class="zero-day-input" id="cf-message" name="message"
+                                placeholder="Scope, target environments, deadlines, or the details of your disclosure…"
+                                required></textarea>
+                    </div>
+                  </div>
+
+                  <label class="vv-check" for="cf-consent">
+                    <input type="checkbox" id="cf-consent" name="consent" required>
+                    <span>
+                      I confirm I am authorised to submit this request and I accept the VUNVAULT
+                      privacy policy and responsible disclosure terms.
+                    </span>
+                  </label>
+
+                  <!-- helper note -->
+                  <div class="vv-form-note" role="note">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                    </svg>
+                    <span>
+                      <strong>Every submission is queued locally and reviewed in User&nbsp;&amp;&nbsp;Access Management.</strong>
+                      Journalist&nbsp;/&nbsp;Blogger profile requests go through manual verification before any publishing
+                      rights are granted.
+                    </span>
+                  </div>
+
+                  <div class="vv-form-actions">
+                    <button type="submit" class="btn-get-started vv-submit" id="cf-submit">Send Secure Request</button>
+                    <span class="text-[11px] text-neutral-500 font-mono">TLS 1.3 · Nothing is stored on this device</span>
+                  </div>
+
+                  <!-- status region -->
+                  <div class="vv-status" id="cf-status" role="status" aria-live="polite"></div>
+                </form>
+              </div>
+
+              <!-- =========================================================
+                   COLUMN 2 — DIRECT CHANNELS & OPERATIONAL INFO
+              ========================================================== -->
+              <div id="direct-channels" class="space-y-5">
+
+                <!-- Email -->
+                <a href="mailto:support@vunvault.com" class="vv-channel glass-card border border-neutral-200/90">
+                  <span class="vv-channel-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                         stroke-linejoin="round">
+                      <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/>
+                      <rect x="2" y="4" width="20" height="16" rx="2"/>
+                    </svg>
+                  </span>
+                  <span class="min-w-0">
+                    <span class="vv-channel-label">Email Support</span>
+                    <span class="vv-channel-value">support@vunvault.com</span>
+                    <span class="vv-channel-text">
+                      General enquiries, scoping calls and assessment scheduling. Typical first response
+                      within one business day.
+                    </span>
+                  </span>
+                </a>
+
+                <!-- WhatsApp -->
+                <a href="https://wa.me/254705998032" target="_blank" rel="noopener noreferrer"
+                   class="vv-channel glass-card border border-neutral-200/90">
+                  <span class="vv-channel-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                         stroke-linejoin="round">
+                      <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/>
+                    </svg>
+                  </span>
+                  <span class="min-w-0">
+                    <span class="vv-channel-label">WhatsApp</span>
+                    <span class="vv-channel-value">+254 705 998 032</span>
+                    <span class="vv-channel-text">
+                      Urgent incident response and active-breach escalation, monitored during Nairobi
+                      business hours.
+                    </span>
+                  </span>
+                </a>
+
+                <!-- Whistleblower & Security -->
+                <div class="glass-card rounded-3xl p-6 sm:p-7 border border-neutral-200/90">
+                  <div class="flex items-start gap-4">
+                    <span class="vv-channel-icon vv-channel-icon--dark" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                           stroke-linejoin="round">
+                        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+                        <path d="M12 8v5"/><path d="M12 16h.01"/>
+                      </svg>
+                    </span>
+                    <div class="min-w-0">
+                      <span class="vv-channel-label">Whistleblower &amp; Security</span>
+                      <h3 class="mt-1 text-lg font-extrabold text-neutral-900 tracking-tight">
+                        Confidential tip submission
+                      </h3>
+                    </div>
+                  </div>
+
+                  <p class="vv-channel-text">
+                    Report a data breach, insider threat or systemic control failure. Encrypt your message with
+                    our public PGP key before sending, and we will never disclose your identity without
+                    explicit consent or a lawful order.
+                  </p>
+
+                  <div class="vv-pgp">
+                    <div>
+                      <div class="text-[10px] font-bold uppercase tracking-widest text-neutral-400">Public PGP Key</div>
+                      <code>0x3B99FC12</code>
+                    </div>
+                    <a class="vv-pgp-dl" href="vunvault-pgp.asc" download="vunvault-pgp.asc">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                           fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                           stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>
+                      </svg>
+                      <span>Download key</span>
+                    </a>
+                  </div>
+
+                  <p class="mt-3 text-[11px] leading-relaxed text-neutral-500">
+                    Fingerprint: <code class="font-mono text-neutral-700">3B99 FC12 8A4D 55E0 91C7</code>
+                  </p>
+                </div>
+
+                <!-- Social -->
+                <div class="glass-card rounded-3xl p-6 sm:p-7 border border-neutral-200/90">
+                  <span class="vv-channel-label">Follow &amp; Engage</span>
+                  <p class="vv-channel-text mb-4">
+                    Threat briefings, zero-day commentary and open-source tooling.
+                  </p>
+
+                  <div class="flex items-center gap-3 flex-wrap" aria-label="VUNVAULT social profiles">
+                    <a class="social-link" href="https://x.com/vunvault" target="_blank" rel="noopener noreferrer"
+                       aria-label="VUNVAULT on X (Twitter)" title="X (Twitter)">
+                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                      </svg>
+                    </a>
+
+                    <a class="social-link" href="https://github.com/vunvault" target="_blank" rel="noopener noreferrer"
+                       aria-label="VUNVAULT on GitHub" title="GitHub">
+                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                      </svg>
+                    </a>
+
+                    <a class="social-link" href="https://www.linkedin.com/company/vunvault" target="_blank" rel="noopener noreferrer"
+                       aria-label="VUNVAULT on LinkedIn" title="LinkedIn">
+                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                      </svg>
+                    </a>
+
+                    <a class="social-link" href="https://discord.gg/vunvault" target="_blank" rel="noopener noreferrer"
+                       aria-label="VUNVAULT on Discord" title="Discord">
+                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0066.1276 12.2986 12.2986 0 0 1-1.873.8914.0766.0766 0 0 0-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Request workflow -->
+                <div class="glass-card rounded-3xl p-6 sm:p-7 border border-neutral-200/90">
+                  <span class="vv-channel-label">Press &amp; Publishing Workflow</span>
+                  <ul class="vv-flow">
+                    <li>
+                      <span class="vv-flow-step">01</span>
+                      <span>Submit a <strong>Journalist&nbsp;/&nbsp;Blogger Profile Request</strong> using the form.</span>
+                    </li>
+                    <li>
+                      <span class="vv-flow-step">02</span>
+                      <span>The request is routed to <code class="font-mono text-neutral-700">user-management.html</code> for manual identity verification.</span>
+                    </li>
+                    <li>
+                      <span class="vv-flow-step">03</span>
+                      <span>On approval, your account is upgraded to an authorised Journalist&nbsp;/&nbsp;Blogger profile.</span>
+                    </li>
+                    <li>
+                      <span class="vv-flow-step">04</span>
+                      <span>Draft posts with embedded images or video and click <strong>Publish</strong>.</span>
+                    </li>
+                    <li>
+                      <span class="vv-flow-step">05</span>
+                      <span>Posts enter the moderation queue in <code class="font-mono text-neutral-700">admin.html</code> — nothing goes live immediately.</span>
+                    </li>
+                    <li>
+                      <span class="vv-flow-step">06</span>
+                      <span>Once an admin approves, the article publishes to the blog and dynamic feeds.</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Operational info -->
+                <div class="glass-card rounded-3xl p-6 sm:p-7 border border-neutral-200/90">
+                  <span class="vv-channel-label">Operational Info</span>
+                  <ul class="mt-3 space-y-3 text-sm text-neutral-500">
+                    <li class="flex items-start justify-between gap-4 border-b border-neutral-200/80 pb-3">
+                      <span>Based in</span>
+                      <strong class="text-neutral-900 font-semibold text-right">Nairobi, Kenya</strong>
+                    </li>
+                    <li class="flex items-start justify-between gap-4 border-b border-neutral-200/80 pb-3">
+                      <span>Coverage</span>
+                      <strong class="text-neutral-900 font-semibold text-right">Africa &amp; worldwide</strong>
+                    </li>
+                    <li class="flex items-start justify-between gap-4 border-b border-neutral-200/80 pb-3">
+                      <span>Support hours</span>
+                      <strong class="text-neutral-900 font-semibold text-right">Mon–Fri · 08:00–18:00 EAT</strong>
+                    </li>
+                    <li class="flex items-start justify-between gap-4">
+                      <span>Incident response</span>
+                      <strong class="text-neutral-900 font-semibold text-right">24 / 7 escalation line</strong>
+                    </li>
+                  </ul>
+                </div>
+
+              </div><!-- /column 2 -->
+
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- =================================================================
+           FOOTER — dark
+      ================================================================== -->
+      <footer class="vv-footer-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-16">
+
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12">
+
+            <div class="md:col-span-4 space-y-4">
+              <a href="vun.html" class="vv-footer-brand" aria-label="VUNVAULT home">
+                <span class="vv-mark">
+                  <img src="logo.svg" alt="VUNVAULT">
+                </span>
+                <span>VUNVAULT</span>
+              </a>
+
+              <p class="text-sm max-w-sm leading-relaxed">
+                Africa-rooted, worldwide penetration testing, vulnerability assessments and
+                cybersecurity education.
+              </p>
+
+              <div class="pt-2">
+                <span class="vv-ops-pill">
+                  <span class="vv-ops-dot" aria-hidden="true"></span>
+                  Security Operations: Online
+                </span>
+              </div>
+            </div>
+
+            <div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8">
+              <div class="space-y-3.5">
+                <h4 class="vv-footer-heading">Resources</h4>
+                <ul class="space-y-2 text-sm">
+                  <li><a href="news.html" class="transition-colors">News</a></li>
+                  <li><a href="blog.html" class="transition-colors">Blog</a></li>
+                  <li><a href="blog.html" class="transition-colors">Breach Watch</a></li>
+                  <li><a href="services.html" class="transition-colors">Templates</a></li>
+                </ul>
+              </div>
+
+              <div class="space-y-3.5">
+                <h4 class="vv-footer-heading">Company</h4>
+                <ul class="space-y-2 text-sm">
+                  <li><a href="about.html" class="transition-colors">About Us</a></li>
+                  <li><a href="about.html" class="transition-colors">Careers</a></li>
+                  <li><a href="contact.html" class="transition-colors">Contact</a></li>
+                  <li><a href="news.html" class="transition-colors">Press</a></li>
+                </ul>
+              </div>
+
+              <div class="space-y-3.5">
+                <h4 class="vv-footer-heading">Solutions</h4>
+                <ul class="space-y-2 text-sm">
+                  <li><a href="services.html" class="transition-colors">Small Business</a></li>
+                  <li><a href="services.html" class="transition-colors">SACCO &amp; Fintech</a></li>
+                  <li><a href="services.html" class="transition-colors">Enterprise</a></li>
+                  <li><a href="course-foundations.html" class="transition-colors">Security Training</a></li>
+                </ul>
+              </div>
+
+              <div class="space-y-3.5">
+                <h4 class="vv-footer-heading">Tools</h4>
+                <ul class="space-y-2 text-sm">
+                  <li><a href="vun.html#free-scanner" class="transition-colors">Free Security Scan</a></li>
+                  <li><a href="services.html" class="transition-colors">Pricing &amp; Plans</a></li>
+                  <li><a href="contact.html" class="transition-colors">Request a Report</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-14 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+            <div class="text-center sm:text-left">
+              © 2026 VUNVAULT. All rights reserved.<br class="sm:hidden">
+              <span class="hidden sm:inline"> · </span>
+              Security operations monitored 24/7 from Nairobi, Kenya.
+            </div>
+
+            <div class="flex items-center gap-6">
+              <a href="index.html" class="transition-colors">Top</a>
+              <a href="services.html" class="transition-colors">Services</a>
+              <a href="course-foundations.html" class="transition-colors">Academy</a>
+              <a href="contact.html" class="transition-colors">Contact</a>
+              <button type="button"
+                      class="p-1.5 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
+                      title="Scroll to Top"
+                      aria-label="Scroll to top"
+                      data-vv-scroll-top>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="w-4 h-4" aria-hidden="true">
+                  <path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    </div><!-- /min-h-screen -->
+
+    <!-- ===================================================================
+         INLINE WIRING — preloader dismissal + mobile navigation drawer
+    ==================================================================== -->
+    <script>
+      (function () {
+        "use strict";
+
+        /* ---------------- Preloader ---------------- */
+        var preloader = document.getElementById("preloader");
+        if (preloader) {
+          var dismissed = false;
+
+          var dismiss = function () {
+            if (dismissed) return;
+            dismissed = true;
+            preloader.classList.add("is-hidden");
+
+            /* notify any consent / analytics controller that loading is done */
+            document.dispatchEvent(new CustomEvent("vunvault:preloader-done"));
+
+            window.setTimeout(function () {
+              if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
+            }, 700);
+          };
+
+          /* Progress sweep is a fixed 4s animation — dismiss in lockstep */
+          window.setTimeout(dismiss, 4000);
+        }
+
+        /* ---------------- Mobile navigation drawer ---------------- */
+        var toggle = document.getElementById("mobile-menu-toggle");
+        var menu = document.getElementById("mobile-menu");
+
+        if (toggle && menu) {
+          var setOpen = function (open) {
+            menu.classList.toggle("is-open", open);
+            toggle.classList.toggle("is-active", open);
+            toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            document.body.classList.toggle("nav-open", open);
+          };
+
+          toggle.addEventListener("click", function () {
+            setOpen(!menu.classList.contains("is-open"));
+          });
+
+          menu.addEventListener("click", function (event) {
+            var link = event.target.closest("a");
+            if (link) setOpen(false);
+          });
+
+          document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") setOpen(false);
+          });
+
+          window.addEventListener("resize", function () {
+            if (window.innerWidth >= 768) setOpen(false);
+          });
+        }
+
+        /* ---------------- Scroll to top ---------------- */
+        var topBtn = document.querySelector("[data-vv-scroll-top]");
+        if (topBtn) {
+          topBtn.addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+        }
+      })();
+    </script>
+
+    <!-- ===================================================================
+         AUTH-AWARE NAVIGATION
+         Reads the identity persisted by login.html and swaps the "Login"
+         link for a "Profile" button. @vunvault.com accounts route to
+         admin.html, everyone else to profile.html.
+    ==================================================================== -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        "use strict";
+
+        var STORAGE_KEY  = "userEmail";
+        var ADMIN_DOMAIN = "@vunvault.com";
+
+        var desktopLogin   = document.getElementById("navLoginLink");
+        var desktopProfile = document.getElementById("navProfileLink");
+        var mobileLogin    = document.getElementById("mobileLoginItem");
+        var mobileProfile  = document.getElementById("mobileProfileItem");
+        var avatarEl       = document.getElementById("navProfileAvatar");
+        var labelEl        = document.getElementById("navProfileLabel");
+
+        /* ------------------------------------------------ read identity */
+        var userEmail = null;
+        try {
+          userEmail = window.localStorage.getItem(STORAGE_KEY);
+        } catch (err) {
+          userEmail = null;   /* storage blocked (private mode / no cookies) */
+        }
+        userEmail = (userEmail || "").trim();
+
+        /* ------------------------------------------------ guest state */
+        if (!userEmail) {
+          if (desktopLogin)   desktopLogin.hidden   = false;
+          if (mobileLogin)    mobileLogin.hidden    = false;
+          if (desktopProfile) desktopProfile.hidden = true;
+          if (mobileProfile)  mobileProfile.hidden  = true;
+          return;
+        }
+
+        /* ------------------------------------------------ signed-in state */
+        var lowered = userEmail.toLowerCase();
+        var isAdmin = lowered.slice(-ADMIN_DOMAIN.length) === ADMIN_DOMAIN;
+        var target  = isAdmin ? "admin.html" : "profile.html";
+
+        if (desktopProfile) {
+          desktopProfile.setAttribute("href", target);
+          desktopProfile.setAttribute("title", userEmail);
+          desktopProfile.classList.toggle("nav-profile--admin", isAdmin);
+          desktopProfile.hidden = false;
+        }
+
+        if (mobileProfile) {
+          var mobileLink = document.getElementById("mobileProfileLink");
+          if (mobileLink) {
+            mobileLink.setAttribute("href", target);
+            mobileLink.setAttribute("title", userEmail);
+          }
+          mobileProfile.hidden = false;
+        }
+
+        /* ------------------------------------------------ personalise */
+        var localPart = userEmail.split("@")[0] || "Profile";
+        if (avatarEl) avatarEl.textContent = localPart.charAt(0).toUpperCase();
+        if (labelEl)  labelEl.textContent  = localPart;
+
+        /* ------------------------------------------------ hide guest link */
+        if (desktopLogin) desktopLogin.hidden = true;
+        if (mobileLogin)  mobileLogin.hidden  = true;
+      });
+    </script>
+
+    <!-- ===================================================================
+         CONTACT FORM CONTROLLER  —  localStorage access-request pipeline
+         -------------------------------------------------------------------
+         Every valid submission is written to
+             localStorage["vunvault_access_requests"]
+         as a JSON array (newest first). user-management.html reads that
+         same key and renders the pending access-request queue.
+    ==================================================================== -->
+    <script>
+      (function () {
+        "use strict";
+
+        var form = document.getElementById("contact-form");
+        if (!form) return;
+
+        var statusEl  = document.getElementById("cf-status");
+        var submitBtn = document.getElementById("cf-submit");
+        var category  = document.getElementById("cf-category");
+
+        var EMAIL_RE    = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+        /* ---- SHARED CONTRACT — must match user-management.html ---------- */
+        var STORAGE_KEY = "vunvault_access_requests";
+        var MAX_RECORDS = 200;   /* soft cap so localStorage never balloons  */
+
+/* Inquiry category → requested platform role + machine-readable slug */
+var CATEGORY_META = {
+  "pentest":       { role: "Security Analyst",       roleSlug: "analyst",  label: "Penetration Testing Request" },
+  "vuln-report":   { role: "Vulnerability Reporter", roleSlug: "reporter", label: "Vulnerability / Bug Report" },
+  "journalist":    { role: "Journalist / Blogger",   roleSlug: "blogger",  label: "Journalist / Blogger Profile" },
+  "whistleblower": { role: "Confidential Source",    roleSlug: "source",   label: "Whistleblower Tip" },
+  "support":       { role: "Support Engineer",       roleSlug: "support",  label: "General Support" }
+};
+
+        /* --------------------------------------------------------- utils */
+        function pad2(n) { return String(n).padStart(2, "0"); }
+
+        function utcStamp(date) {
+          var d = date || new Date();
+          return d.getUTCFullYear() + "-" + pad2(d.getUTCMonth() + 1) + "-" + pad2(d.getUTCDate()) +
+                 " " + pad2(d.getUTCHours()) + ":" + pad2(d.getUTCMinutes()) + " UTC";
+        }
+
+        /* Crockford-style alphabet: no I, O, 0 or 1 to avoid mis-reading */
+        function makeRequestId() {
+          var alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+          var out = "";
+          for (var i = 0; i < 6; i++) {
+            out += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+          }
+          return "REQ-" + out;
+        }
+
+        function readRequests() {
+          try {
+            var raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw) return [];
+            var parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (err) {
+            return [];                      /* corrupt payload — start clean */
+          }
+        }
+
+        function writeRequests(list) {
+          try {
+            window.localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+            return true;
+          } catch (err) {
+            return false;                   /* quota / private mode           */
+          }
+        }
+
+        /* ------------------------------------------------------ status UI */
+        function setStatus(kind, html) {
+          if (!statusEl) return;
+          statusEl.className = "vv-status is-visible vv-status--" + kind;
+
+          var icon = kind === "ok"
+            ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>'
+            : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>';
+
+          statusEl.innerHTML = icon + "<span>" + html + "</span>";
+        }
+
+        function clearStatus() {
+          if (!statusEl) return;
+          statusEl.className = "vv-status";
+          statusEl.innerHTML = "";
+        }
+
+        function markInvalid(el, invalid) {
+          if (!el) return;
+          el.classList.toggle("is-invalid", !!invalid);
+        }
+
+        /* -------------------------------------------------- submit handler */
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();     /* never reload, never post anywhere     */
+          clearStatus();
+
+          var name    = document.getElementById("cf-name");
+          var email   = document.getElementById("cf-email");
+          var org     = document.getElementById("cf-org");
+          var subject = document.getElementById("cf-subject");
+          var message = document.getElementById("cf-message");
+          var consent = document.getElementById("cf-consent");
+
+          var firstInvalid = null;
+
+          var nameBad    = !name.value.trim();
+          var emailBad   = !EMAIL_RE.test(email.value.trim());
+          var catBad     = !category.value;
+          var messageBad = message.value.trim().length < 12;
+          var consentBad = !consent.checked;
+
+          markInvalid(name, nameBad);       if (nameBad && !firstInvalid)    firstInvalid = name;
+          markInvalid(email, emailBad);     if (emailBad && !firstInvalid)   firstInvalid = email;
+          markInvalid(category, catBad);    if (catBad && !firstInvalid)     firstInvalid = category;
+          markInvalid(message, messageBad); if (messageBad && !firstInvalid) firstInvalid = message;
+
+          if (nameBad || emailBad || catBad || messageBad || consentBad) {
+            setStatus("err", "Please complete every required field with a valid business email address before sending.");
+            if (firstInvalid && typeof firstInvalid.focus === "function") firstInvalid.focus();
+            return;
+          }
+
+          /* ------------------------------------------------ build record */
+          var meta = CATEGORY_META[category.value] || { role: "Unspecified", roleSlug: "", label: category.value };
+          var now  = new Date();
+
+var record = {
+  id:            makeRequestId(),
+  name:          name.value.trim(),
+  email:         email.value.trim(),
+  organization:  org ? org.value.trim() : "",
+  role:          meta.role,
+  roleSlug:      meta.roleSlug,        // ← NEW: drives RBAC grant downstream
+  category:      category.value,
+  categoryLabel: meta.label,
+  subject:       subject ? subject.value.trim() : "",
+  message:       message.value.trim(),
+  submittedAt:   utcStamp(now),
+  submittedTs:   now.getTime(),
+  status:        "Pending",
+  decidedAt:     ""
+};
+          /* ------------------------------------- persist (newest first) */
+          var queue = readRequests();
+          queue.unshift(record);
+          if (queue.length > MAX_RECORDS) queue = queue.slice(0, MAX_RECORDS);
+
+          if (!writeRequests(queue)) {
+            setStatus("err",
+              "Your browser blocked local storage, so the request could not be queued. " +
+              "Please email <strong>support@vunvault.com</strong> instead.");
+            return;
+          }
+
+          /* ------------------------- notify any same-page listeners ---- */
+          try {
+            document.dispatchEvent(new CustomEvent("vunvault:access-request-created", { detail: record }));
+          } catch (err) { /* older browsers — non-fatal */ }
+
+          /* --------------------------------------------- success copy */
+          var routing = category.value === "journalist"
+            ? "Your Journalist&nbsp;/&nbsp;Blogger profile request is now queued in " +
+              "<strong>User &amp; Access Management</strong> for manual verification."
+            : category.value === "whistleblower"
+              ? "Your tip is queued for the confidential disclosure team. Encrypt follow-up " +
+                "correspondence with our public PGP key <strong>0x3B99FC12</strong>."
+              : "Your request is now queued in <strong>User &amp; Access Management</strong> for review.";
+
+          setStatus("ok",
+            "Request received — reference <strong>" + record.id + "</strong>. " + routing +
+            " An administrator will approve or reject it shortly.");
+
+          /* ------------------------------------------------- reset form */
+          form.reset();
+          [name, email, category, message].forEach(function (el) { markInvalid(el, false); });
+
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Sending…";
+            window.setTimeout(function () {
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Send Secure Request";
+            }, 700);
+          }
+        });
+
+        /* clear invalid state as the user corrects fields */
+        form.addEventListener("input", function (event) {
+          if (event.target.classList) event.target.classList.remove("is-invalid");
+        });
+      })();
+    </script>
+  </body>
+</html>

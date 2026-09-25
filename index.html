@@ -1,0 +1,2582 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VUNVAULT — Africa-rooted penetration testing, vulnerability assessments and zero-day threat intelligence for SACCOs, fintechs and enterprises.">
+  <link rel="stylesheet" href="vun1.css">
+  <title>VUNVAULT — We Find The Cracks Before They Do</title>
+
+  <!-- ==================================================================
+       AUTH-AWARE NAVIGATION — profile pill
+       Revealed/hidden by the localStorage-driven script at the end of
+       the document. Admin accounts get an amber accent.
+       ================================================================== -->
+  <style>
+    #navLoginLink[hidden],
+    #navProfileLink[hidden],
+    #mobileLoginItem[hidden],
+    #mobileProfileItem[hidden] {
+      display: none !important;
+    }
+
+    .nav-profile {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px 4px 4px;
+      border-radius: 9999px;
+      border: 1px solid rgba(59, 153, 252, 0.28);
+      background: rgba(59, 153, 252, 0.10);
+      color: #1E7BE0;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                  border-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                  color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-profile:hover,
+    .nav-profile:focus-visible {
+      background: rgba(59, 153, 252, 0.18);
+      border-color: #3B99FC;
+      color: #0A0D12;
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .nav-profile-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3B99FC, #1E7BE0);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .nav-profile-label {
+      max-width: 110px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* -------- admin accent (@vunvault.com) -------- */
+    .nav-profile--admin {
+      border-color: rgba(245, 158, 11, 0.45);
+      background: rgba(245, 158, 11, 0.12);
+      color: #b45309;
+    }
+
+    .nav-profile--admin:hover,
+    .nav-profile--admin:focus-visible {
+      background: rgba(245, 158, 11, 0.20);
+      border-color: #f59e0b;
+      color: #78350f;
+    }
+
+    .nav-profile--admin .nav-profile-avatar {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav-profile { transition: none; }
+    }
+  </style>
+</head>
+  <body>
+
+<!-- ===================================================================
+     PAGE PRELOADER — 3D orbital brand mark + 4-second progress sweep
+==================================================================== -->
+<div id="preloader" class="preloader" role="status" aria-live="polite" aria-label="Loading VUNVAULT">
+  <div class="preloader-inner">
+
+    <!-- 3D orbital stage: three rings rotating on independent axes -->
+    <div class="preloader-mark">
+      <div class="preloader-stage" aria-hidden="true">
+        <span class="preloader-ring preloader-ring--1"></span>
+        <span class="preloader-ring preloader-ring--2"></span>
+        <span class="preloader-ring preloader-ring--3"></span>
+        <span class="preloader-halo"></span>
+      </div>
+
+      <img src="logo.svg" alt="VUNVAULT Logo" class="preloader-logo">
+    </div>
+
+    <div class="preloader-wordmark">VUNVAULT</div>
+
+    <div class="preloader-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-label="Page loading progress">
+      <span class="preloader-progress-fill"></span>
+    </div>
+
+    <span class="preloader-caption">Establishing secure channel</span>
+  </div>
+</div>
+
+    <div class="min-h-screen bg-[#fcfbf9] text-neutral-900 flex flex-col font-sans selection:bg-neutral-900 selection:text-white relative">
+
+      <!-- =================================================================
+           HEADER
+      ================================================================== -->
+<header class="sticky top-0 z-50 bg-[#fcfbf9]/95 backdrop-blur-md border-b border-neutral-200/80 transition-all duration-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+
+    <a href="vun.html" class="flex items-center gap-3 group shrink-0" aria-label="VUNVAULT home">
+      <span class="w-9 h-9 rounded-xl bg-black flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+        <img src="logo.svg" alt="VUNVAULT" class="w-6 h-6 object-contain">
+      </span>
+      <span class="font-extrabold text-xl md:text-2xl tracking-wider text-neutral-900 group-hover:opacity-80 transition-opacity">VUNVAULT</span>
+    </a>
+
+    <!-- Desktop navigation: hidden < 768px, flex ≥ 768px -->
+    <nav class="hidden md:flex items-center gap-2 md:gap-4 lg:gap-6 min-w-0 overflow-x-auto no-scrollbar py-1"
+         aria-label="Primary">
+      <a href="about.html"               class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-900 font-bold bg-neutral-200/60">About Us</a>
+      <a href="services.html"            class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Services</a>
+      <a href="course-foundations.html"  class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Academy</a>
+      <a href="blog.html"                class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Blog</a>
+      <a href="product.html"             class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Products</a>
+      <a href="contact.html"             class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Contact</a>
+  <a href="login.html" id="navLoginLink"
+     class="relative px-2.5 py-1 text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100">Login</a>
+
+  <!-- User profile — revealed by the auth-aware navigation script -->
+  <a href="profile.html" id="navProfileLink" class="nav-profile" hidden>
+    <span class="nav-profile-avatar" id="navProfileAvatar" aria-hidden="true">U</span>
+    <span class="nav-profile-label" id="navProfileLabel">Profile</span>
+  </a>
+</nav>
+
+    <!-- Mobile hamburger — .hamburger already hides itself above 768px -->
+    <button id="mobile-menu-toggle"
+            class="hamburger"
+            type="button"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false"
+            aria-controls="mobile-menu">
+      <span class="hamburger-bar"></span>
+      <span class="hamburger-bar"></span>
+      <span class="hamburger-bar"></span>
+    </button>
+  </div>
+
+  <!-- Mobile drawer (unchanged) -->
+  <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile">
+    <ul class="mobile-menu-list">
+      <li><a href="about.html">About Us</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="course-foundations.html">Academy</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="product.html">Products</a></li>
+      <li><a href="contact.html">Contact</a></li>
+  <li id="mobileLoginItem"><a href="login.html" class="mobile-menu-login">Login</a></li>
+  <li id="mobileProfileItem" hidden>
+    <a href="profile.html" id="mobileProfileLink" class="mobile-menu-login">Profile</a>
+  </li>
+</ul>
+  </nav>
+</header>
+      <main class="flex-1 space-y-2">
+
+        <!-- =============================================================
+             HERO
+        ============================================================== -->
+        <section class="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="text-center max-w-4xl mx-auto space-y-6">
+              <span class="hero-eyebrow">Africa-rooted · Worldwide defense</span>
+              <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold text-neutral-900 tracking-tight leading-[1.1]">We Find The Cracks Before They Do</h1>
+              <p class="text-lg sm:text-xl text-neutral-500 font-normal max-w-2xl mx-auto leading-relaxed">Advanced vulnerability management through intelligent automation and proactive defense strategies.</p>
+              <div class="flex items-center justify-center pt-4">
+                <a href="#get-started" class="btn-get-started">Get Started</a>
+              </div>
+            </div>
+
+            <!-- Rebranded hero visual: glowing tech grid + live network node map -->
+            <div class="mt-14 md:mt-18 max-w-5xl mx-auto">
+              <div class="hero-visual" style="transform: perspective(1000px) rotateY(0deg) rotateX(0deg);">
+                <div class="hero-visual-glow" aria-hidden="true"></div>
+                <div class="hero-grid" aria-hidden="true"></div>
+
+                <div class="hero-visual-inner">
+
+                  <div class="hero-visual-head">
+                    <div>
+                      <div class="hero-visual-eyebrow">VUNVAULT</div>
+                      <h2 class="hero-visual-title">Live Attack Surface</h2>
+                    </div>
+                    <div class="glass-pill hero-status">
+                      <span class="hero-status-dot" aria-hidden="true"><span></span><span></span></span>
+                      <span>SYSTEM STATUS: SECURE</span>
+                    </div>
+                  </div>
+
+                  <div class="hero-visual-stage">
+                    <svg class="hero-network" viewBox="0 0 900 420" role="img" aria-label="Live map of protected network nodes" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <linearGradient id="vv-link" x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0" stop-color="#22d3ee" stop-opacity="0.15"></stop>
+                          <stop offset="1" stop-color="#22d3ee" stop-opacity="0.75"></stop>
+                        </linearGradient>
+                        <radialGradient id="vv-node" cx="50%" cy="50%" r="50%">
+                          <stop offset="0" stop-color="#67e8f9"></stop>
+                          <stop offset="1" stop-color="#0891b2"></stop>
+                        </radialGradient>
+                      </defs>
+
+                      <!-- connective mesh -->
+                      <g class="hero-network-links" stroke="url(#vv-link)" stroke-width="1.6" fill="none">
+                        <path d="M150 90 L330 150"></path>
+                        <path d="M330 150 L520 80"></path>
+                        <path d="M520 80 L740 140"></path>
+                        <path d="M150 90 L300 300"></path>
+                        <path d="M330 150 L300 300"></path>
+                        <path d="M520 80 L620 320"></path>
+                        <path d="M300 300 L620 320"></path>
+                        <path d="M740 140 L620 320"></path>
+                        <path d="M740 140 L520 80" stroke-dasharray="5 6"></path>
+                        <path d="M150 90 L520 80" stroke-dasharray="5 6"></path>
+                      </g>
+
+                      <!-- nodes -->
+                      <g class="hero-network-nodes">
+                        <g class="hero-node">
+                          <circle cx="150" cy="90" r="26" fill="rgba(34,211,238,0.10)"></circle>
+                          <circle cx="150" cy="90" r="11" fill="url(#vv-node)"></circle>
+                          <text x="150" y="52" text-anchor="middle">API Gateway</text>
+                        </g>
+                        <g class="hero-node">
+                          <circle cx="330" cy="150" r="24" fill="rgba(34,211,238,0.10)"></circle>
+                          <circle cx="330" cy="150" r="10" fill="url(#vv-node)"></circle>
+                          <text x="330" y="118" text-anchor="middle">Core K8s</text>
+                        </g>
+                        <g class="hero-node">
+                          <circle cx="520" cy="80" r="24" fill="rgba(34,211,238,0.10)"></circle>
+                          <circle cx="520" cy="80" r="10" fill="url(#vv-node)"></circle>
+                          <text x="520" y="46" text-anchor="middle">Identity</text>
+                        </g>
+                        <g class="hero-node">
+                          <circle cx="740" cy="140" r="22" fill="rgba(34,211,238,0.10)"></circle>
+                          <circle cx="740" cy="140" r="9" fill="url(#vv-node)"></circle>
+                          <text x="740" y="108" text-anchor="middle">Edge CDN</text>
+                        </g>
+                        <g class="hero-node">
+                          <circle cx="300" cy="300" r="22" fill="rgba(52,211,153,0.10)"></circle>
+                          <circle cx="300" cy="300" r="9" fill="#34d399"></circle>
+                          <text x="300" y="336" text-anchor="middle">DB Replica</text>
+                        </g>
+                        <g class="hero-node">
+                          <circle cx="620" cy="320" r="22" fill="rgba(52,211,153,0.10)"></circle>
+                          <circle cx="620" cy="320" r="9" fill="#34d399"></circle>
+                          <text x="620" y="356" text-anchor="middle">Backup Vault</text>
+                        </g>
+                      </g>
+                    </svg>
+
+                    <span class="hero-scanline" aria-hidden="true"></span>
+                  </div>
+
+                  <div class="hero-visual-foot">
+                    <div class="hero-metric">
+                      <span class="hero-metric-label">Nodes Monitored</span>
+                      <span class="hero-metric-value">1,284</span>
+                    </div>
+                    <div class="hero-metric">
+                      <span class="hero-metric-label">Threats Blocked</span>
+                      <span class="hero-metric-value">12,904</span>
+                    </div>
+                    <div class="hero-metric">
+                      <span class="hero-metric-label">Mean Patch Time</span>
+                      <span class="hero-metric-value">1.2s</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <span id="get-started" class="anchor-offset" aria-hidden="true"></span>
+        <div class="w-full bg-[#0a1931] text-white overflow-hidden py-3 border-y border-neutral-800 shadow-md">
+  <div class="animate-marquee flex items-center gap-12 text-xs font-mono select-none">
+
+    <!-- --- copy 1 of 2 (TICKER_THREATS) --- -->
+    <div class="flex items-center gap-3 shrink-0 cursor-pointer hover:text-cyan-300 transition-colors group">
+      <span class="text-neutral-400 font-bold group-hover:text-white transition-colors">CVE-2025-18820</span>
+      <span class="text-neutral-300">– SQL injection in unsanitized search parameter</span>
+      <span class="text-[10px] font-bold px-2 py-0.5 rounded tracking-wider bg-blue-600 text-white">MEDIUM</span>
+      <span class="text-neutral-600 font-sans mx-2">|</span>
+    </div>
+    <div class="flex items-center gap-3 shrink-0 cursor-pointer hover:text-cyan-300 transition-colors group">
+      <span class="text-neutral-400 font-bold group-hover:text-white transition-colors">CVE-2026-9122</span>
+      <span class="text-neutral-300">– Critical Remote Code Execution in API Ingress</span>
+      <span class="text-[10px] font-bold px-2 py-0.5 rounded tracking-wider bg-rose-600 text-white">CRITICAL</span>
+      <span class="text-neutral-600 font-sans mx-2">|</span>
+    </div>
+    <div class="flex items-center gap-3 shrink-0 cursor-pointer hover:text-cyan-300 transition-colors group">
+      <span class="text-neutral-400 font-bold group-hover:text-white transition-colors">CVE-2026-4401</span>
+      <span class="text-neutral-300">– Directory Traversal in Unauthenticated RMM Agent</span>
+      <span class="text-[10px] font-bold px-2 py-0.5 rounded tracking-wider bg-amber-600 text-white">HIGH</span>
+      <span class="text-neutral-600 font-sans mx-2">|</span>
+    </div>
+    <div class="flex items-center gap-3 shrink-0 cursor-pointer hover:text-cyan-300 transition-colors group">
+      <span class="text-neutral-400 font-bold group-hover:text-white transition-colors">CVE-2026-1104</span>
+      <span class="text-neutral-300">– Zero-Day Memory Exfiltration Attempt Intercepted</span>
+      <span class="text-[10px] font-bold px-2 py-0.5 rounded tracking-wider bg-rose-600 text-white">HIGH</span>
+      <span class="text-neutral-600 font-sans mx-2">|</span>
+    </div>
+
+    <!-- --- copy 2 of 2 (duplicate — required for the seamless marquee loop) --- -->
+    <div class="flex items-center gap-3 shrink-0 cursor-pointer hover:text-cyan-300 transition-colors group">
+      <span class="text-neutral-400 font-bold group-hover:text-white transition-colors">CVE-2025-18820</span>
+      <span class="text-neutral-300">– SQL injection in unsanitized search parameter</span>
+      <span class="text-[10px] font-bold px-2 py-0.5 rounded tracking-wider bg-blue-600 text-white">MEDIUM</span>
+      <span class="text-neutral-600 font-sans mx-2">|</span>
+    </div>
+    <div class="flex items-center gap-3 shrink-0 cursor-pointer hover:text-cyan-300 transition-colors group">
+      <span class="text-neutral-400 font-bold group-hover:text-white transition-colors">CVE-2026-9122</span>
+      <span class="text-neutral-300">– Critical Remote Code Execution in API Ingress</span>
+      <span class="text-[10px] font-bold px-2 py-0.5 rounded tracking-wider bg-rose-600 text-white">CRITICAL</span>
+      <span class="text-neutral-600 font-sans mx-2">|</span>
+    </div>
+    <div class="flex items-center gap-3 shrink-0 cursor-pointer hover:text-cyan-300 transition-colors group">
+      <span class="text-neutral-400 font-bold group-hover:text-white transition-colors">CVE-2026-4401</span>
+      <span class="text-neutral-300">– Directory Traversal in Unauthenticated RMM Agent</span>
+      <span class="text-[10px] font-bold px-2 py-0.5 rounded tracking-wider bg-amber-600 text-white">HIGH</span>
+      <span class="text-neutral-600 font-sans mx-2">|</span>
+    </div>
+    <div class="flex items-center gap-3 shrink-0 cursor-pointer hover:text-cyan-300 transition-colors group">
+      <span class="text-neutral-400 font-bold group-hover:text-white transition-colors">CVE-2026-1104</span>
+      <span class="text-neutral-300">– Zero-Day Memory Exfiltration Attempt Intercepted</span>
+      <span class="text-[10px] font-bold px-2 py-0.5 rounded tracking-wider bg-rose-600 text-white">HIGH</span>
+      <span class="text-neutral-600 font-sans mx-2">|</span>
+    </div>
+
+  </div>
+</div>
+<!-- ==================================================================
+     FREE VULNERABILITY SCAN — CTA BANNER
+     ================================================================== -->
+<section id="free-scanner" class="vv-scan-cta-section">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="vv-scan-cta">
+      <div class="vv-scan-cta-glow" aria-hidden="true"></div>
+
+      <div class="vv-scan-cta-body">
+        <span class="vv-scan-cta-eyebrow">No cost · No commitment</span>
+        <h2 class="vv-scan-cta-title">
+          We Offer a Free Vulnerability Scan — <span>Scan Now</span>
+        </h2>
+        <p class="vv-scan-cta-text">
+          Point us at a web application, API gateway or public IP range and watch our reconnaissance
+          engine enumerate live exposure in real time. Evaluate your perimeter before an attacker does.
+        </p>
+
+        <div class="vv-scan-cta-actions">
+          <button type="button" class="vv-scan-cta-btn" data-vv-open-scanner>
+            <span>Request Free Scan</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                 stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </button>
+          <span class="vv-scan-cta-note">Runs in your browser · Nothing is stored</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <!-- ==================================================================
+     B. ATTACK SURFACE MAPPING  — buildAttackSurface()
+     Injected immediately before #services-plans
+     ================================================================== -->
+<section class="py-14 md:py-20 bg-[#fcfbf9] border-t border-neutral-200/80">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+
+    <div class="flex items-center gap-2">
+      <span class="h-[2px] w-6 bg-cyan-600 rounded-full"></span>
+      <span class="text-xs font-bold uppercase tracking-[0.2em] text-cyan-700">ATTACK SURFACE MAPPING</span>
+    </div>
+
+    <div class="space-y-4 max-w-3xl">
+      <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-900 tracking-tight leading-[1.15]">
+        Every login page, API and subdomain is a door. We map them all.
+      </h2>
+      <p class="text-neutral-500 text-base sm:text-lg leading-relaxed">
+        Before a single test runs, we build a live picture of your exposed assets — the same view an attacker builds during reconnaissance.
+      </p>
+    </div>
+
+    <div class="pt-4 space-y-0">
+
+      <div class="py-5 sm:py-6 border-b border-neutral-200/80 flex items-start gap-6 sm:gap-10 group hover:bg-white/60 px-3 rounded-xl transition-colors cursor-pointer">
+        <span class="text-lg sm:text-xl font-bold font-mono text-cyan-600 group-hover:text-neutral-900 transition-colors shrink-0">01</span>
+        <p class="text-neutral-700 text-sm sm:text-base font-medium leading-relaxed group-hover:text-neutral-900 transition-colors">
+          Domains, subdomains and exposed services are enumerated and scored by exposure.
+        </p>
+      </div>
+
+      <div class="py-5 sm:py-6 border-b border-neutral-200/80 flex items-start gap-6 sm:gap-10 group hover:bg-white/60 px-3 rounded-xl transition-colors cursor-pointer">
+        <span class="text-lg sm:text-xl font-bold font-mono text-cyan-600 group-hover:text-neutral-900 transition-colors shrink-0">02</span>
+        <p class="text-neutral-700 text-sm sm:text-base font-medium leading-relaxed group-hover:text-neutral-900 transition-colors">
+          Each node is cross-referenced against known CVEs and misconfiguration patterns.
+        </p>
+      </div>
+
+      <div class="py-5 sm:py-6 border-b border-neutral-200/80 flex items-start gap-6 sm:gap-10 group hover:bg-white/60 px-3 rounded-xl transition-colors cursor-pointer">
+        <span class="text-lg sm:text-xl font-bold font-mono text-cyan-600 group-hover:text-neutral-900 transition-colors shrink-0">03</span>
+        <p class="text-neutral-700 text-sm sm:text-base font-medium leading-relaxed group-hover:text-neutral-900 transition-colors">
+          You receive a prioritized map — not a 40-page PDF nobody reads.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==================================================================
+     C. NEWS & BLOG
+     ================================================================== -->
+<section class="py-12 md:py-16 bg-[#fcfbf9] border-y border-neutral-200/60">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+      <div>
+        <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-neutral-500 mb-1">
+          <svg …>…</svg>
+          Latest Insights &amp; Intelligence
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 tracking-tight">
+          From the VUNVAULT News &amp; Blog
+        </h2>
+      </div>
+
+      <a href="blog.html" class="inline-flex items-center gap-1.5 text-sm font-semibold text-neutral-900 hover:text-neutral-600 transition-colors group">
+        <span>Explore all news &amp; reports</span>
+        <svg …>…</svg>
+      </a>
+    </div>
+
+    <!-- Dynamic news grid — populated from localStorage by the sync engine -->
+    <div class="vv-news-grid" id="vv-news-grid" aria-live="polite" aria-busy="true"></div>
+
+  </div>
+</section>
+<!-- ==================================================================
+     D. ORGANISATION SOLUTIONS  — buildOrgSolutions()
+     Injected immediately before #services-plans
+     ================================================================== -->
+<section class="py-12 md:py-16 bg-[#fcfbf9]">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+
+    <div class="text-center max-w-2xl mx-auto space-y-2 mb-8">
+      <span class="text-xs font-bold uppercase tracking-wider text-cyan-600 bg-cyan-50 px-3 py-1 rounded-full border border-cyan-200">Tailored Defense Strategies</span>
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 tracking-tight">How Can VUNVAULT Help You?</h2>
+      <p class="text-neutral-500 text-sm md:text-base">Select your organization type for customized vulnerability assessments.</p>
+    </div>
+
+    <div class="vv-seg-grid">
+
+      <!-- ---------- Small Business ---------- -->
+      <a href="services.html" class="vv-seg-card">
+        <div class="vv-seg-body">
+          <div class="vv-seg-top">
+            <h3 class="vv-seg-title">I run a Small Business</h3>
+            <span class="vv-seg-tag">Starter Scan</span>
+          </div>
+          <p class="vv-seg-text">
+            Affordable starter vulnerability scans with clear, actionable executive reporting.
+          </p>
+        </div>
+        <span class="vv-seg-arrow" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </span>
+      </a>
+
+      <!-- ---------- SACCO / Fintech ---------- -->
+      <a href="services.html" class="vv-seg-card">
+        <div class="vv-seg-body">
+          <div class="vv-seg-top">
+            <h3 class="vv-seg-title">I&rsquo;m in a SACCO or Fintech</h3>
+            <span class="vv-seg-tag">Compliance Ready</span>
+          </div>
+          <p class="vv-seg-text">
+            Regulation-aware security testing for financial institutions &amp; Central Bank readiness.
+          </p>
+        </div>
+        <span class="vv-seg-arrow" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </span>
+      </a>
+
+      <!-- ---------- IT / Enterprise ---------- -->
+      <a href="services.html" class="vv-seg-card">
+        <div class="vv-seg-body">
+          <div class="vv-seg-top">
+            <h3 class="vv-seg-title">I&rsquo;m in IT / Enterprise</h3>
+            <span class="vv-seg-tag">Retainer Protection</span>
+          </div>
+          <p class="vv-seg-text">
+            Full-scope retainer testing and board-ready reporting for complex estates.
+          </p>
+        </div>
+        <span class="vv-seg-arrow" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </span>
+      </a>
+
+      <!-- ---------- SOC ---------- -->
+      <a href="services.html" class="vv-seg-card">
+        <div class="vv-seg-body">
+          <div class="vv-seg-top">
+            <h3 class="vv-seg-title">I run a SOC / Security Team</h3>
+            <span class="vv-seg-tag">Purple Team</span>
+          </div>
+          <p class="vv-seg-text">
+            Adversary emulation, detection-rule validation and purple-team exercises that harden your SOC.
+          </p>
+        </div>
+        <span class="vv-seg-arrow" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==================================================================
+     E. PROACTIVE SECURITY ECOSYSTEM  — buildSecurityEcosystem()
+     Injected immediately before #services-plans
+     ================================================================== -->
+<section class="py-12 md:py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <div class="text-center max-w-3xl mx-auto mb-14 md:mb-18 space-y-3">
+      <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 tracking-tight">Proactive Security Ecosystem</h2>
+      <p class="text-neutral-500 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+        Comprehensive tools designed to map, analyze, and secure your infrastructure seamlessly.
+      </p>
+    </div>
+
+<div class="lg:col-span-8 space-y-6 md:space-y-8">
+<div class="lg:col-span-4 space-y-6 md:space-y-8">
+
+      <!-- ================= left column ================= -->
+      <div class="lg:col-span-8 space-y-6 md:space-y-8">
+
+<!-- ---------- Zero-Day Exploit Tracking card ---------- -->
+<div class="glass-card rounded-3xl p-6 sm:p-8 border border-neutral-200/90 shadow-sm hover:shadow-md transition-all duration-300">
+
+  <!-- card header -->
+  <div class="flex items-start gap-4 mb-6">
+    <div class="w-12 h-12 rounded-2xl bg-neutral-100 border border-neutral-200/80 flex items-center justify-center text-neutral-800 shadow-xs shrink-0">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bug w-6 h-6 stroke-[1.75]" aria-hidden="true">
+        <path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/>
+        <path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/>
+        <path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/>
+        <path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/>
+        <path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/>
+        <path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/>
+        <path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/>
+      </svg>
+    </div>
+    <div class="space-y-1">
+      <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 tracking-tight">Zero-Day Exploit Tracking Dashboard</h3>
+      <p class="text-neutral-500 text-sm leading-relaxed max-w-2xl">
+        Continuous coverage of past and active zero-days across cloud, endpoint, network, web, mobile and OT/ICS — with live exploitation status, CVSS severity and patch availability in one view.
+      </p>
+    </div>
+  </div>
+
+  <!-- dark console -->
+  <div class="rounded-2xl bg-neutral-900/95 text-neutral-100 p-4 sm:p-5 border border-neutral-800 shadow-2xl overflow-hidden font-sans">
+
+    <!-- console header -->
+    <div class="flex flex-wrap items-center justify-between gap-3 pb-3.5 border-b border-neutral-800 text-xs">
+      <div class="flex items-center gap-3">
+        <span class="font-extrabold tracking-wider text-white">VUNVAULT</span>
+        <span class="text-neutral-600">|</span>
+        <span class="text-neutral-300 font-semibold uppercase tracking-wider">Zero-Day Exploit Tracking</span>
+        <span class="text-neutral-600 hidden sm:inline">|</span>
+        <span id="zdet-clock" class="text-neutral-400 font-mono text-[11px] hidden sm:inline">--:--:-- UTC</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/50 border border-emerald-800/60 px-2 py-0.5 rounded-full">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          Live
+        </span>
+        <div class="w-6 h-6 rounded-full bg-neutral-700 flex items-center justify-center text-neutral-300 text-[10px] font-bold">ER</div>
+        <span class="text-neutral-300 font-medium text-xs hidden sm:inline">Dr. Evelyn Reed</span>
+      </div>
+    </div>
+
+    <!-- tabs -->
+    <div class="flex items-center gap-1 sm:gap-2 py-3 overflow-x-auto text-xs border-b border-neutral-800/80 no-scrollbar">
+      <button type="button" class="px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap cursor-pointer bg-neutral-800 text-white font-medium border border-neutral-700">Dashboard</button>
+      <button type="button" class="px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap cursor-pointer text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/50">Live Feed</button>
+      <button type="button" class="px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap cursor-pointer text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/50">Exploit DB</button>
+      <button type="button" class="px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap cursor-pointer text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/50">Patch Status</button>
+      <button type="button" class="px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap cursor-pointer text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/50">Vendors</button>
+      <button type="button" class="px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap cursor-pointer text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800/50">Reports</button>
+    </div>
+
+    <!-- key metrics -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 pt-4">
+      <article class="rounded-xl bg-neutral-800/50 border border-neutral-700/60 p-3 hover:border-neutral-600 transition-colors">
+        <div class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-radar w-3 h-3" aria-hidden="true"><path d="M19.07 4.93A10 10 0 0 0 6.99 3.34"/><path d="M4 6h.01"/><path d="M2.29 9.62a10 10 0 1 0 19.02-1.27"/><path d="M16.24 7.76a6 6 0 1 0-8.01 8.91"/><path d="M12 18h.01"/><path d="M17.99 11.66a6 6 0 0 1-2.22 4.7"/><circle cx="12" cy="12" r="2"/><path d="m13.41 10.59 5.66-5.66"/></svg>
+          Total Active Zero-Days
+        </div>
+        <div class="mt-1.5 text-2xl font-extrabold font-mono tracking-tight text-white">1,284</div>
+        <div class="mt-1 text-[10px] font-semibold text-rose-400">▲ 62 this week</div>
+      </article>
+
+      <article class="rounded-xl bg-neutral-800/50 border border-neutral-700/60 p-3 hover:border-neutral-600 transition-colors">
+        <div class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap w-3 h-3" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+          Weaponized in the Wild
+        </div>
+        <div class="mt-1.5 text-2xl font-extrabold font-mono tracking-tight text-white">37</div>
+        <div class="mt-1 text-[10px] font-semibold text-amber-400">● Active exploitation</div>
+      </article>
+      
+            <article class="rounded-xl bg-neutral-800/50 border border-neutral-700/60 p-3 hover:border-neutral-600 transition-colors">
+        <div class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check w-3 h-3" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+          Patched Vulnerabilities
+        </div>
+        <div class="mt-1.5 text-2xl font-extrabold font-mono tracking-tight text-white">37,910</div>
+        <div class="mt-1 text-[10px] font-semibold text-emerald-400">▼ 18% open backlog</div>
+      </article>
+
+      <article class="rounded-xl bg-neutral-800/50 border border-neutral-700/60 p-3 hover:border-neutral-600 transition-colors">
+        <div class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-timer w-3 h-3" aria-hidden="true"><path d="M10 2h4"/><path d="M12 14v-4"/><circle cx="12" cy="14" r="8"/></svg>
+          Mean Time to Patch
+        </div>
+        <div class="mt-1.5 text-2xl font-extrabold font-mono tracking-tight text-white">1.2<span class="text-sm text-neutral-400 ml-0.5">s</span></div>
+        <div class="mt-1 text-[10px] font-semibold text-cyan-400">Automated validation</div>
+      </article>
+
+    </div>
+
+    <!-- main grid: stream + status -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+
+      <!-- ============ live intelligence stream ============ -->
+      <div class="md:col-span-2 space-y-2">
+
+        <div class="flex items-center justify-between text-[11px] font-semibold text-neutral-400 uppercase tracking-wider mb-2">
+          <span class="flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
+            Live Zero-Day Intelligence Stream
+          </span>
+          <span class="text-neutral-500 font-mono text-[10px] normal-case">
+            <span id="zdet-refreshed">Auto-refresh</span> · <span id="zdet-countdown">8s</span>
+          </span>
+        </div>
+
+        <div id="zdet-feed" class="space-y-2 max-h-[340px] overflow-y-auto pr-1">
+
+          <!-- row 1 -->
+          <article class="group p-2.5 sm:p-3 rounded-xl bg-neutral-800/60 hover:bg-neutral-800 border border-neutral-700/60 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="space-y-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider bg-rose-500/10 text-rose-300 border-rose-500/30">Critical</span>
+                <code class="text-neutral-200 text-[11px] font-mono font-bold">CVE-2026-21447</code>
+                <span class="text-neutral-500 text-[11px] font-mono">14:36:45 UTC</span>
+              </div>
+              <div class="text-xs font-semibold text-neutral-100 group-hover:text-cyan-400 transition-colors truncate">Apache Struts 2 — OGNL injection RCE</div>
+              <div class="text-[11px] text-neutral-500 truncate">Web &amp; API · Apache Software Foundation · CVSS 9.8</div>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-center shrink-0">
+              <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-rose-500 text-white">● Unpatched</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right w-3.5 h-3.5 text-neutral-500 group-hover:text-white transition-colors" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </article>
+
+          <!-- row 2 -->
+          <article class="group p-2.5 sm:p-3 rounded-xl bg-neutral-800/60 hover:bg-neutral-800 border border-neutral-700/60 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="space-y-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider bg-rose-500/10 text-rose-300 border-rose-500/30">Critical</span>
+                <code class="text-neutral-200 text-[11px] font-mono font-bold">CVE-2026-0091</code>
+                <span class="text-neutral-500 text-[11px] font-mono">14:35:12 UTC</span>
+              </div>
+              <div class="text-xs font-semibold text-neutral-100 group-hover:text-cyan-400 transition-colors truncate">Cisco IOS XE — Web UI authentication bypass</div>
+              <div class="text-[11px] text-neutral-500 truncate">Network &amp; Edge · Cisco · CVSS 9.1</div>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-center shrink-0">
+              <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-500 text-white">● Patch in progress</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right w-3.5 h-3.5 text-neutral-500 group-hover:text-white transition-colors" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </article>
+
+          <!-- row 3 -->
+          <article class="group p-2.5 sm:p-3 rounded-xl bg-neutral-800/60 hover:bg-neutral-800 border border-neutral-700/60 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="space-y-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider bg-orange-500/10 text-orange-300 border-orange-500/30">High</span>
+                <code class="text-neutral-200 text-[11px] font-mono font-bold">CVE-2026-3327</code>
+                <span class="text-neutral-500 text-[11px] font-mono">14:32:01 UTC</span>
+              </div>
+              <div class="text-xs font-semibold text-neutral-100 group-hover:text-cyan-400 transition-colors truncate">Oracle WebLogic Server — deserialization RCE</div>
+              <div class="text-[11px] text-neutral-500 truncate">Web &amp; API · Oracle · CVSS 8.8</div>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-center shrink-0">
+              <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-rose-500 text-white">● Unpatched</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right w-3.5 h-3.5 text-neutral-500 group-hover:text-white transition-colors" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </article>
+                    <!-- row 4 -->
+          <article class="group p-2.5 sm:p-3 rounded-xl bg-neutral-800/60 hover:bg-neutral-800 border border-neutral-700/60 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="space-y-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider bg-orange-500/10 text-orange-300 border-orange-500/30">High</span>
+                <code class="text-neutral-200 text-[11px] font-mono font-bold">CVE-2026-18820</code>
+                <span class="text-neutral-500 text-[11px] font-mono">14:28:55 UTC</span>
+              </div>
+              <div class="text-xs font-semibold text-neutral-100 group-hover:text-cyan-400 transition-colors truncate">Microsoft Windows Print Spooler — privilege escalation</div>
+              <div class="text-[11px] text-neutral-500 truncate">Endpoint / Desktop · Microsoft · CVSS 8.1</div>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-center shrink-0">
+              <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-600 text-white">● Patched</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right w-3.5 h-3.5 text-neutral-500 group-hover:text-white transition-colors" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </article>
+
+          <!-- row 5 -->
+          <article class="group p-2.5 sm:p-3 rounded-xl bg-neutral-800/60 hover:bg-neutral-800 border border-neutral-700/60 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="space-y-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider bg-rose-500/10 text-rose-300 border-rose-500/30">Critical</span>
+                <code class="text-neutral-200 text-[11px] font-mono font-bold">CVE-2025-53112</code>
+                <span class="text-neutral-500 text-[11px] font-mono">14:25:11 UTC</span>
+              </div>
+              <div class="text-xs font-semibold text-neutral-100 group-hover:text-cyan-400 transition-colors truncate">Google Chrome V8 — type confusion in JIT</div>
+              <div class="text-[11px] text-neutral-500 truncate">Endpoint / Desktop · Google · CVSS 9.6</div>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-center shrink-0">
+              <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-600 text-white">● Patched</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right w-3.5 h-3.5 text-neutral-500 group-hover:text-white transition-colors" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </article>
+
+          <!-- row 6 -->
+          <article class="group p-2.5 sm:p-3 rounded-xl bg-neutral-800/60 hover:bg-neutral-800 border border-neutral-700/60 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div class="space-y-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider bg-orange-500/10 text-orange-300 border-orange-500/30">High</span>
+                <code class="text-neutral-200 text-[11px] font-mono font-bold">CVE-2026-1104</code>
+                <span class="text-neutral-500 text-[11px] font-mono">14:21:40 UTC</span>
+              </div>
+              <div class="text-xs font-semibold text-neutral-100 group-hover:text-cyan-400 transition-colors truncate">Linux Kernel io_uring — use-after-free memory corruption</div>
+              <div class="text-[11px] text-neutral-500 truncate">OT / ICS · Linux Kernel · CVSS 7.8</div>
+            </div>
+            <div class="flex items-center gap-2 self-start sm:self-center shrink-0">
+              <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-600 text-white">● Patched</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right w-3.5 h-3.5 text-neutral-500 group-hover:text-white transition-colors" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- ============ system status + quick actions ============ -->
+      <div class="bg-neutral-800/40 rounded-xl p-3.5 border border-neutral-700/60 space-y-4 flex flex-col justify-between">
+
+        <div class="space-y-4">
+          <div>
+            <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2">Tracking System Status</div>
+            <div class="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check w-3.5 h-3.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+              All Sensors Nominal
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex items-center justify-between text-xs border-b border-neutral-700/60 pb-2">
+              <span class="text-neutral-400">Active Zero-Days</span>
+              <span class="font-bold font-mono text-rose-400">1,284</span>
+            </div>
+            <div class="flex items-center justify-between text-xs border-b border-neutral-700/60 pb-2">
+              <span class="text-neutral-400">Weaponized in Wild</span>
+              <span class="font-bold font-mono text-amber-400">37</span>
+            </div>
+            <div class="flex items-center justify-between text-xs border-b border-neutral-700/60 pb-2">
+              <span class="text-neutral-400">Critical Unpatched</span>
+              <span class="font-bold font-mono text-rose-400">46</span>
+            </div>
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-neutral-400">Sensors Online</span>
+              <span class="text-emerald-400 text-[10px] font-semibold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800">412 / 412</span>
+            </div>
+          </div>
+
+          <div class="pt-1 space-y-1.5">
+            <div class="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+              <span>Patch Coverage</span>
+              <span class="font-mono text-cyan-400">68%</span>
+            </div>
+            <div class="relative h-1.5 w-full rounded-full bg-neutral-700/70 overflow-hidden zdet-sweep">
+              <span class="absolute inset-y-0 left-0 rounded-full bg-cyan-500" style="width: 68%;"></span>
+            </div>
+          </div>
+        </div>
+        
+                <div class="pt-3 border-t border-neutral-700/60">
+          <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2">Quick Actions</div>
+          <div class="grid grid-cols-2 gap-1.5 text-[10px]">
+            <button type="button" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-200 py-1.5 px-2 rounded font-medium transition-colors text-center cursor-pointer border border-neutral-700/60">Run CVE Scan</button>
+            <button type="button" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-200 py-1.5 px-2 rounded font-medium transition-colors text-center cursor-pointer border border-neutral-700/60">Isolate Asset</button>
+            <button type="button" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-200 py-1.5 px-2 rounded font-medium transition-colors text-center cursor-pointer border border-neutral-700/60">Push Patch</button>
+            <button type="button" class="bg-neutral-800 hover:bg-neutral-700 text-neutral-200 py-1.5 px-2 rounded font-medium transition-colors text-center cursor-pointer border border-neutral-700/60">Advisories</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- console footer -->
+    <p class="pt-4 mt-4 border-t border-neutral-800 text-[10px] text-neutral-500 leading-relaxed">
+      Refreshed continuously from NVD, vendor advisories and the VUNVAULT sensor network. Times shown in UTC.
+    </p>
+
+  </div>
+</div>
+
+        <!-- ---------- Security Advisory card ---------- -->
+        <div class="glass-card rounded-3xl p-6 sm:p-8 border border-neutral-200/90 shadow-sm hover:shadow-md transition-all duration-300">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div class="space-y-3 max-w-xl">
+              <div class="w-12 h-12 rounded-2xl bg-neutral-100 border border-neutral-200/80 flex items-center justify-center text-neutral-800 shadow-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield w-6 h-6 stroke-[1.75]" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 tracking-tight">Security Advisory</h3>
+              <p class="text-neutral-500 text-sm leading-relaxed">
+                Expert guidance tailored to your risk profile. Actionable steps to remediate identified vulnerabilities swiftly.
+              </p>
+            </div>
+            <div class="shrink-0 pt-2 sm:pt-0">
+              <button class="inline-flex items-center gap-2 text-sm font-semibold text-neutral-900 hover:text-neutral-600 transition-colors group cursor-pointer">
+                <span>Get advice</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- ================= right column ================= -->
+      <div class="lg:col-span-4 space-y-6 md:space-y-8">
+
+        <!-- ---------- Network Mapping card ---------- -->
+        <div class="glass-card rounded-3xl p-6 sm:p-8 border border-neutral-200/90 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between min-h-[580px]">
+
+          <div class="space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-neutral-100 border border-neutral-200/80 flex items-center justify-center text-neutral-800 shadow-xs">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-network w-6 h-6 stroke-[1.75]" aria-hidden="true"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></svg>
+            </div>
+            <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 tracking-tight">Network Mapping</h3>
+            <p class="text-neutral-500 text-sm leading-relaxed">
+              Visualize your entire attack surface. Automatically discover exposed assets and unmapped connections.
+            </p>
+          </div>
+
+          <div class="my-6 rounded-2xl bg-neutral-950/90 p-4 border border-neutral-800 shadow-inner relative overflow-hidden min-h-[260px] flex items-center justify-center">
+            <div class="absolute inset-0 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
+
+            <svg class="w-full h-48 relative z-10" viewBox="0 0 300 200">
+              <path d="M 150 40 L 80 100" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="4 4" class="animate-pulse"/>
+              <path d="M 150 40 L 220 100" stroke="#38bdf8" stroke-width="1.5"/>
+              <path d="M 80 100 L 60 160" stroke="#38bdf8" stroke-width="1.5"/>
+              <path d="M 80 100 L 130 160" stroke="#38bdf8" stroke-width="1.5"/>
+              <path d="M 220 100 L 240 160" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+              <g class="cursor-pointer group">
+                <circle cx="150" cy="40" r="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                <circle cx="150" cy="40" r="6.15" fill="#38bdf8"/>
+                <text x="150" y="16" text-anchor="middle" fill="#cbd5e1" font-size="9">API Gateway</text>
+              </g>
+              <g class="cursor-pointer group">
+                <circle cx="80" cy="100" r="14" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                <circle cx="80" cy="100" r="5.38" fill="#38bdf8"/>
+                <text x="58" y="103" text-anchor="end" fill="#cbd5e1" font-size="9">Core-K8s</text>
+              </g>
+              <g class="cursor-pointer group">
+                <circle cx="220" cy="100" r="14" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                <circle cx="220" cy="100" r="5.38" fill="#38bdf8"/>
+                <text x="242" y="103" text-anchor="start" fill="#cbd5e1" font-size="9">DB-Main</text>
+              </g>
+              <g class="cursor-pointer group">
+                <circle cx="60" cy="160" r="10" fill="#0f172a" stroke="#34d399" stroke-width="2"/>
+                <circle cx="60" cy="160" r="3.85" fill="#34d399"/>
+                <text x="60" y="184" text-anchor="middle" fill="#cbd5e1" font-size="9">Auth</text>
+              </g>
+              <g class="cursor-pointer group">
+                <circle cx="130" cy="160" r="10" fill="#0f172a" stroke="#34d399" stroke-width="2"/>
+                <circle cx="130" cy="160" r="3.85" fill="#34d399"/>
+                <text x="130" y="184" text-anchor="middle" fill="#cbd5e1" font-size="9">Edge CDN</text>
+              </g>
+              <g class="cursor-pointer group">
+                <circle cx="240" cy="160" r="12" fill="#0f172a" stroke="#f43f5e" stroke-width="2"/>
+                <circle cx="240" cy="160" r="4.6" fill="#f43f5e"/>
+                <text x="240" y="186" text-anchor="middle" fill="#cbd5e1" font-size="9">Exposed</text>
+              </g>
+            </svg>
+
+            <div class="absolute bottom-2 left-3 right-3 flex items-center justify-between text-[10px] text-neutral-400 bg-neutral-900/90 px-2.5 py-1 rounded border border-neutral-800">
+              <span>Selected Node: <strong class="text-cyan-400">Core-K8s</strong></span>
+              <span class="text-emerald-400">Auto-Discovered</span>
+            </div>
+          </div>
+
+          <div>
+            <button class="inline-flex items-center gap-2 text-sm font-semibold text-neutral-900 hover:text-neutral-600 transition-colors group cursor-pointer">
+              <span>Explore mapping</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- ---------- Image card ---------- -->
+        <div class="relative rounded-3xl overflow-hidden shadow-lg group border border-neutral-200/80 min-h-[280px] md:min-h-[320px] flex items-end">
+          <img
+            src="soft1.jpg"
+           alt="Soft Protection for Hard Data Glass Cubes"
+            class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-white/90 via-white/30 to-transparent"></div>
+          <div class="relative z-10 p-6 md:p-8">
+            <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-neutral-900 tracking-tight">Soft Protection for Hard Data.</h3>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ==================================================================
+     ACADEMY — LEARNING TRACKS
+     ================================================================== -->
+<section id="academy" class="py-14 md:py-20 bg-[#fcfbf9] border-t border-neutral-200/80">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+
+    <div class="text-center max-w-2xl mx-auto space-y-3">
+      <span class="text-xs font-bold uppercase tracking-wider text-cyan-600 bg-cyan-50 px-3.5 py-1 rounded-full border border-cyan-200">
+        VUNVAULT Academy
+      </span>
+      <h2 class="text-3xl sm:text-4xl font-bold text-neutral-900 tracking-tight">
+        Learning tracks built for the real threat landscape
+      </h2>
+      <p class="text-neutral-500 text-sm md:text-base max-w-xl mx-auto">
+        Structured, hands-on curriculum for defenders, analysts and offensive engineers with free certificate.
+      </p>
+    </div>
+
+    <div class="vv-academy-grid">
+
+      <!-- ---------- Track 1 ---------- -->
+      <article class="vv-track">
+        <div class="vv-track-thumb">
+          <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="vvT1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#0d1522"/>
+                <stop offset="1" stop-color="#05080e"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="225" fill="url(#vvT1)"/>
+            <g stroke="#3B99FC" stroke-opacity=".35" stroke-width="1.2" fill="none">
+              <path d="M80 60 L200 112"/>
+              <path d="M200 112 L320 62"/>
+              <path d="M200 112 L150 182"/>
+              <path d="M200 112 L268 178"/>
+            </g>
+            <g fill="#3B99FC">
+              <circle cx="80" cy="60" r="5"/>
+              <circle cx="320" cy="62" r="5"/>
+              <circle cx="150" cy="182" r="5"/>
+              <circle cx="268" cy="178" r="5"/>
+            </g>
+            <circle cx="200" cy="112" r="15" fill="#3B99FC" fill-opacity=".18"/>
+            <circle cx="200" cy="112" r="6" fill="#6FB6FF"/>
+          </svg>
+          <span class="vv-track-badge">Foundations</span>
+        </div>
+
+        <div class="vv-track-body">
+          <h3 class="vv-track-title">Networking &amp; Defense Foundations</h3>
+          <p class="vv-track-text">
+            Build the protocol-level intuition every defender needs — from TCP/IP and DNS to firewalls,
+            segmentation and secure architecture.
+          </p>
+          <div class="vv-track-skills">
+            <span class="vv-skill">TCP/IP</span>
+            <span class="vv-skill">DNS &amp; TLS</span>
+            <span class="vv-skill">Firewalls</span>
+            <span class="vv-skill">Hardening</span>
+          </div>
+          <a href="course-foundations.html" class="vv-track-cta">
+            <span>Explore Track</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- ---------- Track 2 ---------- -->
+      <article class="vv-track">
+        <div class="vv-track-thumb">
+          <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="vvT2" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#0d1522"/>
+                <stop offset="1" stop-color="#05080e"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="225" fill="url(#vvT2)"/>
+            <g fill="none" stroke="#3B99FC" stroke-opacity=".3" stroke-width="1.2">
+              <circle cx="200" cy="112" r="34"/>
+              <circle cx="200" cy="112" r="62"/>
+              <circle cx="200" cy="112" r="90"/>
+              <path d="M200 112 L200 22"/>
+              <path d="M200 112 L290 112"/>
+            </g>
+            <path d="M200 112 L268 66" stroke="#6FB6FF" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="268" cy="66" r="5" fill="#f43f5e"/>
+            <circle cx="200" cy="112" r="5" fill="#6FB6FF"/>
+          </svg>
+          <span class="vv-track-badge">Blue Team</span>
+        </div>
+
+        <div class="vv-track-body">
+          <h3 class="vv-track-title">SOC Analyst &amp; Incident Response</h3>
+          <p class="vv-track-text">
+            Triage alerts, hunt threats and run structured incident response playbooks inside a live
+            SIEM and EDR lab environment.
+          </p>
+          <div class="vv-track-skills">
+            <span class="vv-skill">SIEM</span>
+            <span class="vv-skill">Threat Hunting</span>
+            <span class="vv-skill">DFIR</span>
+            <span class="vv-skill">MITRE ATT&amp;CK</span>
+          </div>
+          <a href="course-foundations.html" class="vv-track-cta">
+            <span>Explore Track</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- ---------- Track 3 ---------- -->
+      <article class="vv-track">
+        <div class="vv-track-thumb">
+          <svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="vvT3" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#0d1522"/>
+                <stop offset="1" stop-color="#05080e"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="225" fill="url(#vvT3)"/>
+            <g stroke="#3B99FC" stroke-opacity=".4" fill="none" stroke-width="1.6">
+              <rect x="110" y="55" width="180" height="118" rx="10"/>
+              <path d="M110 82h180"/>
+              <path d="M150 118l-18 14 18 14"/>
+              <path d="M250 118l18 14-18 14"/>
+              <path d="M216 112l-32 40"/>
+            </g>
+            <g fill="#3B99FC">
+              <circle cx="126" cy="69" r="3.5"/>
+              <circle cx="138" cy="69" r="3.5" fill-opacity=".6"/>
+              <circle cx="150" cy="69" r="3.5" fill-opacity=".35"/>
+            </g>
+          </svg>
+          <span class="vv-track-badge">Red Team</span>
+        </div>
+
+        <div class="vv-track-body">
+          <h3 class="vv-track-title">Ethical Hacking &amp; Web Pentesting</h3>
+          <p class="vv-track-text">
+            Recon, exploit and report. Work through OWASP Top 10 labs, API abuse chains and
+            real-world bug-bounty style scenarios.
+          </p>
+          <div class="vv-track-skills">
+            <span class="vv-skill">OWASP Top 10</span>
+            <span class="vv-skill">Burp Suite</span>
+            <span class="vv-skill">API Security</span>
+            <span class="vv-skill">Reporting</span>
+          </div>
+          <a href="course-foundations.html" class="vv-track-cta">
+            <span>Explore Track</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+    </div>
+</section>
+
+        <!-- ==================================================================
+     PRICING — MINIMALIST 3-TIER
+     ================================================================== -->
+<section id="pricing" class="py-14 md:py-20 bg-[#fcfbf9] border-t border-neutral-200/80">
+  <!-- Backwards-compatibility anchor for any JS targeting #services-plans -->
+  <span id="services-plans" class="anchor-offset" aria-hidden="true"></span>
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+
+    <div class="text-center max-w-2xl mx-auto space-y-3">
+      <span class="text-xs font-bold uppercase tracking-wider text-cyan-600 bg-cyan-50 px-3.5 py-1 rounded-full border border-cyan-200">
+        Plans &amp; Pricing
+      </span>
+      <h2 class="text-3xl sm:text-4xl font-bold text-neutral-900 tracking-tight">
+        Accessible security pricing for African &amp; global tech
+      </h2>
+      <p class="text-neutral-500 text-sm md:text-base max-w-lg mx-auto">
+        High-impact penetration testing and vulnerability assessments at balanced, competitive starting rates.
+      </p>
+    </div>
+
+    <div class="vv-plan-grid">
+
+      <!-- ---------- Starter ---------- -->
+      <article class="vv-plan">
+        <header class="vv-plan-head">
+          <h3 class="vv-plan-name">Small Business / Starter</h3>
+          <span class="vv-plan-tag">Starter</span>
+        </header>
+
+        <div class="vv-plan-price">
+          <span class="vv-plan-amount">$299</span>
+          <span class="vv-plan-period">/ scan</span>
+        </div>
+
+        <p class="vv-plan-desc">
+          Affordable starter vulnerability scans with clear, actionable executive reporting.
+        </p>
+
+        <ul class="vv-plan-list">
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            <span>External IP &amp; domain enumeration</span>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            <span>Port &amp; SSL vulnerability check</span>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            <span>Executive summary + remediation checklist</span>
+          </li>
+        </ul>
+
+        <a href="services.html" class="vv-plan-cta">
+          <span>Learn More</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </a>
+      </article>
+
+      <!-- ---------- SACCO / Fintech ---------- -->
+      <article class="vv-plan vv-plan--featured">
+        <header class="vv-plan-head">
+          <h3 class="vv-plan-name">SACCO &amp; Fintech Compliance</h3>
+          <span class="vv-plan-tag">Recommended</span>
+        </header>
+
+        <div class="vv-plan-price">
+          <span class="vv-plan-amount">$899</span>
+          <span class="vv-plan-period">/ assessment</span>
+        </div>
+
+        <p class="vv-plan-desc">
+          Regulation-aware testing for financial institutions, M-Pesa gateways and Central Bank readiness.
+        </p>
+
+        <ul class="vv-plan-list">
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            <span>Full external &amp; API gateway assessment</span>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            <span>Central Bank regulatory audit mapping</span>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            <span>Mobile app &amp; M-Pesa security check</span>
+          </li>
+        </ul>
+
+        <a href="services.html" class="vv-plan-cta">
+          <span>Learn More</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </a>
+      </article>
+
+      <!-- ---------- Enterprise ---------- -->
+      <article class="vv-plan">
+        <header class="vv-plan-head">
+          <h3 class="vv-plan-name">IT / Enterprise Retainer</h3>
+          <span class="vv-plan-tag">Retainer</span>
+        </header>
+
+        <div class="vv-plan-price">
+          <span class="vv-plan-amount">$2,499</span>
+          <span class="vv-plan-period">/ month</span>
+        </div>
+
+        <p class="vv-plan-desc">
+          Full-scope retainer testing, continuous red teaming and board-ready reporting.
+        </p>
+
+        <ul class="vv-plan-list">
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            <span>24/7 attack surface monitoring</span>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            <span>Quarterly penetration testing</span>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+            <span>Dedicated security architect</span>
+          </li>
+        </ul>
+
+        <a href="services.html" class="vv-plan-cta">
+          <span>Learn More</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </a>
+      </article>
+
+    </div>
+
+    <p class="text-center text-xs text-neutral-500">
+      All plans include a named engagement lead, encrypted report delivery and a post-remediation re-test window.
+    </p>
+  </div>
+</section>
+        
+
+        <!-- =============================================================
+             PRESS & MEDIA
+        ============================================================== -->
+        <section id="press-media" class="py-14 md:py-20 bg-[#fcfbf9] border-t border-neutral-200/80">
+          <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            <div class="flex items-center gap-2">
+              <span class="h-[2px] w-6 bg-cyan-600 rounded-full"></span>
+              <span class="text-xs font-bold uppercase tracking-[0.2em] text-cyan-700">PRESS &amp; MEDIA</span>
+            </div>
+            <div class="space-y-4 max-w-3xl">
+              <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-900 tracking-tight leading-[1.15]">For journalists and partners</h2>
+              <p class="text-neutral-600 text-base sm:text-lg leading-relaxed font-normal">VUNVAULT is an Africa-rooted cybersecurity firm headquartered in Nairobi, Kenya, providing penetration testing, vulnerability assessments and security education to organizations of every size, across Africa and worldwide.</p>
+            </div>
+            <div class="glass-card rounded-3xl p-6 sm:p-8 border border-neutral-200/90 relative overflow-hidden shadow-xs space-y-4">
+              <div class="absolute top-6 left-6 text-neutral-200/60 pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-quote w-16 h-16 stroke-[1]" aria-hidden="true">
+                  <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
+                  <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
+                </svg>
+              </div>
+              <blockquote class="relative z-10 text-neutral-800 text-sm sm:text-base md:text-lg font-medium leading-relaxed pl-4 border-l-4 border-indigo-600">“The Minnesota attacks were not sophisticated, and that is exactly what makes them dangerous. Attackers simply found control systems left connected to the internet, often with default passwords. Every utility should treat perimeter security as mission critical.”</blockquote>
+              <div class="pt-2 flex items-center justify-between text-xs text-neutral-500 font-mono">
+                <span>— VUNVAULT Threat Intelligence Commentary</span>
+                <span class="text-cyan-700 font-bold">Featured in Global Tech Press</span>
+              </div>
+            </div>
+            <div class="p-6 rounded-2xl bg-neutral-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div class="space-y-1 text-center sm:text-left">
+                <h4 class="font-bold text-sm">Media Inquiries &amp; Interview Requests</h4>
+                <p class="text-xs text-neutral-400">Direct press contact: <code class="text-cyan-400 font-mono">press@vunvault.com</code></p>
+              </div>
+              <div class="flex items-center gap-3">
+                <a href="mailto:press@vunvault.com" class="bg-cyan-400 hover:bg-cyan-300 text-neutral-950 text-xs font-bold px-4 py-2.5 rounded-full transition-colors flex items-center gap-1.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail w-3.5 h-3.5" aria-hidden="true">
+                    <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                  </svg>
+                  <span>Contact Press Office</span>
+                </a>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================
+             CONTRIBUTORS
+        ============================================================== -->
+        <section id="contributors" class="contributors py-14 md:py-20 border-t border-neutral-200/80">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <header class="contributors-header">
+              <div class="flex items-center gap-2">
+                <span class="h-[2px] w-6 bg-cyan-600 rounded-full"></span>
+                <span class="text-xs font-bold uppercase tracking-[0.2em] text-cyan-700">CONTRIBUTORS</span>
+              </div>
+              <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-neutral-900 tracking-tight leading-[1.15]">The people behind the defense</h2>
+              <p class="text-neutral-500 text-base sm:text-lg leading-relaxed max-w-2xl">
+                Ethical hackers, security engineers and threat researchers building VUNVAULT’s detection, automation and education stack.
+              </p>
+            </header>
+
+            <div class="contributors-grid">
+
+              <article class="contributor-card circular">
+                <div class="contributor-avatar-wrap">
+                  <img class="contributor-avatar"
+                       src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%230f172a'/%3E%3Ccircle cx='60' cy='46' r='22' fill='%2338bdf8'/%3E%3Cpath d='M18 112c0-24 19-38 42-38s42 14 42 38z' fill='%2338bdf8'/%3E%3C/svg%3E"
+                       alt="Portrait of Amara Njoroge" width="120" height="120" loading="lazy">
+                </div>
+                <h4 class="contributor-name">Amara Njoroge</h4>
+                <p class="contributor-role">Offensive Security Lead</p>
+                <p class="contributor-bio">Designs and runs red-team engagements for SACCOs, fintechs and M-Pesa gateway providers across East Africa.</p>
+              </article>
+
+              <article class="contributor-card circular">
+                <div class="contributor-avatar-wrap">
+                  <img class="contributor-avatar"
+                       src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%230f172a'/%3E%3Ccircle cx='60' cy='46' r='22' fill='%2334d399'/%3E%3Cpath d='M18 112c0-24 19-38 42-38s42 14 42 38z' fill='%2334d399'/%3E%3C/svg%3E"
+                       alt="Portrait of Daniel Mwangi" width="120" height="120" loading="lazy">
+                </div>
+                <h4 class="contributor-name">Daniel Mwangi</h4>
+                <p class="contributor-role">Security Automation Engineer</p>
+                <p class="contributor-bio">Builds the continuous attack-surface enumeration agents and automated patch-validation CLI behind the VUNVAULT engine.</p>
+              </article>
+
+              <article class="contributor-card circular">
+                <div class="contributor-avatar-wrap">
+                  <img class="contributor-avatar"
+                       src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%230f172a'/%3E%3Ccircle cx='60' cy='46' r='22' fill='%23a78bfa'/%3E%3Cpath d='M18 112c0-24 19-38 42-38s42 14 42 38z' fill='%23a78bfa'/%3E%3C/svg%3E"
+                       alt="Portrait of Fatima Hassan" width="120" height="120" loading="lazy">
+                </div>
+                <h4 class="contributor-name">Fatima Hassan</h4>
+                <p class="contributor-role">Threat Intelligence Analyst</p>
+                <p class="contributor-bio">Curates the zero-day tracking feed, correlates CVE data with vendor advisories and authors VUNVAULT threat briefings.</p>
+              </article>
+
+              <article class="contributor-card circular">
+                <div class="contributor-avatar-wrap">
+                  <img class="contributor-avatar"
+                       src="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' fill='%230f172a'/%3E%3Ccircle cx='60' cy='46' r='22' fill='%23fbbf24'/%3E%3Cpath d='M18 112c0-24 19-38 42-38s42 14 42 38z' fill='%23fbbf24'/%3E%3C/svg%3E"
+                       alt="Portrait of Brian Otieno" width="120" height="120" loading="lazy">
+                </div>
+                <h4 class="contributor-name">Brian Otieno</h4>
+                <p class="contributor-role">Compliance &amp; Curriculum Lead</p>
+                <p class="contributor-bio">Maps audit findings to Central Bank frameworks and authors the VUNVAULT Academy cybersecurity foundations course.</p>
+              </article>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================
+             CONTACT & PARTNERSHIPS
+        ============================================================== -->
+        <section id="contact" class="py-14 md:py-20 bg-[#fcfbf9] border-t border-neutral-200/80">
+          <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-cyan-600">
+                <span class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>Contact &amp; Partnerships
+              </div>
+              <h2 class="text-3xl sm:text-4xl font-bold text-neutral-900 tracking-tight">Get in Touch with VUNVAULT</h2>
+              <p class="text-neutral-500 text-base sm:text-lg max-w-2xl leading-relaxed">Reach the team directly to discuss an assessment, ask a question or become a partner.</p>
+            </div>
+
+            <div class="space-y-4 max-w-3xl">
+              <a href="https://wa.me/254705998032" target="_blank" rel="noopener noreferrer" class="p-5 sm:p-6 rounded-2xl glass-card border border-neutral-200/80 hover:border-neutral-900 transition-all duration-200 flex items-center gap-5 group cursor-pointer">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone w-6 h-6 stroke-[1.75]" aria-hidden="true">
+                    <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path>
+                  </svg>
+                </div>
+                <div class="space-y-0.5">
+                  <div class="text-[11px] font-bold uppercase tracking-widest text-neutral-400">WHATSAPP</div>
+                  <div class="text-lg sm:text-xl font-extrabold text-neutral-900 group-hover:text-indigo-600 transition-colors font-mono">+254 705 998 032</div>
+                </div>
+              </a>
+
+              <a href="mailto:support@vunvault.com" class="p-5 sm:p-6 rounded-2xl glass-card border border-neutral-200/80 hover:border-neutral-900 transition-all duration-200 flex items-center gap-5 group cursor-pointer">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold shrink-0 shadow-xs group-hover:scale-105 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail w-6 h-6 stroke-[1.75]" aria-hidden="true">
+                    <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path>
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                  </svg>
+                </div>
+                <div class="space-y-0.5">
+                  <div class="text-[11px] font-bold uppercase tracking-widest text-neutral-400">EMAIL</div>
+                  <div class="text-lg sm:text-xl font-extrabold text-neutral-900 group-hover:text-indigo-600 transition-colors font-mono">info@vunvault.com</div>
+                </div>
+              </a>
+
+              <div class="p-5 sm:p-6 rounded-2xl glass-card border border-neutral-200/80 flex items-start gap-5">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold shrink-0 shadow-xs mt-0.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-6 h-6 stroke-[1.75]" aria-hidden="true">
+                    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                </div>
+                <div class="space-y-0.5">
+                  <div class="text-[11px] font-bold uppercase tracking-widest text-neutral-400">BASED IN</div>
+                  <div class="text-base sm:text-lg font-bold text-neutral-900 leading-snug">Nairobi, Kenya — serving clients across Africa and worldwide.</div>
+                </div>
+              </div>
+
+              <!-- Direct social links (no modals) -->
+              <div class="pt-4 flex items-center gap-3" aria-label="VUNVAULT social profiles">
+                <a class="social-link" href="https://x.com/vunvault" target="_blank" rel="noopener noreferrer" aria-label="VUNVAULT on X (Twitter)" title="X (Twitter)">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                  </svg>
+                </a>
+
+                <a class="social-link" href="https://www.linkedin.com/company/vunvault" target="_blank" rel="noopener noreferrer" aria-label="VUNVAULT on LinkedIn" title="LinkedIn">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"></path>
+                  </svg>
+                </a>
+
+                <a class="social-link" href="https://github.com/vunvault" target="_blank" rel="noopener noreferrer" aria-label="VUNVAULT on GitHub" title="GitHub">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
+                  </svg>
+                </a>
+
+                <a class="social-link" href="https://wa.me/254705998032" target="_blank" rel="noopener noreferrer" aria-label="VUNVAULT on WhatsApp" title="WhatsApp">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- =================================================================
+           FOOTER
+      ================================================================== -->
+      <footer class="mt-20 border-t border-neutral-200/80 bg-[#fcfbf9] text-neutral-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12">
+
+            <div class="md:col-span-4 space-y-4">
+              <a href="index.html" class="flex items-center gap-3" aria-label="VUNVAULT home">
+                <span class="w-9 h-9 rounded-xl bg-black flex items-center justify-center shrink-0 shadow-xs">
+       <img src="logo.svg" alt="VUNVAULT" class="w-6 h-6 object-contain">
+
+                    <path d="M40 24 L78 104 L116 24" stroke="#ffffff" stroke-width="14"></path>
+                    <path d="M130 24 L236 24 L168 104 L138 54" stroke="#ffffff" stroke-width="14"></path>
+                  </svg>
+                </span>
+                <span class="font-extrabold text-2xl tracking-wider text-neutral-900">VUNVAULT</span>
+              </a>
+              <p class="text-neutral-500 text-sm max-w-sm leading-relaxed">Africa-rooted, worldwide penetration testing, vulnerability assessments and cybersecurity education.</p>
+              <div class="pt-2 flex items-center gap-3">
+                <span class="inline-flex items-center gap-1.5 text-xs text-neutral-600 bg-neutral-200/60 px-3 py-1 rounded-full font-medium">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>System Operational
+                </span>
+              </div>
+            </div>
+
+            <div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8">
+              <div class="space-y-3.5">
+                <h4 class="text-xs font-bold text-neutral-900 tracking-wider uppercase">Resources</h4>
+                <ul class="space-y-2 text-sm text-neutral-500">
+                  <li><a href="news.html" class="hover:text-neutral-900 transition-colors">News</a></li>
+                  <li><a href="blog.html" class="hover:text-neutral-900 transition-colors">Blog</a></li>
+                  <li><button type="button" class="hover:text-neutral-900 transition-colors text-left cursor-pointer">Breach Watch</button></li>
+                  <li><button type="button" class="hover:text-neutral-900 transition-colors text-left cursor-pointer">Templates</button></li>
+                </ul>
+              </div>
+              <div class="space-y-3.5">
+                <h4 class="text-xs font-bold text-neutral-900 tracking-wider uppercase">Company</h4>
+                <ul class="space-y-2 text-sm text-neutral-500">
+                  <li><button type="button" class="hover:text-neutral-900 transition-colors cursor-pointer">About Us</button></li>
+                  <li><button type="button" class="hover:text-neutral-900 transition-colors cursor-pointer">Careers</button></li>
+                  <li><button type="button" class="hover:text-neutral-900 transition-colors cursor-pointer">Contact</button></li>
+                  <li><a href="news.html" class="hover:text-neutral-900 transition-colors">Press</a></li>
+                  <li><button type="button" class="hover:text-neutral-900 transition-colors cursor-pointer">Support</button></li>
+                </ul>
+              </div>
+              <div class="space-y-3.5">
+                <h4 class="text-xs font-bold text-neutral-900 tracking-wider uppercase">Solutions</h4>
+                <ul class="space-y-2 text-sm text-neutral-500">
+                  <li><a href="services.html" class="hover:text-neutral-900 transition-colors">Small Business</a></li>
+                  <li><a href="services.html" class="hover:text-neutral-900 transition-colors">SACCO &amp; Fintech</a></li>
+                  <li><a href="services.html" class="hover:text-neutral-900 transition-colors">Enterprise</a></li>
+                  <li><a href="course-foundations.html" class="hover:text-neutral-900 transition-colors">Security Training</a></li>
+                </ul>
+              </div>
+              <div class="space-y-3.5">
+                <h4 class="text-xs font-bold text-neutral-900 tracking-wider uppercase">Tools</h4>
+                <ul class="space-y-2 text-sm text-neutral-500">
+                  <li><button type="button" class="hover:text-neutral-900 transition-colors text-left cursor-pointer">Free Security Scan</button></li>
+                  <li><a href="services.html" class="hover:text-neutral-900 transition-colors">Pricing &amp; Plans</a></li>
+                  <li><button type="button" class="hover:text-neutral-900 transition-colors cursor-pointer">Request a Report</button></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-16 pt-8 border-t border-neutral-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
+            <div>© 2026 VUNVAULT. All rights reserved.</div>
+            <div class="flex items-center gap-6">
+              <a href="index.html" class="hover:text-neutral-900 transition-colors">Top</a>
+              <a href="services.html" class="hover:text-neutral-900 transition-colors">Services</a>
+              <a href="course-foundations.html" class="hover:text-neutral-900 transition-colors">Academy</a>
+              <button type="button" class="hover:text-neutral-900 transition-colors cursor-pointer">Contact</button>
+              <button type="button" class="p-1.5 rounded-full hover:bg-neutral-200/60 text-neutral-600 transition-colors cursor-pointer ml-2" title="Scroll to Top" aria-label="Scroll to top">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up w-4 h-4" aria-hidden="true">
+                  <path d="m5 12 7-7 7 7"></path>
+                  <path d="M12 19V5"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      <!-- Floating AI security agent -->
+      <div class="fixed bottom-6 right-6 z-50">
+        <button type="button" class="w-14 h-14 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl hover:shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer relative group" aria-label="Open AI Security Agent">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square w-6 h-6 fill-current" aria-hidden="true">
+            <path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span class="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-white animate-pulse"></span>
+        </button>
+      </div>
+    </div>
+
+
+
+    <!-- ===================================================================
+         INLINE WIRING — preloader dismissal + mobile navigation drawer
+    ==================================================================== -->
+    <script>
+    
+      (function () {
+        "use strict";
+
+        /* ---------------- Preloader ---------------- */
+    var preloader = document.getElementById("preloader");
+if (preloader) {
+  var dismissed = false;
+  var dismiss = function () {
+    if (dismissed) return;
+    dismissed = true;
+    preloader.classList.add("is-hidden");
+    window.setTimeout(function () {
+      if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
+    }, 700);
+  };
+  /* Progress sweep is a fixed 4s animation — dismiss in lockstep */
+  window.setTimeout(dismiss, 4000);
+}
+
+   var dismiss = function () {
+    if (dismissed) return;
+    dismissed = true;
+    preloader.classList.add("is-hidden");
+
+    // ▼ NEW — notify the consent controller that the preloader is done
+    document.dispatchEvent(new CustomEvent("vunvault:preloader-done"));
+
+    window.setTimeout(function () {
+      if (preloader.parentNode) preloader.parentNode.removeChild(preloader);
+    }, 700);
+  };
+  /* ---------------- Mobile navigation drawer ---------------- */
+        var toggle = document.getElementById("mobile-menu-toggle");
+        var menu = document.getElementById("mobile-menu");
+
+        if (toggle && menu) {
+          var setOpen = function (open) {
+            menu.classList.toggle("is-open", open);
+            toggle.classList.toggle("is-active", open);
+            toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            document.body.classList.toggle("nav-open", open);
+          };
+
+          toggle.addEventListener("click", function () {
+            setOpen(!menu.classList.contains("is-open"));
+          });
+
+          menu.addEventListener("click", function (event) {
+            var link = event.target.closest("a");
+            if (link) setOpen(false);
+          });
+
+          document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") setOpen(false);
+          });
+
+          window.addEventListener("resize", function () {
+            if (window.innerWidth >= 768) setOpen(false);
+          });
+        }
+      })();
+    </script>
+    
+    <script>
+  (function () {
+    "use strict";
+
+    var pad = function (n) { return String(n).padStart(2, "0"); };
+    var utcStamp = function () {
+      var d = new Date();
+      return pad(d.getUTCHours()) + ":" + pad(d.getUTCMinutes()) + ":" + pad(d.getUTCSeconds());
+    };
+
+    /* ---------------- live UTC clock ---------------- */
+    var clock = document.getElementById("zdet-clock");
+    if (clock) {
+      var tick = function () { clock.textContent = utcStamp() + " UTC"; };
+      tick();
+      window.setInterval(tick, 1000);
+    }
+
+    /* ---------------- auto-refreshing stream ---------------- */
+    var feed = document.getElementById("zdet-feed");
+    var countdown = document.getElementById("zdet-countdown");
+    var refreshed = document.getElementById("zdet-refreshed");
+
+    if (feed && feed.children.length > 1) {
+      var INTERVAL = 8;
+      var remaining = INTERVAL;
+
+      window.setInterval(function () {
+        remaining -= 1;
+
+        if (remaining > 0) {
+          if (countdown) countdown.textContent = remaining + "s";
+          return;
+        }
+
+        remaining = INTERVAL;
+        if (countdown) countdown.textContent = INTERVAL + "s";
+
+        /* rotate the oldest entry to the top and flash it */
+        var last = feed.lastElementChild;
+        feed.insertBefore(last, feed.firstElementChild);
+        last.classList.add("zdet-flash");
+        window.setTimeout(function () { last.classList.remove("zdet-flash"); }, 1200);
+
+        if (refreshed) refreshed.textContent = "Updated " + utcStamp() + " UTC";
+      }, 1000);
+    }
+  })();
+</script>
+<!-- ===================================================================
+     AUTH-AWARE NAVIGATION
+     Reads the identity persisted by login.html and swaps the "Login"
+     link for a "Profile" button. @vunvault.com accounts route to
+     admin.html, everyone else to profile.html.
+==================================================================== -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    "use strict";
+
+    var STORAGE_KEY  = "userEmail";
+    var ADMIN_DOMAIN = "@vunvault.com";
+
+    var desktopLogin   = document.getElementById("navLoginLink");
+    var desktopProfile = document.getElementById("navProfileLink");
+    var mobileLogin    = document.getElementById("mobileLoginItem");
+    var mobileProfile  = document.getElementById("mobileProfileItem");
+    var avatarEl       = document.getElementById("navProfileAvatar");
+    var labelEl        = document.getElementById("navProfileLabel");
+
+    /* ------------------------------------------------ read identity */
+    var userEmail = null;
+    try {
+      userEmail = window.localStorage.getItem(STORAGE_KEY);
+    } catch (err) {
+      userEmail = null;   /* storage blocked (private mode / no cookies) */
+    }
+    userEmail = (userEmail || "").trim();
+
+    /* ------------------------------------------------ guest state */
+    if (!userEmail) {
+      if (desktopLogin)   desktopLogin.hidden   = false;
+      if (mobileLogin)    mobileLogin.hidden    = false;
+      if (desktopProfile) desktopProfile.hidden = true;
+      if (mobileProfile)  mobileProfile.hidden  = true;
+      return;
+    }
+
+    /* ------------------------------------------------ signed-in state */
+    var lowered  = userEmail.toLowerCase();
+    var isAdmin  = lowered.slice(-ADMIN_DOMAIN.length) === ADMIN_DOMAIN;
+    var target   = isAdmin ? "admin.html" : "profile.html";
+
+    if (desktopProfile) {
+      desktopProfile.setAttribute("href", target);
+      desktopProfile.setAttribute("title", userEmail);
+      desktopProfile.classList.toggle("nav-profile--admin", isAdmin);
+      desktopProfile.hidden = false;
+    }
+
+    if (mobileProfile) {
+      var mobileLink = document.getElementById("mobileProfileLink");
+      if (mobileLink) {
+        mobileLink.setAttribute("href", target);
+        mobileLink.setAttribute("title", userEmail);
+      }
+      mobileProfile.hidden = false;
+    }
+
+    /* ------------------------------------------------ personalise */
+    var localPart = userEmail.split("@")[0] || "Profile";
+    if (avatarEl) avatarEl.textContent = localPart.charAt(0).toUpperCase();
+    if (labelEl)  labelEl.textContent  = localPart;
+
+    /* ------------------------------------------------ hide guest link */
+    if (desktopLogin) desktopLogin.hidden = true;
+    if (mobileLogin)  mobileLogin.hidden  = true;
+  });
+</script>
+<!-- ==================================================================
+     VUNVAULT SCANNER CLI — OS-STYLE TERMINAL MODAL
+     ================================================================== -->
+<!-- ==================================================================
+     FREE SCANNER — OS-style CLI modal
+     Triggered by any [data-vv-open-scanner] element
+     ================================================================== -->
+<div id="free-scanner-modal"
+     class="vv-scan-modal"
+     hidden
+     aria-hidden="true"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="vv-scan-dialog-title">
+
+  <!-- backdrop (click to close) -->
+  <div class="vv-scan-modal-backdrop" data-vv-scanner-close></div>
+
+  <div class="vv-scan-window" role="document">
+
+    <!-- ---------- title bar ---------- -->
+    <div class="vv-scan-titlebar">
+      <div class="vv-scan-controls">
+        <button type="button" class="vv-dot vv-dot-close" data-vv-scanner-close aria-label="Close scanner"></button>
+        <button type="button" class="vv-dot vv-dot-min"   data-vv-scanner-min   aria-label="Minimize scanner"></button>
+        <button type="button" class="vv-dot vv-dot-max"   data-vv-scanner-max   aria-label="Maximize scanner"></button>
+      </div>
+
+      <div class="vv-scan-title" id="vv-scan-dialog-title">
+        vunvault-scanner-cli v2.4.0 — vvscan --interactive
+      </div>
+
+      <div class="vv-scan-status" data-vv-status data-state="idle">
+        <span class="vv-scan-status-dot" aria-hidden="true"></span>
+        <span data-vv-status-text>IDLE</span>
+      </div>
+    </div>
+
+    <!-- ---------- body ---------- -->
+    <div class="vv-scan-body">
+
+      <form class="vv-scan-form" data-vv-scan-form novalidate>
+        <label class="sr-only" for="vv-scan-target">Target IP address or domain name</label>
+
+        <div class="vv-scan-input-wrap">
+          <span class="vv-scan-prompt" aria-hidden="true">$</span>
+          <input id="vv-scan-target"
+                 class="vv-scan-input"
+                 data-vv-scan-target
+                 type="text"
+                 name="target"
+                 placeholder="example.com   or   192.168.1.1"
+                 autocomplete="off"
+                 spellcheck="false">
+        </div>
+
+        <button type="submit" class="vv-scan-execute" data-vv-scan-execute>
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <path d="m5 3 14 9-14 9V3z"/>
+          </svg>
+          <span>Execute Scan</span>
+        </button>
+
+        <button type="button" class="vv-scan-reset" data-vv-scan-reset>Clear</button>
+      </form>
+
+      <div class="vv-scan-chips">
+        <span class="vv-scan-chips-label">Try:</span>
+        <button type="button" class="vv-chip" data-vv-scan-suggest="example.com">example.com</button>
+        <button type="button" class="vv-chip" data-vv-scan-suggest="192.168.1.1">192.168.1.1</button>
+        <button type="button" class="vv-chip" data-vv-scan-suggest="api.vunvault.com">api.vunvault.com</button>
+      </div>
+
+      <div class="vv-scan-screen"
+           data-vv-scan-screen
+           role="log"
+           aria-live="polite"
+           aria-label="Scan output"></div>
+
+      <div class="vv-scan-progress" role="progressbar" aria-label="Scan progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <span data-vv-scan-bar></span>
+      </div>
+
+      <p class="vv-scan-disclaimer">
+        Simulated reconnaissance for demonstration purposes. Only scan systems you own or have
+        written authorisation to test.
+      </p>
+    </div>
+  </div>
+</div>
+</script>
+<script>
+  /* ==================================================================
+     VUNVAULT — Free Scanner modal controller
+     Open / close / Escape / backdrop / simulated scan feed
+     ================================================================== */
+  (function () {
+    "use strict";
+
+    var modal = document.getElementById("free-scanner-modal");
+    if (!modal) return;
+
+    var openers     = document.querySelectorAll("[data-vv-open-scanner]");
+    var closers     = modal.querySelectorAll("[data-vv-scanner-close]");
+    var form        = modal.querySelector("[data-vv-scan-form]");
+    var input       = modal.querySelector("[data-vv-scan-target]");
+    var executeBtn  = modal.querySelector("[data-vv-scan-execute]");
+    var resetBtn    = modal.querySelector("[data-vv-scan-reset]");
+    var screen      = modal.querySelector("[data-vv-scan-screen]");
+    var bar         = modal.querySelector("[data-vv-scan-bar]");
+    var status      = modal.querySelector("[data-vv-status]");
+    var statusText  = modal.querySelector("[data-vv-status-text]");
+    var progress    = modal.querySelector(".vv-scan-progress");
+    var suggestions = modal.querySelectorAll("[data-vv-scan-suggest]");
+    var maxBtn      = modal.querySelector("[data-vv-scanner-max]");
+    var minBtn      = modal.querySelector("[data-vv-scanner-min]");
+
+    var lastFocused = null;
+    var scanTimer   = null;
+
+    /* ---------- helpers ---------- */
+    function setStatus(state, text) {
+      if (status) status.setAttribute("data-state", state);
+      if (statusText) statusText.textContent = text;
+    }
+
+    function setProgress(pct) {
+      if (bar) bar.style.width = pct + "%";
+      if (progress) progress.setAttribute("aria-valuenow", String(pct));
+    }
+
+    function logLine(kind, msg) {
+      if (!screen) return;
+      var ts = new Date().toISOString().substr(11, 8);
+      var line = document.createElement("div");
+      line.className = "vv-line vv-line--" + kind;
+      var tsEl = document.createElement("span");
+      tsEl.className = "vv-line-ts";
+      tsEl.textContent = "[" + ts + "]";
+      var msgEl = document.createElement("span");
+      msgEl.className = "vv-line-msg";
+      msgEl.textContent = msg;
+      line.appendChild(tsEl);
+      line.appendChild(msgEl);
+      screen.appendChild(line);
+      screen.scrollTop = screen.scrollHeight;
+    }
+
+    /* ---------- open / close ---------- */
+    function openModal() {
+      lastFocused = document.activeElement;
+      modal.hidden = false;
+      modal.setAttribute("aria-hidden", "false");
+      void modal.offsetWidth;                // force reflow so transition fires
+      modal.classList.add("is-open");
+      document.body.classList.add("nav-open");
+      window.setTimeout(function () { if (input) input.focus(); }, 120);
+    }
+
+    function closeModal() {
+      if (scanTimer) { window.clearInterval(scanTimer); scanTimer = null; }
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("nav-open");
+      window.setTimeout(function () {
+        modal.hidden = true;
+        if (executeBtn) executeBtn.disabled = false;
+        if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
+      }, 240);
+    }
+
+    openers.forEach(function (btn) { btn.addEventListener("click", openModal); });
+    closers.forEach(function (btn) { btn.addEventListener("click", closeModal); });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("is-open")) closeModal();
+    });
+
+    /* ---------- suggestion chips ---------- */
+    suggestions.forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        if (!input) return;
+        input.value = chip.getAttribute("data-vv-scan-suggest") || "";
+        input.classList.remove("is-invalid");
+        input.focus();
+      });
+    });
+
+    /* ---------- reset ---------- */
+    if (resetBtn) {
+      resetBtn.addEventListener("click", function () {
+        if (scanTimer) { window.clearInterval(scanTimer); scanTimer = null; }
+        if (screen) screen.innerHTML = "";
+        setProgress(0);
+        if (input) { input.value = ""; input.classList.remove("is-invalid"); }
+        if (executeBtn) executeBtn.disabled = false;
+        setStatus("idle", "IDLE");
+      });
+    }
+
+    /* ---------- window controls ---------- */
+    if (maxBtn) {
+      maxBtn.addEventListener("click", function () {
+        var win = modal.querySelector(".vv-scan-window");
+        if (win) win.classList.toggle("is-max");
+      });
+    }
+    if (minBtn) minBtn.addEventListener("click", closeModal);
+
+    /* ---------- scan simulation ---------- */
+    var VALID = /^(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$|^(?:\d{1,3}\.){3}\d{1,3}$/;
+
+    function runScan(target) {
+      if (scanTimer) { window.clearInterval(scanTimer); scanTimer = null; }
+      if (screen) screen.innerHTML = "";
+      setProgress(0);
+      setStatus("scanning", "SCANNING");
+      if (executeBtn) executeBtn.disabled = true;
+
+      var steps = [
+        { kind: "sys",   msg: "vunvault-scanner-cli v2.4.0 — initialising reconnaissance engine" },
+        { kind: "muted", msg: "> target: " + target },
+        { kind: "info",  msg: "[*] Resolving DNS records ..." },
+        { kind: "ok",    msg: "[+] A record resolved → 203.0.113.42" },
+        { kind: "info",  msg: "[*] Enumerating subdomains (CT logs + DNS brute) ..." },
+        { kind: "ok",    msg: "[+] 14 subdomains discovered" },
+        { kind: "info",  msg: "[*] Probing TCP ports 1-1024 ..." },
+        { kind: "warn",  msg: "[!] Port 22/tcp open — SSH (OpenSSH 8.2p1)" },
+        { kind: "warn",  msg: "[!] Port 8080/tcp open — HTTP proxy" },
+        { kind: "ok",    msg: "[+] Port 443/tcp open — TLS 1.3, HSTS enabled" },
+        { kind: "info",  msg: "[*] Fingerprinting web stack ..." },
+        { kind: "ok",    msg: "[+] nginx/1.24.0, PHP/8.2, WordPress/6.5.2" },
+        { kind: "info",  msg: "[*] Cross-referencing CVEs ..." },
+        { kind: "crit",  msg: "[CRITICAL] CVE-2026-9122 — RCE in API ingress (CVSS 9.8)" },
+        { kind: "warn",  msg: "[HIGH]     CVE-2026-4401 — Directory traversal (CVSS 7.5)" },
+        { kind: "warn",  msg: "[MEDIUM]   CVE-2025-18820 — SQLi in search parameter (CVSS 5.3)" },
+        { kind: "info",  msg: "[*] Generating prioritised remediation map ..." },
+        { kind: "ok",    msg: "[+] Report ready. 3 findings — 1 critical, 1 high, 1 medium." },
+        { kind: "sys",   msg: "scan complete in 4.28s" }
+      ];
+
+      var i = 0, total = steps.length;
+
+      scanTimer = window.setInterval(function () {
+        if (i >= total) {
+          window.clearInterval(scanTimer);
+          scanTimer = null;
+          setProgress(100);
+          setStatus("done", "COMPLETE");
+          if (executeBtn) executeBtn.disabled = false;
+          return;
+        }
+        logLine(steps[i].kind, steps[i].msg);
+        i++;
+        setProgress(Math.round((i / total) * 100));
+      }, 260);
+    }
+
+    /* ---------- form submit ---------- */
+    if (form) {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var value = (input && input.value || "").trim();
+        if (!value || !VALID.test(value)) {
+          if (input) input.classList.add("is-invalid");
+          logLine("crit", "[!] Invalid target. Enter a domain (example.com) or IPv4 address.");
+          return;
+        }
+        if (input) input.classList.remove("is-invalid");
+        runScan(value);
+      });
+    }
+  })();
+</script>
+
+
+
+<!-- ==========================================================================
+     VUNVAULT — CONSENT CONTROLLER
+     Checks localStorage → fetches consent-banner.html → injects it after
+     the preloader dismisses → handles the decision → unmounts the banner.
+     ========================================================================== -->
+<div id="consent-banner-wrapper"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY   = "vunvault_consent";
+  var CONSENT_VER   = 1;
+  var BANNER_URL    = "consent-banner.html";
+  var MOUNT_ID      = "consent-banner-wrapper";
+  var FALLBACK_MS   = 6000;   // safety net if the preloader event never fires
+
+  /* --------------------------------------------------------- storage */
+  function readConsent() {
+    try {
+      var raw = sessionStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      if (!data || data.version !== CONSENT_VER) return null;
+      if (typeof data.analytics !== "boolean") return null;
+      return data;
+    } catch (e) { return null; }
+  }
+
+  function writeConsent(prefs) {
+    var payload = {
+      version:    CONSENT_VER,
+      timestamp:  new Date().toISOString(),
+      necessary:  true,
+      analytics:  !!prefs.analytics,
+      marketing:  !!prefs.marketing,
+      functional: !!prefs.functional
+    };
+    try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); } catch (e) {}
+    return payload;
+  }
+
+  /* --------------------------------------------------- public API used by the banner */
+  window.VunvaultConsent = {
+    record: function (prefs) {
+      var saved = writeConsent(prefs);
+      window.vunvaultConsentPrefs = saved;
+
+      document.dispatchEvent(new CustomEvent("vunvault:consent-recorded", { detail: saved }));
+
+      // Smooth exit using the design tokens from vun1.css, then unmount
+      var banner = document.getElementById("vv-consent");
+      if (banner) banner.classList.add("is-leaving");
+
+      window.setTimeout(function () {
+        document.body.classList.remove("vv-consent-open");
+        var mount = document.getElementById(MOUNT_ID);
+        if (mount && mount.parentNode) mount.parentNode.removeChild(mount);
+      }, 400);
+    }
+  };
+
+  /* --------------------------------------------------- existing consent? bail out */
+  var existing = readConsent();
+  if (existing) {
+    window.vunvaultConsentPrefs = existing;
+    document.dispatchEvent(new CustomEvent("vunvault:consent-recorded", { detail: existing }));
+    return;  // ← do NOT load or show the banner
+  }
+
+  /* --------------------------------------------------- lazy fetch + inject */
+  var loaded = false;
+
+  function loadBanner() {
+    if (loaded) return;
+    loaded = true;
+
+    var mount = document.getElementById(MOUNT_ID);
+    if (!mount) {
+      mount = document.createElement("div");
+      mount.id = MOUNT_ID;
+      document.body.appendChild(mount);
+    }
+
+    fetch(BANNER_URL, { credentials: "same-origin", cache: "no-cache" })
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.text();
+      })
+      .then(function (html) {
+        // createContextualFragment executes the <script> inside the fragment
+        var range = document.createRange();
+        range.selectNode(mount);
+        var frag = range.createContextualFragment(html);
+        mount.innerHTML = "";
+        mount.appendChild(frag);
+
+        // reveal on the next frame so the CSS transition fires
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            var banner = document.getElementById("vv-consent");
+            if (!banner) return;
+            banner.classList.add("is-visible");
+            document.body.classList.add("vv-consent-open");
+
+            var first = banner.querySelector("[data-vv-consent='accept-all']");
+            if (first) first.focus({ preventScroll: true });
+          });
+        });
+      })
+      .catch(function (err) {
+        console.warn("[VUNVAULT consent] failed to load banner:", err);
+      });
+  }
+
+  /* --------------------------------------------------- preloader coupling */
+  document.addEventListener("vunvault:preloader-done", loadBanner, { once: true });
+
+  // Safety net: if the preloader event never fires (error, reduced motion, etc.)
+  window.setTimeout(function () { if (!loaded) loadBanner(); }, FALLBACK_MS);
+})();
+</script>
+<script>
+/* ====================================================================
+   VUNVAULT — Real-time News Sync Engine  (vun1.html)
+   --------------------------------------------------------------------
+   • Reads the single source of truth: localStorage["approved_blog_posts"]
+   • Renders up to 3 cards into #vv-news-grid
+   • Applies DELTA replacement on dataset expansion:
+        +1 post  → replace 1 slot
+        +2 posts → replace 2 slots
+        +3+ posts → full refresh of all 3 slots
+   • Auto-rotates visible indices every ROTATE_MS while the dataset
+     exceeds 3 posts.
+   • Reacts to cross-tab writes via window "storage" events.
+   ==================================================================== */
+(function () {
+  "use strict";
+
+  /* ------------------------------------------------------------------
+     CONFIG
+     ------------------------------------------------------------------ */
+  var STORAGE_KEY  = "approved_blog_posts";
+  var MAX_VISIBLE  = 3;          // grid slots on screen
+  var ROTATE_MS    = 4000;       // rotation interval
+
+  /* ------------------------------------------------------------------
+     STATE
+     ------------------------------------------------------------------ */
+  var allPosts    = [];          // normalised list, newest first
+  var visibleIds  = [];          // ids currently occupying the 3 slots
+  var cursor      = 0;           // rotation index into allPosts
+  var lastCount   = 0;           // dataset size at last sync (for delta)
+  var rotateTimer = null;
+  var hoverPaused = false;
+  var grid        = null;
+
+  /* ------------------------------------------------------------------
+     BOOTSTRAP SEED — read-only fallback so the section is never blank
+     on the very first visit before blog.html has ever persisted.
+     ------------------------------------------------------------------ */
+  var SEED_POSTS = [
+    { id:"kenya-state-house-hack",     title:"Kenya State House Cyber Security Audit & Risk Analysis",       excerpt:"An investigative analysis of government digital perimeter vulnerabilities and defence protocols.",  category:"Cyber News",       severity:"HIGH",     author:"VUNVAULT Threat Desk", date:"2026-08-14", readTime:7, tags:["Government","Perimeter","Kenya"] },
+    { id:"blog-cybersecurity-awakening", title:"Africa's Cyber Awakening: How the Continent Is Fighting Back",  excerpt:"An in-depth analysis of evolving threat landscapes across Kenya, Ghana and Nigeria.",               category:"Cyber Defense",    severity:"MEDIUM",   author:"Fatima Hassan",        date:"2026-08-11", readTime:6, tags:["Africa","Threat Landscape"] },
+    { id:"blog-cybersecurity-compliance", title:"Cybersecurity Compliance Frameworks for SACCOs & Fintechs",   excerpt:"Step-by-step regulatory readiness guide for Central Bank compliance and data protection.",          category:"Compliance",       severity:"MEDIUM",   author:"Brian Otieno",         date:"2026-08-08", readTime:8, tags:["SACCO","Fintech"] },
+    { id:"blog-zero-day-trends",         title:"Zero-Day Exploit Trends: What 2026 Revealed About API Ingress", excerpt:"Correlating twelve months of weaponised CVEs to expose where attackers are concentrating next.",     category:"Threat Intel",     severity:"CRITICAL", author:"Fatima Hassan",        date:"2026-08-05", readTime:5, tags:["Zero-Day","API"] },
+    { id:"blog-ransomware-saccos",       title:"Ransomware Playbooks Now Targeting East African SACCOs",       excerpt:"A forensic walkthrough of three real intrusion chains and the containment steps that worked.",      category:"Incident Response", severity:"HIGH",     author:"Amara Njoroge",        date:"2026-08-02", readTime:9, tags:["Ransomware","SACCO"] },
+    { id:"blog-sensor-network",          title:"Inside the VUNVAULT Sensor Network: Catching Memory Exfiltration", excerpt:"How 412 distributed sensors correlate kernel-level telemetry to stop zero-day exfiltration in flight.", category:"Engineering",      severity:"LOW",      author:"Daniel Mwangi",        date:"2026-07-29", readTime:6, tags:["Telemetry","Kernel"] }
+  ];
+
+  /* ==================================================================
+     HELPERS
+     ================================================================== */
+  function escapeHtml(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
+  function slugify(s) {
+    return String(s || "").toLowerCase().trim()
+      .replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-")
+      .replace(/-+/g, "-").slice(0, 72) || ("post-" + Date.now());
+  }
+
+  var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  function formatDate(input) {
+    if (!input) return "";
+    var d = new Date(input);
+    if (isNaN(d.getTime())) return String(input);
+    return MONTHS[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+  }
+
+  function severityClass(sev) {
+    var s = String(sev || "").toUpperCase();
+    if (s === "CRITICAL") return "vv-chip--critical";
+    if (s === "HIGH")     return "vv-chip--high";
+    if (s === "MEDIUM")   return "vv-chip--medium";
+    return "vv-chip--low";
+  }
+
+  /* --------------------------------------------------------------
+     Thumbnail SVG factory — the same six variants used by blog.html
+     -------------------------------------------------------------- */
+  function thumbSVG(index) {
+    var uid = "vvN" + index + "_" + Math.random().toString(36).slice(2, 7);
+    var variants = [
+      '<svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="'+uid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a1931"/><stop offset="1" stop-color="#060a10"/></linearGradient></defs><rect width="400" height="225" fill="url(#'+uid+')"/><g fill="none" stroke="#3B99FC" stroke-opacity=".28" stroke-width="1"><path d="M0 56h400M0 112h400M0 168h400M100 0v225M200 0v225M300 0v225"/></g><path d="M200 62 L246 78 V124 c0 30-46 44-46 44 s-46-14-46-44 V78 z" fill="#3B99FC" fill-opacity=".16" stroke="#6FB6FF" stroke-width="2"/><path d="M182 116 l14 14 26-30" fill="none" stroke="#6FB6FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      '<svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="'+uid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a1931"/><stop offset="1" stop-color="#060a10"/></linearGradient></defs><rect width="400" height="225" fill="url(#'+uid+')"/><g fill="none" stroke="#3B99FC" stroke-opacity=".35" stroke-width="1.4"><path d="M70 150 L150 78 L232 132 L318 62"/><path d="M150 78 L232 132"/></g><g fill="#6FB6FF"><circle cx="70" cy="150" r="6"/><circle cx="150" cy="78" r="6"/><circle cx="232" cy="132" r="6"/></g><circle cx="318" cy="62" r="9" fill="#f43f5e" fill-opacity=".2"/><circle cx="318" cy="62" r="5" fill="#f43f5e"/></svg>',
+      '<svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="'+uid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a1931"/><stop offset="1" stop-color="#060a10"/></linearGradient></defs><rect width="400" height="225" fill="url(#'+uid+')"/><rect x="120" y="46" width="160" height="134" rx="12" fill="#3B99FC" fill-opacity=".1" stroke="#3B99FC" stroke-opacity=".45" stroke-width="1.6"/><g stroke="#6FB6FF" stroke-opacity=".65" stroke-width="2.4" stroke-linecap="round"><path d="M148 88h104"/><path d="M148 114h104"/><path d="M148 140h62"/></g><path d="M232 148 l12 12 24-28" fill="none" stroke="#34d399" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+      '<svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="'+uid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a1931"/><stop offset="1" stop-color="#060a10"/></linearGradient></defs><rect width="400" height="225" fill="url(#'+uid+')"/><path d="M0 158 L80 118 L160 142 L240 84 L320 112 L400 62 V225 H0 Z" fill="#3B99FC" fill-opacity=".1"/><path d="M0 158 L80 118 L160 142 L240 84 L320 112 L400 62" fill="none" stroke="#3B99FC" stroke-opacity=".45" stroke-width="1.6"/><g fill="#6FB6FF"><circle cx="80" cy="118" r="4"/><circle cx="160" cy="142" r="4"/><circle cx="320" cy="112" r="4"/></g><circle cx="240" cy="84" r="10" fill="#f43f5e" fill-opacity=".2"/><circle cx="240" cy="84" r="5" fill="#f43f5e"/></svg>',
+      '<svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="'+uid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a1931"/><stop offset="1" stop-color="#060a10"/></linearGradient></defs><rect width="400" height="225" fill="url(#'+uid+')"/><g fill="none" stroke="#3B99FC" stroke-opacity=".22" stroke-width="1"><path d="M0 56h400M0 112h400M0 168h400M100 0v225M200 0v225M300 0v225"/></g><rect x="168" y="102" width="64" height="54" rx="9" fill="#3B99FC" fill-opacity=".16" stroke="#6FB6FF" stroke-width="2"/><path d="M182 102V86a18 18 0 0 1 36 0v16" fill="none" stroke="#6FB6FF" stroke-width="2" stroke-linecap="round"/><circle cx="200" cy="126" r="5.5" fill="#f43f5e"/><path d="M200 132v9" stroke="#f43f5e" stroke-width="3.2" stroke-linecap="round"/></svg>',
+      '<svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="'+uid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a1931"/><stop offset="1" stop-color="#060a10"/></linearGradient></defs><rect width="400" height="225" fill="url(#'+uid+')"/><g fill="none" stroke="#3B99FC" stroke-opacity=".28" stroke-width="1.2"><circle cx="200" cy="112" r="30"/><circle cx="200" cy="112" r="60"/><circle cx="200" cy="112" r="90"/></g><path d="M200 112 L200 22 A90 90 0 0 1 290 112 Z" fill="#3B99FC" fill-opacity=".12"/><path d="M200 112 L200 22" stroke="#3B99FC" stroke-opacity=".5" stroke-width="1.2"/><path d="M200 112 L290 112" stroke="#3B99FC" stroke-opacity=".5" stroke-width="1.2"/><g fill="#6FB6FF"><circle cx="236" cy="80" r="4"/><circle cx="170" cy="150" r="4"/><circle cx="262" cy="142" r="4"/></g><circle cx="200" cy="112" r="6" fill="#6FB6FF"/></svg>'
+    ];
+    return variants[index % variants.length];
+  }
+
+  /* ==================================================================
+     NORMALISATION — accept both seed shape and admin-authored shape
+     ================================================================== */
+  function resolveAuthorName(raw) {
+    var a = raw.author || raw.byline || raw.authorName || raw.creator || raw.writer;
+    if (a && typeof a === "object") return a.name || a.displayName || a.fullName || "VUNVAULT Threat Desk";
+    if (typeof a === "string" && a.trim()) return a.trim();
+    return "VUNVAULT Threat Desk";
+  }
+
+  function normalisePost(raw, index) {
+    if (!raw || typeof raw !== "object") return null;
+
+    var title   = raw.title   || raw.heading  || "Untitled Report";
+    var id      = raw.id      || raw.slug     || raw.postId || slugify(title);
+    var excerpt = raw.excerpt || raw.summary  || raw.description || "";
+    var body    = raw.contentHtml || raw.body || raw.html || raw.content || raw.article || "";
+    if (!body && excerpt) body = "<p>" + escapeHtml(excerpt) + "</p>";
+
+    var dateRaw = raw.date || raw.publishedAt || raw.createdAt || raw.timestamp || "";
+    var readRaw = raw.readTime || raw.readtime || raw.readingTime || 0;
+    var readTime = parseInt(readRaw, 10);
+    if (!readTime || readTime < 1) {
+      var words = String(body).replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).length;
+      readTime = Math.max(2, Math.round(words / 210)) || 5;
+    }
+
+    var tags = raw.tags;
+    if (typeof tags === "string") tags = tags.split(",").map(function (t) { return t.trim(); }).filter(Boolean);
+    if (!Array.isArray(tags)) tags = [];
+
+    return {
+      id:         String(id),
+      title:      String(title),
+      excerpt:    String(excerpt),
+      body:       String(body),
+      category:   raw.category || raw.topic || "Cyber News",
+      severity:   raw.severity || raw.risk  || "MEDIUM",
+      author:     resolveAuthorName(raw),
+      date:       dateRaw,
+      readTime:   readTime,
+      featured:   !!raw.featured || !!raw.isFeatured || !!raw.pinned,
+      tags:       tags,
+      thumbIndex: (typeof raw.thumbIndex === "number") ? raw.thumbIndex : index
+    };
+  }
+
+  /* ==================================================================
+     STORAGE READER
+     ================================================================== */
+  function readStoredPosts() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;                          // null → use seed fallback
+      var parsed = JSON.parse(raw);
+      if (Array.isArray(parsed))                        return parsed;
+      if (parsed && Array.isArray(parsed.posts))        return parsed.posts;
+      if (parsed && typeof parsed === "object")         return Object.values(parsed);
+      return [];
+    } catch (e) {
+      return null;                                    // malformed → fallback
+    }
+  }
+
+  /* ==================================================================
+     RENDERING
+     ================================================================== */
+  function cardHTML(post) {
+    var href = "blog.html#" + encodeURIComponent(post.id);
+    return (
+      '<a href="' + escapeHtml(href) + '" class="vv-article-card" data-post-id="' + escapeHtml(post.id) + '">' +
+        '<div class="vv-article-thumb">' +
+          thumbSVG(post.thumbIndex) +
+          '<span class="vv-article-thumb-badge">' + escapeHtml(post.category) + '</span>' +
+        '</div>' +
+        '<div class="vv-article-body">' +
+          '<div class="vv-article-meta">' +
+            '<span>' + escapeHtml(formatDate(post.date)) + '</span>' +
+            '<span>·</span>' +
+            '<span>' + post.readTime + ' min read</span>' +
+          '</div>' +
+          '<h3 class="vv-article-title">' + escapeHtml(post.title) + '</h3>' +
+          '<p class="vv-article-excerpt">' + escapeHtml(post.excerpt) + '</p>' +
+          '<span class="vv-article-link">' +
+            '<span>Read Full Article</span>' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" ' +
+                 'stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+              '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>' +
+            '</svg>' +
+          '</span>' +
+        '</div>' +
+      '</a>'
+    );
+  }
+
+  function renderVisible(animate) {
+    if (!grid) return;
+    grid.setAttribute("aria-busy", "true");
+
+    var html = "";
+    for (var i = 0; i < visibleIds.length; i++) {
+      var post = allPosts.find(function (p) { return p.id === visibleIds[i]; });
+      if (post) html += cardHTML(post);
+    }
+    grid.innerHTML = html;
+    grid.setAttribute("aria-busy", "false");
+
+    /* Staggered entrance — cards animate in from the left */
+    if (animate) {
+      var cards = grid.querySelectorAll(".vv-article-card");
+      Array.prototype.forEach.call(cards, function (card, idx) {
+        card.style.animationDelay = (idx * 70) + "ms";
+        card.classList.add("is-news-entering");
+      });
+    }
+  }
+
+  /* ==================================================================
+     DELTA REPLACEMENT LOGIC
+     ------------------------------------------------------------------
+     Compares the new dataset size against `lastCount` and decides
+     how many slots to swap:
+
+       delta === 0  → dataset unchanged (skip)
+       delta  < 0  → dataset shrank (reconcile orphans)
+       delta === 1  → replace 1 slot with newest post
+       delta === 2  → replace 2 slots with the two newest posts
+       delta >= 3   → refresh all 3 slots with the three newest posts
+       initial     → same as >= 3
+     ================================================================== */
+  function applyDelta(newPosts, isInitial) {
+    var newCount = newPosts.length;
+    var delta    = newCount - lastCount;
+
+    /* --- Full refresh: initial load, or +3 or more posts --- */
+    if (isInitial || visibleIds.length === 0 || delta >= MAX_VISIBLE) {
+      visibleIds = newPosts.slice(0, MAX_VISIBLE).map(function (p) { return p.id; });
+      cursor     = MAX_VISIBLE % Math.max(newCount, 1);
+      return;
+    }
+
+    /* --- Shrink / reconcile: rebuild any orphaned slots --- */
+    if (delta <= 0) {
+      var live = Object.create(null);
+      newPosts.forEach(function (p) { live[p.id] = true; });
+
+      visibleIds = visibleIds.filter(function (id) { return live[id]; });
+
+      for (var i = 0; visibleIds.length < MAX_VISIBLE && i < newPosts.length; i++) {
+        if (visibleIds.indexOf(newPosts[i].id) === -1) visibleIds.push(newPosts[i].id);
+      }
+      return;
+    }
+
+    /* --- +1 post: replace exactly one slot --- */
+    if (delta === 1) {
+      visibleIds[0] = newPosts[0].id;
+      cursor = 1;
+      return;
+    }
+
+    /* --- +2 posts: replace exactly two slots --- */
+    if (delta === 2) {
+      visibleIds[0] = newPosts[0].id;
+      visibleIds[1] = newPosts[1].id;
+      cursor = 2;
+      return;
+    }
+  }
+
+  /* ==================================================================
+     ROTATION ENGINE
+     ================================================================== */
+  function rotate() {
+    if (allPosts.length <= MAX_VISIBLE) return;   // nothing to rotate
+    if (hoverPaused) return;                      // user is reading
+    if (document.hidden) return;                  // tab is hidden
+
+    cursor = (cursor + 1) % allPosts.length;
+
+    var next = [];
+    for (var i = 0; i < MAX_VISIBLE; i++) {
+      next.push(allPosts[(cursor + i) % allPosts.length].id);
+    }
+    visibleIds = next;
+    renderVisible(true);
+  }
+
+  function stopRotation() {
+    if (rotateTimer) { window.clearInterval(rotateTimer); rotateTimer = null; }
+  }
+
+  function startRotation() {
+    stopRotation();
+    if (allPosts.length <= MAX_VISIBLE) return;
+    rotateTimer = window.setInterval(rotate, ROTATE_MS);
+  }
+
+  /* ==================================================================
+     MAIN SYNC — pulls from localStorage, applies delta, renders
+     ================================================================== */
+  function syncFromStorage(isInitial) {
+    var stored = readStoredPosts();
+    var source = (stored && stored.length) ? stored : SEED_POSTS;
+
+    var posts = source
+      .map(function (p, i) { return normalisePost(p, i); })
+      .filter(Boolean)
+      .sort(function (a, b) {
+        return String(b.date || "").localeCompare(String(a.date || ""));
+      });
+
+    allPosts = posts;
+
+    applyDelta(posts, isInitial);
+    lastCount = posts.length;
+
+    renderVisible(true);
+    startRotation();          // timer is re-synced after every update
+  }
+
+  /* ==================================================================
+     EVENT WIRING
+     ================================================================== */
+  function wireEvents() {
+    /* Cross-tab: any write to localStorage from another tab fires this */
+    window.addEventListener("storage", function (e) {
+      if (e.key === STORAGE_KEY || e.key === null) {
+        syncFromStorage(false);
+      }
+    });
+
+    /* Pause rotation while the user is reading */
+    if (grid) {
+      grid.addEventListener("mouseenter", function () { hoverPaused = true;  });
+      grid.addEventListener("mouseleave", function () { hoverPaused = false; });
+      grid.addEventListener("focusin",    function () { hoverPaused = true;  });
+      grid.addEventListener("focusout",   function () { hoverPaused = false; });
+    }
+
+    /* Stop hammering the CPU when the tab is hidden */
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) stopRotation();
+      else startRotation();
+    });
+
+    /* Same-tab re-check: bl*/
+        window.addEventListener("focus", function () {
+      var current = readStoredPosts();
+      if (current && current.length !== lastCount) syncFromStorage(false);
+    });
+  }
+
+  function boot() {
+    grid = document.getElementById("vv-news-grid");
+    if (!grid) return;
+    syncFromStorage(true);
+    wireEvents();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+})();
+</script>
+    <script>
+  </body>
+</html>

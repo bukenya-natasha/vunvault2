@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sign in to your VUNVAULT secure console.">
+  <meta name="theme-color" content="#0A0D12">
+  <title>Sign In — VUNVAULT</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+
+<body class="vv-auth-body">
+
+  <!-- ==================================================================
+       AMBIENT BACKGROUND — sits *behind* the blurred overlay so the
+       glassmorphic blur has something rich to diffuse.
+       ================================================================== -->
+  <div class="vv-auth-bg" aria-hidden="true">
+    <span class="vv-orb vv-orb--1"></span>
+    <span class="vv-orb vv-orb--2"></span>
+    <span class="vv-orb vv-orb--3"></span>
+    <span class="vv-auth-grid"></span>
+    <span class="vv-auth-scanline"></span>
+  </div>
+
+
+  <!-- ==================================================================
+       LOGIN MODAL + BLURRED OVERLAY
+       ================================================================== -->
+  <div class="vv-auth-overlay" id="vvAuthOverlay">
+
+    <div class="vv-auth-card" id="vvLoginCard"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="vvLoginTitle">
+
+      <!-- ------------------------------ brand head ------------------------------ -->
+      <header class="vv-auth-head">
+        <span class="vv-brand">
+          <span class="vv-brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 260 128" xmlns="http://www.w3.org/2000/svg" focusable="false">
+              <path d="M40 24 L78 104 L116 24" fill="none" stroke="#3B99FC"
+                    stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M130 24 L236 24 L168 104 L138 54" fill="none" stroke="#6FB6FF"
+                    stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="vv-brand-name">VUNVAULT</span>
+        </span>
+
+        <h1 class="vv-auth-title" id="vvLoginTitle">Welcome back</h1>
+        <p class="vv-auth-sub">Sign in to access your security console.</p>
+      </header>
+
+      <!-- ------------------------------ social auth ------------------------------ -->
+      <div class="vv-social-grid" role="group" aria-label="Social sign in">
+
+        <button type="button" class="vv-social-btn" data-vv-provider="Google">
+          <span class="vv-social-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
+              <path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47a5.54 5.54 0 0 1-2.4 3.63v3h3.86c2.26-2.09 3.56-5.17 3.56-8.87z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09A11.99 11.99 0 0 0 12 24z"/>
+              <path fill="#FBBC05" d="M5.27 14.29a7.2 7.2 0 0 1 0-4.58V6.62H1.29a12 12 0 0 0 0 10.76l3.98-3.09z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.7 0 3.99 2.47 1.29 6.62l3.98 3.09C6.22 6.86 8.87 4.75 12 4.75z"/>
+            </svg>
+          </span>
+          <span class="vv-social-label">Google</span>
+        </button>
+
+        <button type="button" class="vv-social-btn" data-vv-provider="GitHub">
+          <span class="vv-social-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" focusable="false">
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+          </span>
+          <span class="vv-social-label">GitHub</span>
+        </button>
+
+        <button type="button" class="vv-social-btn" data-vv-provider="Microsoft">
+          <span class="vv-social-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" focusable="false">
+              <path fill="#F25022" d="M1.5 1.5h10v10h-10z"/>
+              <path fill="#7FBA00" d="M12.5 1.5h10v10h-10z"/>
+              <path fill="#00A4EF" d="M1.5 12.5h10v10h-10z"/>
+              <path fill="#FFB900" d="M12.5 12.5h10v10h-10z"/>
+            </svg>
+          </span>
+          <span class="vv-social-label">Microsoft</span>
+        </button>
+
+      </div>
+
+      <!-- ------------------------------ OR divider ------------------------------ -->
+      <div class="vv-divider" role="separator" aria-label="or">
+        <span>OR</span>
+      </div>
+
+      <!-- ------------------------------ credential form ------------------------------ -->
+      <form class="vv-form" id="vvLoginForm" novalidate autocomplete="on">
+
+        <!-- email -->
+        <div class="vv-field">
+          <label class="vv-label" for="vvEmail">Email address</label>
+
+          <div class="vv-input-wrap">
+            <span class="vv-input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/>
+              </svg>
+            </span>
+
+            <input class="vv-input"
+                   id="vvEmail"
+                   name="email"
+                   type="email"
+                   inputmode="email"
+                   autocomplete="username"
+                   spellcheck="false"
+                   placeholder="you@company.com"
+                   aria-describedby="vvEmailError">
+          </div>
+
+          <p class="vv-error" id="vvEmailError" role="alert" aria-live="polite"></p>
+        </div>
+
+        <!-- password -->
+        <div class="vv-field">
+          <div class="vv-field-row">
+            <label class="vv-label" for="vvPassword">Password</label>
+            <a class="vv-link" href="forgot-password.html">Forgot Password?</a>
+          </div>
+
+          <div class="vv-input-wrap">
+            <span class="vv-input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </span>
+
+            <input class="vv-input vv-input--pw"
+                   id="vvPassword"
+                   name="password"
+                   type="password"
+                   autocomplete="current-password"
+                   placeholder="Enter your password"
+                   aria-describedby="vvPasswordError">
+
+            <button type="button"
+                    class="vv-eye"
+                    id="vvTogglePw"
+                    aria-label="Show password"
+                    aria-pressed="false"
+                    aria-controls="vvPassword">
+              <svg class="vv-eye-on" viewBox="0 0 24 24" width="17" height="17" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg class="vv-eye-off" viewBox="0 0 24 24" width="17" height="17" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                   stroke-linejoin="round" aria-hidden="true">
+                <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
+                <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c6.5 0 10 7 10 7a17.6 17.6 0 0 1-3.16 4.19"/>
+                <path d="M6.61 6.61A17.5 17.5 0 0 0 2 12s3.5 7 10 7a10.4 10.4 0 0 0 5.39-1.39"/>
+                <path d="m2 2 20 20"/>
+              </svg>
+            </button>
+          </div>
+
+          <p class="vv-error" id="vvPasswordError" role="alert" aria-live="polite"></p>
+        </div>
+
+        <!-- remember -->
+        <label class="vv-checkbox">
+          <input type="checkbox" id="vvRemember" name="remember">
+          <span class="vv-checkmark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor"
+                 stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </span>
+          <span class="vv-checkbox-text">Keep me signed in on this device</span>
+        </label>
+
+        <!-- submit -->
+        <button type="submit" class="vv-submit" id="vvSubmitBtn">
+          <span class="vv-submit-label">Sign In</span>
+          <span class="vv-spinner" aria-hidden="true"></span>
+        </button>
+
+      </form>
+
+      <!-- ------------------------------ sign-up link ------------------------------ -->
+      <p class="vv-signup">
+        Don&rsquo;t have an account?
+        <a href="signup.html" class="vv-signup-link">Sign Up</a>
+      </p>
+
+      <!-- ------------------------------ legal / trust ------------------------------ -->
+      <p class="vv-legal">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+        </svg>
+        Secured with 256-bit TLS · Zero-knowledge credential handling
+      </p>
+
+    </div>
+  </div>
+
+
+  <!-- ==================================================================
+       OTP VERIFICATION MODAL (nested / secondary)
+       ================================================================== -->
+  <div class="vv-otp-overlay" id="vvOtpOverlay" hidden>
+
+    <div class="vv-otp-card" id="vvOtpCard"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="vvOtpTitle">
+
+      <button type="button" class="vv-otp-close" id="vvOtpClose" aria-label="Close verification">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+             stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <!-- ---------- normal OTP view ---------- -->
+      <div class="vv-otp-view" id="vvOtpView">
+
+        <span class="vv-otp-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            <circle cx="12" cy="16.5" r="1.4" fill="currentColor" stroke="none"/>
+          </svg>
+        </span>
+
+        <h2 class="vv-otp-title" id="vvOtpTitle">Verify it&rsquo;s you</h2>
+
+        <p class="vv-otp-sub">
+          Enter the 6-digit code we sent to
+          <strong id="vvOtpTarget">your email</strong>
+        </p>
+
+        <form id="vvOtpForm" novalidate autocomplete="off">
+          <div class="vv-otp-inputs" id="vvOtpInputs" role="group" aria-label="6 digit verification code">
+            <input class="vv-otp-digit" data-vv-otp-digit type="text" inputmode="numeric"
+                   pattern="[0-9]*" maxlength="1" autocomplete="one-time-code"
+                   aria-label="Digit 1" input-idx="0">
+            <input class="vv-otp-digit" data-vv-otp-digit type="text" inputmode="numeric"
+                   pattern="[0-9]*" maxlength="1" aria-label="Digit 2">
+            <input class="vv-otp-digit" data-vv-otp-digit type="text" inputmode="numeric"
+                   pattern="[0-9]*" maxlength="1" aria-label="Digit 3">
+            <input class="vv-otp-digit" data-vv-otp-digit type="text" inputmode="numeric"
+                   pattern="[0-9]*" maxlength="1" aria-label="Digit 4">
+            <input class="vv-otp-digit" data-vv-otp-digit type="text" inputmode="numeric"
+                   pattern="[0-9]*" maxlength="1" aria-label="Digit 5">
+            <input class="vv-otp-digit" data-vv-otp-digit type="text" inputmode="numeric"
+                   pattern="[0-9]*" maxlength="1" aria-label="Digit 6">
+          </div>
+
+          <p class="vv-error vv-error--center" id="vvOtpError" role="alert" aria-live="polite"></p>
+
+          <button type="submit" class="vv-submit" id="vvOtpSubmit">
+            <span class="vv-submit-label">Verify OTP</span>
+            <span class="vv-spinner" aria-hidden="true"></span>
+          </button>
+        </form>
+
+        <div class="vv-otp-foot">
+          <span class="vv-otp-foot-text">Didn&rsquo;t get the code?</span>
+          <button type="button" class="vv-link-btn" id="vvResend">Resend code</button>
+          <span class="vv-otp-timer" id="vvTimer" aria-live="polite"></span>
+        </div>
+
+        <button type="button" class="vv-back" id="vvBackToLogin">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+               stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>
+          </svg>
+          Back to sign in
+        </button>
+      </div>
+
+      <!-- ---------- success view ---------- -->
+      <div class="vv-otp-view vv-otp-success" id="vvOtpSuccess" hidden>
+        <span class="vv-success-ring" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor"
+               stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 6 9 17l-5-5"/>
+          </svg>
+        </span>
+        <h2 class="vv-otp-title">Identity verified</h2>
+        <p class="vv-otp-sub">Redirecting you to your dashboard&hellip;</p>
+        <div class="vv-success-bar"><span></span></div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ==================================================================
+       TOAST STACK — surfaces the generated test OTP
+       ================================================================== -->
+  <div class="vv-toast-stack" id="vvToastStack" aria-live="polite" aria-atomic="false"></div>
+
+
+  <!-- ==================================================================
+       INLINE LOGIC
+       ================================================================== -->
+  <script>
+  (function () {
+    "use strict";
+
+    /* ------------------------------------------------------------------
+       1. ELEMENT REFERENCES
+    ------------------------------------------------------------------ */
+    var loginCard    = document.getElementById("vvLoginCard");
+    var loginForm    = document.getElementById("vvLoginForm");
+    var emailInput   = document.getElementById("vvEmail");
+    var pwInput      = document.getElementById("vvPassword");
+    var pwToggle     = document.getElementById("vvTogglePw");
+    var submitBtn    = document.getElementById("vvSubmitBtn");
+    var emailErr     = document.getElementById("vvEmailError");
+    var pwErr        = document.getElementById("vvPasswordError");
+    var socialBtns   = document.querySelectorAll("[data-vv-provider]");
+
+    var otpOverlay   = document.getElementById("vvOtpOverlay");
+    var otpCard      = document.getElementById("vvOtpCard");
+    var otpForm      = document.getElementById("vvOtpForm");
+    var otpView      = document.getElementById("vvOtpView");
+    var otpSuccess   = document.getElementById("vvOtpSuccess");
+    var otpInputs    = Array.prototype.slice.call(document.querySelectorAll("[data-vv-otp-digit]"));
+    var otpError     = document.getElementById("vvOtpError");
+    var otpTarget    = document.getElementById("vvOtpTarget");
+    var otpSubmit    = document.getElementById("vvOtpSubmit");
+    var otpClose     = document.getElementById("vvOtpClose");
+    var backToLogin  = document.getElementById("vvBackToLogin");
+    var resendBtn    = document.getElementById("vvResend");
+    var timerEl      = document.getElementById("vvTimer");
+    var toastStack   = document.getElementById("vvToastStack");
+
+    /* ------------------------------------------------------------------
+       2. STATE
+    ------------------------------------------------------------------ */
+    var generatedOtp   = null;
+    var resendCooldown = null;
+    var lastFocused    = null;
+    var RESEND_SECONDS = 30;
+
+    /* ------------------------------------------------------------------
+       3. UTILITIES
+    ------------------------------------------------------------------ */
+    function generateOtp() {
+      // Prefer crypto-grade randomness; fall back to Math.random.
+      if (window.crypto && window.crypto.getRandomValues) {
+        var buf = new Uint32Array(1);
+        window.crypto.getRandomValues(buf);
+        return String(100000 + (buf[0] % 900000));
+      }
+      return String(Math.floor(100000 + Math.random() * 900000));
+    }
+
+    function maskEmail(value) {
+      var at = value.indexOf("@");
+      if (at < 1) return value;
+      var name = value.slice(0, at);
+      var domain = value.slice(at);
+      var head = name.slice(0, Math.min(2, name.length));
+      return head + "•".repeat(Math.max(1, name.length - 2)) + domain;
+    }
+
+    function setLoading(button, isLoading) {
+      if (!button) return;
+      button.classList.toggle("is-loading", isLoading);
+      button.disabled = isLoading;
+    }
+
+    function clearErrors() {
+      emailErr.textContent = "";
+      pwErr.textContent = "";
+      emailInput.classList.remove("is-invalid");
+      pwInput.classList.remove("is-invalid");
+    }
+
+    /* ------------------------------------------------------------------
+       4. PASSWORD VISIBILITY TOGGLE
+    ------------------------------------------------------------------ */
+    pwToggle.addEventListener("click", function () {
+      var showing = pwInput.type === "text";
+      pwInput.type = showing ? "password" : "text";
+      pwToggle.classList.toggle("is-visible", !showing);
+      pwToggle.setAttribute("aria-pressed", String(!showing));
+      pwToggle.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+      pwInput.focus({ preventScroll: true });
+    });
+
+    /* ------------------------------------------------------------------
+       5. TOAST SYSTEM
+    ------------------------------------------------------------------ */
+    function showToast(options) {
+      var opts = options || {};
+      var toast = document.createElement("div");
+      toast.className = "vv-toast" + (opts.variant ? " vv-toast--" + opts.variant : "");
+
+      var iconSvg = opts.variant === "success"
+        ? '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
+        : '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+
+      var html = ''
+        + '<span class="vv-toast-icon" aria-hidden="true">' + iconSvg + '</span>'
+        + '<div class="vv-toast-body">'
+        +   '<div class="vv-toast-title">' + (opts.title || "Notice") + '</div>'
+        +   (opts.message ? '<div class="vv-toast-msg">' + opts.message + '</div>' : '')
+        +   (opts.code
+              ? '<div class="vv-toast-code-row">'
+                + '<code class="vv-toast-code">' + opts.code + '</code>'
+                + '<button type="button" class="vv-toast-copy" data-vv-copy="' + opts.code + '">Copy</button>'
+                + '</div>'
+              : '')
+        + '</div>'
+        + '<button type="button" class="vv-toast-close" aria-label="Dismiss notification">'
+        +   '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>'
+        + '</button>';
+
+      toast.innerHTML = html;
+      toastStack.appendChild(toast);
+
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { toast.classList.add("is-in"); });
+      });
+
+      var lifetime = opts.duration || 16000;
+      var killTimer = window.setTimeout(dismiss, lifetime);
+
+      function dismiss() {
+        window.clearTimeout(killTimer);
+        toast.classList.remove("is-in");
+        toast.classList.add("is-out");
+        window.setTimeout(function () {
+          if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 380);
+      }
+
+      toast.querySelector(".vv-toast-close").addEventListener("click", dismiss);
+
+      var copyBtn = toast.querySelector("[data-vv-copy]");
+      if (copyBtn) {
+        copyBtn.addEventListener("click", function () {
+          var value = copyBtn.getAttribute("data-vv-copy");
+          var done = function () {
+            copyBtn.textContent = "Copied";
+            copyBtn.classList.add("is-copied");
+            window.setTimeout(function () {
+              copyBtn.textContent = "Copy";
+              copyBtn.classList.remove("is-copied");
+            }, 1800);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(value).then(done).catch(done);
+          } else {
+            done();
+          }
+        });
+      }
+
+      return dismiss;
+    }
+
+    /* ------------------------------------------------------------------
+       6. OTP MODAL CONTROL
+    ------------------------------------------------------------------ */
+    function openOtpModal() {
+      lastFocused = document.activeElement;
+
+      otpView.hidden = false;
+      otpSuccess.hidden = true;
+      otpError.textContent = "";
+      resetOtpInputs();
+
+      otpOverlay.hidden = false;
+      loginCard.classList.add("is-dimmed");
+      document.body.classList.add("vv-modal-open");
+
+      void otpOverlay.offsetWidth;
+      otpOverlay.classList.add("is-open");
+
+      window.setTimeout(function () {
+        if (otpInputs[0]) otpInputs[0].focus();
+      }, 180);
+    }
+
+    function closeOtpModal() {
+      otpOverlay.classList.remove("is-open");
+      loginCard.classList.remove("is-dimmed");
+
+      window.setTimeout(function () {
+        otpOverlay.hidden = true;
+        document.body.classList.remove("vv-modal-open");
+        stopResendCooldown();
+        if (lastFocused && typeof lastFocused.focus === "function") {
+          lastFocused.focus({ preventScroll: true });
+        }
+      }, 280);
+    }
+
+    function resetOtpInputs() {
+      otpInputs.forEach(function (input) {
+        input.value = "";
+        input.classList.remove("is-filled", "is-error", "is-ok");
+        input.disabled = false;
+      });
+    }
+
+    /* ------------------------------------------------------------------
+       7. OTP INPUT BEHAVIOUR (auto-advance, backspace, paste, arrows)
+    ------------------------------------------------------------------ */
+    otpInputs.forEach(function (input, index) {
+
+      input.addEventListener("input", function (event) {
+        var digits = event.target.value.replace(/\D/g, "");
+
+        if (digits.length > 1) {
+          // Defensive: distribute multi-char input across boxes
+          distribute(digits, index);
+          return;
+        }
+
+        event.target.value = digits;
+        event.target.classList.toggle("is-filled", digits.length === 1);
+        event.target.classList.remove("is-error", "is-ok");
+        otpError.textContent = "";
+
+        if (digits && index < otpInputs.length - 1) {
+          otpInputs[index + 1].focus();
+        }
+        if (digits && index === otpInputs.length - 1) {
+          maybeAutoSubmit();
+        }
+      });
+
+      input.addEventListener("keydown", function (event) {
+        var key = event.key;
+
+        if (key === "Backspace") {
+          if (!event.target.value && index > 0) {
+            event.preventDefault();
+            otpInputs[index - 1].value = "";
+            otpInputs[index - 1].classList.remove("is-filled", "is-error", "is-ok");
+            otpInputs[index - 1].focus();
+          } else {
+            event.target.classList.remove("is-error", "is-ok");
+          }
+          return;
+        }
+
+        if (key === "ArrowLeft" && index > 0) {
+          event.preventDefault();
+          otpInputs[index - 1].focus();
+        }
+
+        if (key === "ArrowRight" && index < otpInputs.length - 1) {
+          event.preventDefault();
+          otpInputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener("focus", function () {
+        input.select();
+      });
+
+      input.addEventListener("paste", function (event) {
+        event.preventDefault();
+        var text = (event.clipboardData || window.clipboardData).getData("text") || "";
+        distribute(text.replace(/\D/g, ""), index);
+      });
+
+    });
+
+    function distribute(digits, startIndex) {
+      var chars = String(digits).replace(/\D/g, "").split("");
+      if (!chars.length) return;
+
+      var cursor = startIndex;
+      chars.forEach(function (char) {
+        if (cursor >= otpInputs.length) return;
+        otpInputs[cursor].value = char;
+        otpInputs[cursor].classList.add("is-filled");
+        otpInputs[cursor].classList.remove("is-error", "is-ok");
+        cursor++;
+      });
+
+      otpError.textContent = "";
+      var next = Math.min(cursor, otpInputs.length - 1);
+      otpInputs[next].focus();
+
+      if (readOtp() === otpInputs.length.toString() + "" || cursor === otpInputs.length) {
+        maybeAutoSubmit();
+      }
+    }
+
+    function readOtp() {
+      return otpInputs.map(function (input) { return input.value; }).join("");
+    }
+
+    function maybeAutoSubmit() {
+      if (readOtp().length === otpInputs.length) {
+        window.setTimeout(function () { otpForm.requestSubmit(); }, 140);
+      }
+    }
+
+    /* ------------------------------------------------------------------
+       8. LOGIN FORM SUBMIT → GENERATE OTP → OPEN OTP MODAL
+    ------------------------------------------------------------------ */
+    loginForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      clearErrors();
+
+      var email = emailInput.value.trim();
+      var password = pwInput.value;
+      var valid = true;
+
+      var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+      if (!email) {
+        emailErr.textContent = "Email address is required.";
+        emailInput.classList.add("is-invalid");
+        valid = false;
+      } else if (!emailRe.test(email)) {
+        emailErr.textContent = "Enter a valid email address.";
+        emailInput.classList.add("is-invalid");
+        valid = false;
+      }
+
+      if (!password) {
+        pwErr.textContent = "Password is required.";
+        pwInput.classList.add("is-invalid");
+        valid = false;
+      } else if (password.length < 6) {
+        pwErr.textContent = "Password must be at least 6 characters.";
+        pwInput.classList.add("is-invalid");
+        valid = false;
+      }
+
+if (!valid) {
+  var firstBad = loginForm.querySelector(".is-invalid");
+  if (firstBad) firstBad.focus();
+  return;
+}
+
+/* --------------------------------------------------------------
+   Persist the authenticated identity so downstream pages
+   (vun1.html navigation, admin vs. user routing) can read it.
+-------------------------------------------------------------- */
+try {
+  window.localStorage.setItem("userEmail", email);
+} catch (err) {
+  /* Storage can be unavailable (private mode / disabled cookies). */
+  console.warn("[VUNVAULT] Unable to persist userEmail:", err);
+}
+
+setLoading(submitBtn, true);
+      // Simulated credential round-trip
+      window.setTimeout(function () {
+        setLoading(submitBtn, false);
+
+        /* ---- generate + surface the mock OTP -------------------------- */
+        generatedOtp = generateOtp();
+
+        otpTarget.textContent = maskEmail(email);
+
+        showToast({
+          variant: "code",
+          title: "Test OTP generated",
+          message: "Use this code to complete verification:",
+          code: generatedOtp,
+          duration: 20000
+        });
+
+        // Also mirror it to the console for quick copy/paste while testing
+        console.log("%c[VUNVAULT TEST OTP] " + generatedOtp,
+                    "color:#3B99FC;font-weight:700;font-size:13px;");
+
+        openOtpModal();
+        startResendCooldown();
+      }, 900);
+    });
+
+    /* ------------------------------------------------------------------
+       9. OTP VERIFICATION
+    ------------------------------------------------------------------ */
+    otpForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      var entered = readOtp();
+
+      if (entered.length < otpInputs.length) {
+        otpError.textContent = "Please enter all 6 digits.";
+        otpInputs.forEach(function (input) {
+          if (!input.value) input.classList.add("is-error");
+        });
+        return;
+      }
+
+      setLoading(otpSubmit, true);
+      otpError.textContent = "";
+
+      window.setTimeout(function () {
+        setLoading(otpSubmit, false);
+
+        if (entered === generatedOtp) {
+          /* ---------------- success ---------------- */
+          otpInputs.forEach(function (input) {
+            input.classList.remove("is-error");
+            input.classList.add("is-ok");
+            input.disabled = true;
+          });
+
+          otpView.hidden = true;
+          otpSuccess.hidden = false;
+          otpSuccess.classList.add("is-in");
+
+          stopResendCooldown();
+
+showToast({
+  variant: "success",
+  title: "Verification successful",
+  message: "Redirecting to VUNVAULT…",
+  duration: 4000
+});
+
+window.setTimeout(function () {
+  window.location.href = "vun1.html";
+}, 1400);
+
+        } else {
+          /* ---------------- failure ---------------- */
+          otpInputs.forEach(function (input) {
+            input.classList.remove("is-ok");
+            input.classList.add("is-error");
+          });
+
+          otpError.textContent = "Incorrect code. Please check the digits and try again.";
+
+          otpCard.classList.remove("vv-shake");
+          void otpCard.offsetWidth;
+          otpCard.classList.add("vv-shake");
+
+          window.setTimeout(function () {
+            resetOtpInputs();
+            otpInputs[0].focus();
+          }, 520);
+        }
+      }, 750);
+    });
+
+    /* ------------------------------------------------------------------
+       10. RESEND COOLDOWN
+    ------------------------------------------------------------------ */
+    function startResendCooldown() {
+      stopResendCooldown();
+
+      var remaining = RESEND_SECONDS;
+      resendBtn.disabled = true;
+      timerEl.textContent = "in " + remaining + "s";
+
+      resendCooldown = window.setInterval(function () {
+        remaining -= 1;
+
+        if (remaining <= 0) {
+          stopResendCooldown();
+          return;
+        }
+        timerEl.textContent = "in " + remaining + "s";
+      }, 1000);
+    }
+
+    function stopResendCooldown() {
+      if (resendCooldown) {
+        window.clearInterval(resendCooldown);
+        resendCooldown = null;
+      }
+      if (resendBtn) resendBtn.disabled = false;
+      if (timerEl) timerEl.textContent = "";
+    }
+
+    resendBtn.addEventListener("click", function () {
+      generatedOtp = generateOtp();
+      resetOtpInputs();
+      otpError.textContent = "";
+      otpInputs[0].focus();
+
+      showToast({
+        variant: "code",
+        title: "New OTP generated",
+        message: "Your previous code is no longer valid:",
+        code: generatedOtp,
+        duration: 20000
+      });
+
+      console.log("%c[VUNVAULT TEST OTP — RESENT] " + generatedOtp,
+                  "color:#3B99FC;font-weight:700;font-size:13px;");
+
+      startResendCooldown();
+    });
+
+    /* ------------------------------------------------------------------
+       11. OTP MODAL DISMISSAL
+    ------------------------------------------------------------------ */
+    otpClose.addEventListener("click", closeOtpModal);
+    backToLogin.addEventListener("click", closeOtpModal);
+
+    otpOverlay.addEventListener("mousedown", function (event) {
+      if (event.target === otpOverlay) closeOtpModal();
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && otpOverlay.classList.contains("is-open")) {
+        closeOtpModal();
+      }
+    });
+
+    /* ------------------------------------------------------------------
+       12. SOCIAL BUTTONS (placeholder behaviour)
+    ------------------------------------------------------------------ */
+    socialBtns.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var provider = btn.getAttribute("data-vv-provider");
+        showToast({
+          variant: "info",
+          title: provider + " sign-in",
+          message: "OAuth handshake would start here in production.",
+          duration: 5000
+        });
+      });
+    });
+
+    /* ------------------------------------------------------------------
+       13. LIVE VALIDATION CLEANUP
+    ------------------------------------------------------------------ */
+    emailInput.addEventListener("input", function () {
+      if (emailInput.classList.contains("is-invalid")) {
+        emailInput.classList.remove("is-invalid");
+        emailErr.textContent = "";
+      }
+    });
+
+    pwInput.addEventListener("input", function () {
+      if (pwInput.classList.contains("is-invalid")) {
+        pwInput.classList.remove("is-invalid");
+        pwErr.textContent = "";
+      }
+    });
+
+    /* ------------------------------------------------------------------
+       14. INITIAL FOCUS
+    ------------------------------------------------------------------ */
+    window.addEventListener("load", function () {
+      window.setTimeout(function () {
+        emailInput.focus({ preventScroll: true });
+      }, 220);
+    });
+
+  })();
+  </script>
+
+</body>
+</html>

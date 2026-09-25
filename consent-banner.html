@@ -1,0 +1,597 @@
+<!-- ==========================================================================
+     VUNVAULT — CONSENT BANNER  (standalone module)
+     Fetched asynchronously by the controller in vun1.html and injected into
+     #consent-banner-wrapper. Fully self-contained: markup + scoped CSS +
+     internal wiring. Consumes the design tokens from vun1.css.
+     ========================================================================== -->
+
+<div class="vv-consent" id="vv-consent"
+     role="dialog" aria-modal="true"
+     aria-labelledby="vv-consent-title"
+     aria-describedby="vv-consent-desc">
+
+  <div class="vv-consent-backdrop" aria-hidden="true"></div>
+
+  <div class="vv-consent-card" role="document">
+    <span class="vv-consent-rule" aria-hidden="true"></span>
+
+    <header class="vv-consent-head">
+      <span class="vv-consent-eyebrow">
+        <span class="vv-consent-eyebrow-dot" aria-hidden="true"></span>
+        Privacy &amp; Consent
+      </span>
+      <h2 class="vv-consent-title" id="vv-consent-title">We value your privacy</h2>
+      <p class="vv-consent-desc" id="vv-consent-desc">
+        VUNVAULT uses a small set of cookies to keep this site secure, remember your
+        preferences and understand how our threat intelligence is used. Strictly
+        necessary cookies are always active — everything else is your call.
+      </p>
+    </header>
+
+    <ul class="vv-consent-chips" aria-label="Cookie categories at a glance">
+      <li class="vv-consent-chip is-locked" data-vv-consent-chip="necessary">
+        Strictly Necessary <b>Always on</b>
+      </li>
+      <li class="vv-consent-chip" data-vv-consent-chip="analytics">
+        Analytics <b>Off</b>
+      </li>
+      <li class="vv-consent-chip" data-vv-consent-chip="marketing">
+        Marketing <b>Off</b>
+      </li>
+      <li class="vv-consent-chip" data-vv-consent-chip="functional">
+        Functional <b>Off</b>
+      </li>
+    </ul>
+
+    <section class="vv-consent-prefs" data-vv-consent-prefs hidden aria-label="Cookie preferences">
+
+      <div class="vv-pref">
+        <div class="vv-pref-text">
+          <h3 class="vv-pref-name">Strictly Necessary</h3>
+          <p class="vv-pref-desc">
+            Authentication, session integrity, CSRF protection and load balancing.
+            Required for the site to function and cannot be disabled.
+          </p>
+        </div>
+        <label class="vv-pref-switch vv-pref-switch--locked">
+          <input type="checkbox" checked disabled data-vv-pref="necessary"
+                 aria-label="Strictly necessary cookies — always active">
+          <span class="vv-pref-track" aria-hidden="true"><span class="vv-pref-knob"></span></span>
+          <span class="vv-pref-state">Always on</span>
+        </label>
+      </div>
+
+      <div class="vv-pref">
+        <div class="vv-pref-text">
+          <h3 class="vv-pref-name">Analytics</h3>
+          <p class="vv-pref-desc">
+            Aggregated, anonymised measurement of which advisories, courses and
+            service pages are actually being used.
+          </p>
+        </div>
+        <label class="vv-pref-switch">
+          <input type="checkbox" data-vv-pref="analytics" aria-label="Analytics cookies">
+          <span class="vv-pref-track" aria-hidden="true"><span class="vv-pref-knob"></span></span>
+          <span class="vv-pref-state">Off</span>
+        </label>
+      </div>
+
+      <div class="vv-pref">
+        <div class="vv-pref-text">
+          <h3 class="vv-pref-name">Marketing</h3>
+          <p class="vv-pref-desc">
+            Used to measure campaign reach and avoid showing you the same
+            security briefing twice.
+          </p>
+        </div>
+        <label class="vv-pref-switch">
+          <input type="checkbox" data-vv-pref="marketing" aria-label="Marketing cookies">
+          <span class="vv-pref-track" aria-hidden="true"><span class="vv-pref-knob"></span></span>
+          <span class="vv-pref-state">Off</span>
+        </label>
+      </div>
+
+      <div class="vv-pref">
+        <div class="vv-pref-text">
+          <h3 class="vv-pref-name">Functional</h3>
+          <p class="vv-pref-desc">
+            Remembers interface choices such as theme, dashboard layout and
+            collapsed panels between visits.
+          </p>
+        </div>
+        <label class="vv-pref-switch">
+          <input type="checkbox" data-vv-pref="functional" aria-label="Functional cookies">
+          <span class="vv-pref-track" aria-hidden="true"><span class="vv-pref-knob"></span></span>
+          <span class="vv-pref-state">Off</span>
+        </label>
+      </div>
+
+      <div class="vv-consent-prefs-actions">
+        <button type="button" class="vv-consent-btn vv-consent-btn--ghost" data-vv-consent-back>
+          Back
+        </button>
+        <button type="button" class="vv-consent-btn vv-consent-btn--primary" data-vv-consent-save>
+          Save Preferences
+        </button>
+      </div>
+    </section>
+
+    <div class="vv-consent-actions" data-vv-consent-actions>
+      <button type="button" class="vv-consent-btn vv-consent-btn--primary" data-vv-consent="accept-all">
+        Accept All
+      </button>
+      <button type="button" class="vv-consent-btn vv-consent-btn--ghost" data-vv-consent="essential-only">
+        Essential Only
+      </button>
+      <button type="button" class="vv-consent-btn vv-consent-btn--link" data-vv-consent-customize>
+        Customize Preferences
+      </button>
+    </div>
+
+    <footer class="vv-consent-foot">
+      <span>
+        Read our <a href="privacy.html">Privacy Policy</a> &amp;
+        <a href="cookie-policy.html">Cookie Policy</a>.
+      </span>
+      <span class="vv-consent-live" data-vv-consent-live role="status" aria-live="polite"></span>
+    </footer>
+  </div>
+</div>
+
+
+<!-- ==========================================================================
+     SCOPED STYLES — namespaced under .vv-consent so nothing else collides.
+     Consumes design tokens from vun1.css (--brand, --ease, --dur, --r-*)
+     with safe fallbacks.
+     ========================================================================== -->
+<style>
+body.vv-consent-open { overflow: hidden; }
+
+.vv-consent {
+  --vv-in:  calc(var(--dur, 200ms) * 1.6);
+  --vv-out: calc(var(--dur, 200ms) * 1.4);
+  --vv-line: rgba(59, 153, 252, 0.28);
+  --vv-ink: #e8eef6;
+  --vv-muted: #9aa8ba;
+  --vv-faint: #6b7a8d;
+
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--vv-in) var(--ease, cubic-bezier(0.4, 0, 0.2, 1)),
+              visibility var(--vv-in) var(--ease, cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.vv-consent.is-visible { opacity: 1; visibility: visible; }
+.vv-consent.is-leaving {
+  opacity: 0; visibility: hidden;
+  transition-duration: var(--vv-out);
+}
+.vv-consent [hidden] { display: none !important; }
+
+.vv-consent-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 7, 10, 0.72);
+  backdrop-filter: blur(7px) saturate(1.2);
+  -webkit-backdrop-filter: blur(7px) saturate(1.2);
+  opacity: 0;
+  transition: opacity var(--vv-in) var(--ease, cubic-bezier(0.4, 0, 0.2, 1));
+}
+.vv-consent.is-visible .vv-consent-backdrop { opacity: 1; }
+
+.vv-consent-card {
+  position: relative;
+  width: min(660px, 100%);
+  max-height: min(88vh, 760px);
+  overflow-y: auto;
+  padding: 30px 30px 26px;
+  border-radius: var(--r-2xl, 28px);
+  background:
+    radial-gradient(110% 90% at 100% 0%, rgba(59, 153, 252, 0.16), transparent 58%),
+    linear-gradient(160deg, #0d131c 0%, #05080d 100%);
+  border: 1px solid var(--vv-line);
+  box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.9),
+              0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+  opacity: 0;
+  transform: translateY(18px) scale(0.985);
+  transition: opacity var(--vv-in) var(--ease, cubic-bezier(0.4, 0, 0.2, 1)),
+              transform var(--vv-in) var(--ease, cubic-bezier(0.4, 0, 0.2, 1));
+}
+.vv-consent.is-visible .vv-consent-card {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.vv-consent-card::-webkit-scrollbar { width: 8px; }
+.vv-consent-card::-webkit-scrollbar-track { background: transparent; }
+.vv-consent-card::-webkit-scrollbar-thumb {
+  background: rgba(59, 153, 252, 0.28);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.vv-consent-card { scrollbar-width: thin; scrollbar-color: rgba(59, 153, 252, 0.35) transparent; }
+
+.vv-consent-rule {
+  position: absolute; top: 0; left: 12%; right: 12%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--brand, #3B99FC), transparent);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* ---------- header ---------- */
+.vv-consent-eyebrow {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-size: 10px; font-weight: 800; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--brand, #3B99FC);
+}
+.vv-consent-eyebrow-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--brand, #3B99FC);
+  box-shadow: 0 0 0 4px rgba(59, 153, 252, 0.16);
+  animation: vvConsentPulse 2.2s var(--ease, cubic-bezier(0.4, 0, 0.2, 1)) infinite;
+}
+.vv-consent-title {
+  margin-top: 12px;
+  font-size: clamp(1.3rem, 3.2vw, 1.65rem);
+  font-weight: 800; letter-spacing: -0.02em; line-height: 1.25; color: #ffffff;
+}
+.vv-consent-desc {
+  margin-top: 10px; font-size: 0.85rem; line-height: 1.75;
+  color: var(--vv-muted); max-width: 62ch;
+}
+
+/* ---------- chips ---------- */
+.vv-consent-chips {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin: 20px 0 0; padding: 0; list-style: none;
+}
+.vv-consent-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px; font-size: 10.5px; font-weight: 600;
+  color: #8d9aab;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--r-full, 9999px);
+  transition: color var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1)),
+              background-color var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1)),
+              border-color var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1));
+}
+.vv-consent-chip b {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--vv-faint);
+}
+.vv-consent-chip.is-on {
+  color: #cfe3ff;
+  background: rgba(59, 153, 252, 0.1);
+  border-color: rgba(59, 153, 252, 0.4);
+}
+.vv-consent-chip.is-on b { color: var(--brand-soft, #6FB6FF); }
+.vv-consent-chip.is-locked b { color: #34d399; }
+
+/* ---------- preferences panel ---------- */
+.vv-consent-prefs {
+  display: flex; flex-direction: column; gap: 12px;
+  margin-top: 20px;
+  animation: vvConsentPanel var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1)) both;
+}
+.vv-pref {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 18px; padding: 14px 16px;
+  border-radius: var(--r-md, 14px);
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: background-color var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1)),
+              border-color var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1));
+}
+.vv-pref:hover {
+  background: rgba(59, 153, 252, 0.05);
+  border-color: rgba(59, 153, 252, 0.28);
+}
+.vv-pref-text { min-width: 0; }
+.vv-pref-name {
+  font-size: 0.84rem; font-weight: 800;
+  letter-spacing: -0.005em; color: var(--vv-ink);
+}
+.vv-pref-desc {
+  margin-top: 5px; font-size: 0.74rem; line-height: 1.65;
+  color: #7d8b9e; max-width: 46ch;
+}
+
+/* ---------- switches ---------- */
+.vv-pref-switch {
+  position: relative; flex: 0 0 auto;
+  display: inline-flex; align-items: center; gap: 10px;
+  cursor: pointer;
+  user-select: none; -webkit-user-select: none;
+}
+.vv-pref-switch--locked { cursor: default; }
+.vv-pref-switch input {
+  position: absolute; width: 1px; height: 1px;
+  opacity: 0; margin: 0; pointer-events: none;
+}
+.vv-pref-track {
+  position: relative; display: block;
+  width: 44px; height: 24px; border-radius: var(--r-full, 9999px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  transition: background-color var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1)),
+              border-color var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1)),
+              box-shadow var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1));
+}
+.vv-pref-knob {
+  position: absolute; top: 2px; left: 2px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #8d9aab;
+  transition: transform var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1)),
+              background-color var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1));
+}
+.vv-pref-switch input:checked + .vv-pref-track {
+  background: linear-gradient(135deg, var(--brand, #3B99FC), var(--brand-strong, #1E7BE0));
+  border-color: rgba(59, 153, 252, 0.6);
+}
+.vv-pref-switch input:checked + .vv-pref-track .vv-pref-knob {
+  transform: translateX(20px);
+  background: #ffffff;
+}
+.vv-pref-switch input:focus-visible + .vv-pref-track {
+  box-shadow: 0 0 0 3px rgba(59, 153, 252, 0.3);
+}
+.vv-pref-switch input:disabled + .vv-pref-track { opacity: 0.85; }
+.vv-pref-state {
+  min-width: 64px; text-align: right;
+  font-size: 9.5px; font-weight: 800;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--vv-faint);
+}
+
+/* ---------- buttons ---------- */
+.vv-consent-actions {
+  display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px;
+}
+.vv-consent-prefs-actions {
+  display: flex; flex-wrap: wrap; justify-content: flex-end;
+  gap: 10px; margin-top: 4px;
+}
+.vv-consent-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 13px 22px;
+  font-size: 0.8rem; font-weight: 800; letter-spacing: 0.01em; line-height: 1;
+  border-radius: var(--r-full, 9999px);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1)),
+              filter var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1)),
+              color var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1)),
+              background-color var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1)),
+              border-color var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1)),
+              box-shadow var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1));
+}
+.vv-consent-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 153, 252, 0.45);
+}
+.vv-consent-btn--primary {
+  flex: 1 1 170px;
+  color: #04121f;
+  background: linear-gradient(135deg, var(--brand-soft, #6FB6FF), var(--brand, #3B99FC));
+  box-shadow: 0 16px 34px -18px rgba(59, 153, 252, 0.75);
+}
+.vv-consent-btn--primary:hover { transform: translateY(-2px); filter: brightness(1.06); }
+.vv-consent-btn--primary:active { transform: translateY(0) scale(0.985); }
+.vv-consent-btn--ghost {
+  flex: 1 1 170px;
+  color: #c3ccd8;
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.vv-consent-btn--ghost:hover {
+  color: #ffffff;
+  background: rgba(59, 153, 252, 0.1);
+  border-color: rgba(59, 153, 252, 0.5);
+  transform: translateY(-2px);
+}
+.vv-consent-btn--link {
+  flex: 1 1 100%;
+  padding: 10px 8px;
+  color: var(--brand-soft, #6FB6FF);
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(59, 153, 252, 0.35);
+}
+.vv-consent-btn--link:hover {
+  color: #ffffff;
+  text-decoration-color: #ffffff;
+}
+
+/* ---------- footer ---------- */
+.vv-consent-foot {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 8px; margin-top: 20px; padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 10.5px; line-height: 1.6;
+  color: var(--vv-faint);
+}
+.vv-consent-foot a {
+  color: var(--vv-muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--dur, 200ms) var(--ease, cubic-bezier(0.4, 0, 0.2, 1));
+}
+.vv-consent-foot a:hover { color: var(--brand-soft, #6FB6FF); }
+.vv-consent-live { font-weight: 700; color: var(--brand-soft, #6FB6FF); }
+
+/* ---------- keyframes ---------- */
+@keyframes vvConsentPulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(59, 153, 252, 0.16); }
+  50%      { box-shadow: 0 0 0 8px rgba(59, 153, 252, 0.04); }
+}
+@keyframes vvConsentPanel {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 768px) {
+  .vv-consent { padding: 16px; }
+  .vv-consent-card { padding: 24px 20px 20px; border-radius: var(--r-xl, 24px); max-height: 92vh; }
+  .vv-pref { flex-direction: column; gap: 12px; }
+  .vv-pref-switch { align-self: flex-start; }
+  .vv-pref-desc { max-width: none; }
+  .vv-consent-btn--primary, .vv-consent-btn--ghost { flex: 1 1 100%; }
+  .vv-consent-foot { font-size: 10px; }
+}
+@media (max-width: 520px) {
+  .vv-consent { align-items: flex-end; padding: 0; }
+  .vv-consent-card {
+    width: 100%; max-height: 88vh;
+    border-radius: var(--r-xl, 24px) var(--r-xl, 24px) 0 0;
+    border-bottom: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vv-consent, .vv-consent-backdrop, .vv-consent-card, .vv-consent-prefs {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
+  .vv-consent-eyebrow-dot { animation: none !important; }
+  .vv-consent-card { transform: none !important; }
+  .vv-consent.is-visible .vv-consent-card { transform: none !important; }
+}
+</style>
+
+
+<!-- ==========================================================================
+     INTERNAL WIRING — runs automatically after injection.
+     Talks to window.VunvaultConsent (exposed by the controller in vun1.html).
+     ========================================================================== -->
+<script>
+(function () {
+  "use strict";
+  var banner = document.getElementById("vv-consent");
+  if (!banner) return;
+
+  var prefsPanel  = banner.querySelector("[data-vv-consent-prefs]");
+  var actionsRow  = banner.querySelector("[data-vv-consent-actions]");
+  var toggles     = banner.querySelectorAll("[data-vv-pref]");
+  var live        = banner.querySelector("[data-vv-consent-live]");
+
+  function announce(msg) { if (live) live.textContent = msg; }
+
+  function toggleValue(name) {
+    var el = banner.querySelector('[data-vv-pref="' + name + '"]');
+    return !!(el && el.checked);
+  }
+
+  function syncUI() {
+    toggles.forEach(function (input) {
+      var name = input.getAttribute("data-vv-pref");
+      if (name === "necessary") return;
+      var wrap = input.closest(".vv-pref-switch");
+      var state = wrap ? wrap.querySelector(".vv-pref-state") : null;
+      if (state) state.textContent = input.checked ? "On" : "Off";
+      var chip = banner.querySelector('[data-vv-consent-chip="' + name + '"]');
+      if (chip) {
+        chip.classList.toggle("is-on", input.checked);
+        var b = chip.querySelector("b");
+        if (b) b.textContent = input.checked ? "On" : "Off";
+      }
+    });
+  }
+
+  toggles.forEach(function (input) {
+    if (input.disabled) return;
+    input.addEventListener("change", function () {
+      syncUI();
+      var n = input.getAttribute("data-vv-pref");
+      announce(n.charAt(0).toUpperCase() + n.slice(1) + " cookies " + (input.checked ? "enabled" : "disabled"));
+    });
+  });
+
+  var customizeBtn = banner.querySelector("[data-vv-consent-customize]");
+  if (customizeBtn) {
+    customizeBtn.addEventListener("click", function () {
+      prefsPanel.hidden = false;
+      actionsRow.hidden = true;
+      syncUI();
+      var first = prefsPanel.querySelector("input:not([disabled])");
+      if (first) first.focus({ preventScroll: true });
+      announce("Preference panel opened");
+    });
+  }
+
+  var backBtn = banner.querySelector("[data-vv-consent-back]");
+  if (backBtn) {
+    backBtn.addEventListener("click", function () {
+      prefsPanel.hidden = true;
+      actionsRow.hidden = false;
+      var first = actionsRow.querySelector("button");
+      if (first) first.focus({ preventScroll: true });
+      announce("Returned to quick choices");
+    });
+  }
+
+  function decide(prefs) {
+    if (window.VunvaultConsent && typeof window.VunvaultConsent.record === "function") {
+      window.VunvaultConsent.record(prefs);
+    } else {
+      // Fallback — hide even without the controller (should not normally happen)
+      banner.classList.add("is-leaving");
+    }
+  }
+
+  var acceptAll = banner.querySelector("[data-vv-consent='accept-all']");
+  if (acceptAll) {
+    acceptAll.addEventListener("click", function () {
+      toggles.forEach(function (i) { if (!i.disabled) i.checked = true; });
+      syncUI();
+      decide({ necessary: true, analytics: true, marketing: true, functional: true });
+    });
+  }
+
+  var essentialOnly = banner.querySelector("[data-vv-consent='essential-only']");
+  if (essentialOnly) {
+    essentialOnly.addEventListener("click", function () {
+      toggles.forEach(function (i) { if (!i.disabled) i.checked = false; });
+      syncUI();
+      decide({ necessary: true, analytics: false, marketing: false, functional: false });
+    });
+  }
+
+  var saveBtn = banner.querySelector("[data-vv-consent-save]");
+  if (saveBtn) {
+    saveBtn.addEventListener("click", function () {
+      decide({
+        necessary: true,
+        analytics: toggleValue("analytics"),
+        marketing: toggleValue("marketing"),
+        functional: toggleValue("functional")
+      });
+    });
+  }
+
+  // Light focus trap so Tab cannot escape the dialog while it is open
+  banner.addEventListener("keydown", function (e) {
+    if (e.key !== "Tab") return;
+    var focusables = banner.querySelectorAll(
+      "button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex='-1'])"
+    );
+    var list = Array.prototype.filter.call(focusables, function (el) {
+      return el.offsetParent !== null;
+    });
+    if (!list.length) return;
+    var first = list[0], last = list[list.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  syncUI();
+})();
+</script>
