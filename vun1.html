@@ -2298,7 +2298,8 @@ if (preloader) {
      Thumbnail SVG factory — the same six variants used by blog.html
      -------------------------------------------------------------- */
   function thumbSVG(index) {
-    var uid = "vvN" + index + "_" + Math.random().toString(36).slice(2, 7);
+    var rand = window.crypto.getRandomValues(new Uint32Array(1))[0];
+    var uid = "vvN" + index + "_" + rand.toString(36).slice(0, 5).padEnd(5, "0");
     var variants = [
       '<svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="'+uid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a1931"/><stop offset="1" stop-color="#060a10"/></linearGradient></defs><rect width="400" height="225" fill="url(#'+uid+')"/><g fill="none" stroke="#3B99FC" stroke-opacity=".28" stroke-width="1"><path d="M0 56h400M0 112h400M0 168h400M100 0v225M200 0v225M300 0v225"/></g><path d="M200 62 L246 78 V124 c0 30-46 44-46 44 s-46-14-46-44 V78 z" fill="#3B99FC" fill-opacity=".16" stroke="#6FB6FF" stroke-width="2"/><path d="M182 116 l14 14 26-30" fill="none" stroke="#6FB6FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
       '<svg viewBox="0 0 400 225" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="'+uid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a1931"/><stop offset="1" stop-color="#060a10"/></linearGradient></defs><rect width="400" height="225" fill="url(#'+uid+')"/><g fill="none" stroke="#3B99FC" stroke-opacity=".35" stroke-width="1.4"><path d="M70 150 L150 78 L232 132 L318 62"/><path d="M150 78 L232 132"/></g><g fill="#6FB6FF"><circle cx="70" cy="150" r="6"/><circle cx="150" cy="78" r="6"/><circle cx="232" cy="132" r="6"/></g><circle cx="318" cy="62" r="9" fill="#f43f5e" fill-opacity=".2"/><circle cx="318" cy="62" r="5" fill="#f43f5e"/></svg>',
